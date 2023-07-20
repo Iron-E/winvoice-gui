@@ -1,0 +1,8 @@
+{
+	"files": [],
+	"include": ["src/**/*", "tests/**/*"],
+	"references": [
+		{"path": "./src/api"},
+		{"path": "./src/schema"}
+	]
+}

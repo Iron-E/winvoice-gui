@@ -6,6 +6,7 @@
 		"declaration": true,
 		"exactOptionalPropertyTypes": true,
 		"newLine": "lf",
+		"noEmitOnError": true,
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitOverride": true,
 		"noImplicitReturns": true,

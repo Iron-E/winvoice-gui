@@ -3,5 +3,9 @@
 	"compilerOptions": {
 		"outDir": "../../out/match",
 		"rootDir": "."
-	}
+	},
+	"references": [
+		{"path": "../schema"},
+		{"path": "../utils"}
+	]
 }

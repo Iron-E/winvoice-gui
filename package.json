@@ -1,0 +1,29 @@
+{
+	"devDependencies": {
+		"typescript": "^5.1.6"
+	},
+	"name": "winvoice-gui",
+	"description": "A WIP front-end for https://github.com/Iron-E/winvoice-server, written in TypeScript with React. It allows graphical management of invoices for any number of clients.",
+	"version": "0.1.0-alpha.1",
+	"main": "index.js",
+	"scripts": {
+		"test": "TODO"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Iron-E/winvoice-gui.git"
+	},
+	"keywords": [
+		"invoice",
+		"client",
+		"winvoice",
+		"invoice-generator",
+		"gui"
+	],
+	"author": "Iron-E",
+	"license": "GPL-3.0",
+	"bugs": {
+		"url": "https://github.com/Iron-E/winvoice-gui/issues"
+	},
+	"homepage": "https://github.com/Iron-E/winvoice-gui#readme"
+}

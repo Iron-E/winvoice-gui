@@ -1,8 +1,13 @@
 import { Id } from "./id";
+import { Money } from "./money";
 
 /**
- * Same as {https://github.com/Iron-E/winvoice-schema | `Foo`} type.
+ * Same as {@link https://github.com/Iron-E/winvoice-schema | `Expense`} type.
  */
-export type Foo = {
+export type Expense = {
+	category: string,
+	cost: Money,
+	description: string,
 	id: Id,
+	timesheet_id: Id,
 };

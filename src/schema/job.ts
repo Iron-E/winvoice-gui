@@ -13,13 +13,14 @@ export type Job = {
 	date_open: Date,
 	departments: Department[],
 	id: Id,
-	invoice: Invoice,
-	notes: string,
-	objectives: string,
 
 	/**
 	 * A concrete {@link Duration} or a {@link https://docs.rs/humantime/latest/humantime | human-readable duration}
 	 *
 	 */
 	increment: Duration | string,
+
+	invoice: Invoice,
+	notes: string,
+	objectives: string,
 };

@@ -1,8 +1,7 @@
 /**
- * Equivalent to the {@link https://docs.rs/money2/latest/money2/enum.Currency.html | Currency} type.
+ * Equivalent to the {@link https://docs.rs/money2/latest/money2/enum.Currency.html | `Currency`} type.
  */
-export enum Currency
-{
+export enum Currency {
 	Aud,
 	Bgn,
 	Brl,

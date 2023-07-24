@@ -7,6 +7,8 @@
 	"version": "0.1.0-alpha.1",
 	"main": "index.js",
 	"scripts": {
+		"build": "tsc -b -v",
+		"clean": "tsc -b --clean",
 		"test": "TODO"
 	},
 	"repository": {

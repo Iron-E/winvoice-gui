@@ -1,8 +1,13 @@
 {
+	"compilerOptions": {
+		"outDir": "./out",
+		"rootDir": "./src"
+	},
 	"files": [],
 	"include": ["src/**/*", "tests/**/*"],
 	"references": [
 		{"path": "./src/api"},
+		{"path": "./src/match"},
 		{"path": "./src/schema"}
 	]
 }

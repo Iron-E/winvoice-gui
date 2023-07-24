@@ -1,8 +1,6 @@
-import { Id } from "./id";
+import { ContactKind } from "./contact/contact_kind";
 
 /**
- * Same as {https://github.com/Iron-E/winvoice-schema | `Foo`} type.
+ * Same as {https://github.com/Iron-E/winvoice-schema | `Contact`} type.
  */
-export type Foo = {
-	id: Id,
-};
+export type Contact = ContactKind & {label: string};

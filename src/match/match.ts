@@ -6,8 +6,10 @@ import { UnionToKeys } from 'utils/union_to_keys';
 export type Match<T> =
 	| "any"
 	| T
-	| UnionToKeys<'and' | 'or', [T, T]>
-	| UnionToKeys<`${'greater' | 'less'}_than`, [T, T]>
-;
+	| UnionToKeys<'and' | 'or', Match<T>[]>
+	| UnionToKeys<`${'greater' | 'less'}_than`, T>
+	| { in_range: [T, T] }
+	| { not: Match<T> }
+	;
 
 // TODO: finish this file

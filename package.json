@@ -1,23 +1,16 @@
 {
+	"author": "Iron-E",
+	"bugs": {
+		"url": "https://github.com/Iron-E/winvoice-gui/issues"
+	},
+	"description": "A WIP front-end for https://github.com/Iron-E/winvoice-server, written in TypeScript with React. It allows graphical management of invoices for any number of clients.",
 	"devDependencies": {
 		"@types/jest": "^29.5.3",
 		"jest": "^29.6.1",
 		"ts-jest": "^29.1.1",
 		"typescript": "^5.1.6"
 	},
-	"name": "winvoice-gui",
-	"description": "A WIP front-end for https://github.com/Iron-E/winvoice-server, written in TypeScript with React. It allows graphical management of invoices for any number of clients.",
-	"version": "0.1.0-alpha.1",
-	"main": "index.js",
-	"scripts": {
-		"build": "npx tsc -b -v",
-		"clean": "npx tsc -b --clean",
-		"test": "npx jest"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/Iron-E/winvoice-gui.git"
-	},
+	"homepage": "https://github.com/Iron-E/winvoice-gui#readme",
 	"keywords": [
 		"invoice",
 		"client",
@@ -25,10 +18,17 @@
 		"invoice-generator",
 		"gui"
 	],
-	"author": "Iron-E",
 	"license": "GPL-3.0",
-	"bugs": {
-		"url": "https://github.com/Iron-E/winvoice-gui/issues"
+	"main": "index.js",
+	"name": "winvoice-gui",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Iron-E/winvoice-gui.git"
 	},
-	"homepage": "https://github.com/Iron-E/winvoice-gui#readme"
+	"scripts": {
+		"build": "npx tsc -b -v",
+		"clean": "npx tsc -b --clean",
+		"test": "npx jest"
+	},
+	"version": "0.1.0-alpha.1"
 }

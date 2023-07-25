@@ -4,7 +4,7 @@
 		"rootDir": "./src"
 	},
 	"files": [],
-	"include": ["src/**/*", "tests/**/*"],
+	"include": ["src/**/*"],
 	"references": [
 		{"path": "./src/api"},
 		{"path": "./src/match"},

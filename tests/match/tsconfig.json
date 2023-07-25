@@ -1,0 +1,10 @@
+{
+	"extends": "../../tsconfig-base.json",
+	"compilerOptions": {
+		"outDir": "/tmp/winvoice-gui/tests/match",
+		"rootDir": "."
+	},
+	"references": [
+		{"path": "../../src/match"}
+	]
+}

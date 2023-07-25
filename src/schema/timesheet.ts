@@ -1,7 +1,7 @@
-import { Employee } from "./employee";
-import { Expense } from "./expense";
-import { Id } from "./id";
-import { Job } from "./job";
+import { type Employee } from "./employee";
+import { type Expense } from "./expense";
+import { type Id } from "./id";
+import { type Job } from "./job";
 
 /**
  * Same as {@link https://github.com/Iron-E/winvoice-schema | `Timesheet`} type.

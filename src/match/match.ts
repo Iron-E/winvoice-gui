@@ -1,4 +1,4 @@
-import { UnionToKeys } from 'utils/union_to_keys';
+import { type UnionToKeys } from 'utils/index';
 
 /**
  * Same as {@link https://github.com/Iron-E/winvoice-match | `Match`}.
@@ -11,5 +11,3 @@ export type Match<T> =
 	| { in_range: [T, T] }
 	| { not: Match<T> }
 	;
-
-// TODO: finish this file

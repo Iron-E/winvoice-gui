@@ -1,5 +1,5 @@
-import { Department } from "./department";
-import { Id } from "./id";
+import { type Department } from "./department";
+import { type Id } from "./id";
 
 /**
  * Same as {@link https://github.com/Iron-E/winvoice-schema | `Employee`} type.

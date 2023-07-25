@@ -1,8 +1,8 @@
-import { Department } from "./department";
-import { Duration } from "./duration";
-import { Id } from "./id";
-import { Invoice } from "./invoice";
-import { Organization } from "./organization";
+import { type Department } from "./department";
+import { type Duration } from "./duration";
+import { type Id } from "./id";
+import { type Invoice } from "./invoice";
+import { type Organization } from "./organization";
 
 /**
  * Same as {@link https://github.com/Iron-E/winvoice-schema | `Job`} type.

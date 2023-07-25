@@ -1,5 +1,6 @@
-import { InvoiceDate } from "./invoice/invoice_date";
-import { Money } from "./money";
+import { type InvoiceDate } from "./invoice/invoice_date";
+import { type Money } from "./money";
+export { type InvoiceDate };
 
 /**
  * Same as {@link https://github.com/Iron-E/winvoice-schema | `Invoice`} type.

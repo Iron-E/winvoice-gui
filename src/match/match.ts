@@ -1,5 +1,5 @@
 import { type MatchCommon } from './match_common';
-import { type UnionToKeys } from 'utils/index';
+import { type UnionToKeys } from '../utils';
 
 type Base<T> =
 	| T

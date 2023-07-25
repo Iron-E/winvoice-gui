@@ -5,6 +5,7 @@
 		"composite": true,
 		"declaration": true,
 		"exactOptionalPropertyTypes": true,
+		"moduleResolution": "node",
 		"newLine": "lf",
 		"noEmitOnError": true,
 		"noFallthroughCasesInSwitch": true,

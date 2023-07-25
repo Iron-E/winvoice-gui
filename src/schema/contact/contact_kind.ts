@@ -1,5 +1,5 @@
 import { type Location } from '../location';
-import { type UnionToKeys } from 'utils/index';
+import { type UnionToKeys } from '../../utils';
 
 /**
  * Same as {@link https://github.com/Iron-E/winvoice-schema | `ContactKind`} type.

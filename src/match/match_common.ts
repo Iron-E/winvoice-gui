@@ -1,4 +1,4 @@
-import { type UnionToKeys } from 'utils/index';
+import { type UnionToKeys } from '../utils';
 
 /**
  * Common match fields.

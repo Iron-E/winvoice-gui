@@ -4,11 +4,11 @@
  * @typeParam K the keys to make a union from
  * @typeParam V the values that will be made out of the keys `K`
  * @example
-* ```typescript
-* type Example = UnionToKeys<'a' | 'b', string>;
-* let foo: Example = {a: 'foo'};
-* let bar: Example = {b: 'foo'};
-* let baz: Example = {c: 'foo'}; -- error!
-* ```
+ * ```typescript
+ * type Example = UnionToKeys<'a' | 'b', string>;
+ * let foo: Example = {a: 'foo'};
+ * let bar: Example = {b: 'foo'};
+ * let baz: Example = {c: 'foo'}; -- error!
+ * ```
  */
 export type UnionToKeys<K extends string, V> = K extends K ? { [key in K]: V } : never;

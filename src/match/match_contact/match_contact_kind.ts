@@ -3,9 +3,9 @@ import { type MatchStr } from '../match_str';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-match | `MatchContactKind`}. */
 export type MatchContactKind =
-	| {address: MatchLocation}
+	| { address: MatchLocation }
 	| 'any'
-	| {email: MatchStr<string>}
-	| {other: MatchStr<string>}
-	| {phone: MatchStr<string>}
+	| { email: MatchStr<string> }
+	| { other: MatchStr<string> }
+	| { phone: MatchStr<string> }
 	;

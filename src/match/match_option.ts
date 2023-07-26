@@ -1,8 +1,6 @@
 import { type UnionToKeys } from '../utils';
 
-/**
- * Same as {@link https://github.com/Iron-E/winvoice-match | `MatchOption`}.
- */
+/** Same as {@link https://github.com/Iron-E/winvoice-match | `MatchOption`}. */
 export type MatchOption<T> =
 	| 'any'
 	| 'none'

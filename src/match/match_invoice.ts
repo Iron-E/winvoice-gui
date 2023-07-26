@@ -4,9 +4,9 @@ import { type MatchOption } from "./match_option";
 
 /** Same as {@link https://github.com/Iron-E/winvoice-match | `MatchInvoice`}. */
 export type MatchInvoice = {
-	/** Should be valid input to {@link Date.parse} */
+	/** If present, should be valid input to {@link Date.parse} */
 	date_issued?: MatchOption<Match<string>>,
-	/** Should be valid input to {@link Date.parse} */
+	/** If present, should be valid input to {@link Date.parse} */
 	date_paid?: MatchOption<Match<string>>,
-	hourly_rate?: Money,
+	hourly_rate?: Match<Money>,
 };

@@ -1,10 +1,8 @@
 import type { Id, Money } from "../schema";
-import { Match } from "./match";
-import { MatchStr } from "./match_str";
+import { type Match } from "./match";
+import { type MatchStr } from "./match_str";
 
-/**
- * Same as {@link https://github.com/Iron-E/winvoice-match | `MatchExpense`}.
- */
+/** Same as {@link https://github.com/Iron-E/winvoice-match | `MatchExpense`}. */
 export type MatchExpense = {
 	category?: MatchStr<string>,
 	cost?: Match<Money>,

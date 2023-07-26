@@ -10,3 +10,4 @@ export { type MatchOption } from './match_option';
 export { type MatchOrganization } from './match_organization';
 export { type MatchSet } from './match_set';
 export { type MatchStr } from './match_str';
+export { type MatchTimesheet } from './match_timesheet';

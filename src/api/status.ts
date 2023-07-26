@@ -1,5 +1,5 @@
 import { Code } from './status/code';
-export { type Code };
+export { Code };
 
 /** Same as {@link https://github.com/Iron-E/winvoice-server | `api::Status`}. */
 export type Status = {

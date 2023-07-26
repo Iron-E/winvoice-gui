@@ -1,7 +1,7 @@
 import { type MatchStr } from '../../src/match';
 
 type M = MatchStr<string>
-describe('testing Match', () => {
+describe('testing MatchStr', () => {
 	test('JSON decoding', () => {
 		expect(JSON.parse(`{
 			"and": [

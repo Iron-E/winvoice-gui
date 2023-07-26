@@ -1,7 +1,7 @@
 import type { Match, MatchOption } from '../../src/match';
 
 type M = MatchOption<Match<number>>
-describe('testing Match', () => {
+describe('testing MatchOption', () => {
 	test('JSON decoding', () => {
 		expect(JSON.parse('"any"')).toStrictEqual<M>("any");
 		expect(JSON.parse('"none"')).toStrictEqual<M>("none");

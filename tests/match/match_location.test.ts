@@ -1,7 +1,7 @@
 import { type MatchLocation as M } from '../../src/match';
 import { Currency } from '../../src/schema';
 
-describe('testing Match', () => {
+describe('testing MatchLocation', () => {
 	test('JSON decoding', () => {
 		expect(JSON.parse(`{
 			"id": "any",

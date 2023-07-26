@@ -1,5 +1,4 @@
 import { type Department } from "./department";
-import { type Duration } from "./duration";
 import { type Id } from "./id";
 import { type Invoice } from "./invoice";
 import { type Organization } from "./organization";
@@ -11,8 +10,8 @@ export type Job = {
 	date_open: Date,
 	departments: Department[],
 	id: Id,
-	/** A concrete {@link Duration} or a {@link https://docs.rs/humantime/latest/humantime | human-readable duration} */
-	increment: Duration | string,
+	/** A {@link https://docs.rs/humantime/latest/humantime | human-readable} duration */
+	increment: string,
 	invoice: Invoice,
 	notes: string,
 	objectives: string,

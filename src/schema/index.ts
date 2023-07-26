@@ -1,7 +1,6 @@
 export { Contact, ContactKind } from './contact';
 export { Currency } from './currency';
 export { Department } from './department';
-export { Duration } from './duration';
 export { Employee } from './employee';
 export { Expense } from './expense';
 export { Id } from './id';

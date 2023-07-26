@@ -1,5 +1,5 @@
-import { type MatchLocation } from '../match_location.ts';
-import { type MatchStr } from '../match_str.ts';
+import { type MatchLocation } from '../match_location';
+import { type MatchStr } from '../match_str';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-match | `MatchContactKind`}. */
 export type MatchContactKind =

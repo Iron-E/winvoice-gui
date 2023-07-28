@@ -4,6 +4,20 @@
 		"url": "https://github.com/Iron-E/winvoice-gui/issues"
 	},
 	"description": "A WIP front-end for https://github.com/Iron-E/winvoice-server, written in TypeScript with React. It allows graphical management of invoices for any number of clients.",
+	"dependencies": {
+		"@types/node": "20.4.5",
+		"@types/react": "18.2.17",
+		"@types/react-dom": "18.2.7",
+		"autoprefixer": "10.4.14",
+		"eslint": "8.46.0",
+		"eslint-config-next": "13.4.12",
+		"next": "13.4.12",
+		"postcss": "8.4.27",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
+		"tailwindcss": "3.3.3",
+		"typescript": "5.1.6"
+	},
 	"devDependencies": {
 		"@types/jest": "^29.5.3",
 		"jest": "^29.6.1",
@@ -19,15 +33,18 @@
 		"gui"
 	],
 	"license": "GPL-3.0",
-	"main": "index.js",
+	"main": "./out/app/index.js",
 	"name": "winvoice-gui",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/Iron-E/winvoice-gui.git"
 	},
 	"scripts": {
-		"build": "npx tsc -b -v",
 		"clean": "npx tsc -b --clean",
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
 		"test": "npx jest"
 	},
 	"version": "0.1.0-alpha.1"

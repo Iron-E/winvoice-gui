@@ -1,0 +1,23 @@
+{
+	"extends": "../../tsconfig-base.json",
+	"compilerOptions": {
+		"outDir": "../../out/app",
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
+		"rootDir": "."
+	},
+	"references": [
+		{
+			"path": "../api"
+		},
+		{
+			"path": "../match"
+		},
+		{
+			"path": "../schema"
+		}
+	]
+}

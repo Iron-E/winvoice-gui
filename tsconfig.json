@@ -1,14 +1,33 @@
 {
 	"compilerOptions": {
+		"allowJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"incremental": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"module": "esnext",
+		"moduleResolution": "node",
+		"noEmit": true,
 		"outDir": "./out",
-		"rootDir": "./src"
+		"plugins": [{ "name": "next" }],
+		"resolveJsonModule": true,
+		"rootDir": "./src",
+		"skipLibCheck": true,
+		"strict": false
 	},
 	"files": [],
-	"include": ["src/**/*"],
+	"include": ["next-env.d.ts", "src/**/*", ".next/types/**/*.ts"],
+	"paths": { "@/*": ["./src/app/*"] },
 	"references": [
-		{"path": "./src/api"},
-		{"path": "./src/match"},
-		{"path": "./src/schema"},
-		{"path": "./src/utils"}
+		{ "path": "./src/api" },
+		{ "path": "./src/app" },
+		{ "path": "./src/match" },
+		{ "path": "./src/schema" },
+		{ "path": "./src/utils" }
+	],
+	"exclude": [
+		"node_modules"
 	]
 }

@@ -4,8 +4,17 @@
 		"allowUnusedLabels": false,
 		"composite": true,
 		"declaration": true,
+		"esModuleInterop": true,
 		"exactOptionalPropertyTypes": true,
-		"moduleResolution": "node",
+		"importHelpers": true,
+		"jsx": "preserve",
+		"lib": [
+			"dom",
+			"dom.iterable",
+			"esnext"
+		],
+		"module": "esnext",
+		"moduleResolution": "bundler",
 		"newLine": "lf",
 		"noEmitOnError": true,
 		"noFallthroughCasesInSwitch": true,
@@ -15,6 +24,7 @@
 		"noUncheckedIndexedAccess": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
+		"resolveJsonModule": true,
 		"strict": true,
 		"target": "es6"
 	}

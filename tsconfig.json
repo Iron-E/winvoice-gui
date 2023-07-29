@@ -23,6 +23,7 @@
 	"references": [
 		{ "path": "./src/api" },
 		{ "path": "./src/app" },
+		{ "path": "./src/components" },
 		{ "path": "./src/match" },
 		{ "path": "./src/schema" },
 		{ "path": "./src/utils" }

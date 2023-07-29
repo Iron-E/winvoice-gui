@@ -5,7 +5,6 @@
 		"rootDir": "."
 	},
 	"references": [
-		{"path": "../match"},
-		{"path": "../schema"}
+		{"path": "../match"}
 	]
 }

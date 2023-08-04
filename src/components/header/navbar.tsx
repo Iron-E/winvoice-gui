@@ -1,12 +1,13 @@
 'use client';
 
-import Link from 'next/link';
 import * as navigation from 'next/navigation';
-import { routes } from '../api';
+import Link from 'next/link';
+import { FLEX } from '../css';
+import { routes } from '../../api';
 
-const COMMON_LINK_STYLE = 'border-2 mx-1 px-2 py-1 rounded';
-const CURRENT_LINK_STYLE = `${COMMON_LINK_STYLE} bg-gray-800 border-gray-800 text-gray-50`;
-const INACTIVE_LINK_STYLE = `${COMMON_LINK_STYLE} border-transparent hover:border-gray-800 duration-200`;
+const COMMON_LINK_STYLE = 'mx-1 px-2 py-1 border-2 rounded hover:border-green-200 duration-200';
+const CURRENT_LINK_STYLE = `${COMMON_LINK_STYLE} bg-green-300 border-green-400 text-gray-950`;
+const INACTIVE_LINK_STYLE = `${COMMON_LINK_STYLE} border-transparent`;
 
 const ROUTES = {
 	[routes.CONTACT]: 'Contact',
@@ -22,16 +23,17 @@ const ROUTES = {
 } as const;
 
 /**
- * @param current the current page being shown.
  * @return the navigation bar for the given `current` page.
  */
 export function NavBar(): React.ReactElement {
 	const PATH_NAME = navigation.usePathname();
 
 	return (
-		<nav className='flex items-center justify-center content-around'>
+		<nav className={`${FLEX} justify-center`}>
 			{Object.entries(ROUTES).map(([route, name]) => (
-				<Link className={PATH_NAME == route ? CURRENT_LINK_STYLE : INACTIVE_LINK_STYLE} href={route} key={route}>{name}</Link>
+				<Link className={PATH_NAME == route ? CURRENT_LINK_STYLE : INACTIVE_LINK_STYLE} href={route} key={route}>
+					{name}
+				</Link>
 			))}
 		</nav>
 	);

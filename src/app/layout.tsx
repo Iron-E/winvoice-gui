@@ -1,9 +1,10 @@
 import './globals.css'
-import type { Metadata } from 'next'
+import { type Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { NavBar } from '../components'
 
-const inter = Inter({ subsets: ['latin'] })
+import { api } from '../components'
+
+const INTER = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
 	title: 'Winvoice',
@@ -13,9 +14,10 @@ export const metadata: Metadata = {
 export default function RootLayout(props: { children: React.ReactNode }): React.ReactNode {
 	return (
 		<html lang="en">
-			<body className={inter.className}>
-				<NavBar />
-				{props.children}
+			<body className={INTER.className}>
+				<api.Page>
+					{props.children}
+				</api.Page>
 			</body>
 		</html>
 	);

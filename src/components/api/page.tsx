@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FLEX } from '../css';
-import { Header, HeaderButton } from '../header';
+import { Header, HEADER_CSS } from '../header';
 
 /**
  * The information which is kept in order to make api requests / provide relevant UI elements (e.g. whether the user is currently signed in).
@@ -25,14 +25,29 @@ export const Context = React.createContext<State | undefined>(undefined);
 export function Page(props: React.PropsWithChildren<{}>): React.ReactElement {
 	const [API, setApi] = React.useState<State>();
 
+	let account_button: React.ReactElement | undefined;
+	if (API != undefined) {
+		let content: string | undefined;
+		let onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
+		if (API.username == undefined) {
+			content = 'Login';
+			onClick = () => { };
+		} else {
+			content = 'Login';
+			onClick = () => { };
+		}
+
+		account_button = <button className={HEADER_CSS.button} onClick={onClick}>{content}</button>;
+	}
+
 	return (
 		<>
 			<Header>
 				<div className={`${FLEX}`}>
-					{API?.username != undefined && (API?.username == undefined ? <HeaderButton>Login</HeaderButton> : <HeaderButton>Logout</HeaderButton>)}
-					<HeaderButton onClick={() => setApi(undefined)}>
+					{account_button}
+					<button className={HEADER_CSS.button} onClick={() => setApi(undefined)}>
 						Connect
-					</HeaderButton>
+					</button>
 				</div>
 			</Header>
 

@@ -1,6 +1,9 @@
-export { Button as HeaderButton } from './header/button';
 import { FLEX } from './css';
 import { NavBar } from './header/navbar';
+
+export const HEADER_CSS = {
+	button: 'bg-gray-300 rounded px-1 py-1 mr-1',
+} as const;
 
 /** @return the header for the given `current` page. */
 export function Header(props: React.PropsWithChildren<{}>): React.ReactElement {

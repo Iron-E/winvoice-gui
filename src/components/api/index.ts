@@ -1,1 +1,2 @@
-export { Context, Page, type State } from './page';
+export { CONTEXT } from './context';
+export { type State } from './state';

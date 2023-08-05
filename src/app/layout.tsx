@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 	description: 'A graphical manager for invoices',
 }
 
-export default function RootLayout(props: { children: React.ReactNode }): React.ReactNode {
+export default function RootLayout(props: React.PropsWithChildren<{}>): React.ReactElement {
 	return (
 		<html lang="en">
 			<body className={INTER.className}>

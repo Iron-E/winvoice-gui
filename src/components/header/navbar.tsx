@@ -22,9 +22,7 @@ const ROUTES = {
 	[routes.USER]: 'User',
 } as const;
 
-/**
- * @return the navigation bar for the given `current` page.
- */
+/** @return the navigation bar for the given `current` page. */
 export function NavBar(): React.ReactElement {
 	const PATH_NAME = navigation.usePathname();
 

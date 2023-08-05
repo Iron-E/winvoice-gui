@@ -19,7 +19,7 @@ export const Context = React.createContext<State | undefined>(undefined);
 
 /**
  * A provider for the {@link Context} that wraps around a page.
- * @param props the properties for a page that accesses the api.
+ * @param children additional elements shown inside this one.
  * @return the API provider for an entire page of the application.
  */
 export function Page(props: React.PropsWithChildren<{}>): React.ReactElement {

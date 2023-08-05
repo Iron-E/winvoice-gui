@@ -1,5 +1,6 @@
-import { FLEX } from '../css';
-import { NavBar } from './navbar';
+export { Button as HeaderButton } from './header/button';
+import { FLEX } from './css';
+import { NavBar } from './header/navbar';
 
 /** @return the header for the given `current` page. */
 export function Header(props: React.PropsWithChildren<{}>): React.ReactElement {

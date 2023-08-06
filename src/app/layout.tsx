@@ -1,15 +1,14 @@
-import './globals.css'
-import { type Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import './globals.css';
+import { Inter } from 'next/font/google';
+import { Page } from '../components';
+import { type Metadata } from 'next';
 
-import { Page } from '../components'
-
-const INTER = Inter({ subsets: ['latin'] })
+const INTER = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
 	title: 'Winvoice',
 	description: 'A graphical manager for invoices',
-}
+};
 
 export default function RootLayout(props: React.PropsWithChildren<{}>): React.ReactElement {
 	return (

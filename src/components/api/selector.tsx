@@ -3,7 +3,7 @@
 import React from 'react';
 import { CONTEXT } from './context';
 import { type State } from './state';
-import { Modal, HandleClose } from '../modal';
+import { Modal, type HandleClose } from '../modal';
 
 /**
  * A handler for API {@link State} changes.

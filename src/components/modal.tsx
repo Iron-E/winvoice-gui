@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dim } from './dim';
-import { XButton } from './x_button';
+import { XButton } from './x-button';
 
 export type HandleClose = () => void;
 
@@ -24,7 +24,7 @@ export function Modal(props: Props): React.ReactElement {
 	}, [])
 
 	return (
-		<Dim onClick={props.onClose} opacity={70}>
+		<Dim onClick={props.onClose} opacity={50}>
 			<div className='fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded bg-gray-300 z-1' onClick={() => props.onClose()}>
 				<XButton className='w-5 mt-1 mr-1 absolute top-0 right-0 bg-gray-100' onClick={props.onClose} />
 				<div className='m-8'>

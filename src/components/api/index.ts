@@ -1,3 +1,3 @@
 export { CONTEXT } from './context';
-export { Selector, HandleSetApi as HandleSelectorSetApi } from './selector';
+export { Selector, type HandleSetApi as HandleSelectorSetApi } from './selector';
 export { type State } from './state';

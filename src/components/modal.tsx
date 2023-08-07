@@ -24,7 +24,7 @@ export function Modal(props: Props): React.ReactElement {
 	}, [])
 
 	return (
-		<Dim onClick={props.onClose} opacity={50}>
+		<Dim onClick={props.onClose} opacity={0.7}>
 			<div className='fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded bg-gray-300 z-1' onClick={() => props.onClose()}>
 				<XButton className='w-5 mt-1 mr-1 absolute top-0 right-0 bg-gray-100' onClick={props.onClose} />
 				<div className='m-8'>

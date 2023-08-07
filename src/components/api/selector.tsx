@@ -3,7 +3,8 @@
 import React from 'react';
 import { CONTEXT } from './context';
 import { type State } from './state';
-import { Modal, type HandleClose } from '../modal';
+import { Modal, type Props as ModalProps } from '../modal';
+import { type ClassName } from '../props-with';
 
 /**
  * A handler for API {@link State} changes.
@@ -11,10 +12,14 @@ import { Modal, type HandleClose } from '../modal';
  */
 export type HandleSetApi = (api: State) => void;
 
-/**
- * @return the {@link Modal} to use when connecting to the {@link State | API}.
- */
-function ConnectModal(props: { onClose: HandleClose, onSetApi: HandleSetApi }): React.ReactElement {
+/** Properties which accept a {@link HandleSetApi | API set handler}. */
+type SetApiProps = { onSetApi: HandleSetApi };
+
+/** Properties used by {@link Modal}s in the {@link Selector}. */
+type SelectorModalProps = Omit<ModalProps & SetApiProps, 'children'>;
+
+/** @return the {@link Modal} to use when connecting to the {@link State | API}. */
+function ConnectModal(props: SelectorModalProps): React.ReactElement {
 	return (
 		<Modal onClose={props.onClose}>
 			<p>I'm the connection modal</p>
@@ -22,10 +27,8 @@ function ConnectModal(props: { onClose: HandleClose, onSetApi: HandleSetApi }): 
 	);
 }
 
-/**
- * @return the {@link Modal} to use when logging in to the {@link State | API}.
- */
-function LoginModal(props: { onClose: HandleClose, onSetApi: HandleSetApi }): React.ReactElement {
+/** @return the {@link Modal} to use when logging in to the {@link State | API}. */
+function LoginModal(props: SelectorModalProps): React.ReactElement {
 	return (
 		<Modal onClose={props.onClose}>
 			<p>I'm the login modal</p>
@@ -33,12 +36,8 @@ function LoginModal(props: { onClose: HandleClose, onSetApi: HandleSetApi }): Re
 	);
 }
 
-/**
- * @param buttonClassName the CSS class used for the buttons.
- * @param onSetApi what to do when the API {@link State} is updated.
- * @return an API {@link State} selector.
- */
-export function Selector(props: { buttonClassName?: string, onSetApi: HandleSetApi }): React.ReactElement {
+/** @return an API {@link State} selector. */
+export function Selector(props: ClassName<SetApiProps, 'buttonClassName'>): React.ReactElement {
 	const [MODAL_VISIBILITY, setModalVisibility] = React.useState<'connect' | 'login' | null>(null);
 	const API = React.useContext(CONTEXT);
 

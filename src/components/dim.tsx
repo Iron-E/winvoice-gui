@@ -1,7 +1,7 @@
-import * as props_with from "./props-with";
+import type { Children, Click } from "./props-with";
 
 /** The properties of a {@link Dim}. */
-export type Props = React.PropsWithChildren<props_with.Click<{
+export type Props = Children<Click<{
 	/** how much of the background page can show through the dim. Should be 0–1 (inclusive).  */
 	opacity: number,
 }>>;

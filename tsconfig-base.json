@@ -5,7 +5,7 @@
 		"composite": true,
 		"declaration": true,
 		"esModuleInterop": true,
-		"exactOptionalPropertyTypes": true,
+		"exactOptionalPropertyTypes": false,
 		"importHelpers": true,
 		"jsx": "preserve",
 		"lib": [

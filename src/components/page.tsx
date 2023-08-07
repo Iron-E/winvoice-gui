@@ -4,13 +4,14 @@ import React from 'react';
 import { FLEX } from './css';
 import { Header, HEADER_CSS } from './header';
 import { CONTEXT, type State, Selector as ApiSelector } from './api';
+import { type Children } from './props-with';
 
 /**
  * A provider for the {@link Context} that wraps around a page.
  * @param children additional elements shown inside this one.
  * @return the API provider for an entire page of the application.
  */
-export function Page(props: React.PropsWithChildren<{}>): React.ReactElement {
+export function Page(props: Children): React.ReactElement {
 	const [API, setApi] = React.useState<State>();
 
 	return (

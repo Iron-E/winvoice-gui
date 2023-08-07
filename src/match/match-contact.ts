@@ -1,5 +1,5 @@
-import { type MatchContactKind } from "./match_contact/match_contact_kind";
-import { type MatchStr } from "./match_str";
+import { type MatchContactKind } from "./match-contact/match-contact-kind";
+import { type MatchStr } from "./match-str";
 
 export { type MatchContactKind };
 

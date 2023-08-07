@@ -1,10 +1,10 @@
 import { Id } from "../schema";
 import { type Match } from "./match";
-import { type MatchEmployee } from "./match_employee";
-import { type MatchExpense } from "./match_expense";
-import { type MatchJob } from "./match_job";
-import { type MatchSet } from "./match_set";
-import { type MatchStr } from "./match_str";
+import { type MatchEmployee } from "./match-employee";
+import { type MatchExpense } from "./match-expense";
+import { type MatchJob } from "./match-job";
+import { type MatchSet } from "./match-set";
+import { type MatchStr } from "./match-str";
 
 /** Same as {@link https://github.com/Iron-E/winvoice-match | `MatchTimesheet`}. */
 export type MatchTimesheet = {

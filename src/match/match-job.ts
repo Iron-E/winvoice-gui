@@ -1,10 +1,10 @@
 import { type Id } from "../schema";
 import { type Match } from "./match";
-import { type MatchDepartment } from "./match_department";
-import { type MatchInvoice } from "./match_invoice";
-import { type MatchOrganization } from "./match_organization";
-import { type MatchSet } from "./match_set";
-import { type MatchStr } from "./match_str";
+import { type MatchDepartment } from "./match-department";
+import { type MatchInvoice } from "./match-invoice";
+import { type MatchOrganization } from "./match-organization";
+import { type MatchSet } from "./match-set";
+import { type MatchStr } from "./match-str";
 
 /** Same as {@link https://github.com/Iron-E/winvoice-match | `MatchJob`}. */
 export type MatchJob = {

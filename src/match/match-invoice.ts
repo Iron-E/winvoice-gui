@@ -1,6 +1,6 @@
 import { type Money } from "../schema";
 import { type Match } from "./match";
-import { type MatchOption } from "./match_option";
+import { type MatchOption } from "./match-option";
 
 /** Same as {@link https://github.com/Iron-E/winvoice-match | `MatchInvoice`}. */
 export type MatchInvoice = {

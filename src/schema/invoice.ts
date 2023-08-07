@@ -1,4 +1,4 @@
-import { type InvoiceDate } from "./invoice/invoice_date";
+import { type InvoiceDate } from "./invoice/invoice-date";
 import { type Money } from "./money";
 
 export { type InvoiceDate };

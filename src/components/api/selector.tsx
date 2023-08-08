@@ -24,27 +24,25 @@ const CONNECT_MODAL_INPUT_ID = 'api-connect-addr' as const;
 /** @return the {@link Modal} to use when connecting to the {@link State | API}. */
 function ConnectModal(props: SelectorModalProps): React.ReactElement {
 	const [INPUT, setInput] = React.useState<string>('');
+	// const [STATUS, setStatus] = React.useState<'input' | 'sending' | 'failed'>('');
+
 	return (
 		<Modal onClose={props.onClose}>
-			<form onSubmit={(e) => console.log(e)}>
+			<form onSubmit={async (e) => {
+				e.preventDefault();
+				console.log('TODO: write fetch for API');
+			}}>
 				<label className='mr-2' htmlFor={CONNECT_MODAL_INPUT_ID}>Address:</label>
 				<input
 					className='p-1 rounded'
 					id={CONNECT_MODAL_INPUT_ID}
 					name={CONNECT_MODAL_INPUT_ID}
 					onChange={(e) => setInput(e.target.value)}
+					required={true}
 					type='url'
-					value={INPUT}
 				/>
 				<div className='text-center mt-3'>
-					<button
-						className='px-1 rounded bg-white shadow-sm disabled:shadow-inner disabled:opacity-50'
-						disabled={INPUT == ''}
-						onClick={(e) => {
-							e.preventDefault();
-							console.log('TODO: ping api');
-						}}
-					>
+					<button className='px-1 rounded bg-white shadow-sm'>
 						Connect
 					</button>
 				</div>

@@ -15,7 +15,7 @@ export function useKeydownHandler(keys: {[index: string]: true}, onKeyPressed?: 
 
 		function handleKeydown(e: KeyboardEvent): void {
 			if (keys[e.key]) {
-				onKeyPressed!()
+				onKeyPressed!();
 			}
 		}
 

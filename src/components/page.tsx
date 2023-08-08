@@ -1,9 +1,8 @@
 'use client';
 
 import React from 'react';
-import { FLEX } from './css';
-import { Header, HEADER_CSS } from './header';
 import { CONTEXT, type State, Selector as ApiSelector } from './api';
+import { Header, HEADER_CSS } from './header';
 import { type Children } from './props-with';
 
 /**
@@ -17,9 +16,7 @@ export function Page(props: Children): React.ReactElement {
 	return (
 		<CONTEXT.Provider value={API}>
 			<Header>
-				<div className={FLEX}>
-					<ApiSelector buttonClassName={HEADER_CSS.button} onSetApi={setApi} />
-				</div>
+				<ApiSelector buttonClassName={HEADER_CSS.button} onSetApi={setApi} />
 			</Header>
 
 			{API == undefined ? <p>Please <b>connect</b> and <b>sign in</b> to continue.</p> : props.children}

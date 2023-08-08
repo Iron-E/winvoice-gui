@@ -13,7 +13,7 @@
 		"outDir": "./out",
 		"plugins": [{ "name": "next" }],
 		"resolveJsonModule": true,
-		"rootDir": "./src",
+		"rootDirs": ["./src", "./.next/types"],
 		"skipLibCheck": true,
 		"strict": false
 	},

@@ -24,6 +24,7 @@
 		{ "path": "./src/api" },
 		{ "path": "./src/app" },
 		{ "path": "./src/components" },
+		{ "path": "./src/hooks" },
 		{ "path": "./src/match" },
 		{ "path": "./src/schema" },
 		{ "path": "./src/utils" }

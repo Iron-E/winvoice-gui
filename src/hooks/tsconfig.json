@@ -1,14 +1,10 @@
 {
 	"extends": "../../tsconfig-base.json",
 	"compilerOptions": {
-		"outDir": "../../out/components",
+		"outDir": "../../out/hooks",
 		"plugins": [{ "name": "next" }],
 		"rootDir": "."
 	},
 	"references": [
-		{ "path": "../api" },
-		{ "path": "../hooks" },
-		{ "path": "../match" },
-		{ "path": "../schema" }
 	]
 }

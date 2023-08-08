@@ -2,26 +2,14 @@ import React from 'react';
 import type { Children, Click } from './props-with';
 import { Dim } from './dim';
 import { XButton } from './x-button';
+import * as hooks from '../hooks';
 
 /** properties for a {@link Modal}. */
 export type Props = Children<Click<{}, 'onClose'>>;
 
 /** @return a div which will show above all other content on the page. */
 export function Modal(props: Props): React.ReactElement {
-	React.useEffect(() => {
-		if (props.onClose == undefined) {
-			return;
-		}
-
-		function close(e: KeyboardEvent): void {
-			if (e.key === 'Escape') {
-				props.onClose!();
-			}
-		}
-
-		window.addEventListener('keydown', close);
-		return () => window.removeEventListener('keydown', close);
-	}, [])
+	hooks.useKeydownHandler({ Escape: true }, props.onClose);
 
 	return (
 		<Dim onClick={props.onClose} opacity={0.7}>

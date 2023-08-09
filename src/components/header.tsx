@@ -13,7 +13,7 @@ function Dropdown(props: Children<Click<{}, 'onClose'>>): React.ReactElement {
 	hooks.useKeydownHandler({ Escape: true }, props.onClose);
 
 	return (
-		<div className="xl:hidden fixed w-fit min-w-full pb-3 border-b-2 top-[2.6rem] bg-green-200 border-b-gray-400 shadow-lg rounded-b-2xl">
+		<div className='xl:hidden fixed w-fit min-w-full pb-3 border-b-2 top-[2.6rem] bg-green-200 border-b-gray-400 shadow-lg rounded-b-2xl'>
 			{props.children}
 		</div>
 	);

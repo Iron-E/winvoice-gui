@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout(props: Children): React.ReactElement {
 	return (
-		<html lang="en">
+		<html lang='en'>
 			<body className={INTER.className}>
 				<Page>
 					{props.children}

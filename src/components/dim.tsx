@@ -1,4 +1,4 @@
-import type { Children, Click } from "./props-with";
+import type { Children, Click } from './props-with';
 
 /** The properties of a {@link Dim}. */
 export type Props = Children<Click>;

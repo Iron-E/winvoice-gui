@@ -1,7 +1,7 @@
-import { type Department } from "./department";
-import { type Id } from "./id";
-import { type Invoice } from "./invoice";
-import { type Organization } from "./organization";
+import { type Department } from './department';
+import { type Id } from './id';
+import { type Invoice } from './invoice';
+import { type Organization } from './organization';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-schema | `Job`} type. */
 export type Job = {

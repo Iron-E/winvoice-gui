@@ -1,7 +1,7 @@
 import { type UnionToKeys } from '../utils';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-match | `MatchSet`}. */
-export type MatchSet<T> =
+export type MatchSet<T = unknown> =
 	| 'any'
 	| UnionToKeys<'and' | 'or', MatchSet<T>[]>
 	| { contains: T }

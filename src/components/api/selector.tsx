@@ -5,7 +5,7 @@ import type { Maybe, Opt } from '../../utils';
 import { CONTEXT } from './context';
 import { Modal, type Props as ModalProps } from '../modal';
 import { type ClassName } from '../props-with';
-import { type State } from './state';
+import { State } from './state';
 
 /**
  * A handler for API {@link State} changes.
@@ -71,7 +71,7 @@ export function Selector(props: ClassName<SetApiProps, 'buttonClassName'>): Reac
 			? ['Login', () => setModalVisibility('login')]
 			: ['Logout', () => {
 				console.log('TODO: send `fetch` to logout on `API.address`');
-				props.onSetApi({ address: API.address });
+				props.onSetApi(new State(API.address));
 			}]
 			;
 

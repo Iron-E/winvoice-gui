@@ -1,6 +1,6 @@
 export * as request from './request';
 export * as response from './response';
-export * as routes from './routes';
+export { Route } from './route';
 export { Code, type Status } from './status';
 
 /** Information about the API version supported by this client. */

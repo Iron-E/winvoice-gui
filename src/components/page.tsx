@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { CONTEXT, type State, Selector as ApiSelector } from './api';
+import { CONTEXT, State, Selector as ApiSelector } from './api';
 import { Header, HEADER_CSS } from './header';
 import { type Children } from './props-with';
 

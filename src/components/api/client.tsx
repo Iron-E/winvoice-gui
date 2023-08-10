@@ -1,24 +1,49 @@
 'use client';
 
 import React from 'react';
+import type { ClassName } from '../props-with';
 import type { Maybe, Opt } from '../../utils';
-import { CONTEXT } from './context';
 import { Modal, type Props as ModalProps } from '../modal';
-import { type ClassName } from '../props-with';
-import { State } from './state';
+import { Route, request, VERSION } from '../../api';
+
+/**
+ * The information which is kept in order to make api requests / provide relevant UI elements (e.g. whether the user is currently signed in).
+ */
+export class Client {
+	constructor(
+		/** the address of the API */
+		public address: string,
+		/** the username of the currently logged in user */
+		public username?: string,
+	) { }
+
+	/**
+	 * Send a delete request.
+	 * @param route the {@link Route} to send the delete request to.
+	 * @param body the request to send.
+	 * @return the response from the server.
+	 */
+	whoAmI(this: Client): Promise<Response> {
+		return fetch(`${this.address}${Route.WhoAmI}`, {});
+	}
+}
 
 /**
  * A handler for API {@link State} changes.
  * @param api the {@link State} of the API being used.
  */
-export type HandleSetApi = (api: State) => void;
+export type HandleSetClient = (client: Client) => void;
 
-/** Properties which accept a {@link HandleSetApi | API set handler}. */
-type SetApiProps = { onSetApi: HandleSetApi };
+/** Properties which accept a {@link HandleSetClient | API set handler}. */
+type SetClientProps = { onSetClient: HandleSetClient };
 
-/** Properties used by {@link Modal}s in the {@link Selector}. */
-type SelectorModalProps = Omit<ModalProps & SetApiProps, 'children'>;
+/** Properties used by {@link Modal}s in the {@link ClientSelector}. */
+type SelectorModalProps = Omit<ModalProps & SetClientProps, 'children'>;
 
+/** The context for the currently selected API address. */
+export const CLIENT_CONTEXT = React.createContext<Maybe<Client>>(undefined);
+
+/** The `#id` of the {@link ConnectModal} {@link HTMLInputElement} */
 const CONNECT_MODAL_INPUT_ID = 'api-connect-addr' as const;
 
 /** @return the {@link Modal} to use when connecting to the {@link State | API}. */
@@ -61,9 +86,9 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 }
 
 /** @return an API {@link State} selector. */
-export function Selector(props: ClassName<SetApiProps, 'buttonClassName'>): React.ReactElement {
+export function ClientSelector(props: ClassName<SetClientProps, 'buttonClassName'>): React.ReactElement {
 	const [MODAL_VISIBILITY, setModalVisibility] = React.useState<Opt<'connect' | 'login'>>(null);
-	const API = React.useContext(CONTEXT);
+	const API = React.useContext(CLIENT_CONTEXT);
 
 	let account_button: Maybe<React.ReactElement>;
 	if (API != undefined) {
@@ -71,7 +96,7 @@ export function Selector(props: ClassName<SetApiProps, 'buttonClassName'>): Reac
 			? ['Login', () => setModalVisibility('login')]
 			: ['Logout', () => {
 				console.log('TODO: send `fetch` to logout on `API.address`');
-				props.onSetApi(new State(API.address));
+				props.onSetClient(new Client(API.address));
 			}]
 			;
 
@@ -90,7 +115,7 @@ export function Selector(props: ClassName<SetApiProps, 'buttonClassName'>): Reac
 				Connect
 			</button>
 
-			{MODAL && <MODAL onClose={() => setModalVisibility(null)} onSetApi={props.onSetApi} />}
+			{MODAL && <MODAL onClose={() => setModalVisibility(null)} onSetClient={props.onSetClient} />}
 		</>
 	);
 }

@@ -4,7 +4,7 @@ import React from 'react';
 import type { ClassName } from '../props-with';
 import type { Maybe, Opt, Result } from '../../utils';
 import { Modal, type Props as ModalProps } from '../modal';
-import { Route, request, VERSION } from '../../api';
+import { Route, VERSION_HEADER } from '../../api';
 
 /**
  * The information which is kept in order to make api requests / provide relevant UI elements (e.g. whether the user is currently signed in).
@@ -21,14 +21,21 @@ export class Client {
 	 * Send a delete request.
 	 * @param route the {@link Route} to send the delete request to.
 	 * @param body the request to send.
-	 * @return the response from the server.
+	 * @return the response from the server, or an error if one occurs.
 	 */
-	async whoAmI(this: Client): Promise<Result<Response, unknown>> {
+	async whoAmI(this: Client): Promise<Response | DOMException | TypeError> {
 		try {
-			const RESPONSE = await fetch(`${this.address}${Route.WhoAmI}`, {method: 'GET'});
-			return { ok:  RESPONSE };
+			const RESPONSE = await fetch(`${this.address}${Route.WhoAmI}`, {
+				method: 'GET',
+				headers: {
+					...VERSION_HEADER,
+				},
+			});
+
+			return RESPONSE;
 		} catch (e: unknown) {
-			return { err: e };
+			// See: https://developer.mozilla.org/en-US/docs/Web/API/fetch
+			return e as DOMException | TypeError;
 		}
 	}
 }
@@ -60,7 +67,7 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 			<form onSubmit={async (e) => {
 				e.preventDefault();
 				const CLIENT = new Client(URL);
-				alert(JSON.stringify(await CLIENT.whoAmI()));
+				console.debug(await CLIENT.whoAmI());
 			}}>
 				<label className='mr-2' htmlFor={CONNECT_MODAL_INPUT_ID}>Address:</label>
 				<input

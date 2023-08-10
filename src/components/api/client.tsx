@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { ClassName } from '../props-with';
-import type { Maybe, Opt } from '../../utils';
+import type { Maybe, Opt, Result } from '../../utils';
 import { Modal, type Props as ModalProps } from '../modal';
 import { Route, request, VERSION } from '../../api';
 
@@ -23,8 +23,13 @@ export class Client {
 	 * @param body the request to send.
 	 * @return the response from the server.
 	 */
-	whoAmI(this: Client): Promise<Response> {
-		return fetch(`${this.address}${Route.WhoAmI}`, {});
+	async whoAmI(this: Client): Promise<Result<Response, unknown>> {
+		try {
+			const RESPONSE = await fetch(`${this.address}${Route.WhoAmI}`, {method: 'GET'});
+			return { ok:  RESPONSE };
+		} catch (e: unknown) {
+			return { err: e };
+		}
 	}
 }
 
@@ -48,21 +53,21 @@ const CONNECT_MODAL_INPUT_ID = 'api-connect-addr' as const;
 
 /** @return the {@link Modal} to use when connecting to the {@link State | API}. */
 function ConnectModal(props: SelectorModalProps): React.ReactElement {
-	const [INPUT, setInput] = React.useState<string>('');
-	// const [STATUS, setStatus] = React.useState<'input' | 'sending' | 'failed'>('');
+	const [URL, setUrl] = React.useState<string>('');
 
 	return (
 		<Modal onClose={props.onClose}>
 			<form onSubmit={async (e) => {
 				e.preventDefault();
-				console.log('TODO: write fetch for API');
+				const CLIENT = new Client(URL);
+				alert(JSON.stringify(await CLIENT.whoAmI()));
 			}}>
 				<label className='mr-2' htmlFor={CONNECT_MODAL_INPUT_ID}>Address:</label>
 				<input
 					className='p-1 rounded'
 					id={CONNECT_MODAL_INPUT_ID}
 					name={CONNECT_MODAL_INPUT_ID}
-					onChange={(e) => setInput(e.target.value)}
+					onChange={(e) => setUrl(e.target.value)}
 					required={true}
 					type='url'
 				/>

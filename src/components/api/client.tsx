@@ -2,9 +2,22 @@
 
 import React from 'react';
 import type { ClassName } from '../props-with';
-import type { Maybe, Opt, Result } from '../../utils';
+import type { Maybe, Opt } from '../../utils';
+import { Code, response, Route, VERSION_HEADER } from '../../api';
 import { Modal, type Props as ModalProps } from '../modal';
-import { Route, VERSION_HEADER } from '../../api';
+import { UnauthorizedError } from './unauthorized_error';
+import { UnexpectedJsonError } from './unexpected_json_error';
+import { UnexpectedResponseError } from './unexpected_response_error';
+
+/**
+ * A {@link Promise.catch | catch} for {@link fetch}.
+ * @returns the typed error which was caught.
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/fetch for why this is safe.
+ */
+function catch_fetch(e: unknown): DOMException | TypeError {
+	return e as DOMException | TypeError;
+}
+
 
 /**
  * The information which is kept in order to make api requests / provide relevant UI elements (e.g. whether the user is currently signed in).
@@ -17,26 +30,59 @@ export class Client {
 		public username?: string,
 	) { }
 
+	/** An error to communicate that the client is not yet authorized. */
+	unauthorized(this: Client, method: 'DELETE' | 'GET' | 'PATCH' | 'POST', resource: string): UnauthorizedError {
+		return new UnauthorizedError(this.address, method, resource);
+	}
+
+	/** An error to communicate that the client received unexpected {@link JSON}. */
+	unexpectedJson(this: Client): UnexpectedJsonError {
+		return new UnexpectedJsonError(this.address);
+	}
+
+	/** An error to communicate that the client received unexpected {@link Response}. */
+	unexpectedResponse(this: Client): UnexpectedResponseError {
+		return new UnexpectedResponseError(this.address);
+	}
+
 	/**
 	 * Send a delete request.
 	 * @param route the {@link Route} to send the delete request to.
 	 * @param body the request to send.
 	 * @return the response from the server, or an error if one occurs.
 	 */
-	async whoAmI(this: Client): Promise<Response | DOMException | TypeError> {
-		try {
-			const RESPONSE = await fetch(`${this.address}${Route.WhoAmI}`, {
-				method: 'GET',
-				headers: {
-					...VERSION_HEADER,
-				},
-			});
+	async whoAmI(this: Client): Promise<
+		DOMException
+		| response.WhoAmI
+		| TypeError
+		| UnexpectedJsonError
+		| UnexpectedResponseError
+		| UnauthorizedError
+	> {
+		const RESULT = await fetch(`${this.address}${Route.WhoAmI}`, {
+			method: 'GET',
+			headers: {
+				...VERSION_HEADER,
+			},
+		}).catch(catch_fetch);
 
-			return RESPONSE;
-		} catch (e: unknown) {
-			// See: https://developer.mozilla.org/en-US/docs/Web/API/fetch
-			return e as DOMException | TypeError;
+		if (RESULT instanceof Response) {
+			switch (RESULT.status) {
+				case 200:
+					let json = await RESULT.json();
+					if ('username' in json) {
+						return json as response.WhoAmI;
+					}
+
+					return this.unexpectedJson();
+				case 401:
+					return this.unauthorized('GET', Route.WhoAmI)
+				default:
+					return this.unexpectedResponse();
+			};
 		}
+
+		return RESULT;
 	}
 }
 

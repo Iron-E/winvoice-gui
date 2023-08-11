@@ -25,7 +25,7 @@ function catch_fetch(e: unknown): DOMException | TypeError {
 export class Client {
 	constructor(
 		/** the address of the API */
-		public address: string,
+		public readonly address: string,
 		/** the username of the currently logged in user */
 		public username?: string,
 	) { }
@@ -113,7 +113,26 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 			<form onSubmit={async (e) => {
 				e.preventDefault();
 				const CLIENT = new Client(URL);
-				console.debug(await CLIENT.whoAmI());
+				const RESULT = await CLIENT.whoAmI();
+
+				if (
+					RESULT instanceof DOMException
+					|| RESULT instanceof TypeError
+					|| RESULT instanceof UnexpectedJsonError
+					|| RESULT instanceof UnexpectedResponseError
+				) {
+					console.log('TODO: show error in popup');
+					console.debug(RESULT);
+				} else { // the user isn't logged in, which is fine.
+					if (!(RESULT instanceof UnauthorizedError)) {
+						CLIENT.username = RESULT.username;
+					}
+
+					props.onSetClient(CLIENT);
+					if (props.onClose != undefined) {
+						props.onClose();
+					}
+				}
 			}}>
 				<label className='mr-2' htmlFor={CONNECT_MODAL_INPUT_ID}>Address:</label>
 				<input

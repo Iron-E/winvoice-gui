@@ -5,4 +5,5 @@ export { Dim, type Props as DimProps } from './dim';
 export { Header, HEADER_CSS } from './header';
 export { Modal, type Props as ModalProps } from './modal';
 export { Page } from './page';
+export { compareByLevel, SHOW_MESSAGE_CONTEXT, type Message, Messages } from './messages';
 export { XButton } from './x-button';

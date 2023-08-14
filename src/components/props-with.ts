@@ -15,3 +15,9 @@ export type Children<T extends {} = {}> = T & {
 	/** The elements inside this one. */
 	children?: React.ReactNode,
 };
+
+/** Properties of an {@link React.ReactElement | element} that include children. */
+export type Key<T extends {} = {}> = T & {
+	/** A unique identifier for the element. */
+	key?: React.Key,
+};

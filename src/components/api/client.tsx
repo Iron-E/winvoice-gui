@@ -3,11 +3,12 @@
 import React from 'react';
 import type { ClassName } from '../props-with';
 import type { Maybe, Opt } from '../../utils';
-import { Code, response, Route, VERSION_HEADER } from '../../api';
+import { response, Route, VERSION_HEADER } from '../../api';
 import { Modal, type Props as ModalProps } from '../modal';
 import { UnauthorizedError } from './unauthorized_error';
 import { UnexpectedJsonError } from './unexpected_json_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
+import { SHOW_MESSAGE_CONTEXT } from '../messages';
 
 /**
  * A {@link Promise.catch | catch} for {@link fetch}.
@@ -106,11 +107,12 @@ const CONNECT_MODAL_INPUT_ID = 'api-connect-addr' as const;
 
 /** @return the {@link Modal} to use when connecting to the {@link State | API}. */
 function ConnectModal(props: SelectorModalProps): React.ReactElement {
+	const addMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
 	const [URL, setUrl] = React.useState<string>('');
 
 	return (
 		<Modal onClose={props.onClose}>
-			<form onSubmit={async (e) => {
+			<form onSubmit={async e => {
 				e.preventDefault();
 				const CLIENT = new Client(URL);
 				const RESULT = await CLIENT.whoAmI();
@@ -130,6 +132,7 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 
 					props.onSetClient(CLIENT);
 					props.onClose?.();
+					addMessage('INFO', 'Connected successfully');
 				}
 			}}>
 				<label className='mr-2' htmlFor={CONNECT_MODAL_INPUT_ID}>Address:</label>
@@ -137,7 +140,7 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 					className='p-1 rounded'
 					id={CONNECT_MODAL_INPUT_ID}
 					name={CONNECT_MODAL_INPUT_ID}
-					onChange={(e) => setUrl(e.target.value)}
+					onChange={e => setUrl(e.target.value)}
 					required={true}
 					type='url'
 				/>

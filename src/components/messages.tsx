@@ -9,28 +9,28 @@ import { XButton } from './x-button';
 /** The icon style which is shared by all icons. */
 const BASE_ICON_STYLE = 'flex-shrink-0 w-5' as const;
 
-/** The style used for the {@link XButton}. */
-const BASE_LEVEL_ICON_STYLE = `${BASE_ICON_STYLE} ml-1` as const;
-
 /** The base style of a {@link Message}, which is shared by all levels. */
 const BASE_MSG_STYLE = `${FLEX} gap-1 justify-between basis-auto hover:flex-shrink-0 m-1 px-1 py-1 min-w-[10vmax] max-w-fit ease-in-out duration-300 rounded z-1` as const;
+
+/** The style used for the {@link XButton}. */
+const LEVEL_ICON_STYLE = `${BASE_ICON_STYLE} ml-1` as const;
 
 /** Arbitrary data ssociated with the {@link Level} of a message. */
 const LEVELS = {
 	error: {
-		icon: <XCircleIcon className={BASE_LEVEL_ICON_STYLE} />,
+		icon: <XCircleIcon className={LEVEL_ICON_STYLE} />,
 		severity: 10,
 		style: `${BASE_MSG_STYLE} flex-shrink bg-rose-500`,
 	},
 
 	info: {
-		icon: <InformationCircleIcon className={BASE_LEVEL_ICON_STYLE} />,
+		icon: <InformationCircleIcon className={LEVEL_ICON_STYLE} />,
 		severity: 1,
 		style: `${BASE_MSG_STYLE} [flex-shrink:3] bg-sky-300`,
 	},
 
 	warn: {
-		icon: <ExclamationTriangleIcon className={BASE_LEVEL_ICON_STYLE} />,
+		icon: <ExclamationTriangleIcon className={LEVEL_ICON_STYLE} />,
 		severity: 5,
 		style: `${BASE_MSG_STYLE} [flex-shrink:2] bg-orange-400`,
 	},

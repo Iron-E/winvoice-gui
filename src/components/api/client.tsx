@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { ClassName } from '../props-with';
+import type { ClassName, On } from '../props-with';
 import type { Maybe, Opt } from '../../utils';
 import { response, Route, VERSION_HEADER } from '../../api';
 import { Modal, type Props as ModalProps } from '../modal';
@@ -87,14 +87,8 @@ export class Client {
 	}
 }
 
-/**
- * A handler for API {@link State} changes.
- * @param api the {@link State} of the API being used.
- */
-export type HandleSetClient = (client: Client) => void;
-
-/** Properties which accept a {@link HandleSetClient | API set handler}. */
-type SetClientProps = { onSetClient: HandleSetClient };
+/** Properties which accept a handler. */
+type SetClientProps = Required<On<'setClient', [client: Client]>>;
 
 /** Properties used by {@link Modal}s in the {@link ClientSelector}. */
 type SelectorModalProps = Omit<ModalProps & SetClientProps, 'children'>;
@@ -164,7 +158,7 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 }
 
 /** @return an API {@link State} selector. */
-export function ClientSelector(props: ClassName<SetClientProps, 'buttonClassName'>): React.ReactElement {
+export function ClientSelector(props: ClassName<'buttonClassName'> & SetClientProps): React.ReactElement {
 	const [MODAL_VISIBILITY, setModalVisibility] = React.useState<Opt<'connect' | 'login'>>(null);
 	const API = React.useContext(CLIENT_CONTEXT);
 

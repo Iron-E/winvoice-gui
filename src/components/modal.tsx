@@ -1,11 +1,11 @@
 import React from 'react';
-import type { Children, Click } from './props-with';
+import type { Children, On } from './props-with';
 import { Dim } from './dim';
 import { XButton } from './x-button';
 import * as hooks from '../hooks';
 
 /** properties for a {@link Modal}. */
-export type Props = Children<Click<{}, 'onClose'>>;
+export type Props = Children & Required<On<'close'>>;
 
 /** @return a div which will show above all other content on the page. */
 export function Modal(props: Props): React.ReactElement {

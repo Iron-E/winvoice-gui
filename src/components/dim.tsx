@@ -1,7 +1,7 @@
 import type { Children, Click } from './props-with';
 
 /** The properties of a {@link Dim}. */
-export type Props = Children<Click>;
+export type Props = Children & Click;
 
 /** @return a floating `div` which dims the screen at `z-0`. */
 export function Dim(props: Props): React.ReactElement {

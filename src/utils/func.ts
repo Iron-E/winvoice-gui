@@ -6,4 +6,4 @@
  * type HandleButtonClick = Func<[foo: string, bar: number], void>; // (foo: string, bar: number) => void
  * ```
  */
-export type Func<Params extends any[], Ret> = Params extends [...infer Param] ? (...param: Param) => Ret : never;
+export type Func<Params extends any[], Return> = Params extends [...infer Param] ? (...param: Param) => Return : never;

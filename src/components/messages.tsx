@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ClassName, Click } from './props-with';
+import type { ClassName, On } from './props-with';
 import { ExclamationTriangleIcon, InformationCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { FLEX } from './css/flex';
 import { XButton } from './x-button';
@@ -65,7 +65,7 @@ export function compareByLevel(a: Message, b: Message): number {
 }
 
 /** @return a {@link Message} as a */
-function Message_(props: Click<Message, 'onHide'>): React.ReactElement {
+function Message_(props: Message & On<'hide'>): React.ReactElement {
 	const DATA = LEVELS[props.level];
 	return (
 		<div className={DATA.style} key={props.key}>
@@ -81,7 +81,7 @@ function Message_(props: Click<Message, 'onHide'>): React.ReactElement {
 }
 
 /** @return an {@link React.ReactElement | element} which floats messages at the bottom of the screen, and a function to show new messages. */
-export function Messages(props: ClassName<{ messages: Message[], onHideMessage: (key: string) => void }>): React.ReactElement {
+export function Messages(props: ClassName & Required<On<'hideMessage', [key: string]>> & { messages: Message[] }): React.ReactElement {
 	return (
 		<div className={props.className}>
 			{props.messages.map(message => Message_({ ...message, onHide: () => props.onHideMessage(message.key) }))}

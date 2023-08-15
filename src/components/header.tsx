@@ -1,7 +1,7 @@
 import * as hooks from '../hooks';
 import React from 'react';
 import { Bars3Icon } from '@heroicons/react/20/solid';
-import { Click, type Children } from './props-with';
+import type { Children, On } from './props-with';
 import { FLEX, HIDDEN_XL_FLEX } from './css';
 import { NavBar } from './header/navbar';
 
@@ -9,7 +9,7 @@ export const HEADER_CSS = {
 	button: 'px-1.5 py-1 mx-3 xl:mx-0 xl:last:mr-1 shadow bg-green-600 text-white rounded',
 } as const;
 
-function Dropdown(props: Children<Click<{}, 'onClose'>>): React.ReactElement {
+function Dropdown(props: Children & Required<On<'close'>>): React.ReactElement {
 	hooks.useKeydownHandler({ Escape: true }, props.onClose);
 
 	return (

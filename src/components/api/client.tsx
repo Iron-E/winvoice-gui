@@ -70,9 +70,9 @@ export class Client {
 		if (RESULT instanceof Response) {
 			switch (RESULT.status) {
 				case 200:
-					let json = await RESULT.json();
-					if ('username' in json) {
-						return json as response.WhoAmI;
+					const OBJECT = await RESULT.json();
+					if ('username' in OBJECT) {
+						return OBJECT as response.WhoAmI;
 					}
 
 					return this.unexpectedJson();
@@ -111,14 +111,8 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 				const CLIENT = new Client(URL);
 				const RESULT = await CLIENT.whoAmI();
 
-				if (
-					RESULT instanceof DOMException
-					|| RESULT instanceof TypeError
-					|| RESULT instanceof UnexpectedJsonError
-					|| RESULT instanceof UnexpectedResponseError
-				) {
-					console.log('TODO: show error in popup');
-					console.debug(RESULT);
+				if (RESULT instanceof DOMException || RESULT instanceof TypeError || RESULT instanceof UnexpectedJsonError || RESULT instanceof UnexpectedResponseError) {
+					addMessage('error', RESULT.message);
 				} else { // the user isn't logged in, which is fine.
 					if (!(RESULT instanceof UnauthorizedError)) {
 						CLIENT.username = RESULT.username;
@@ -162,7 +156,6 @@ export function ClientSelector(props: ClassName<'buttonClassName'> & SetClientPr
 	const [MODAL_VISIBILITY, setModalVisibility] = React.useState<Opt<'connect' | 'login'>>(null);
 	const API = React.useContext(CLIENT_CONTEXT);
 
-	let account_button: Maybe<React.ReactElement>;
 	if (API != undefined) {
 		let [content, onClick] = API.username == undefined
 			? ['Login', () => setModalVisibility('login')]
@@ -172,7 +165,7 @@ export function ClientSelector(props: ClassName<'buttonClassName'> & SetClientPr
 			}]
 			;
 
-		account_button = (
+		var account_button: Maybe<React.ReactElement> = (
 			<button className={props.buttonClassName} onClick={onClick}>
 				{content}
 			</button>

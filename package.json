@@ -41,12 +41,13 @@
 		"url": "git+https://github.com/Iron-E/winvoice-gui.git"
 	},
 	"scripts": {
-		"clean": "npx tsc -b --clean",
-		"dev": "next dev",
 		"build": "next build",
-		"start": "next start",
+		"check": "tsc -b -v",
+		"clean": "tsc -b --clean",
+		"dev": "next dev",
 		"lint": "next lint",
-		"test": "npx jest"
+		"start": "next start",
+		"test": "jest"
 	},
 	"version": "0.1.0-alpha.1"
 }

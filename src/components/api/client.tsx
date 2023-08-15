@@ -132,7 +132,7 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 
 					props.onSetClient(CLIENT);
 					props.onClose?.();
-					addMessage('INFO', 'Connected successfully');
+					addMessage('info', 'Connected successfully');
 				}
 			}}>
 				<label className='mr-2' htmlFor={CONNECT_MODAL_INPUT_ID}>Address:</label>

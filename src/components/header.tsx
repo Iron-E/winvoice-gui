@@ -6,7 +6,7 @@ import { FLEX, HIDDEN_XL_FLEX } from './css';
 import { NavBar } from './header/navbar';
 
 export const HEADER_CSS = {
-	button: 'px-1.5 py-1 mt-1 xl:mt-0 mx-3 xl:ml-0 xl:mr-1 shadow bg-green-600 text-white rounded',
+	button: 'px-1.5 py-1 mx-3 xl:mx-0 xl:last:mr-1 shadow bg-green-600 text-white rounded',
 } as const;
 
 function Dropdown(props: Children<Click<{}, 'onClose'>>): React.ReactElement {
@@ -32,7 +32,7 @@ export function Header(props: Children): React.ReactElement {
 
 			{/* Wide screen */}
 			<NavBar className={`${HIDDEN_XL_FLEX} justify-center`} />
-			<div className={HIDDEN_XL_FLEX}>
+			<div className={`${HIDDEN_XL_FLEX} gap-1.5`}>
 				{props.children}
 			</div>
 
@@ -44,7 +44,7 @@ export function Header(props: Children): React.ReactElement {
 			{DROPDOWN_VISIBLE && <Dropdown onClose={() => setDropdownVisible(false)}>
 				<div className='flex flex-col'>
 					<NavBar className={`[display:inherit] [flex-flow:inherit]`} />
-					<div className={`[display:inherit] flex-col-reverse`}>
+					<div className={`[display:inherit] flex-col-reverse gap-1`}>
 						{props.children}
 					</div>
 				</div>

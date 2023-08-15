@@ -4,33 +4,29 @@ import React from 'react';
 import type { ClassName, On } from './props-with';
 import { ExclamationTriangleIcon, InformationCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { FLEX } from './css/flex';
-import { XButton } from './x-button';
 
 /** The icon style which is shared by all icons. */
 const BASE_ICON_STYLE = 'flex-shrink-0 w-5' as const;
 
 /** The base style of a {@link Message}, which is shared by all levels. */
-const BASE_MSG_STYLE = `${FLEX} gap-1 justify-between basis-auto hover:flex-shrink-0 m-1 px-1 py-1 min-w-[10vmax] max-w-fit ease-in-out duration-300 rounded z-1` as const;
-
-/** The style used for the {@link XButton}. */
-const LEVEL_ICON_STYLE = `${BASE_ICON_STYLE} ml-1` as const;
+const BASE_MSG_STYLE = `${FLEX} gap-1 justify-between basis-auto hover:flex-shrink-0 m-1 px-2 py-1 min-w-[10vmax] max-w-fit ease-in-out duration-300 rounded z-1` as const;
 
 /** Arbitrary data ssociated with the {@link Level} of a message. */
 const LEVELS = {
 	error: {
-		icon: <XCircleIcon className={LEVEL_ICON_STYLE} />,
+		icon: <XCircleIcon className={BASE_ICON_STYLE} />,
 		severity: 10,
 		style: `${BASE_MSG_STYLE} flex-shrink bg-rose-500`,
 	},
 
 	info: {
-		icon: <InformationCircleIcon className={LEVEL_ICON_STYLE} />,
+		icon: <InformationCircleIcon className={BASE_ICON_STYLE} />,
 		severity: 1,
 		style: `${BASE_MSG_STYLE} [flex-shrink:3] bg-sky-300`,
 	},
 
 	warn: {
-		icon: <ExclamationTriangleIcon className={LEVEL_ICON_STYLE} />,
+		icon: <ExclamationTriangleIcon className={BASE_ICON_STYLE} />,
 		severity: 5,
 		style: `${BASE_MSG_STYLE} [flex-shrink:2] bg-orange-400`,
 	},
@@ -65,18 +61,29 @@ export function compareByLevel(a: Message, b: Message): number {
 }
 
 /** @return a {@link Message} as a */
-function Message_(props: Message & On<'hide'>): React.ReactElement {
+function Message_(props: Omit<Message, 'key'> & Required<On<'hide'>>): React.ReactElement {
+	React.useEffect(() => {
+		switch (props.level) {
+			case 'info':
+				return console.log(props.text);
+			case 'warn':
+				return console.warn(props.text);
+			case 'error':
+				return console.error(props.text);
+			default:
+				const _: never = props.level;
+				return _;
+		};
+	}, []);
+
 	const DATA = LEVELS[props.level];
 	return (
-		<div className={DATA.style} key={props.key}>
-			<XButton className={BASE_ICON_STYLE} onClick={props.onHide} />
-
+		<button className={DATA.style} onClick={props.onHide}>
+			{DATA.icon}
 			<span className='flex-shrink overflow-hidden overflow-ellipsis whitespace-nowrap'>
 				{props.text}
 			</span>
-
-			{DATA.icon}
-		</div>
+		</button>
 	);
 }
 
@@ -84,7 +91,12 @@ function Message_(props: Message & On<'hide'>): React.ReactElement {
 export function Messages(props: ClassName & Required<On<'hideMessage', [key: string]>> & { messages: Message[] }): React.ReactElement {
 	return (
 		<div className={props.className}>
-			{props.messages.map(message => Message_({ ...message, onHide: () => props.onHideMessage(message.key) }))}
+			{props.messages.map(message => <Message_
+				key={message.key}
+				level={message.level}
+				onHide={() => props.onHideMessage(message.key)}
+				text={message.text}
+			/>)}
 		</div>
 	);
 }

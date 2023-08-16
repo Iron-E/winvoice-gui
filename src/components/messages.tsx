@@ -1,15 +1,20 @@
 'use client';
 
 import React from 'react';
-import type { ClassName, On } from './props-with';
+import type { Class, On } from './props-with';
 import { ExclamationTriangleIcon, InformationCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { FLEX } from './css/flex';
+import { PAD } from './css/pad';
 
 /** The icon style which is shared by all icons. */
 const BASE_ICON_STYLE = 'flex-shrink-0 w-5' as const;
 
 /** The base style of a {@link Message}, which is shared by all levels. */
-const BASE_MSG_STYLE = `${FLEX} gap-1 justify-between basis-auto hover:flex-shrink-0 m-1 px-2 py-1 min-w-[10vmax] max-w-fit ease-in-out duration-200 rounded shadow-2xl z-1` as const;
+const BASE_MSG_STYLE = `${FLEX} gap-1 justify-between basis-auto hover:flex-shrink-0 \
+${PAD} min-w-[10vmax] max-w-fit \
+ease-in-out duration-200 \
+[&:not(:first-child):not(:hover)]:opacity-60 \
+z-1` as const;
 
 /** Arbitrary data ssociated with the {@link Level} of a message. */
 const LEVELS = {
@@ -52,14 +57,6 @@ export type Message = {
 /** The context used to provide a message creator. */
 export const SHOW_MESSAGE_CONTEXT = React.createContext<(level: Level, text: string) => void>(() => { });
 
-/**
- * Sort a {@link Array | list} of messages such that the more critical messages are shown first.
- * @see {@link Array.sort}
- */
-export function compareByLevel(a: Message, b: Message): number {
-	return LEVELS[b.level].severity - LEVELS[a.level].severity;
-}
-
 /** @return a {@link Message} as a */
 function Message_(props: Omit<Message, 'key'> & Required<On<'hide'>>): React.ReactElement {
 	const DATA = LEVELS[props.level];
@@ -77,7 +74,7 @@ function Message_(props: Omit<Message, 'key'> & Required<On<'hide'>>): React.Rea
 }
 
 /** @return an {@link React.ReactElement | element} which floats messages at the bottom of the screen, and a function to show new messages. */
-export function Messages(props: ClassName & Required<On<'hideMessage', [key: string]>> & { messages: Message[] }): React.ReactElement {
+export function Messages(props: Class & Required<On<'hideMessage', [key: string]>> & { messages: Message[] }): React.ReactElement {
 	return (
 		<div className={props.className}>
 			{props.messages.map(message => <Message_

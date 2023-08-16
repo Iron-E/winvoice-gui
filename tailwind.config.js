@@ -53,7 +53,7 @@ module.exports = {
 				},
 
 				x: {
-					'bg-hover': COLORS.rose[500],
+					'bg-hover': COLORS.rose[400],
 				},
 			},
 		},

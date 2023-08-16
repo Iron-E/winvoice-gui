@@ -1,19 +1,28 @@
 import * as hooks from '../hooks';
 import React from 'react';
-import { Bars3Icon } from '@heroicons/react/20/solid';
 import type { Children, On } from './props-with';
+import { Bars3Icon } from '@heroicons/react/20/solid';
 import { FLEX, HIDDEN_XL_FLEX } from './css';
 import { NavBar } from './header/navbar';
+import { CLICKABLE } from './header/style';
 
 export const HEADER_CSS = {
-	button: 'mx-1 xl:mx-0 xl:last:mr-1 px-2 py-1 shadow bg-header-button-bg border-2 border-header-dropdown-bg xl:border-header-bg hover:border-header-button-bg text-header-button-fg rounded duration-200',
+	button: `${CLICKABLE} xl:mx-0 xl:last:mr-1 \
+bg-header-button-bg border-header-dropdown-bg xl:border-header-bg hover:border-header-button-bg text-header-button-fg \
+shadow`,
 } as const;
 
 function Dropdown(props: Children & Required<On<'close'>>): React.ReactElement {
 	hooks.useKeydownHandler({ Escape: true }, props.onClose);
 
 	return (
-		<div className='xl:hidden fixed w-fit min-w-full px-1 py-3 border-b-2 top-[2.6rem] bg-header-dropdown-bg border-b-header-dropdown-border shadow-lg rounded-b-2xl'>
+		<div
+			className='xl:hidden \
+fixed top-[2.6rem] \
+px-1 py-3 border-b-2 w-fit min-w-full \
+bg-header-dropdown-bg border-b-header-dropdown-border \
+shadow-lg rounded-b-2xl'
+		>
 			{props.children}
 		</div>
 	);
@@ -27,8 +36,15 @@ export function Header(props: Children): React.ReactElement {
 	const [DROPDOWN_VISIBLE, setDropdownVisible] = React.useState(false);
 
 	return (
-		<header className={`${FLEX} justify-between w-fit min-w-full py-1 sticky top-0 bg-header-bg border-b-2 border-b-header-border`}>
-			<h1 className='ml-2 font-bold text-2xl'>Winvoice</h1>
+		<header
+			className={`${FLEX} justify-between \
+sticky top-0 \
+py-1 w-fit min-w-full border-b-2 \
+bg-header-bg border-b-header-border`}
+		>
+			<h1 className='ml-2 font-bold text-2xl'>
+				Winvoice
+			</h1>
 
 			{/* Wide screen */}
 			<NavBar className={`${HIDDEN_XL_FLEX} justify-center`} />

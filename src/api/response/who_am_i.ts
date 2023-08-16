@@ -2,3 +2,11 @@
 export type WhoAmI = {
 	username: string,
 };
+
+export function isWhoAmI(json: any): json is WhoAmI {
+	if (json == undefined) {
+		return false;
+	}
+
+	return 'username' in json;
+}

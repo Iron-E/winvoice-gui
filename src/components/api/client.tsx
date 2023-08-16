@@ -1,21 +1,31 @@
 'use client';
 
 import React from 'react';
-import type { ClassName, On } from '../props-with';
+import type { Class, On } from '../props-with';
 import type { Maybe, Opt } from '../../utils';
-import { response, Route, VERSION_HEADER } from '../../api';
+import { LabeledInput } from '../labeled-input';
 import { Modal, type Props as ModalProps } from '../modal';
+import { response, Route, headers } from '../../api';
+import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { UnauthorizedError } from './unauthorized_error';
 import { UnexpectedJsonError } from './unexpected_json_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
-import { SHOW_MESSAGE_CONTEXT } from '../messages';
+
+/** {@link Error}s which likely occur due to a misconfigured (or mistyped) API endpoint. */
+type ApiError = UnexpectedJsonError | UnexpectedResponseError | UnauthorizedError;
+
+/** {@link Error}s which may be `throw`n by {@link fetch}. */
+type FetchError = DOMException | TypeError;
+
+/** HTTP methods used by the winvoice-server. */
+type Method = 'DELETE' | 'GET' | 'PATCH' | 'POST';
 
 /**
  * A {@link Promise.catch | catch} for {@link fetch}.
  * @returns the typed error which was caught.
  * @see https://developer.mozilla.org/en-US/docs/Web/API/fetch for why this is safe.
  */
-function catch_(e: unknown): DOMException | TypeError {
+function catch_(e: unknown): FetchError {
 	return e as DOMException | TypeError;
 }
 
@@ -31,18 +41,43 @@ export class Client {
 		public username?: string,
 	) { }
 
+	private async checkResponse<T>(
+		this: Client,
+		result: Response | (FetchError),
+		method: Method,
+		route: Route,
+		check: (json: any) => json is T,
+	): Promise<T | (ApiError | FetchError)> {
+		if (result instanceof Response) {
+			if (result.ok) {
+				const OBJECT = await result.json();
+				if (check(OBJECT)) {
+					return OBJECT;
+				}
+
+				return this.unexpectedJson();
+			} else if (result.status === 401) {
+				return this.unauthorized(method, route)
+			}
+
+			return this.unexpectedResponse();
+		}
+
+		return result;
+	}
+
 	/** An error to communicate that the client is not yet authorized. */
-	unauthorized(this: Client, method: 'DELETE' | 'GET' | 'PATCH' | 'POST', resource: string): UnauthorizedError {
+	private unauthorized(this: Client, method: Method, resource: string): UnauthorizedError {
 		return new UnauthorizedError(this.address, method, resource);
 	}
 
 	/** An error to communicate that the client received unexpected {@link JSON}. */
-	unexpectedJson(this: Client): UnexpectedJsonError {
+	private unexpectedJson(this: Client): UnexpectedJsonError {
 		return new UnexpectedJsonError(this.address);
 	}
 
 	/** An error to communicate that the client received unexpected {@link Response}. */
-	unexpectedResponse(this: Client): UnexpectedResponseError {
+	private unexpectedResponse(this: Client): UnexpectedResponseError {
 		return new UnexpectedResponseError(this.address);
 	}
 
@@ -52,32 +87,21 @@ export class Client {
 	 * @param body the request to send.
 	 * @return the response from the server, or an error if one occurs.
 	 */
-	async whoAmI(this: Client): Promise<response.WhoAmI | (DOMException | TypeError | UnexpectedJsonError | UnexpectedResponseError | UnauthorizedError)> {
-		const RESULT = await fetch(`${this.address}${Route.WhoAmI}`, {
-			credentials: 'include',
-			method: 'GET',
-			headers: { ...VERSION_HEADER },
-		}).catch(catch_);
+	public async whoAmI(this: Client): Promise<response.WhoAmI | (ApiError | FetchError)> {
+		const RESULT = await fetch(`${this.address}${Route.WhoAmI}`, headers({ method: 'GET' })).catch(catch_);
 
-		if (RESULT instanceof Response) {
-			switch (RESULT.status) {
-				case 200:
-					const OBJECT = await RESULT.json();
-					if ('username' in OBJECT) {
-						return OBJECT as response.WhoAmI;
-					}
-
-					return this.unexpectedJson();
-				case 401:
-					return this.unauthorized('GET', Route.WhoAmI)
-				default:
-					return this.unexpectedResponse();
-			};
-		}
-
-		return RESULT;
+		return await this.checkResponse(RESULT, 'GET', Route.WhoAmI, response.isWhoAmI);
 	}
 }
+
+/** The button used to submit the {@link ConnectModal} and {@link LoginModal} */
+const MODAL_BUTTON = (
+	<div className='text-center mt-3'>
+		<button className='px-1 rounded bg-modal-button-bg shadow-sm'>
+			Connect
+		</button>
+	</div>
+);
 
 /** Properties which accept a handler. */
 type SetClientProps = Required<On<'setClient', [client: Client]>>;
@@ -88,13 +112,10 @@ type SelectorModalProps = Omit<ModalProps & SetClientProps, 'children'>;
 /** The context for the currently selected API address. */
 export const CLIENT_CONTEXT = React.createContext<Maybe<Client>>(undefined);
 
-/** The `#id` of the {@link ConnectModal} {@link HTMLInputElement} */
-const CONNECT_MODAL_INPUT_ID = 'api-connect-addr' as const;
-
 /** @return the {@link Modal} to use when connecting to the {@link State | API}. */
-function ConnectModal(props: SelectorModalProps): React.ReactElement {
+function ConnectModal(props: SelectorModalProps & { address: Maybe<Client['address']> }): React.ReactElement {
 	const addMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
-	const [URL, setUrl] = React.useState<string>('');
+	const [URL, setUrl] = React.useState<string>(props.address || '');
 
 	return (
 		<Modal onClose={props.onClose}>
@@ -106,9 +127,9 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 				if (RESULT instanceof DOMException) {
 					addMessage('error', RESULT.message);
 				} else if (RESULT instanceof TypeError) {
-					addMessage('error', RESULT.message);
+					addMessage('error', 'Could not connect to that address, see the console for additional details');
 				} else if (RESULT instanceof UnexpectedJsonError || RESULT instanceof UnexpectedResponseError) {
-					addMessage('error', RESULT.message);
+					addMessage('error', RESULT.message); // *My* errors leave good messages…
 				} else { // the user isn't logged in, which is fine.
 					if (!(RESULT instanceof UnauthorizedError)) {
 						CLIENT.username = RESULT.username;
@@ -119,20 +140,17 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 					addMessage('info', 'Connected successfully');
 				}
 			}}>
-				<label className='mr-2' htmlFor={CONNECT_MODAL_INPUT_ID}>Address:</label>
-				<input
-					className='p-1 rounded'
-					id={CONNECT_MODAL_INPUT_ID}
-					name={CONNECT_MODAL_INPUT_ID}
+				<LabeledInput
+					id='api-connect-addr'
 					onChange={e => setUrl(e.target.value)}
 					required={true}
 					type='url'
-				/>
-				<div className='text-center mt-3'>
-					<button className='px-1 rounded bg-modal-button-bg shadow-sm'>
-						Connect
-					</button>
-				</div>
+					value={URL}
+				>
+					Address:
+				</LabeledInput>
+
+				{MODAL_BUTTON}
 			</form>
 		</Modal>
 	);
@@ -148,17 +166,17 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 }
 
 /** @return an API {@link State} selector. */
-export function ClientSelector(props: ClassName<'buttonClassName'> & SetClientProps): React.ReactElement {
+export function ClientSelector(props: Class<'button'> & SetClientProps): React.ReactElement {
 	const [MODAL_VISIBILITY, setModalVisibility] = React.useState<Opt<'connect' | 'login'>>(null);
-	const API = React.useContext(CLIENT_CONTEXT);
+	const CLIENT = React.useContext(CLIENT_CONTEXT);
 
 	let account_button: Maybe<React.ReactElement>;
-	if (API != undefined) {
-		let [content, onClick] = API.username == undefined
+	if (CLIENT != undefined) {
+		let [content, onClick] = CLIENT.username == undefined
 			? ['Login', () => setModalVisibility('login')]
 			: ['Logout', () => {
 				console.log('TODO: send `fetch` to logout on `API.address`');
-				props.onSetClient(new Client(API.address));
+				props.onSetClient(new Client(CLIENT.address));
 			}]
 			;
 
@@ -177,7 +195,7 @@ export function ClientSelector(props: ClassName<'buttonClassName'> & SetClientPr
 				Connect
 			</button>
 
-			{MODAL && <MODAL onClose={() => setModalVisibility(null)} onSetClient={props.onSetClient} />}
+			{MODAL && <MODAL address={CLIENT?.address} onClose={() => setModalVisibility(null)} onSetClient={props.onSetClient} />}
 		</>
 	);
 }

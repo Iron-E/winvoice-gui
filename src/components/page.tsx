@@ -20,7 +20,7 @@ export function Page(props: Children): React.ReactElement {
 		<>
 			<CLIENT_CONTEXT.Provider value={CLIENT}>
 				<SHOW_MESSAGE_CONTEXT.Provider value={
-					(level, text) => setMessages(messages => [...messages, { key: crypto.randomUUID(), level, text }].sort(byLevel))
+					(level, text) => setMessages(messages => [{ key: crypto.randomUUID(), level, text }, ...messages])
 				}>
 					<Header>
 						<ClientSelector buttonClassName={HEADER_CSS.button} onSetClient={setClient} />

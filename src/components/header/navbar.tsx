@@ -2,11 +2,12 @@
 
 import * as navigation from 'next/navigation';
 import Link from 'next/link';
-import type { ClassName } from '../props-with';
+import type { Class } from '../props-with';
+import { CLICKABLE } from './style';
 import { Route } from '../../api';
 
 /** The CSS styles that all {@link Navbar} {@link Links} share. */
-const COMMON_LINK_STYLE = 'mx-1 px-2 py-1 border-2 rounded hover:border-navbar-link-bg-current duration-200';
+const COMMON_LINK_STYLE = `${CLICKABLE} hover:border-navbar-link-bg-current`;
 
 /** The CSS style of the current {@link Link}. */
 const CURRENT_LINK_STYLE = `${COMMON_LINK_STYLE} bg-navbar-link-bg-current border-header-dropdown-bg xl:border-header-bg`;
@@ -26,7 +27,7 @@ const HIDDEN_LINKS: { [key in Route]?: true } = {
 const LINKS = Object.entries(Route).filter(([_, route]) => !HIDDEN_LINKS[route]);
 
 /** @return the navigation bar for the given `current` page. */
-export function NavBar(props: ClassName): React.ReactElement {
+export function NavBar(props: Class): React.ReactElement {
 	const PATH_NAME = navigation.usePathname();
 
 	return (

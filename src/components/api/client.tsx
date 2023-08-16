@@ -133,7 +133,7 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 					type='url'
 				/>
 				<div className='text-center mt-3'>
-					<button className='px-1 rounded bg-white shadow-sm'>
+					<button className='px-1 rounded bg-modal-button-bg shadow-sm'>
 						Connect
 					</button>
 				</div>
@@ -156,6 +156,7 @@ export function ClientSelector(props: ClassName<'buttonClassName'> & SetClientPr
 	const [MODAL_VISIBILITY, setModalVisibility] = React.useState<Opt<'connect' | 'login'>>(null);
 	const API = React.useContext(CLIENT_CONTEXT);
 
+	let account_button: Maybe<React.ReactElement>;
 	if (API != undefined) {
 		let [content, onClick] = API.username == undefined
 			? ['Login', () => setModalVisibility('login')]
@@ -165,7 +166,7 @@ export function ClientSelector(props: ClassName<'buttonClassName'> & SetClientPr
 			}]
 			;
 
-		var account_button: Maybe<React.ReactElement> = (
+		account_button = (
 			<button className={props.buttonClassName} onClick={onClick}>
 				{content}
 			</button>

@@ -6,13 +6,13 @@ import type { ClassName } from '../props-with';
 import { Route } from '../../api';
 
 /** The CSS styles that all {@link Navbar} {@link Links} share. */
-const COMMON_LINK_STYLE = 'mx-1 px-2 py-1 border-2 rounded xl:hover:border-green-300 duration-200';
+const COMMON_LINK_STYLE = 'mx-1 px-2 py-1 border-2 rounded hover:border-navbar-link-bg-current duration-200';
 
 /** The CSS style of the current {@link Link}. */
-const CURRENT_LINK_STYLE = `${COMMON_LINK_STYLE} bg-green-300 border-green-400 text-gray-950`;
+const CURRENT_LINK_STYLE = `${COMMON_LINK_STYLE} bg-navbar-link-bg-current border-header-dropdown-bg xl:border-header-bg`;
 
 /** The CSS style of inactive {@link Link}s. */
-const INACTIVE_LINK_STYLE = `${COMMON_LINK_STYLE} border-transparent hover:border-green-400`;
+const INACTIVE_LINK_STYLE = `${COMMON_LINK_STYLE} border-transparent hover:border-header-bg`;
 
 /** The {@link Route}s which are to be hidden in the {@link Navbar}. */
 const HIDDEN_LINKS: { [key in Route]?: true } = {

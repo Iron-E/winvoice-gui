@@ -6,14 +6,14 @@ import { FLEX, HIDDEN_XL_FLEX } from './css';
 import { NavBar } from './header/navbar';
 
 export const HEADER_CSS = {
-	button: 'px-1.5 py-1 mx-3 xl:mx-0 xl:last:mr-1 shadow bg-green-600 text-white rounded',
+	button: 'mx-1 xl:mx-0 xl:last:mr-1 px-2 py-1 shadow bg-header-button-bg border-2 border-header-dropdown-bg xl:border-header-bg hover:border-header-button-bg text-header-button-fg rounded duration-200',
 } as const;
 
 function Dropdown(props: Children & Required<On<'close'>>): React.ReactElement {
 	hooks.useKeydownHandler({ Escape: true }, props.onClose);
 
 	return (
-		<div className='xl:hidden fixed w-fit min-w-full pb-3 border-b-2 top-[2.6rem] bg-green-200 border-b-gray-400 shadow-lg rounded-b-2xl'>
+		<div className='xl:hidden fixed w-fit min-w-full px-1 py-3 border-b-2 top-[2.6rem] bg-header-dropdown-bg border-b-header-dropdown-border shadow-lg rounded-b-2xl'>
 			{props.children}
 		</div>
 	);
@@ -27,7 +27,7 @@ export function Header(props: Children): React.ReactElement {
 	const [DROPDOWN_VISIBLE, setDropdownVisible] = React.useState(false);
 
 	return (
-		<header className={`${FLEX} justify-between w-fit min-w-full py-1 sticky top-0 bg-green-400 border-b-2 border-b-green-700`}>
+		<header className={`${FLEX} justify-between w-fit min-w-full py-1 sticky top-0 bg-header-bg border-b-2 border-b-header-border`}>
 			<h1 className='ml-2 font-bold text-2xl'>Winvoice</h1>
 
 			{/* Wide screen */}
@@ -38,7 +38,7 @@ export function Header(props: Children): React.ReactElement {
 
 			{/* Small screen */}
 			<button className='xl:hidden w-5 my-1 mr-3' onClick={() => setDropdownVisible(!DROPDOWN_VISIBLE)}>
-				<Bars3Icon className={`duration-200 ${DROPDOWN_VISIBLE ? 'rotate-90' : undefined}`} />
+				<Bars3Icon className={`duration-150 ${DROPDOWN_VISIBLE ? 'rotate-90' : undefined}`} />
 			</button>
 
 			{DROPDOWN_VISIBLE && <Dropdown onClose={() => setDropdownVisible(false)}>

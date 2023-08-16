@@ -26,7 +26,7 @@ export function Page(props: Children): React.ReactElement {
 						<ClientSelector buttonClassName={HEADER_CSS.button} onSetClient={setClient} />
 					</Header>
 
-					{CLIENT == undefined ? <p>Please <b>connect</b> and <b>sign in</b> to continue.</p> : props.children}
+					{CLIENT?.username == undefined ? <p>Please <b>connect</b> and <b>sign in</b> to continue.</p> : props.children}
 				</SHOW_MESSAGE_CONTEXT.Provider>
 			</CLIENT_CONTEXT.Provider>
 

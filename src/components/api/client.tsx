@@ -15,7 +15,7 @@ import { SHOW_MESSAGE_CONTEXT } from '../messages';
  * @returns the typed error which was caught.
  * @see https://developer.mozilla.org/en-US/docs/Web/API/fetch for why this is safe.
  */
-function catch_fetch(e: unknown): DOMException | TypeError {
+function catch_(e: unknown): DOMException | TypeError {
 	return e as DOMException | TypeError;
 }
 
@@ -52,20 +52,12 @@ export class Client {
 	 * @param body the request to send.
 	 * @return the response from the server, or an error if one occurs.
 	 */
-	async whoAmI(this: Client): Promise<
-		DOMException
-		| response.WhoAmI
-		| TypeError
-		| UnexpectedJsonError
-		| UnexpectedResponseError
-		| UnauthorizedError
-	> {
+	async whoAmI(this: Client): Promise<response.WhoAmI | (DOMException | TypeError | UnexpectedJsonError | UnexpectedResponseError | UnauthorizedError)> {
 		const RESULT = await fetch(`${this.address}${Route.WhoAmI}`, {
+			credentials: 'include',
 			method: 'GET',
-			headers: {
-				...VERSION_HEADER,
-			},
-		}).catch(catch_fetch);
+			headers: { ...VERSION_HEADER },
+		}).catch(catch_);
 
 		if (RESULT instanceof Response) {
 			switch (RESULT.status) {
@@ -111,7 +103,11 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 				const CLIENT = new Client(URL);
 				const RESULT = await CLIENT.whoAmI();
 
-				if (RESULT instanceof DOMException || RESULT instanceof TypeError || RESULT instanceof UnexpectedJsonError || RESULT instanceof UnexpectedResponseError) {
+				if (RESULT instanceof DOMException) {
+					addMessage('error', RESULT.message);
+				} else if (RESULT instanceof TypeError) {
+					addMessage('error', RESULT.message);
+				} else if (RESULT instanceof UnexpectedJsonError || RESULT instanceof UnexpectedResponseError) {
 					addMessage('error', RESULT.message);
 				} else { // the user isn't logged in, which is fine.
 					if (!(RESULT instanceof UnauthorizedError)) {

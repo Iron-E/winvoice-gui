@@ -62,28 +62,17 @@ export function compareByLevel(a: Message, b: Message): number {
 
 /** @return a {@link Message} as a */
 function Message_(props: Omit<Message, 'key'> & Required<On<'hide'>>): React.ReactElement {
-	React.useEffect(() => {
-		switch (props.level) {
-			case 'info':
-				return console.log(props.text);
-			case 'warn':
-				return console.warn(props.text);
-			case 'error':
-				return console.error(props.text);
-			default:
-				const _: never = props.level;
-				return _;
-		};
-	}, []);
-
 	const DATA = LEVELS[props.level];
 	return (
-		<button className={DATA.style} onClick={props.onHide}>
-			{DATA.icon}
+		<div className={DATA.style}>
+			<button onClick={props.onHide}>
+				{DATA.icon}
+			</button>
+
 			<span className='flex-shrink overflow-hidden overflow-ellipsis whitespace-nowrap'>
 				{props.text}
 			</span>
-		</button>
+		</div>
 	);
 }
 

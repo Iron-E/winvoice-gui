@@ -46,7 +46,7 @@ export class Client {
 		result: Response | (FetchError),
 		method: Method,
 		route: Route,
-		check: (json: any) => json is T,
+		check: (json: unknown) => json is T,
 	): Promise<T | (ApiError | FetchError)> {
 		if (result instanceof Response) {
 			if (result.ok) {
@@ -89,7 +89,6 @@ export class Client {
 	 */
 	public async whoAmI(this: Client): Promise<response.WhoAmI | (ApiError | FetchError)> {
 		const RESULT = await fetch(`${this.address}${Route.WhoAmI}`, headers({ method: 'GET' })).catch(catch_);
-
 		return await this.checkResponse(RESULT, 'GET', Route.WhoAmI, response.isWhoAmI);
 	}
 }

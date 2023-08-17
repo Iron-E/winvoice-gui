@@ -3,10 +3,10 @@ export type WhoAmI = {
 	username: string,
 };
 
-export function isWhoAmI(json: any): json is WhoAmI {
-	if (json == undefined) {
-		return false;
-	}
-
-	return 'username' in json;
+/**
+ * @param json the value to check.
+ * @return whether the `json` is an instance of `WhoAmI`.
+ */
+export function isWhoAmI(json: unknown): json is WhoAmI {
+	return json instanceof Object && 'username' in json;
 }

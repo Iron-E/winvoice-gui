@@ -5,3 +5,11 @@ export type Get<T = unknown> = {
 	entities: T[],
 	status: Status,
 };
+
+/**
+ * @param json the value to check.
+ * @return whether the `json` is an instance of {@link Get}.
+ */
+export function isGet(json: unknown): json is Get {
+	return json instanceof Object && 'entities' in json && 'status' in json;
+}

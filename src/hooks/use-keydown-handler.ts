@@ -7,9 +7,9 @@ import React from 'react';
  * @param keys the keys to listen for
  * @param onKeyPressed what to do when a matching key is pressed.
  */
-export function useKeydownHandler(keys: {[index: string]: true}, onKeyPressed: () => void): void {
+export function useKeydownHandler(keys: Readonly<Record<string, true>>, onKeyPressed: () => void): void {
 	React.useEffect(() => {
-		function handleKeydown(e: KeyboardEvent): void {
+		function handleKeydown(e: Readonly<KeyboardEvent>): void {
 			if (keys[e.key]) {
 				onKeyPressed();
 			}

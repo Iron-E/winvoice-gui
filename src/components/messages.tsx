@@ -54,11 +54,14 @@ export type Message = {
 	text: string,
 };
 
+/** The function which is used to show additional messages on the screen. */
+type ShowMessage = (level: Level, text: string) => void;
+
 /** The context used to provide a message creator. */
-export const SHOW_MESSAGE_CONTEXT = React.createContext<(level: Level, text: string) => void>(() => { });
+export const SHOW_MESSAGE_CONTEXT: Readonly<React.Context<ShowMessage>> = React.createContext<ShowMessage>(() => { });
 
 /** @return a {@link Message} as a */
-function Message_(props: Omit<Message, 'key'> & Required<On<'hide'>>): React.ReactElement {
+function Message_(props: Omit<Readonly<Message>, 'key'> & Required<On<'hide'>>): React.ReactElement {
 	const DATA = LEVELS[props.level];
 	return (
 		<div className={DATA.style}>
@@ -74,7 +77,7 @@ function Message_(props: Omit<Message, 'key'> & Required<On<'hide'>>): React.Rea
 }
 
 /** @return an {@link React.ReactElement | element} which floats messages at the bottom of the screen, and a function to show new messages. */
-export function Messages(props: Class & Required<On<'hideMessage', [key: string]>> & { messages: Message[] }): React.ReactElement {
+export function Messages(props: Class & Required<On<'hideMessage', [key: string]>> & Readonly<{ messages: Message[] }>): React.ReactElement {
 	return (
 		<div className={props.className}>
 			{props.messages.map(message => <Message_

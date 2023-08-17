@@ -6,7 +6,7 @@ import { type Metadata } from 'next';
 
 const INTER = Inter({ subsets: ['latin'] });
 
-export const metadata: Metadata = {
+export const METADATA: Readonly<Metadata> = {
 	title: 'Winvoice',
 	description: 'A graphical manager for invoices',
 };

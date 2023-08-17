@@ -11,4 +11,4 @@
  * let baz: Example = {c: 'foo'}; -- error!
  * ```
  */
-export type UnionToKeys<K extends string, V> = K extends K ? { [key in K]: V } : never;
+export type UnionToKeys<K extends string, V> = K extends K ? Record<K, V> : never;

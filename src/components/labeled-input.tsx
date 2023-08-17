@@ -3,6 +3,7 @@ import type { Children, Class, Id, On } from './props-with';
 
 type InputAttr = React.InputHTMLAttributes<HTMLInputElement>;
 
+/** @return an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
 export function LabeledInput(
 	props:
 		Children

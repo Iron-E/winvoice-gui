@@ -5,7 +5,7 @@ import type { Class, On } from '../props-with';
 import type { Maybe, Opt } from '../../utils';
 import { LabeledInput } from '../labeled-input';
 import { Modal, type Props as ModalProps } from '../modal';
-import { response, Route, headers } from '../../api';
+import { response, Route, headers as apiHeaders, Code } from '../../api';
 import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { UnauthorizedError } from './unauthorized_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
@@ -21,7 +21,6 @@ type Method = 'DELETE' | 'GET' | 'PATCH' | 'POST';
 
 type Request<T> = Promise<T | (ApiError | FetchError)>;
 
-
 /**
  * The information which is kept in order to make api requests / provide relevant UI elements (e.g. whether the user is currently signed in).
  */
@@ -35,20 +34,26 @@ export class Client {
 
 	/**
 	 * Make a {@link fetch} request
-	 * @param method the HTTP method to send the request with.
+	 * @param headers the HTTP method to send the request with.
 	 * @param route the {@link Route} to send the request to.
 	 * @param checkSchema ensure that the response body deserializes to
 	 */
-	private async request<T>(this: Client, method: Method, route: Route, checkSchema: (json: unknown) => json is T): Request<T> {
+	public async request<T>(
+		this: Readonly<Client>,
+		route: Route,
+		headers: Record<string,
+			string> & { method: Method },
+		checkSchema: (json: unknown) => json is T,
+	): Request<T> {
 		try {
-			const RESULT = await fetch(`${this.address}${route}`, headers({ method }));
+			const RESULT: Readonly<Response> = await fetch(`${this.address}${route}`, apiHeaders(headers));
 			if (RESULT.ok) {
 				try {
-					const OBJECT = await RESULT.json();
+					const OBJECT = await RESULT.json() as unknown;
 					if (checkSchema(OBJECT)) { return OBJECT; }
 				} catch { /** NOTE: `!checkSchema` and `SyntaxError` logic are the same */ }
 			} else if (RESULT.status === 401) {
-				return this.unauthorized(method, route)
+				return this.unauthorized(headers.method, route)
 			}
 
 			return this.unexpectedResponse();
@@ -58,12 +63,12 @@ export class Client {
 	}
 
 	/** An error to communicate that the client is not yet authorized. */
-	private unauthorized(this: Client, method: Method, resource: string): UnauthorizedError {
+	public unauthorized(this: Readonly<Client>, method: Method, resource: string): UnauthorizedError {
 		return new UnauthorizedError(this.address, method, resource);
 	}
 
 	/** An error to communicate that the client received unexpected {@link Response}. */
-	private unexpectedResponse(this: Client): UnexpectedResponseError {
+	public unexpectedResponse(this: Readonly<Client>): UnexpectedResponseError {
 		return new UnexpectedResponseError(this.address);
 	}
 
@@ -73,29 +78,29 @@ export class Client {
 	 * @param body the request to send.
 	 * @return the response from the server, or an error if one occurs.
 	 */
-	public async login(this: Client): Request<response.Login> {
-		return await this.request('GET', Route.Login, response.isLogin);
+	public async login(this: Readonly<Client>, password: string): Request<response.Login> {
+		return await this.request(Route.Login, { authorization: btoa(password), method: 'GET' }, response.isLogin);
 	}
 
 	/**
 	 * Make a request on the {@link Route.Logout}.
 	 * @return the response or an error.
 	 */
-	public async logout(this: Client): Request<response.Logout> {
-		return await this.request('GET', Route.Logout, response.isLogout);
+	public async logout(this: Readonly<Client>): Request<response.Logout> {
+		return await this.request(Route.Logout, { method: 'GET' }, response.isLogout);
 	}
 
 	/**
 	 * Make a request on the {@link Route.WhoAmI}.
 	 * @return the response or an error.
 	 */
-	public async whoAmI(this: Client): Request<response.WhoAmI> {
-		return await this.request('GET', Route.WhoAmI, response.isWhoAmI);
+	public async whoAmI(this: Readonly<Client>): Request<response.WhoAmI> {
+		return await this.request(Route.WhoAmI, { method: 'GET' }, response.isWhoAmI);
 	}
 }
 
 /** The button used to submit the {@link ConnectModal} and {@link LoginModal} */
-const MODAL_BUTTON = (
+const MODAL_BUTTON: Readonly<React.JSX.Element> = (
 	<div className='text-center mt-3'>
 		<button className='px-1 rounded bg-modal-button-bg shadow-sm'>
 			Connect
@@ -107,41 +112,44 @@ const MODAL_BUTTON = (
 type SetClientProps = Required<On<'setClient', [client: Client]>>;
 
 /** Properties used by {@link Modal}s in the {@link ClientSelector}. */
-type SelectorModalProps = Omit<ModalProps & SetClientProps, 'children'>;
+type SelectorModalProps = Omit<ModalProps & SetClientProps & { client?: Client }, 'children'>;
+
+type ClientContext = Maybe<Readonly<Client>>;
 
 /** The context for the currently selected API address. */
-export const CLIENT_CONTEXT = React.createContext<Maybe<Client>>(undefined);
+export const CLIENT_CONTEXT: Readonly<React.Context<ClientContext>> = React.createContext<ClientContext>(undefined);
 
 /** @return the {@link Modal} to use when connecting to the {@link State | API}. */
-function ConnectModal(props: SelectorModalProps & { address: Maybe<Client['address']> }): React.ReactElement {
+function ConnectModal(props: SelectorModalProps): React.ReactElement {
 	const addMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
-	const [URL, setUrl] = React.useState<string>(props.address || '');
+	const [URL, setUrl] = React.useState<string>(props.client?.username || '');
 
 	return (
 		<Modal onClose={props.onClose}>
 			<form onSubmit={async e => {
 				e.preventDefault();
-				const CLIENT = new Client(URL);
+				const CLIENT: Client = new Client(URL);
 				const RESULT = await CLIENT.whoAmI();
 
-				if (RESULT instanceof DOMException) {
-					addMessage('error', RESULT.message);
-				} else if (RESULT instanceof TypeError) {
-					addMessage('error', 'Could not connect to that address, see the console for additional details');
-				} else if (RESULT instanceof UnexpectedResponseError) {
-					addMessage('error', RESULT.message); // *My* errors leave good messages…
-				} else { // the user isn't logged in, which is fine.
-					if (!(RESULT instanceof UnauthorizedError)) {
-						CLIENT.username = RESULT.username;
-					}
-
-					props.onSetClient(CLIENT);
-					props.onClose?.();
-					addMessage('info', 'Connected successfully');
+				if (RESULT instanceof DOMException || RESULT instanceof TypeError) {
+					return addMessage('error', 'Could not connect to that address, see the console for additional details');
 				}
+
+				if (RESULT instanceof UnexpectedResponseError) {
+					return addMessage('error', RESULT.message);
+				}
+
+				// the user isn't logged in, which is fine.
+				if (!(RESULT instanceof UnauthorizedError)) {
+					CLIENT.username = RESULT.username;
+				}
+
+				props.onSetClient(CLIENT);
+				props.onClose?.();
+				addMessage('info', 'Connected successfully');
 			}}>
 				<LabeledInput
-					id='api-connect-addr'
+					id='client-connect-addr'
 					onChange={e => setUrl(e.target.value)}
 					required={true}
 					type='url'
@@ -158,9 +166,56 @@ function ConnectModal(props: SelectorModalProps & { address: Maybe<Client['addre
 
 /** @return the {@link Modal} to use when logging in to the {@link State | API}. */
 function LoginModal(props: SelectorModalProps): React.ReactElement {
+	const addMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
+	const [USERNAME, setUsername] = React.useState<string>(props.client?.username || '');
+	const [PASSWORD, setPassword] = React.useState<string>(props.client?.username || '');
+
 	return (
 		<Modal onClose={props.onClose}>
-			<p>I'm the login modal</p>
+			<form onSubmit={async e => {
+				e.preventDefault();
+				const CLIENT = new Client(props.client!.address, USERNAME);
+				const RESULT = await CLIENT.login(PASSWORD);
+
+				if (RESULT instanceof DOMException || RESULT instanceof TypeError) {
+					return addMessage('error', 'Could not connect to that address, see the console for additional details');
+				}
+
+				if (RESULT instanceof UnexpectedResponseError || RESULT instanceof UnauthorizedError) {
+					return addMessage('error', RESULT.message);
+				}
+
+				if (RESULT.status.code !== Code.Success) { // the user isn't logged in, which is fine.
+					CLIENT.username = undefined;
+					return;
+				}
+
+				props.onSetClient(CLIENT);
+				props.onClose?.();
+				addMessage('info', 'Connected successfully');
+			}}>
+				<LabeledInput
+					id='client-login-username'
+					onChange={e => setUsername(e.target.value)}
+					required={true}
+					type='url'
+					value={USERNAME}
+				>
+					Username:
+				</LabeledInput>
+
+				<LabeledInput
+					id='client-login-password'
+					onChange={e => setPassword(e.target.value)}
+					required={true}
+					type='url'
+					value={PASSWORD}
+				>
+					Password:
+				</LabeledInput>
+
+				{MODAL_BUTTON}
+			</form>
 		</Modal>
 	);
 }
@@ -195,7 +250,7 @@ export function ClientSelector(props: Class<'button'> & SetClientProps): React.R
 				Connect
 			</button>
 
-			{MODAL && <MODAL address={CLIENT?.address} onClose={() => setModalVisibility(null)} onSetClient={props.onSetClient} />}
+			{MODAL && <MODAL client={CLIENT} onClose={() => setModalVisibility(null)} onSetClient={props.onSetClient} />}
 		</>
 	);
 }

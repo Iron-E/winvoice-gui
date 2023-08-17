@@ -8,11 +8,10 @@ import { Modal, type Props as ModalProps } from '../modal';
 import { response, Route, headers } from '../../api';
 import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { UnauthorizedError } from './unauthorized_error';
-import { UnexpectedJsonError } from './unexpected_json_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
 
 /** {@link Error}s which likely occur due to a misconfigured (or mistyped) API endpoint. */
-type ApiError = UnexpectedJsonError | UnexpectedResponseError | UnauthorizedError;
+type ApiError = UnexpectedResponseError | UnauthorizedError;
 
 /** {@link Error}s which may be `throw`n by {@link fetch}. */
 type FetchError = DOMException | TypeError;
@@ -20,14 +19,7 @@ type FetchError = DOMException | TypeError;
 /** HTTP methods used by the winvoice-server. */
 type Method = 'DELETE' | 'GET' | 'PATCH' | 'POST';
 
-/**
- * A {@link Promise.catch | catch} for {@link fetch}.
- * @returns the typed error which was caught.
- * @see https://developer.mozilla.org/en-US/docs/Web/API/fetch for why this is safe.
- */
-function catch_(e: unknown): FetchError {
-	return e as DOMException | TypeError;
-}
+type Request<T> = Promise<T | (ApiError | FetchError)>;
 
 
 /**
@@ -41,39 +33,33 @@ export class Client {
 		public username?: string,
 	) { }
 
-	private async checkResponse<T>(
-		this: Client,
-		result: Response | (FetchError),
-		method: Method,
-		route: Route,
-		check: (json: unknown) => json is T,
-	): Promise<T | (ApiError | FetchError)> {
-		if (result instanceof Response) {
-			if (result.ok) {
-				const OBJECT = await result.json();
-				if (check(OBJECT)) {
-					return OBJECT;
-				}
-
-				return this.unexpectedJson();
-			} else if (result.status === 401) {
+	/**
+	 * Make a {@link fetch} request
+	 * @param method the HTTP method to send the request with.
+	 * @param route the {@link Route} to send the request to.
+	 * @param checkSchema ensure that the response body deserializes to
+	 */
+	private async request<T>(this: Client, method: Method, route: Route, checkSchema: (json: unknown) => json is T): Request<T> {
+		try {
+			const RESULT = await fetch(`${this.address}${route}`, headers({ method }));
+			if (RESULT.ok) {
+				try {
+					const OBJECT = await RESULT.json();
+					if (checkSchema(OBJECT)) { return OBJECT; }
+				} catch { /** NOTE: `!checkSchema` and `SyntaxError` logic are the same */ }
+			} else if (RESULT.status === 401) {
 				return this.unauthorized(method, route)
 			}
 
 			return this.unexpectedResponse();
-		}
-
-		return result;
+		} catch (e) {
+			return e as FetchError;
+		};
 	}
 
 	/** An error to communicate that the client is not yet authorized. */
 	private unauthorized(this: Client, method: Method, resource: string): UnauthorizedError {
 		return new UnauthorizedError(this.address, method, resource);
-	}
-
-	/** An error to communicate that the client received unexpected {@link JSON}. */
-	private unexpectedJson(this: Client): UnexpectedJsonError {
-		return new UnexpectedJsonError(this.address);
 	}
 
 	/** An error to communicate that the client received unexpected {@link Response}. */
@@ -87,9 +73,24 @@ export class Client {
 	 * @param body the request to send.
 	 * @return the response from the server, or an error if one occurs.
 	 */
-	public async whoAmI(this: Client): Promise<response.WhoAmI | (ApiError | FetchError)> {
-		const RESULT = await fetch(`${this.address}${Route.WhoAmI}`, headers({ method: 'GET' })).catch(catch_);
-		return await this.checkResponse(RESULT, 'GET', Route.WhoAmI, response.isWhoAmI);
+	public async login(this: Client): Request<response.Login> {
+		return await this.request('GET', Route.Login, response.isLogin);
+	}
+
+	/**
+	 * Make a request on the {@link Route.Logout}.
+	 * @return the response or an error.
+	 */
+	public async logout(this: Client): Request<response.Logout> {
+		return await this.request('GET', Route.Logout, response.isLogout);
+	}
+
+	/**
+	 * Make a request on the {@link Route.WhoAmI}.
+	 * @return the response or an error.
+	 */
+	public async whoAmI(this: Client): Request<response.WhoAmI> {
+		return await this.request('GET', Route.WhoAmI, response.isWhoAmI);
 	}
 }
 
@@ -127,7 +128,7 @@ function ConnectModal(props: SelectorModalProps & { address: Maybe<Client['addre
 					addMessage('error', RESULT.message);
 				} else if (RESULT instanceof TypeError) {
 					addMessage('error', 'Could not connect to that address, see the console for additional details');
-				} else if (RESULT instanceof UnexpectedJsonError || RESULT instanceof UnexpectedResponseError) {
+				} else if (RESULT instanceof UnexpectedResponseError) {
 					addMessage('error', RESULT.message); // *My* errors leave good messages…
 				} else { // the user isn't logged in, which is fine.
 					if (!(RESULT instanceof UnauthorizedError)) {

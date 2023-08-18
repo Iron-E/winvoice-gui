@@ -9,8 +9,7 @@ export function LabeledInput(
 		Children
 		& Class<'label'>
 		& Class<'input'>
-		& Required<Id>
-		& On<'change', [e: React.ChangeEvent<HTMLInputElement>]>
+		& Required<Id & On<'change', [value: React.ChangeEvent<HTMLInputElement>['target']['value']]>>
 		& { required?: InputAttr['required'], type?: InputAttr['type'], value?: InputAttr['value'] },
 ): React.ReactElement {
 	return (
@@ -23,7 +22,7 @@ export function LabeledInput(
 				className={`p-1 rounded ${props.inputClassName}`}
 				id={props.id}
 				name={props.id}
-				onChange={props.onChange}
+				onChange={e => props.onChange(e.target.value)}
 				required={props.required}
 				type={props.type}
 				value={props.value}

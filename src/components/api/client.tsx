@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { Class, On } from '../props-with';
+import type { AsyncOn, Children, Class, On } from '../props-with';
 import type { Maybe, Opt } from '../../utils';
 import { Form } from '../form';
 import { LabeledInput } from '../labeled-input';
@@ -104,15 +104,6 @@ export class Client {
 	}
 }
 
-/** The button used to submit the {@link ConnectModal} and {@link LoginModal} */
-const MODAL_BUTTON: Readonly<React.JSX.Element> = (
-	<div className='text-center mt-3'>
-		<button className='px-1 rounded bg-modal-button-bg shadow-sm'>
-			Connect
-		</button>
-	</div>
-);
-
 /** Properties which accept a handler. */
 type SetClientProps = Required<On<'setClient', [client: Client]>>;
 
@@ -124,47 +115,60 @@ type ClientContext = Maybe<Readonly<Client>>;
 /** The context for the currently selected API address. */
 export const CLIENT_CONTEXT: Readonly<React.Context<ClientContext>> = React.createContext<ClientContext>(undefined);
 
+/** @return A floating form. */
+function ModalForm(props: Children & Required<AsyncOn<'submit'> & On<'close'> & { button_text: string }>) {
+	return (
+		<Modal onClose={props.onClose}>
+			<Form onSubmit={props.onSubmit}>
+				{props.children}
+
+				<div className='text-center mt-3'>
+					<button className='px-1 rounded bg-modal-button-bg shadow-sm'>
+						{props.button_text}
+					</button>
+				</div>
+			</Form>
+		</Modal>
+	);
+}
+
 /** @return the {@link Modal} to use when connecting to the {@link State | API}. */
 function ConnectModal(props: SelectorModalProps): React.ReactElement {
 	const addMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
 	const [URL, setUrl] = React.useState<string>(props.client?.username || '');
 
 	return (
-		<Modal onClose={props.onClose}>
-			<Form onSubmit={async () => {
-				const CLIENT: Client = new Client(URL);
-				const RESULT = await CLIENT.whoAmI();
+		<ModalForm button_text='Connect' onClose={props.onClose} onSubmit={async () => {
+			const CLIENT: Client = new Client(URL);
+			const RESULT = await CLIENT.whoAmI();
 
-				if (RESULT instanceof DOMException || RESULT instanceof TypeError) {
-					return addMessage('error', GENERIC_ERR_MSG);
-				}
+			if (RESULT instanceof DOMException || RESULT instanceof TypeError) {
+				return addMessage('error', GENERIC_ERR_MSG);
+			}
 
-				if (RESULT instanceof UnexpectedResponseError) {
-					return addMessage('error', RESULT.message);
-				}
+			if (RESULT instanceof UnexpectedResponseError) {
+				return addMessage('error', RESULT.message);
+			}
 
-				// the user isn't logged in, which is fine.
-				if (!(RESULT instanceof UnauthorizedError)) {
-					CLIENT.username = RESULT.username;
-				}
+			// the user isn't logged in, which is fine.
+			if (!(RESULT instanceof UnauthorizedError)) {
+				CLIENT.username = RESULT.username;
+			}
 
-				props.onSetClient(CLIENT);
-				props.onClose?.();
-				addMessage('info', 'Connected successfully');
-			}}>
-				<LabeledInput
-					id='client-connect-addr'
-					onChange={e => setUrl(e.target.value)}
-					required={true}
-					type='url'
-					value={URL}
-				>
-					Address:
-				</LabeledInput>
-
-				{MODAL_BUTTON}
-			</Form>
-		</Modal>
+			props.onSetClient(CLIENT);
+			props.onClose();
+			addMessage('info', 'Connected');
+		}}>
+			<LabeledInput
+				id='client-connect-addr'
+				onChange={setUrl}
+				required={true}
+				type='url'
+				value={URL}
+			>
+				Address:
+			</LabeledInput>
+		</ModalForm>
 	);
 }
 
@@ -175,51 +179,35 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 	const [PASSWORD, setPassword] = React.useState<string>(props.client?.username || '');
 
 	return (
-		<Modal onClose={props.onClose}>
-			<Form onSubmit={async () => {
-				const CLIENT = new Client(props.client!.address, USERNAME);
-				const RESULT = await CLIENT.login(PASSWORD);
+		<ModalForm button_text='Login' onClose={props.onClose} onSubmit={async () => {
+			const CLIENT = new Client(props.client!.address, USERNAME);
+			const RESULT = await CLIENT.login(PASSWORD);
 
-				if (RESULT instanceof DOMException || RESULT instanceof TypeError) {
-					return addMessage('error', GENERIC_ERR_MSG);
-				}
+			if (RESULT instanceof DOMException || RESULT instanceof TypeError) {
+				return addMessage('error', GENERIC_ERR_MSG);
+			}
 
-				if (RESULT instanceof UnexpectedResponseError) {
-					return addMessage('error', RESULT.message);
-				}
+			if (RESULT instanceof UnexpectedResponseError) {
+				return addMessage('error', RESULT.message);
+			}
 
-				if (RESULT.status.code !== Code.Success) { // the user isn't logged in, which is fine.
-					CLIENT.username = undefined;
-					return;
-				}
+			if (RESULT.status.code !== Code.Success) { // the login failed.
+				CLIENT.username = undefined;
+				return addMessage('error', RESULT.status.message);
+			}
 
-				props.onSetClient(CLIENT);
-				props.onClose?.();
-				addMessage('info', 'Connected successfully');
-			}}>
-				<LabeledInput
-					id='client-login-username'
-					onChange={e => setUsername(e.target.value)}
-					required={true}
-					type='url'
-					value={USERNAME}
-				>
-					Username:
-				</LabeledInput>
+			props.onSetClient(CLIENT);
+			props.onClose();
+			addMessage('info', 'Logged in');
+		}}>
+			<LabeledInput id='client-login-username' onChange={setUsername} required={true} type='text' value={USERNAME}>
+				Username:
+			</LabeledInput>
 
-				<LabeledInput
-					id='client-login-password'
-					onChange={e => setPassword(e.target.value)}
-					required={true}
-					type='url'
-					value={PASSWORD}
-				>
-					Password:
-				</LabeledInput>
-
-				{MODAL_BUTTON}
-			</Form>
-		</Modal>
+			<LabeledInput id='client-login-password' onChange={setPassword} required={true} type='password' value={PASSWORD}>
+				Password:
+			</LabeledInput>
+		</ModalForm>
 	);
 }
 

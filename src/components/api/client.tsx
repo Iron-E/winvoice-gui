@@ -124,7 +124,9 @@ function ModalForm(props: Children & Required<AsyncOn<'submit'> & On<'close'> & 
 	return (
 		<Modal onClose={props.onClose}>
 			<Form onSubmit={props.onSubmit}>
-				{props.children}
+				<div className={`flex flex-col`}>
+					{props.children}
+				</div>
 
 				<div className='text-center mt-3'>
 					<button className='px-1 rounded bg-modal-button-bg shadow-sm'>
@@ -204,12 +206,12 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 			props.onClose();
 			addMessage('info', 'Logged in');
 		}}>
-			<LabeledInput id='client-login-username' onChange={setUsername} required={true} type='text' value={USERNAME}>
-				Username:
+			<LabeledInput id='client-login-username' inputClassName='mb-2' onChange={setUsername} required={true} type='text' value={USERNAME}>
+				Username
 			</LabeledInput>
 
 			<LabeledInput id='client-login-password' onChange={setPassword} required={true} type='password' value={PASSWORD}>
-				Password:
+				Password
 			</LabeledInput>
 		</ModalForm>
 	);

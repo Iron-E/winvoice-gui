@@ -11,7 +11,7 @@ const BASE_ICON_STYLE = 'flex-shrink-0 w-5' as const;
 
 /** The base style of a {@link Message}, which is shared by all levels. */
 const BASE_MSG_STYLE = `${FLEX} gap-1 justify-between basis-auto hover:flex-shrink-0 \
-${PAD} min-w-[10vmax] max-w-fit \
+${PAD} min-w-[7vmax] max-w-fit \
 ease-in-out duration-200 \
 [&:not(:first-child):not(:hover)]:opacity-60 \
 z-1` as const;

@@ -163,7 +163,6 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 
 			props.onSetClient(CLIENT);
 			props.onClose();
-			addMessage('info', 'Connected');
 		}}>
 			<LabeledInput
 				id='client-connect-addr'
@@ -204,7 +203,6 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 
 			props.onSetClient(CLIENT);
 			props.onClose();
-			addMessage('info', 'Logged in');
 		}}>
 			<LabeledInput id='client-login-username' inputClassName='mb-2' onChange={setUsername} required={true} type='text' value={USERNAME}>
 				Username

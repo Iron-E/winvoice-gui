@@ -10,6 +10,9 @@ import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { UnauthorizedError } from './unauthorized_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
 
+/** A generic error message, for builtin {@link Error}s that have unhelpful provided messages. */
+const GENERIC_ERR_MSG = 'Could not connect to that address, see the console for additional details' as const;
+
 /** {@link Error}s which likely occur due to a misconfigured (or mistyped) API endpoint. */
 type ApiError = UnexpectedResponseError | UnauthorizedError;
 
@@ -78,8 +81,9 @@ export class Client {
 	 * @param body the request to send.
 	 * @return the response from the server, or an error if one occurs.
 	 */
-	public async login(this: Readonly<Client>, password: string): Request<response.Login> {
-		return await this.request(Route.Login, { authorization: btoa(password), method: 'GET' }, response.isLogin);
+	public async login(this: Readonly<Client>, password: string): Promise<response.Login | FetchError | UnexpectedResponseError> {
+		const RESULT = await this.request(Route.Login, { authorization: btoa(password), method: 'GET' }, response.isLogin);
+		return RESULT instanceof UnauthorizedError ? this.unexpectedResponse() : RESULT;
 	}
 
 	/**
@@ -132,7 +136,7 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 				const RESULT = await CLIENT.whoAmI();
 
 				if (RESULT instanceof DOMException || RESULT instanceof TypeError) {
-					return addMessage('error', 'Could not connect to that address, see the console for additional details');
+					return addMessage('error', GENERIC_ERR_MSG);
 				}
 
 				if (RESULT instanceof UnexpectedResponseError) {
@@ -178,10 +182,10 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 				const RESULT = await CLIENT.login(PASSWORD);
 
 				if (RESULT instanceof DOMException || RESULT instanceof TypeError) {
-					return addMessage('error', 'Could not connect to that address, see the console for additional details');
+					return addMessage('error', GENERIC_ERR_MSG);
 				}
 
-				if (RESULT instanceof UnexpectedResponseError || RESULT instanceof UnauthorizedError) {
+				if (RESULT instanceof UnexpectedResponseError) {
 					return addMessage('error', RESULT.message);
 				}
 

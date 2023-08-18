@@ -1,4 +1,7 @@
-import { type Func } from '../utils';
+import { type Fn } from '../utils';
+
+/** Properties of an {@link React.ReactElement | element} that include children a handler for the given `Event`. */
+export type AsyncOn<Event extends string, Params extends any[] = [], Return = void> = On<Event, Params, Promise<Return>>;
 
 /** Properties of an {@link React.ReactElement | element} that include class names. */
 export type Class<Field extends string = ''> = Readonly<{
@@ -29,5 +32,5 @@ export type Key = Readonly<{
 
 /** Properties of an {@link React.ReactElement | element} that include children a handler for the given `Event`. */
 export type On<Event extends string, Params extends any[] = [], Return = void> = Readonly<{
-	[E in Capitalize<Event> as `on${E}`]?: Func<Params, Return>;
+	[E in Capitalize<Event> as `on${E}`]?: Fn<Params, Return>;
 }>;

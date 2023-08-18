@@ -3,6 +3,7 @@
 import React from 'react';
 import type { Class, On } from '../props-with';
 import type { Maybe, Opt } from '../../utils';
+import { Form } from '../form';
 import { LabeledInput } from '../labeled-input';
 import { Modal, type Props as ModalProps } from '../modal';
 import { response, Route, headers as apiHeaders, Code } from '../../api';
@@ -130,8 +131,7 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 
 	return (
 		<Modal onClose={props.onClose}>
-			<form onSubmit={async e => {
-				e.preventDefault();
+			<Form onSubmit={async () => {
 				const CLIENT: Client = new Client(URL);
 				const RESULT = await CLIENT.whoAmI();
 
@@ -163,7 +163,7 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 				</LabeledInput>
 
 				{MODAL_BUTTON}
-			</form>
+			</Form>
 		</Modal>
 	);
 }
@@ -176,8 +176,7 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 
 	return (
 		<Modal onClose={props.onClose}>
-			<form onSubmit={async e => {
-				e.preventDefault();
+			<Form onSubmit={async () => {
 				const CLIENT = new Client(props.client!.address, USERNAME);
 				const RESULT = await CLIENT.login(PASSWORD);
 
@@ -219,7 +218,7 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 				</LabeledInput>
 
 				{MODAL_BUTTON}
-			</form>
+			</Form>
 		</Modal>
 	);
 }

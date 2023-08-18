@@ -8,7 +8,7 @@ export const VERSION_HEADER = 'api-version' as const;
 export const VERSION_RANGE = '^0.1' as const;
 
 /** Create headers for an API request. */
-export function headers(r: Omit<RequestInit, 'credentials'>): RequestInit {
+export function requestInit(r: Omit<RequestInit, 'credentials'>): RequestInit {
 	(r as RequestInit).credentials = 'include';
 	r.headers = r.headers == undefined ?
 		{ [VERSION_HEADER]: VERSION_RANGE } :

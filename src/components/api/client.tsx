@@ -6,7 +6,7 @@ import type { Maybe, Opt } from '../../utils';
 import { Form } from '../form';
 import { LabeledInput } from '../labeled-input';
 import { Modal, type Props as ModalProps } from '../modal';
-import { response, Route, headers as apiHeaders, Code } from '../../api';
+import { response, Route, requestInit as apiRequestInit, Code } from '../../api';
 import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { UnauthorizedError } from './unauthorized_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
@@ -38,26 +38,25 @@ export class Client {
 
 	/**
 	 * Make a {@link fetch} request
-	 * @param headers the HTTP method to send the request with.
+	 * @param requestInit the HTTP method to send the request with.
 	 * @param route the {@link Route} to send the request to.
 	 * @param checkSchema ensure that the response body deserializes to
 	 */
 	public async request<T>(
 		this: Readonly<Client>,
 		route: Route,
-		headers: Record<string,
-			string> & { method: Method },
+		requestInit: RequestInit & { method: Method },
 		checkSchema: (json: unknown) => json is T,
 	): Request<T> {
 		try {
-			const RESULT: Readonly<Response> = await fetch(`${this.address}${route}`, apiHeaders(headers));
+			const RESULT: Readonly<Response> = await fetch(`${this.address}${route}`, apiRequestInit(requestInit));
 			if (RESULT.ok) {
 				try {
 					const OBJECT = await RESULT.json() as unknown;
 					if (checkSchema(OBJECT)) { return OBJECT; }
 				} catch { /** NOTE: `!checkSchema` and `SyntaxError` logic are the same */ }
 			} else if (RESULT.status === 401) {
-				return this.unauthorized(headers.method, route)
+				return this.unauthorized(requestInit.method, route)
 			}
 
 			return this.unexpectedResponse();
@@ -83,7 +82,12 @@ export class Client {
 	 * @return the response from the server, or an error if one occurs.
 	 */
 	public async login(this: Readonly<Client>, password: string): Promise<response.Login | FetchError | UnexpectedResponseError> {
-		const RESULT = await this.request(Route.Login, { authorization: btoa(password), method: 'GET' }, response.isLogin);
+		const RESULT = await this.request(
+			Route.Login,
+			{ method: 'GET', headers: { authorization: `Basic ${btoa(`${this.username}:${password}`)}` } },
+			response.isLogin,
+		);
+
 		return RESULT instanceof UnauthorizedError ? this.unexpectedResponse() : RESULT;
 	}
 

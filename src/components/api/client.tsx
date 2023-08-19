@@ -6,24 +6,10 @@ import type { Fn, Maybe, Opt } from '../../utils';
 import { Form } from '../form';
 import { LabeledInput } from '../labeled-input';
 import { Modal, type Props as ModalProps } from '../modal';
-import { response, Route, requestInit as apiRequestInit, Code } from '../../api';
-import { SHOW_MESSAGE_CONTEXT } from '../messages';
+import { response, Route, newRequest, Code, type Request } from '../../api';
+import { SHOW_MESSAGE_CONTEXT, type ShowMessage } from '../messages';
 import { UnauthenticatedError } from './unauthenticated_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
-
-/** A generic error message, for builtin {@link Error}s that have unhelpful provided messages. */
-const GENERIC_ERR_MSG = 'Could not connect to that address, see the console for additional details' as const;
-
-/** {@link Error}s which likely occur due to a misconfigured (or mistyped) API endpoint. */
-type ApiError = UnauthenticatedError | UnexpectedResponseError;
-
-/** {@link Error}s which may be `throw`n by {@link fetch}. */
-type FetchError = DOMException | TypeError;
-
-/** HTTP methods used by the winvoice-server. */
-type Method = 'DELETE' | 'GET' | 'PATCH' | 'POST';
-
-type Request<T> = Promise<T | (ApiError | FetchError)>;
 
 /**
  * The information which is kept in order to make api requests / provide relevant UI elements (e.g. whether the user is currently signed in).
@@ -37,32 +23,106 @@ export class Client {
 	) { }
 
 	/**
+	 * Attempt to login to the {@link Client.address} using the defined {@link Client.username} and `password`.
+	 * @param password the user's password.
+	 * @param showMessage a function that will be used to notify a user of errors.
+	 * @return whether the request succeeded.
+	 */
+	public async login(this: Readonly<Client>, showMessage: ShowMessage, password: string): Promise<boolean> {
+		const RESULT = await this.request(
+			Route.Login,
+			{ method: 'GET', headers: { authorization: `Basic ${btoa(`${this.username}:${password}`)}` } },
+			showMessage,
+			response.isLogin,
+		);
+
+		if (RESULT instanceof UnauthenticatedError) {
+			showMessage('error', this.unexpectedResponse().message);
+		} else if (RESULT !== null) {
+			if (RESULT.status.code === Code.Success) {
+				return true;
+			}
+
+			showMessage('error', RESULT.status.message);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Make a request on the {@link Route.Logout}.
+	 * @param showMessage a function that will be used to notify a user of errors.
+	 * @return the response or an error.
+	 */
+	public async logout(this: Readonly<Client>, showMessage: ShowMessage): Promise<boolean> {
+		const RESULT = await this.request(Route.Logout, { method: 'GET' }, showMessage, response.isLogout);
+
+		if (RESULT instanceof UnauthenticatedError) {
+			showMessage('warn', RESULT.message);
+		} else if (RESULT !== null) {
+			if (RESULT.status.code === Code.Success) {
+				return true;
+			}
+
+			showMessage('error', RESULT.status.message);
+		}
+
+		return false;
+	}
+
+	/**
 	 * Make a {@link fetch} request
-	 * @param requestInit the HTTP method to send the request with.
+	 * @param <RequestBodyInner> see {@link newRequest}.
+	 * @param <ApiResponse> the response which is expected by the server on a success ({@link Response.ok}).
+	 * @param requestParams the HTTP method to send the request with.
 	 * @param route the {@link Route} to send the request to.
+	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @param checkSchema ensure that the response body deserializes to
 	 */
-	public async request<T>(
+	public async request<RequestBodyInner = never, ResponseBody = unknown>(
 		this: Readonly<Client>,
 		route: Route,
-		requestInit: RequestInit & { method: Method },
-		checkSchema: (json: unknown) => json is T,
-	): Request<T> {
+		requestParams: Request<RequestBodyInner>,
+		showMessage: ShowMessage,
+		checkSchema: (json: unknown) => json is ResponseBody,
+	): Promise<Opt<ResponseBody | UnauthenticatedError>> {
 		try {
-			const RESULT: Readonly<Response> = await fetch(`${this.address}${route}`, apiRequestInit(requestInit));
+			const RESULT: Readonly<Response> = await fetch(`${this.address}${route}`, newRequest(requestParams));
 			if (RESULT.ok) {
 				try {
 					const OBJECT = await RESULT.json() as unknown;
-					if (checkSchema(OBJECT)) { return OBJECT; }
-				} catch { /** NOTE: `!checkSchema` and `SyntaxError` logic are the same */ }
+					if (checkSchema(OBJECT)) {
+						return OBJECT;
+					}
+				} catch {
+					// NOTE: `!checkSchema` and `SyntaxError` logic are the same
+				}
 			} else if (RESULT.status === 401) {
 				return this.unauthenticated();
 			}
 
-			return this.unexpectedResponse();
-		} catch (e) {
-			return e as FetchError;
-		};
+			showMessage('error', this.unexpectedResponse().message);
+		} catch {
+			showMessage('error', `Could not connect to ${this.address}, see the console for details`);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Update `this` {@link Client} based on information from a {@link Route.WhoAmI} request.
+	 * @param showMessage a function that will be used to notify a user of errors.
+	 * @return whether the request succeeded.
+	 */
+	public async setWhoIAm(this: Client, showMessage: ShowMessage): Promise<boolean> {
+		const RESULT = await this.request(Route.WhoAmI, { method: 'GET' }, showMessage, response.isWhoAmI);
+		if (RESULT === null) { return false; }
+
+		if (!(RESULT instanceof UnauthenticatedError)) { // the user isn't logged in, which is fine.
+			this.username = RESULT.username;
+		}
+
+		return true;
 	}
 
 	/** An error to communicate that the client is not yet authenticated. */
@@ -74,42 +134,10 @@ export class Client {
 	public unexpectedResponse(this: Readonly<Client>): UnexpectedResponseError {
 		return new UnexpectedResponseError(this.address);
 	}
-
-	/**
-	 * Send a delete request.
-	 * @param route the {@link Route} to send the delete request to.
-	 * @param body the request to send.
-	 * @return the response from the server, or an error if one occurs.
-	 */
-	public async login(this: Readonly<Client>, password: string): Promise<response.Login | FetchError | UnexpectedResponseError> {
-		const RESULT = await this.request(
-			Route.Login,
-			{ method: 'GET', headers: { authorization: `Basic ${btoa(`${this.username}:${password}`)}` } },
-			response.isLogin,
-		);
-
-		return RESULT instanceof UnauthenticatedError ? this.unexpectedResponse() : RESULT;
-	}
-
-	/**
-	 * Make a request on the {@link Route.Logout}.
-	 * @return the response or an error.
-	 */
-	public async logout(this: Readonly<Client>): Request<response.Logout> {
-		return await this.request(Route.Logout, { method: 'GET' }, response.isLogout);
-	}
-
-	/**
-	 * Make a request on the {@link Route.WhoAmI}.
-	 * @return the response or an error.
-	 */
-	public async whoAmI(this: Readonly<Client>): Request<response.WhoAmI> {
-		return await this.request(Route.WhoAmI, { method: 'GET' }, response.isWhoAmI);
-	}
 }
 
 /** Properties which accept a handler. */
-type SelectorProps = Required<On<'setClient', [client: Client]>> & { client?: Client };
+type SelectorProps = Required<On<'setClient', [client: Client]>> & { client?: Readonly<Client> };
 
 /** Properties used by {@link Modal}s in the {@link ClientSelector}. */
 type SelectorModalProps = Omit<ModalProps, 'children'> & SelectorProps;
@@ -151,16 +179,7 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 	return (
 		<ModalForm button_text='Connect' onClose={props.onClose} onSubmit={async () => {
 			const CLIENT: Client = new Client(URL);
-			const RESULT = await CLIENT.whoAmI();
-
-			if (RESULT instanceof DOMException || RESULT instanceof TypeError) {
-				return showMessage('error', GENERIC_ERR_MSG);
-			} else if (RESULT instanceof UnexpectedResponseError) {
-				return showMessage('error', RESULT.message);
-			} else if (!(RESULT instanceof UnauthenticatedError)) { // the user isn't logged in, which is fine.
-				CLIENT.username = RESULT.username;
-			}
-
+			if (!await CLIENT.setWhoIAm(showMessage)) { return; }
 			props.onSetClient(CLIENT);
 			props.onClose();
 		}}>
@@ -186,17 +205,7 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 	return (
 		<ModalForm button_text='Login' onClose={props.onClose} onSubmit={async () => {
 			const CLIENT = new Client(props.client!.address, USERNAME);
-			const RESULT = await CLIENT.login(PASSWORD);
-
-			if (RESULT instanceof DOMException || RESULT instanceof TypeError) {
-				return showMessage('error', GENERIC_ERR_MSG);
-			} else if (RESULT instanceof UnexpectedResponseError) {
-				return showMessage('error', RESULT.message);
-			} else if (RESULT.status.code !== Code.Success) { // the login failed.
-				CLIENT.username = undefined;
-				return showMessage('error', RESULT.status.message);
-			}
-
+			if (!await CLIENT.login(showMessage, PASSWORD)) { return; }
 			props.onSetClient(CLIENT);
 			props.onClose();
 		}}>
@@ -223,18 +232,7 @@ export function ClientSelector(props: Class<'button'> & SelectorProps): React.Re
 		let [content, onClick] = CLIENT.username == undefined
 			? ['Login', () => setModalVisibility('login')]
 			: ['Logout', async () => {
-				const RESULT = await CLIENT.logout();
-
-				if (RESULT instanceof DOMException || RESULT instanceof TypeError) {
-					return showMessage('error', GENERIC_ERR_MSG);
-				} else if (RESULT instanceof UnauthenticatedError) {
-					return showMessage('warn', RESULT.message);
-				} else if (RESULT instanceof UnexpectedResponseError) {
-					return showMessage('error', RESULT.message);
-				} else if (RESULT.status.code !== Code.Success) {
-					return showMessage('error', RESULT.status.message);
-				}
-
+				if (!await CLIENT.logout(showMessage)) { return; }
 				props.onSetClient(new Client(CLIENT.address));
 			}]
 			;

@@ -145,7 +145,7 @@ function ModalForm(props: Children & Required<AsyncOn<'submit'> & On<'close'> & 
 
 /** @return the {@link Modal} to use when connecting to the {@link State | API}. */
 function ConnectModal(props: SelectorModalProps): React.ReactElement {
-	const addMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
+	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
 	const [URL, setUrl] = React.useState<string>(props.client?.username || '');
 
 	return (
@@ -154,15 +154,10 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 			const RESULT = await CLIENT.whoAmI();
 
 			if (RESULT instanceof DOMException || RESULT instanceof TypeError) {
-				return addMessage('error', GENERIC_ERR_MSG);
-			}
-
-			if (RESULT instanceof UnexpectedResponseError) {
-				return addMessage('error', RESULT.message);
-			}
-
-			// the user isn't logged in, which is fine.
-			if (!(RESULT instanceof UnauthenticatedError)) {
+				return showMessage('error', GENERIC_ERR_MSG);
+			} else if (RESULT instanceof UnexpectedResponseError) {
+				return showMessage('error', RESULT.message);
+			} else if (!(RESULT instanceof UnauthenticatedError)) { // the user isn't logged in, which is fine.
 				CLIENT.username = RESULT.username;
 			}
 
@@ -184,7 +179,7 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 
 /** @return the {@link Modal} to use when logging in to the {@link State | API}. */
 function LoginModal(props: SelectorModalProps): React.ReactElement {
-	const addMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
+	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
 	const [USERNAME, setUsername] = React.useState<string>(props.client?.username || '');
 	const [PASSWORD, setPassword] = React.useState<string>(props.client?.username || '');
 
@@ -194,16 +189,12 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 			const RESULT = await CLIENT.login(PASSWORD);
 
 			if (RESULT instanceof DOMException || RESULT instanceof TypeError) {
-				return addMessage('error', GENERIC_ERR_MSG);
-			}
-
-			if (RESULT instanceof UnexpectedResponseError) {
-				return addMessage('error', RESULT.message);
-			}
-
-			if (RESULT.status.code !== Code.Success) { // the login failed.
+				return showMessage('error', GENERIC_ERR_MSG);
+			} else if (RESULT instanceof UnexpectedResponseError) {
+				return showMessage('error', RESULT.message);
+			} else if (RESULT.status.code !== Code.Success) { // the login failed.
 				CLIENT.username = undefined;
-				return addMessage('error', RESULT.status.message);
+				return showMessage('error', RESULT.status.message);
 			}
 
 			props.onSetClient(CLIENT);
@@ -223,15 +214,28 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 /** @return an API {@link State} selector. */
 export function ClientSelector(props: Class<'button'> & SelectorProps): React.ReactElement {
 	const [MODAL_VISIBILITY, setModalVisibility] = React.useState<Opt<'connect' | 'login'>>(null);
+	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
+	const CLIENT = props.client;
 
 	let account_button: Maybe<React.ReactElement>;
-	if (props.client != undefined) {
+	if (CLIENT != undefined) {
 		props.client
-		let [content, onClick] = props.client.username == undefined
+		let [content, onClick] = CLIENT.username == undefined
 			? ['Login', () => setModalVisibility('login')]
-			: ['Logout', () => {
-				console.log('TODO: send `fetch` to logout on `API.address`');
-				props.onSetClient(new Client(props.client!.address));
+			: ['Logout', async () => {
+				const RESULT = await CLIENT.logout();
+
+				if (RESULT instanceof DOMException || RESULT instanceof TypeError) {
+					return showMessage('error', GENERIC_ERR_MSG);
+				} else if (RESULT instanceof UnauthenticatedError) {
+					return showMessage('warn', RESULT.message);
+				} else if (RESULT instanceof UnexpectedResponseError) {
+					return showMessage('error', RESULT.message);
+				} else if (RESULT.status.code !== Code.Success) {
+					return showMessage('error', RESULT.status.message);
+				}
+
+				props.onSetClient(new Client(CLIENT.address));
 			}]
 			;
 

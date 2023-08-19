@@ -2,20 +2,20 @@
 
 import React from 'react';
 import type { AsyncOn, Children, Class, On } from '../props-with';
-import type { Maybe, Opt } from '../../utils';
+import type { Fn, Maybe, Opt } from '../../utils';
 import { Form } from '../form';
 import { LabeledInput } from '../labeled-input';
 import { Modal, type Props as ModalProps } from '../modal';
 import { response, Route, requestInit as apiRequestInit, Code } from '../../api';
 import { SHOW_MESSAGE_CONTEXT } from '../messages';
-import { UnauthorizedError } from './unauthorized_error';
+import { UnauthenticatedError } from './unauthenticated_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
 
 /** A generic error message, for builtin {@link Error}s that have unhelpful provided messages. */
 const GENERIC_ERR_MSG = 'Could not connect to that address, see the console for additional details' as const;
 
 /** {@link Error}s which likely occur due to a misconfigured (or mistyped) API endpoint. */
-type ApiError = UnexpectedResponseError | UnauthorizedError;
+type ApiError = UnauthenticatedError | UnexpectedResponseError;
 
 /** {@link Error}s which may be `throw`n by {@link fetch}. */
 type FetchError = DOMException | TypeError;
@@ -56,7 +56,7 @@ export class Client {
 					if (checkSchema(OBJECT)) { return OBJECT; }
 				} catch { /** NOTE: `!checkSchema` and `SyntaxError` logic are the same */ }
 			} else if (RESULT.status === 401) {
-				return this.unauthorized(requestInit.method, route)
+				return this.unauthenticated();
 			}
 
 			return this.unexpectedResponse();
@@ -65,9 +65,9 @@ export class Client {
 		};
 	}
 
-	/** An error to communicate that the client is not yet authorized. */
-	public unauthorized(this: Readonly<Client>, method: Method, resource: string): UnauthorizedError {
-		return new UnauthorizedError(this.address, method, resource);
+	/** An error to communicate that the client is not yet authenticated. */
+	public unauthenticated(this: Readonly<Client>): UnauthenticatedError {
+		return new UnauthenticatedError(this.address);
 	}
 
 	/** An error to communicate that the client received unexpected {@link Response}. */
@@ -88,7 +88,7 @@ export class Client {
 			response.isLogin,
 		);
 
-		return RESULT instanceof UnauthorizedError ? this.unexpectedResponse() : RESULT;
+		return RESULT instanceof UnauthenticatedError ? this.unexpectedResponse() : RESULT;
 	}
 
 	/**
@@ -109,15 +109,20 @@ export class Client {
 }
 
 /** Properties which accept a handler. */
-type SetClientProps = Required<On<'setClient', [client: Client]>>;
+type SelectorProps = Required<On<'setClient', [client: Client]>> & { client?: Client };
 
 /** Properties used by {@link Modal}s in the {@link ClientSelector}. */
-type SelectorModalProps = Omit<ModalProps & SetClientProps & { client?: Client }, 'children'>;
+type SelectorModalProps = Omit<ModalProps, 'children'> & SelectorProps;
 
-type ClientContext = Maybe<Readonly<Client>>;
+type ClientContext = Readonly<Client>;
 
 /** The context for the currently selected API address. */
-export const CLIENT_CONTEXT: Readonly<React.Context<ClientContext>> = React.createContext<ClientContext>(undefined);
+export const CLIENT_CONTEXT: Readonly<React.Context<ClientContext>> = React.createContext<ClientContext>(new Client(
+	'DEFAULT CLIENT, SHOULD NEVER BE READ',
+));
+
+/** Marks the current session as expired. */
+export const SESSION_EXPIRED_CONTEXT: Readonly<React.Context<Fn>> = React.createContext<Fn>(() => { });
 
 /** @return A floating form. */
 function ModalForm(props: Children & Required<AsyncOn<'submit'> & On<'close'> & { button_text: string }>) {
@@ -157,7 +162,7 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 			}
 
 			// the user isn't logged in, which is fine.
-			if (!(RESULT instanceof UnauthorizedError)) {
+			if (!(RESULT instanceof UnauthenticatedError)) {
 				CLIENT.username = RESULT.username;
 			}
 
@@ -216,17 +221,17 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 }
 
 /** @return an API {@link State} selector. */
-export function ClientSelector(props: Class<'button'> & SetClientProps): React.ReactElement {
+export function ClientSelector(props: Class<'button'> & SelectorProps): React.ReactElement {
 	const [MODAL_VISIBILITY, setModalVisibility] = React.useState<Opt<'connect' | 'login'>>(null);
-	const CLIENT = React.useContext(CLIENT_CONTEXT);
 
 	let account_button: Maybe<React.ReactElement>;
-	if (CLIENT != undefined) {
-		let [content, onClick] = CLIENT.username == undefined
+	if (props.client != undefined) {
+		props.client
+		let [content, onClick] = props.client.username == undefined
 			? ['Login', () => setModalVisibility('login')]
 			: ['Logout', () => {
 				console.log('TODO: send `fetch` to logout on `API.address`');
-				props.onSetClient(new Client(CLIENT.address));
+				props.onSetClient(new Client(props.client!.address));
 			}]
 			;
 
@@ -245,7 +250,7 @@ export function ClientSelector(props: Class<'button'> & SetClientProps): React.R
 				Connect
 			</button>
 
-			{MODAL && <MODAL client={CLIENT} onClose={() => setModalVisibility(null)} onSetClient={props.onSetClient} />}
+			{MODAL && <MODAL client={props.client} onClose={() => setModalVisibility(null)} onSetClient={props.onSetClient} />}
 		</>
 	);
 }

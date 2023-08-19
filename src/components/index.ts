@@ -7,5 +7,5 @@ export { Header, HEADER_CSS } from './header';
 export { LabeledInput } from './labeled-input';
 export { Modal, type Props as ModalProps } from './modal';
 export { Page } from './page';
-export { SHOW_MESSAGE_CONTEXT, type Message, Messages } from './messages';
+export { SHOW_MESSAGE_CONTEXT, type Message, Messages, type ShowMessage } from './messages';
 export { XButton } from './x-button';

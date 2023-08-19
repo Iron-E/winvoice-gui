@@ -55,7 +55,7 @@ export type Message = {
 };
 
 /** The function which is used to show additional messages on the screen. */
-type ShowMessage = (level: Level, text: string) => void;
+export type ShowMessage = (level: Level, text: string) => void;
 
 /** The context used to provide a message creator. */
 export const SHOW_MESSAGE_CONTEXT: Readonly<React.Context<ShowMessage>> = React.createContext<ShowMessage>(() => { });

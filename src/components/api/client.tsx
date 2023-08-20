@@ -347,14 +347,12 @@ export function ClientSelector(props: Class<'button'> & SelectorProps): React.Re
 	}
 
 	const MODAL = (MODAL_VISIBILITY == 'connect' && ConnectModal) || (MODAL_VISIBILITY == 'login' && LoginModal);
-	return (
-		<>
-			{account_button}
-			<button className={props.buttonClassName} onClick={() => setModalVisibility('connect')}>
-				Connect
-			</button>
+	return <>
+		{account_button}
+		<button className={props.buttonClassName} onClick={() => setModalVisibility('connect')}>
+			Connect
+		</button>
 
-			{MODAL && <MODAL client={props.client} onClose={() => setModalVisibility(null)} onSetClient={props.onSetClient} />}
-		</>
-	);
+		{MODAL && <MODAL client={props.client} onClose={() => setModalVisibility(null)} onSetClient={props.onSetClient} />}
+	</>;
 }

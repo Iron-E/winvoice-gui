@@ -8,6 +8,11 @@ import { FLEX } from './css/flex';
 import { Header, HEADER_CSS } from './header';
 import { SHOW_MESSAGE_CONTEXT, Messages, type Message, type ShowMessage } from './messages';
 
+/** @return a guidance message to help users get started using winvoice. */
+function Guidance(props: Children): React.ReactElement {
+	return (<p>Please <b>{props.children}</b> to continue.</p>);
+}
+
 /**
  * A provider for the {@link Context} that wraps around a page.
  * @param children additional elements shown inside this one.
@@ -33,8 +38,7 @@ export function Page(props: Children): React.ReactElement {
 		}
 	}, []);
 
-	return (
-		<>
+	return <>
 			<SHOW_MESSAGE_CONTEXT.Provider value={showMessage}>
 				<Header>
 					<ClientSelector buttonClassName={HEADER_CSS.button} client={CLIENT} onSetClient={c => {
@@ -43,16 +47,18 @@ export function Page(props: Children): React.ReactElement {
 					}} />
 				</Header>
 
-				{CLIENT?.username == undefined
-					? <p>Please <b>connect</b> and <b>sign in</b> to continue.</p>
-					: <CLIENT_CONTEXT.Provider value={CLIENT}>
-						<SESSION_EXPIRED_CONTEXT.Provider value={() => {
-							setClient(new Client(CLIENT.address));
-							showMessage('info', 'Your session has expired. Please login again.');
-						}}>
-							{props.children}
-						</SESSION_EXPIRED_CONTEXT.Provider>
-					</CLIENT_CONTEXT.Provider>
+				{CLIENT == undefined
+					? <Guidance>connect</Guidance>
+					: CLIENT.address == undefined
+						? <Guidance>sign in</Guidance>
+						: <CLIENT_CONTEXT.Provider value={CLIENT}>
+							<SESSION_EXPIRED_CONTEXT.Provider value={() => {
+								setClient(new Client(CLIENT.address));
+								showMessage('info', 'Your session has expired. Please login again.');
+							}}>
+								{props.children}
+							</SESSION_EXPIRED_CONTEXT.Provider>
+						</CLIENT_CONTEXT.Provider>
 				}
 			</SHOW_MESSAGE_CONTEXT.Provider>
 
@@ -61,6 +67,5 @@ export function Page(props: Children): React.ReactElement {
 				messages={MESSAGES}
 				onHideMessage={key => setMessages(MESSAGES.filter((m) => m.key !== key))}
 			/>
-		</>
-	);
+	</>;
 }

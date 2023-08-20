@@ -1,2 +1,2 @@
 /** A value which might be `null`. */
-export type Opt<T> = T | null;
+export type Opt<T> = NonNullable<T> | null;

@@ -21,13 +21,13 @@ export const VERSION_RANGE = '^0.1' as const;
  */
 export function newRequest<BodyInner>(r: Request<BodyInner>): RequestInit {
 	if (r.body != undefined) {
-		(r as RequestInit).body = JSON.stringify(r.body);
+		((r as unknown) as RequestInit).body = JSON.stringify(r.body);
 	}
 
-	(r as RequestInit).credentials = 'include';
+	((r as unknown) as RequestInit).credentials = 'include';
 	r.headers = r.headers == undefined ?
 		{ [VERSION_HEADER]: VERSION_RANGE } :
 		{ [VERSION_HEADER]: VERSION_RANGE, ...r.headers };
 
-	return r as RequestInit;
+	return (r as unknown) as RequestInit;
 }

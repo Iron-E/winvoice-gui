@@ -6,10 +6,19 @@ import type { Fn, Maybe, Opt } from '../../utils';
 import { Form } from '../form';
 import { LabeledInput } from '../labeled-input';
 import { Modal, type Props as ModalProps } from '../modal';
-import { response, Route, newRequest, Code, type Request } from '../../api';
+import { Code, newRequest, request, response, Route, type Request, type Status } from '../../api';
 import { SHOW_MESSAGE_CONTEXT, type ShowMessage } from '../messages';
 import { UnauthenticatedError } from './unauthenticated_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
+
+/** A response body (`<T>`) or {@link null} if an error was handled. */
+type OptBody<T = unknown> = Promise<Opt<T>>;
+
+/** Whether a request succeeded. */
+type RequestSuccess = Promise<boolean>;
+
+/** Routes that require user input to make a complete request. */
+type UserInputRoute = Exclude<Route, Route.Export | Route.Login | Route.Logout | Route.WhoAmI>;
 
 /**
  * The information which is kept in order to make api requests / provide relevant UI elements (e.g. whether the user is currently signed in).
@@ -23,67 +32,52 @@ export class Client {
 	) { }
 
 	/**
-	 * Attempt to login to the {@link Client.address} using the defined {@link Client.username} and `password`.
-	 * @param password the user's password.
-	 * @param showMessage a function that will be used to notify a user of errors.
-	 * @return whether the request succeeded.
-	 */
-	public async login(this: Readonly<Client>, showMessage: ShowMessage, password: string): Promise<boolean> {
-		const RESULT = await this.request(
-			Route.Login,
-			{ method: 'GET', headers: { authorization: `Basic ${btoa(`${this.username}:${password}`)}` } },
-			showMessage,
-			response.isLogin,
-		);
-
-		if (RESULT instanceof UnauthenticatedError) {
-			showMessage('error', this.unexpectedResponse().message);
-		} else if (RESULT !== null) {
-			if (RESULT.status.code === Code.Success) {
-				return true;
-			}
-
-			showMessage('error', RESULT.status.message);
-		}
-
-		return false;
-	}
-
-	/**
-	 * Make a request on the {@link Route.Logout}.
-	 * @param showMessage a function that will be used to notify a user of errors.
-	 * @return the response or an error.
-	 */
-	public async logout(this: Readonly<Client>, showMessage: ShowMessage): Promise<boolean> {
-		const RESULT = await this.request(Route.Logout, { method: 'GET' }, showMessage, response.isLogout);
-
-		if (RESULT instanceof UnauthenticatedError) {
-			showMessage('warn', RESULT.message);
-		} else if (RESULT !== null) {
-			if (RESULT.status.code === Code.Success) {
-				return true;
-			}
-
-			showMessage('error', RESULT.status.message);
-		}
-
-		return false;
-	}
-
-	/**
-	 * Make a {@link fetch} request
 	 * @param <RequestBodyInner> see {@link newRequest}.
 	 * @param <ApiResponse> the response which is expected by the server on a success ({@link Response.ok}).
 	 * @param requestParams the HTTP method to send the request with.
 	 * @param route the {@link Route} to send the request to.
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @param checkSchema ensure that the response body deserializes to
+	 * @return the response body, or {@link null} if an error was handled.
 	 */
-	public async request<RequestBodyInner = never, ResponseBody = unknown>(
+	private async caughtRequest<RequestBodyInner = never, ResponseBody extends { status: Status } = { status: Status }>(
 		this: Readonly<Client>,
+		showMessage: ShowMessage,
 		route: Route,
 		requestParams: Request<RequestBodyInner>,
+		checkSchema: (json: unknown) => json is ResponseBody,
+	): OptBody<ResponseBody> {
+		const RESULT = await (this as Client).request(showMessage, route, requestParams, checkSchema);
+		if (RESULT instanceof UnauthenticatedError) {
+			showMessage('error', RESULT.message);
+		} else if (RESULT !== null) {
+			switch (RESULT.status.code) {
+				case Code.SuccessForPermissions: // WARN: fallthrough
+					showMessage('warn', RESULT.status.message);
+				case Code.Success:
+					return RESULT;
+				default:
+					showMessage('error', RESULT.status.message);
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param <RequestBodyInner> see {@link newRequest}.
+	 * @param <ApiResponse> the response which is expected by the server on a success ({@link Response.ok}).
+	 * @param requestParams the HTTP method to send the request with.
+	 * @param route the {@link Route} to send the request to.
+	 * @param showMessage a function that will be used to notify a user of errors.
+	 * @param checkSchema ensure that the response body deserializes to
+	 * @return the response body, {@link null} if an error {@link fetch}ing was handled, or an error if one was unable to be handled in a manner compatible with all possible request purposes.
+	 */
+	private async request<RequestBodyInner = never, ResponseBody extends {} = {}>(
+		this: Readonly<Client>,
 		showMessage: ShowMessage,
+		route: Route,
+		requestParams: Request<RequestBodyInner>,
 		checkSchema: (json: unknown) => json is ResponseBody,
 	): Promise<Opt<ResponseBody | UnauthenticatedError>> {
 		try {
@@ -98,10 +92,10 @@ export class Client {
 					// NOTE: `!checkSchema` and `SyntaxError` logic are the same
 				}
 			} else if (RESULT.status === 401) {
-				return this.unauthenticated();
+				return (this as Client).unauthenticated();
 			}
 
-			showMessage('error', this.unexpectedResponse().message);
+			showMessage('error', (this as Client).unexpectedResponse().message);
 		} catch {
 			showMessage('error', `Could not connect to ${this.address}, see the console for details`);
 		}
@@ -109,13 +103,131 @@ export class Client {
 		return null;
 	}
 
+	/** An error to communicate that the client is not yet authenticated. */
+	private unauthenticated(this: Readonly<Client>): UnauthenticatedError {
+		return new UnauthenticatedError(this.address);
+	}
+
+	/** An error to communicate that the client received unexpected {@link Response}. */
+	private unexpectedResponse(this: Readonly<Client>): UnexpectedResponseError {
+		return new UnexpectedResponseError(this.address);
+	}
+
+	/**
+	 * @param showMessage a function that will be used to notify a user of errors.
+	 * @param route the {@link Route} to send the request to.
+	 * @param body the delete request.
+	 * @return whether the request succeeded.
+	 */
+	public async delete<RequestBodyInner>(
+		this: Readonly<Client>,
+		showMessage: ShowMessage,
+		route: UserInputRoute,
+		body: request.Delete<RequestBodyInner>,
+	): RequestSuccess {
+		return await (this as Client).caughtRequest(showMessage, route, { method: 'DELETE', body }, response.isDelete) !== null;
+	}
+
+	/**
+	 * Attempt to login to the {@link Client.address} using the defined {@link Client.username} and `password`.
+	 * @param password the user's password.
+	 * @param showMessage a function that will be used to notify a user of errors.
+	 * @return whether the request succeeded.
+	 */
+	public async export(this: Readonly<Client>, showMessage: ShowMessage, body: request.Export): OptBody<response.Export['exported']> {
+		const RESULT = await (this as Client).caughtRequest(showMessage, Route.Export, { method: 'GET', body }, response.isExport);
+		return RESULT && RESULT.exported;
+	}
+
+	/**
+	 * @param showMessage a function that will be used to notify a user of errors.
+	 * @param route the {@link Route} to send the request to.
+	 * @param body the delete request.
+	 * @return whether the request succeeded.
+	 */
+	public async get<RequestBodyInner, ResponseBody>(
+		this: Readonly<Client>,
+		showMessage: ShowMessage,
+		route: UserInputRoute,
+		body: request.Get<RequestBodyInner>,
+		checkSchema: (json: unknown) => json is ResponseBody,
+	): OptBody<response.Get<ResponseBody>['entities']> {
+		const RESULT = await (this as Client).caughtRequest(showMessage, route, { method: 'GET', body }, response.isGet);
+		if (RESULT !== null) {
+			const IS_EMPTY = RESULT.entities.length < 1;
+			if (IS_EMPTY || (!IS_EMPTY && checkSchema(RESULT.entities[0]))) {
+				return RESULT.entities as ResponseBody[];
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Attempt to login to the {@link Client.address} using the defined {@link Client.username} and `password`.
+	 * @param password the user's password.
+	 * @param showMessage a function that will be used to notify a user of errors.
+	 * @return whether the request succeeded.
+	 */
+	public async login(this: Readonly<Client>, showMessage: ShowMessage, password: string): RequestSuccess {
+		return await (this as Client).caughtRequest(
+			showMessage,
+			Route.Login,
+			{ method: 'GET', headers: { authorization: `Basic ${btoa(`${this.username}:${password}`)}` } },
+			response.isDelete,
+		) !== null;
+	}
+
+	/**
+	 * Make a request on the {@link Route.Logout}.
+	 * @param showMessage a function that will be used to notify a user of errors.
+	 * @return the response or an error.
+	 */
+	public async logout(this: Readonly<Client>, showMessage: ShowMessage): RequestSuccess {
+		return await (this as Client).caughtRequest(showMessage, Route.Logout, { method: 'GET' }, response.isDelete) !== null;
+	}
+
+	/**
+	 * @param showMessage a function that will be used to notify a user of errors.
+	 * @param route the {@link Route} to send the request to.
+	 * @param body the delete request.
+	 * @return whether the request succeeded.
+	 */
+	public async patch<RequestBodyInner>(
+		this: Readonly<Client>,
+		showMessage: ShowMessage,
+		route: UserInputRoute,
+		body: request.Patch<RequestBodyInner>,
+	): RequestSuccess {
+		return await (this as Client).caughtRequest(showMessage, route, { method: 'PATCH', body }, response.isPatch) !== null;
+	}
+
+	/**
+	 * @param showMessage a function that will be used to notify a user of errors.
+	 * @param route the {@link Route} to send the request to.
+	 * @param body the delete request.
+	 * @return whether the request succeeded.
+	 */
+	public async post<RequestBodyInner, ResponseBody extends {}>(
+		this: Readonly<Client>,
+		showMessage: ShowMessage,
+		route: UserInputRoute,
+		body: request.Post<RequestBodyInner>,
+		checkSchema: (json: unknown) => json is ResponseBody,
+	): OptBody<response.Post<ResponseBody>['entity']> {
+		const RESULT = await (this as Client).caughtRequest(showMessage, route, { method: 'POST', body }, response.isPost);
+		return (RESULT !== null && checkSchema(RESULT.entity))
+			? RESULT.entity
+			: null;
+	}
+
 	/**
 	 * Update `this` {@link Client} based on information from a {@link Route.WhoAmI} request.
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @return whether the request succeeded.
 	 */
-	public async setWhoIAm(this: Client, showMessage: ShowMessage): Promise<boolean> {
-		const RESULT = await this.request(Route.WhoAmI, { method: 'GET' }, showMessage, response.isWhoAmI);
+	public async setWhoIAm(this: Client, showMessage: ShowMessage): RequestSuccess {
+		const RESULT = await this.request(showMessage, Route.WhoAmI, { method: 'GET' }, response.isWhoAmI);
 		if (RESULT === null) { return false; }
 
 		if (!(RESULT instanceof UnauthenticatedError)) { // the user isn't logged in, which is fine.
@@ -123,16 +235,6 @@ export class Client {
 		}
 
 		return true;
-	}
-
-	/** An error to communicate that the client is not yet authenticated. */
-	public unauthenticated(this: Readonly<Client>): UnauthenticatedError {
-		return new UnauthenticatedError(this.address);
-	}
-
-	/** An error to communicate that the client received unexpected {@link Response}. */
-	public unexpectedResponse(this: Readonly<Client>): UnexpectedResponseError {
-		return new UnexpectedResponseError(this.address);
 	}
 }
 

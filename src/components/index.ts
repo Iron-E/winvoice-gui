@@ -1,10 +1,12 @@
 export * as api from './api';
 export * as css from './css';
 export * as props_with from './props-with';
+export { CrudPage } from './crud-page';
 export { Dim, type Props as DimProps } from './dim';
 export { Form } from './form';
 export { Header, HEADER_CSS } from './header';
 export { LabeledInput } from './labeled-input';
+export { LandscapeSpan, PortraitSpan } from './span';
 export { Modal, type Props as ModalProps } from './modal';
 export { Page } from './page';
 export { SHOW_MESSAGE_CONTEXT, type Message, Messages, type ShowMessage } from './messages';

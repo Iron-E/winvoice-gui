@@ -16,6 +16,14 @@ module.exports = {
 			},
 
 			colors: {
+				'crud-page': {
+					button: {
+						bg: COLORS.gray[200],
+						border: COLORS.gray[400],
+						'bg-hover': COLORS.gray[300],
+					},
+				},
+
 				dim: {
 					bg: COLORS.black,
 				},

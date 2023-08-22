@@ -1,4 +1,4 @@
-import { PAD } from '../css/pad';
+import { SPACE } from '../css';
 
 /** CSS used for clickables. */
-export const CLICKABLE = `${PAD} border-2 duration-200` as const;
+export const CLICKABLE = `${SPACE} border-[1px]` as const;

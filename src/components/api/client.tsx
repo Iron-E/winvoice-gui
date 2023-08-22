@@ -7,10 +7,11 @@ import { Code, newRequest, request, response, Route, type Request, type Status }
 import { Form } from '../form';
 import { LabeledInput } from '../labeled-input';
 import { Modal, type Props as ModalProps } from '../modal';
-import { PAD } from '../css';
+import { ICON, SPACE } from '../css';
 import { SHOW_MESSAGE_CONTEXT, type ShowMessage } from '../messages';
 import { UnauthenticatedError } from './unauthenticated_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
+import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, WifiIcon } from '@heroicons/react/20/solid';
 
 /** A response body (`<T>`) or {@link null} if an error was handled. */
 type OptBody<T = unknown> = Promise<Opt<T>>;
@@ -265,7 +266,7 @@ function ModalForm(props: Children & Required<AsyncOn<'submit'> & On<'close'> & 
 				</div>
 
 				<div className='text-center mt-1'>
-					<button className={`${PAD} bg-modal-button-bg hover:bg-modal-button-bg-hover duration-150 hover:shadow`}>
+					<button className={`${SPACE} bg-modal-button-bg hover:bg-modal-button-bg-hover`}>
 						{props.button_text}
 					</button>
 				</div>
@@ -277,7 +278,7 @@ function ModalForm(props: Children & Required<AsyncOn<'submit'> & On<'close'> & 
 /** @return the {@link Modal} to use when connecting to the {@link State | API}. */
 function ConnectModal(props: SelectorModalProps): React.ReactElement {
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
-	const [URL, setUrl] = React.useState<string>(props.client?.username || '');
+	const [URL, setUrl] = React.useState<string>(props.client?.address || '');
 
 	return (
 		<ModalForm button_text='Connect' onClose={props.onClose} onSubmit={async () => {
@@ -341,9 +342,9 @@ export function ClientSelector(props: Class<'button'> & SelectorProps): React.Re
 	let account_button: Maybe<React.ReactElement>;
 	if (CLIENT != undefined) {
 		props.client
-		let [content, onClick] = CLIENT.username == undefined
-			? ['Login', () => setModalVisibility('login')]
-			: ['Logout', async () => {
+		let [Icon, content, onClick] = CLIENT.username == undefined
+			? [ArrowRightOnRectangleIcon, 'Login', () => setModalVisibility('login')]
+			: [ArrowLeftOnRectangleIcon, 'Logout', async () => {
 				if (!await CLIENT.logout(showMessage)) { return; }
 				props.onSetClient(new Client(CLIENT.address));
 			}]
@@ -351,7 +352,7 @@ export function ClientSelector(props: Class<'button'> & SelectorProps): React.Re
 
 		account_button = (
 			<button className={props.buttonClassName} onClick={onClick}>
-				{content}
+				<Icon className={ICON} /> {content}
 			</button>
 		);
 	}
@@ -360,7 +361,7 @@ export function ClientSelector(props: Class<'button'> & SelectorProps): React.Re
 	return <>
 		{account_button}
 		<button className={props.buttonClassName} onClick={() => setModalVisibility('connect')}>
-			Connect
+			 <WifiIcon className={ICON} /> Connect
 		</button>
 
 		{MODAL && <MODAL client={props.client} onClose={() => setModalVisibility(null)} onSetClient={props.onSetClient} />}

@@ -4,7 +4,7 @@ import React from 'react';
 import type { Children } from './props-with';
 import type { JsonFields } from '../utils';
 import { CLIENT_CONTEXT, SESSION_EXPIRED_CONTEXT, Client, ClientSelector } from './api';
-import { FLEX } from './css/flex';
+import { FLEX, PAD } from './css';
 import { Header, HEADER_CSS } from './header';
 import { SHOW_MESSAGE_CONTEXT, Messages, type Message, type ShowMessage } from './messages';
 
@@ -47,19 +47,21 @@ export function Page(props: Children): React.ReactElement {
 					}} />
 				</Header>
 
-				{CLIENT == undefined
-					? <Guidance>connect</Guidance>
-					: CLIENT.address == undefined
-						? <Guidance>sign in</Guidance>
-						: <CLIENT_CONTEXT.Provider value={CLIENT}>
-							<SESSION_EXPIRED_CONTEXT.Provider value={() => {
-								setClient(new Client(CLIENT.address));
-								showMessage('info', 'Your session has expired. Please login again.');
-							}}>
-								{props.children}
-							</SESSION_EXPIRED_CONTEXT.Provider>
-						</CLIENT_CONTEXT.Provider>
-				}
+				<div className={PAD}>
+					{CLIENT == undefined
+						? <Guidance>connect</Guidance>
+						: CLIENT.address == undefined
+							? <Guidance>sign in</Guidance>
+							: <CLIENT_CONTEXT.Provider value={CLIENT}>
+								<SESSION_EXPIRED_CONTEXT.Provider value={() => {
+									setClient(new Client(CLIENT.address));
+									showMessage('info', 'Your session has expired. Please login again.');
+								}}>
+									{props.children}
+								</SESSION_EXPIRED_CONTEXT.Provider>
+							</CLIENT_CONTEXT.Provider>
+					}
+				</div>
 			</SHOW_MESSAGE_CONTEXT.Provider>
 
 			<Messages

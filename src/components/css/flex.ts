@@ -4,5 +4,8 @@ export const FLEX_ATTRS = 'align-middle items-center' as const;
 /** CSS properties to flex a container */
 export const FLEX = `flex ${FLEX_ATTRS}` as const;
 
+/** {@link FLEX} that justifies content between.  */
+export const FLEX_BETWEEN = `flex ${FLEX_ATTRS} justify-between` as const;
+
 /** CSS properties to make a container invisible until it is `xl`, then flex it. */
 export const HIDDEN_XL_FLEX = `hidden xl:flex ${FLEX_ATTRS}` as const;

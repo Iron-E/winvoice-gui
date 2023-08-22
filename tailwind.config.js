@@ -36,7 +36,8 @@ module.exports = {
 				modal: {
 					bg: COLORS.gray[300],
 					button: {
-						bg: COLORS.white
+						bg: COLORS.white,
+						'bg-hover': COLORS.sky[400],
 					},
 				},
 

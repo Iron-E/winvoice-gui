@@ -2,7 +2,7 @@ import * as hooks from '../hooks';
 import React from 'react';
 import type { Children, On } from './props-with';
 import { Bars3Icon } from '@heroicons/react/20/solid';
-import { FLEX, HIDDEN_XL_FLEX } from './css';
+import { FLEX_BETWEEN, HIDDEN_XL_FLEX } from './css';
 import { NavBar } from './header/navbar';
 import { CLICKABLE } from './header/style';
 
@@ -37,7 +37,7 @@ export function Header(props: Children): React.ReactElement {
 
 	return (
 		<header
-			className={`${FLEX} justify-between \
+			className={`${FLEX_BETWEEN} \
 sticky top-0 \
 py-1 w-fit min-w-full border-b-2 \
 bg-header-bg border-b-header-border`}

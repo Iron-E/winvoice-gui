@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Children, Class, Id, On } from './props-with';
+import { FLEX_BETWEEN } from './css';
 
 type InputAttr = React.InputHTMLAttributes<HTMLInputElement>;
 
@@ -10,15 +11,18 @@ export function LabeledInput(
 		& Class<'label'>
 		& Class<'input'>
 		& Required<Id & On<'change', [value: React.ChangeEvent<HTMLInputElement>['target']['value']]>>
-		& { required?: InputAttr['required'], type?: InputAttr['type'], value?: InputAttr['value'] },
+		& { label: string, required?: InputAttr['required'], type?: InputAttr['type'], value?: InputAttr['value'] },
 ): React.ReactElement {
 	return <>
-		<label className={`mr-2 ${props.labelClassName}`} htmlFor={props.id}>
+		<span className={FLEX_BETWEEN}>
+			<label className={props.labelClassName} htmlFor={props.id}>
+				{props.label}
+			</label>
 			{props.children}
-		</label>
+		</span>
 
 		<input
-			className={`p-1 rounded ${props.inputClassName}`}
+			className={`p-1 rounded-md ${props.inputClassName}`}
 			id={props.id}
 			name={props.id}
 			onChange={e => props.onChange(e.target.value)}

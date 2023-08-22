@@ -3,10 +3,11 @@
 import React from 'react';
 import type { AsyncOn, Children, Class, On } from '../props-with';
 import type { Fn, Maybe, Opt } from '../../utils';
+import { Code, newRequest, request, response, Route, type Request, type Status } from '../../api';
 import { Form } from '../form';
 import { LabeledInput } from '../labeled-input';
 import { Modal, type Props as ModalProps } from '../modal';
-import { Code, newRequest, request, response, Route, type Request, type Status } from '../../api';
+import { PAD } from '../css';
 import { SHOW_MESSAGE_CONTEXT, type ShowMessage } from '../messages';
 import { UnauthenticatedError } from './unauthenticated_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
@@ -259,12 +260,12 @@ function ModalForm(props: Children & Required<AsyncOn<'submit'> & On<'close'> & 
 	return (
 		<Modal onClose={props.onClose}>
 			<Form onSubmit={props.onSubmit}>
-				<div className={`flex flex-col`}>
+				<div className='flex flex-col [&>span+input]:mb-2'>
 					{props.children}
 				</div>
 
-				<div className='text-center mt-3'>
-					<button className='px-1 rounded bg-modal-button-bg shadow-sm'>
+				<div className='text-center mt-1'>
+					<button className={`${PAD} bg-modal-button-bg hover:bg-modal-button-bg-hover duration-150 hover:shadow`}>
 						{props.button_text}
 					</button>
 				</div>
@@ -287,13 +288,12 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 		}}>
 			<LabeledInput
 				id='client-connect-addr'
+				label='Address'
 				onChange={setUrl}
 				required={true}
 				type='url'
 				value={URL}
-			>
-				Address:
-			</LabeledInput>
+			/>
 		</ModalForm>
 	);
 }
@@ -311,13 +311,23 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 			props.onSetClient(CLIENT);
 			props.onClose();
 		}}>
-			<LabeledInput id='client-login-username' inputClassName='mb-2' onChange={setUsername} required={true} type='text' value={USERNAME}>
-				Username
-			</LabeledInput>
+			<LabeledInput
+				id='client-login-username'
+				label='Username'
+				onChange={setUsername}
+				required={true}
+				type='text'
+				value={USERNAME}
+			/>
 
-			<LabeledInput id='client-login-password' onChange={setPassword} required={true} type='password' value={PASSWORD}>
-				Password
-			</LabeledInput>
+			<LabeledInput
+				id='client-login-password'
+				label='Password'
+				onChange={setPassword}
+				required={true}
+				type='password'
+				value={PASSWORD}
+			/>
 		</ModalForm>
 	);
 }

@@ -1,7 +1,7 @@
 import './globals.css';
-import { type Children } from '../components/props-with';
+import { propsWith as w } from '../components';
 import { Inter } from 'next/font/google';
-import { Page } from '../components';
+import { InnerRootLayout } from './layout/inner';
 import { type Metadata } from 'next';
 
 const INTER = Inter({ subsets: ['latin'] });
@@ -12,13 +12,14 @@ export const metadata: Readonly<Metadata> = {
 	description: 'A graphical manager for invoices',
 };
 
-export default function RootLayout(props: Children): React.ReactElement {
+/** @return the layout used for all pages in the application. */
+export default function RootLayout(props: w.Children): React.ReactElement {
 	return (
 		<html lang='en'>
 			<body className={INTER.className}>
-				<Page>
+				<InnerRootLayout>
 					{props.children}
-				</Page>
+				</InnerRootLayout>
 			</body>
 		</html>
 	);

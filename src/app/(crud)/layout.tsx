@@ -7,11 +7,11 @@ export default function CrudLayout(props: w.Children): React.ReactElement {
 	return <>
 		<div className={`${css.FLEX} justify-center`}>
 			<InnerCrudLayout
-				createLinkChildren={<>
+				newLinkChildren={<>
 					<PlusIcon className={css.ICON} /> New
 				</>}
 
-				retrieveLinkChildren={<>
+				searchLinkChildren={<>
 					<MagnifyingGlassIcon className={css.ICON} /> Search
 				</>}
 			/>

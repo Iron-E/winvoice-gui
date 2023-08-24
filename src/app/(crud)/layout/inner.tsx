@@ -22,15 +22,15 @@ bg-crud-page-button-bg border-crud-page-button-border hover:bg-crud-page-button-
 }
 
 /** @return the part of the `CrudLayout` that must be rendered on the client side. */
-export function InnerCrudLayout(props: { createLinkChildren: React.ReactElement, retrieveLinkChildren: React.ReactElement }): React.ReactElement {
+export function InnerCrudLayout(props: { newLinkChildren: React.ReactElement, searchLinkChildren: React.ReactElement }): React.ReactElement {
 	const PATH_NAME = navigation.usePathname();
 	return <>
-		<CrudLink href={`${PATH_NAME}/create`}>
-			{props.createLinkChildren}
+		<CrudLink href={`${PATH_NAME}/new`}>
+			{props.newLinkChildren}
 		</CrudLink>
 
-		<CrudLink href={`${PATH_NAME}/retrieve`}>
-			{props.retrieveLinkChildren}
+		<CrudLink href={PATH_NAME}>
+			{props.searchLinkChildren}
 		</CrudLink>
 	</>;
 }

@@ -33,6 +33,14 @@ export class Client {
 		public username?: string,
 	) { }
 
+	/** The context for the currently selected API address. */
+	public static readonly CONTEXT: Readonly<React.Context<Readonly<Client>>> = React.createContext<Readonly<Client>>(
+		new Client('DEFAULT CLIENT, SHOULD NEVER BE READ'),
+	);
+
+	/** Marks the current client's session as expired. */
+	public static readonly SET_EXPIRED_CONTEXT: Readonly<React.Context<Fn>> = React.createContext<Fn>(() => { });
+
 	/**
 	 * @param <RequestBodyInner> see {@link newRequest}.
 	 * @param <ApiResponse> the response which is expected by the server on a success ({@link Response.ok}).
@@ -246,16 +254,6 @@ type SelectorProps = Required<On<'setClient', [client: Client]>> & { client?: Re
 /** Properties used by {@link Modal}s in the {@link ClientSelector}. */
 type SelectorModalProps = Omit<ModalProps, 'children'> & SelectorProps;
 
-type ClientContext = Readonly<Client>;
-
-/** The context for the currently selected API address. */
-export const CLIENT_CONTEXT: Readonly<React.Context<ClientContext>> = React.createContext<ClientContext>(new Client(
-	'DEFAULT CLIENT, SHOULD NEVER BE READ',
-));
-
-/** Marks the current session as expired. */
-export const SESSION_EXPIRED_CONTEXT: Readonly<React.Context<Fn>> = React.createContext<Fn>(() => { });
-
 /** @return A floating form. */
 function ModalForm(props: Children & Required<AsyncOn<'submit'> & On<'close'> & { button_text: string }>) {
 	return (
@@ -361,7 +359,7 @@ export function ClientSelector(props: Class<'button'> & SelectorProps): React.Re
 	return <>
 		{account_button}
 		<button className={props.buttonClassName} onClick={() => setModalVisibility('connect')}>
-			 <WifiIcon className={ICON} /> Connect
+			<WifiIcon className={ICON} /> Connect
 		</button>
 
 		{MODAL && <MODAL client={props.client} onClose={() => setModalVisibility(null)} onSetClient={props.onSetClient} />}

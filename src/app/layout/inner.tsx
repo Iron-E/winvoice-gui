@@ -58,14 +58,14 @@ export function InnerRootLayout(props: w.Children): React.ReactElement {
 					? <Guidance>connect</Guidance>
 					: CLIENT.address == undefined
 						? <Guidance>sign in</Guidance>
-						: <api.CLIENT_CONTEXT.Provider value={CLIENT}>
-							<api.SESSION_EXPIRED_CONTEXT.Provider value={() => {
+						: <api.Client.CONTEXT.Provider value={CLIENT}>
+							<api.Client.SET_EXPIRED_CONTEXT.Provider value={() => {
 								setClient(new api.Client(CLIENT.address));
 								showMessage('info', 'Your session has expired. Please login again.');
 							}}>
 								{props.children}
-							</api.SESSION_EXPIRED_CONTEXT.Provider>
-						</api.CLIENT_CONTEXT.Provider>
+							</api.Client.SET_EXPIRED_CONTEXT.Provider>
+						</api.Client.CONTEXT.Provider>
 				}
 			</div>
 		</SHOW_MESSAGE_CONTEXT.Provider>

@@ -50,8 +50,14 @@ module.exports = {
 				},
 
 				navbar: {
-					link: {
+					entry: {
 						'bg-current': COLORS.green[300],
+					},
+
+					link: {
+						'bg-hover-xl': COLORS.green[200],
+						bg: COLORS.green[100],
+						border: COLORS.gray[400],
 					},
 				},
 

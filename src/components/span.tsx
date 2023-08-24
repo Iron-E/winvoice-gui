@@ -3,7 +3,7 @@ import { Children } from './props-with';
 /** A {@link React.JSX.IntrinsicElements.span | span} that only shows in landscape. */
 export function LandscapeSpan(props: Children): React.ReactElement{
 	return (
-		<span className='hidden xl:inline'>
+		<span className='hidden xl:[display:initial]'>
 			{props.children}
 		</span>
 	);

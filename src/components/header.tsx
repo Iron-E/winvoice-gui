@@ -61,7 +61,7 @@ bg-header-bg border-b-header-border`}
 				<Dropdown onClose={() => setDropdownVisible(false)}>
 					<div className='flex flex-col gap-1.5'>
 						<NavBar className='[display:inherit] [flex-flow:inherit]' />
-						<div className='[display:inherit] flex-row [&>*]:w-full justify-between'>
+						<div className='[display:inherit] [&>*]:w-full'>
 							{props.children}
 						</div>
 					</div>

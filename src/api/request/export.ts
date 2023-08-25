@@ -1,4 +1,4 @@
-import { Currency, type Job, type Organization } from '../../schema';
+import { Currency, type Job, type Organization } from 'schema';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-server | `api::request::Export`}. */
 export type Export = {

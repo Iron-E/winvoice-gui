@@ -1,4 +1,4 @@
-import { type Id } from '../schema';
+import { type Id } from 'schema';
 import { type Match } from './match';
 import { type MatchLocation } from './match-location';
 import { type MatchStr } from './match-str';

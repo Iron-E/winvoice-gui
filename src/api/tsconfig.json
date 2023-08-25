@@ -2,9 +2,14 @@
 	"extends": "../../tsconfig-base.json",
 	"compilerOptions": {
 		"outDir": "../../out/api",
-		"rootDir": "."
+		"rootDir": ".",
+		"paths": {
+			"match": ["../match"],
+			"schema": ["../schema"]
+		}
 	},
 	"references": [
-		{"path": "../match"}
+		{"path": "../match"},
+		{"path": "../schema"}
 	]
 }

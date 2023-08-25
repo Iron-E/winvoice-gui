@@ -4,11 +4,11 @@ import * as navigation from 'next/navigation';
 import Link from 'next/link';
 import React from 'react';
 import type { Children, Class } from '../props-with';
-import type { LookupTable, Props } from '../../utils';
+import type { LookupTable, Props } from 'utils';
 import { CLICKABLE } from './style';
 import { ICON } from '../css';
 import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/20/solid';
-import { Route } from '../../api';
+import { Route } from 'api';
 
 /** Properties accepted by a {@link Link}. */
 type LinkProps = Props<typeof Link>;

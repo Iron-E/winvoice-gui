@@ -1,4 +1,4 @@
-import * as hooks from '../hooks';
+import * as hooks from 'hooks';
 import Link from 'next/link';
 import React from 'react';
 import type { Children, On } from './props-with';

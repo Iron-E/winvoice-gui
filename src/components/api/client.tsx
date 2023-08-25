@@ -2,16 +2,16 @@
 
 import React from 'react';
 import type { AsyncOn, Children, Class, On } from '../props-with';
-import type { Fn, Maybe, Opt } from '../../utils';
-import { Code, newRequest, request, response, Route, type Request, type Status } from '../../api';
+import type { Fn, Maybe, Opt } from 'utils';
+import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, WifiIcon } from '@heroicons/react/20/solid';
+import { Code, newRequest, request, response, Route, type Request, type Status } from 'api';
 import { Form } from '../form';
+import { ICON, SPACE } from '../css';
 import { LabeledInput } from '../labeled-input';
 import { Modal, type Props as ModalProps } from '../modal';
-import { ICON, SPACE } from '../css';
 import { SHOW_MESSAGE_CONTEXT, type ShowMessage } from '../messages';
 import { UnauthenticatedError } from './unauthenticated_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
-import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, WifiIcon } from '@heroicons/react/20/solid';
 
 /** A response body (`<T>`) or {@link null} if an error was handled. */
 type OptBody<T = unknown> = Promise<Opt<T>>;

@@ -1,4 +1,4 @@
-import { LandscapeSpan, PortraitSpan } from '../components';
+import { LandscapeSpan, PortraitSpan } from 'components';
 
 export default function Page(): React.ReactElement {
 	return (

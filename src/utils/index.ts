@@ -1,5 +1,6 @@
 export type { AsyncFn, Fn } from './fn';
 export { type JsonFields } from './json-fields';
+export { type LookupTable } from './lookup-table';
 export { type Maybe } from './maybe';
 export { type Opt } from './opt';
 export { type Props } from './props';

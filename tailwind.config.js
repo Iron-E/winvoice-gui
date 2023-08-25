@@ -37,6 +37,7 @@ module.exports = {
 					},
 					dropdown: {
 						bg: COLORS.green[200],
+						'bg-even': '#ccffcc',
 						border: COLORS.gray[400],
 					},
 				},

@@ -4,53 +4,22 @@ import * as navigation from 'next/navigation';
 import Link from 'next/link';
 import React from 'react';
 import type { Children, Class } from '../props-with';
-import type { Props } from '../../utils';
+import type { LookupTable, Props } from '../../utils';
 import { CLICKABLE } from './style';
 import { ICON } from '../css';
 import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { Route } from '../../api';
-import { PortraitSpan } from '../span';
 
 /** Properties accepted by a {@link Link}. */
 type LinkProps = Props<typeof Link>;
-
-/** The {@link Route}s which are to be hidden in the {@link Navbar}. */
-const HIDDEN_ROUTES: Readonly<Partial<Record<Route, true>>> = {
-	[Route.Export]: true,
-	[Route.Login]: true,
-	[Route.Logout]: true,
-	[Route.WhoAmI]: true,
-};
-
-/** The {@link Link}s which are to be shown in the {@link Navbar}. */
-const ROUTES: ReadonlyArray<[string, Route]> = Object.entries(Route).filter(([_, route]) => !HIDDEN_ROUTES[route]);
-
-/** The CSS styles that all {@link Navbar} {@link Links} share. */
-const COMMON_ENTRY_STYLE = `${CLICKABLE} flex justify-between xl:[display:initial] xl:max-w-min group hover:border-navbar-entry-bg-current xl:text-center` as const;
-
-/** The CSS style of the current {@link Link}. */
-const CURRENT_ENTRY_STYLE = `${COMMON_ENTRY_STYLE} bg-navbar-entry-bg-current border-header-dropdown-bg xl:border-header-bg` as const;
-
-/** The CSS style of inactive {@link Link}s. */
-const INACTIVE_ENTRY_STYLE = `${COMMON_ENTRY_STYLE} border-transparent hover:border-header-bg` as const;
-
-/** HACK: required or else the width of the {@link NavLink}s will be less than the initial width of a given {@link NavEntry}, causing jitter. */
-const ENTRY_WIDTHS: Readonly<Partial<Record<Route, string>>> = {
-	[Route.Department]: 'xl:min-w-[7.2rem]',
-	[Route.Employee]: 'xl:min-w-[6.1rem]',
-	[Route.Expense]: 'xl:min-w-[5.4rem]',
-	[Route.Location]: 'xl:min-w-[5.5rem]',
-	[Route.Organization]: 'xl:min-w-[7.7rem]',
-	[Route.Timesheet]: 'xl:min-w-[6.3rem]',
-};
 
 /** A link in a {@link NavEntry}. */
 function NavLink(props: Children & { href: LinkProps['href'] }): React.ReactElement {
 	return (
 		<Link
-			className='px-1 xl:px-0 w-[10vmax] xl:w-[40%] xl:min-w-[2rem] border-2 xl:border-0 rounded-md \
+			className='p-1 border-2 xl:border-0 w-[10vmax] xl:w-full rounded-md \
 hover:border-navbar-link-border bg-navbar-link-bg xl:bg-transparent xl:hover:bg-navbar-link-bg-hover-xl hover:shadow-md \
-text-center duration-200'
+text-center xl:text-left duration-200'
 			href={props.href}
 		>
 			{props.children}
@@ -58,28 +27,65 @@ text-center duration-200'
 	);
 }
 
+/** The CSS styles that all {@link Navbar} {@link Links} share. */
+const COMMON_ENTRY_STYLE = `${CLICKABLE} group flex justify-between \
+xl:border-b-0 xl:hover:rounded-b-none \
+hover:shadow-none hover:border-navbar-entry-bg-current \
+xl:text-center border-header-dropdown-bg xl:border-header-bg` as const;
+
+/** The CSS style of the current {@link Link}. */
+const CURRENT_ENTRY_STYLE = `${COMMON_ENTRY_STYLE} bg-navbar-entry-bg-current` as const;
+
+/** The CSS style of inactive {@link Link}s. */
+const INACTIVE_ENTRY_STYLE = `${COMMON_ENTRY_STYLE} hover:bg-navbar-entry-bg-current` as const;
+
+/** A few of the {@link NavEntry | entries} are not happy with the default translation on `xl:` devices. */
+const ENTRY_XL_TRANSLATION_OFF_BY_ONE: Partial<LookupTable<Route, true>> = {
+	[Route.Department]: true,
+	[Route.Job]: true,
+};
+
+/** A few of the {@link NavEntry | entries} are not happy with the default translation on `2xl:` devices. */
+const ENTRY_2XL_TRANSLATION_OFF_BY_ONE: Partial<LookupTable<Route, true>> = {
+	[Route.Organization]: true,
+	[Route.User]: true,
+};
+
 /** An entry in the {@link NavBar}. */
 function NavEntry(props: Class & Children & { route: Route }): React.ReactElement {
 	return (
-		<div className={`${ENTRY_WIDTHS[props.route] || 'xl:min-w-[5.2rem]'} ${props.className}`}>
-			<span className='flex-grow xl:group-hover:hidden'>
+		<div className={props.className}>
+			<span className='flex-grow self-center'>
 				{props.children}
 			</span>
 
-			<div className='flex flex-grow justify-end xl:justify-around gap-2 xl:gap-0 xl:hidden xl:group-hover:flex'>
+			<div className={`xl:fixed flex flex-grow gap-1 justify-end xl:hidden xl:group-hover:flex xl:flex-col xl:justify-around \
+xl:p-2 min-w-[10rem] xl:top-[2.5rem] xl:rounded-b-md xl:rounded-tr-md \
+${ENTRY_XL_TRANSLATION_OFF_BY_ONE[props.route] ? 'xl:-translate-x-[0.57rem]' : 'xl:-translate-x-[0.56rem]'} \
+${ENTRY_2XL_TRANSLATION_OFF_BY_ONE[props.route] ? '2xl:-translate-x-[0.57rem]' : '2xl:-translate-x-[0.56rem]'} \
+xl:bg-navbar-entry-bg-current`}>
 				<NavLink href={`${props.route}/new`}>
-					<PlusIcon className={ICON} />
-					<PortraitSpan>New</PortraitSpan>
+					<PlusIcon className={ICON} /> New
 				</NavLink>
 
 				<NavLink href={props.route}>
-					<MagnifyingGlassIcon className={ICON} />
-					<PortraitSpan>Search</PortraitSpan>
+					<MagnifyingGlassIcon className={ICON} /> Search
 				</NavLink>
 			</div>
 		</div>
 	);
 }
+
+/** The {@link Route}s which are to be hidden in the {@link Navbar}. */
+const ROUTE_HIDDEN: Partial<LookupTable<Route, true>> = {
+	[Route.Export]: true,
+	[Route.Login]: true,
+	[Route.Logout]: true,
+	[Route.WhoAmI]: true,
+};
+
+/** The {@link Link}s which are to be shown in the {@link Navbar}. */
+const ROUTES: ReadonlyArray<[string, Route]> = Object.entries(Route).filter(([_, route]) => !ROUTE_HIDDEN[route]);
 
 
 /** @return the navigation bar for the given `current` page. */

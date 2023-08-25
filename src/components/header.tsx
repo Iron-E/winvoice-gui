@@ -59,8 +59,8 @@ bg-header-bg border-b-header-border`}
 
 			{DROPDOWN_VISIBLE && (
 				<Dropdown onClose={() => setDropdownVisible(false)}>
-					<div className='flex flex-col gap-1.5'>
-						<NavBar className='[display:inherit] [flex-flow:inherit]' />
+					<div className='flex flex-col gap-2'>
+						<NavBar className='[display:inherit] [flex-flow:inherit] [gap:inherit] [&>*:nth-child(even):not(:hover)]:bg-header-dropdown-bg-even' />
 						<div className='[display:inherit] [&>*]:w-full'>
 							{props.children}
 						</div>

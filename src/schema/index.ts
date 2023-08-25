@@ -9,4 +9,6 @@ export { type Job } from './job';
 export { type Location } from './location';
 export { type Money } from './money';
 export { type Organization } from './organization';
+export { type Role } from './role';
 export { type Timesheet } from './timesheet';
+export { type User } from './user';

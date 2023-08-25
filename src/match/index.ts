@@ -8,6 +8,8 @@ export { type MatchJob } from './match-job';
 export { type MatchLocation } from './match-location';
 export { type MatchOption } from './match-option';
 export { type MatchOrganization } from './match-organization';
+export { type MatchRole } from './match-role';
 export { type MatchSet } from './match-set';
 export { type MatchStr } from './match-str';
 export { type MatchTimesheet } from './match-timesheet';
+export { type MatchUser } from './match-user';

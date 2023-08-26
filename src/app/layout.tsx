@@ -1,7 +1,7 @@
 import './globals.css';
 import { InnerRootLayout } from './layout/inner';
 import { Inter } from 'next/font/google';
-import { propsWith as w } from 'components';
+import { propsWith as w } from '@/components';
 import { type Metadata } from 'next';
 
 const INTER = Inter({ subsets: ['latin'] });

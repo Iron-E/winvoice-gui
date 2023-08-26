@@ -3,11 +3,7 @@
 	"compilerOptions": {
 		"outDir": "../../out/app",
 		"plugins": [{ "name": "next" }],
-		"rootDir": ".",
-		"paths": {
-			"components": ["../components"],
-			"utils": ["../utils"]
-		}
+		"rootDir": "."
 	},
 	"references": [
 		{ "path": "../components" },

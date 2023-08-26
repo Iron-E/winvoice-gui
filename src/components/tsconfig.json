@@ -3,14 +3,7 @@
 	"compilerOptions": {
 		"outDir": "../../out/components",
 		"plugins": [{ "name": "next" }],
-		"rootDir": ".",
-		"paths": {
-			"api": ["../api"],
-			"hooks": ["../hooks"],
-			"match": ["../match"],
-			"schema": ["../schema"],
-			"utils": ["../utils"]
-		}
+		"rootDir": "."
 	},
 	"references": [
 		{ "path": "../api" },

@@ -1,4 +1,4 @@
-import type { Id, Money } from 'schema';
+import type { Id, Money } from '@/schema';
 import { type Match } from './match';
 import { type MatchStr } from './match-str';
 

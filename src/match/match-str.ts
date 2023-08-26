@@ -1,4 +1,4 @@
-import { type UnionToKeys } from 'utils';
+import { type UnionToKeys } from '@/utils';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-match | `MatchStr`}. */
 export type MatchStr<T = unknown> =

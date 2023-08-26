@@ -1,6 +1,6 @@
 import type { On } from '../../props-with';
-import type { Props, Spread } from 'utils';
-import { Currency } from 'schema';
+import type { Props, Spread } from '@/utils';
+import { Currency } from '@/schema';
 import { LabeledSelect } from '../../labeled';
 
 type SelectProps = Omit<Props<typeof LabeledSelect>, 'children' | 'onChange'>;

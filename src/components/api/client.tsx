@@ -2,9 +2,9 @@
 
 import React from 'react';
 import type { AsyncOn, Children, Class, On } from '../props-with';
-import type { Fn, Maybe, Opt } from 'utils';
+import type { Fn, Maybe, Opt } from '@/utils';
 import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, WifiIcon } from '@heroicons/react/20/solid';
-import { Code, newRequest, request, response, Route, type Request, type Status } from 'api';
+import { Code, newRequest, request, response, Route, type Request, type Status } from '@/api';
 import { Form } from '../form';
 import { ICON, SPACE } from '../css';
 import { LabeledInput } from '../labeled';

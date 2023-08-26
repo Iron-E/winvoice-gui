@@ -10,9 +10,9 @@ import {
 	SHOW_MESSAGE_CONTEXT,
 	type Message,
 	type ShowMessage,
-} from 'components';
+} from '@/components';
 import React from 'react';
-import type { JsonFields } from 'utils';
+import type { JsonFields } from '@/utils';
 
 /** @return a guidance message to help users get started using winvoice. */
 function Guidance(props: w.Children): React.ReactElement {

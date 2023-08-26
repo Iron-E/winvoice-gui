@@ -1,4 +1,4 @@
-import { type Id } from 'schema';
+import { type Id } from '@/schema';
 import { type Match } from './match';
 import { type MatchDepartment } from './match-department';
 import { type MatchInvoice } from './match-invoice';

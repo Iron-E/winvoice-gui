@@ -3,10 +3,7 @@
 	"compilerOptions": {
 		"outDir": "../../out/hooks",
 		"plugins": [{ "name": "next" }],
-		"rootDir": ".",
-		"paths": {
-			"utils": ["../utils"]
-		}
+		"rootDir": "."
 	},
 	"references": [
 		{ "path": "../utils" }

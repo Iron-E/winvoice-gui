@@ -1,4 +1,4 @@
-import { Currency, type Id } from 'schema';
+import { Currency, type Id } from '@/schema';
 import { type Match } from './match';
 import { type MatchOption } from './match-option';
 import { type MatchStr } from './match-str';

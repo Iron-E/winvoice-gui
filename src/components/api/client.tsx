@@ -7,7 +7,7 @@ import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, WifiIcon } from '@
 import { Code, newRequest, request, response, Route, type Request, type Status } from 'api';
 import { Form } from '../form';
 import { ICON, SPACE } from '../css';
-import { LabeledInput } from '../labeled-input';
+import { LabeledInput } from '../labeled';
 import { Modal, type Props as ModalProps } from '../modal';
 import { SHOW_MESSAGE_CONTEXT, type ShowMessage } from '../messages';
 import { UnauthenticatedError } from './unauthenticated_error';

@@ -93,9 +93,9 @@ export function NavBar(props: Class): React.ReactElement {
 	const URL = navigation.usePathname();
 	return (
 		<nav className={props.className}>
-			{ROUTES.map(([name, route]) => (
-				<NavEntry className={URL == route ? CURRENT_ENTRY_STYLE : INACTIVE_ENTRY_STYLE} key={route} route={route}>
-					{name}
+			{ROUTES.map(([k, v]) => (
+				<NavEntry className={URL == v ? CURRENT_ENTRY_STYLE : INACTIVE_ENTRY_STYLE} key={k} route={v}>
+					{k}
 				</NavEntry>
 			))}
 		</nav>

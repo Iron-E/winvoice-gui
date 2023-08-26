@@ -1,4 +1,5 @@
 export type { AsyncFn, Fn } from './fn';
+export { type FieldName } from './field-name';
 export { type JsonFields } from './json-fields';
 export { type LookupTable } from './lookup-table';
 export { type Maybe } from './maybe';

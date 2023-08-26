@@ -33,10 +33,3 @@ export enum Currency {
 	Usd = 'USD',
 	Zar = 'ZAR',
 }
-
-export namespace Currency {
-	/** @returns The default {@link Currency}. */
-	export function default_(): Currency {
-		return Currency.Eur;
-	}
-}

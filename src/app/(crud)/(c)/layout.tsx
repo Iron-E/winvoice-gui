@@ -1,4 +1,4 @@
-import { css, propsWith as w } from '@/components';
+import { propsWith as w } from '@/components';
 import { InnerCreateLayout } from './layout/inner';
 
 /** @return the layout used for all pages with CRUD logic in the application. */

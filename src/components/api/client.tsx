@@ -288,6 +288,7 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 				label='Address'
 				onChange={setUrl}
 				required={true}
+				title="Input the winvoice-server's address"
 				type='url'
 				value={URL}
 			/>
@@ -313,6 +314,7 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 				label='Username'
 				onChange={setUsername}
 				required={true}
+				title='Input your username'
 				type='text'
 				value={USERNAME}
 			/>
@@ -322,6 +324,7 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 				label='Password'
 				onChange={setPassword}
 				required={true}
+				title='Input your password'
 				type='password'
 				value={PASSWORD}
 			/>

@@ -18,7 +18,12 @@ export function LabeledInput(
 	props:
 		LabeledProps<'input'>
 		& Required<On<'change', [value: React.ChangeEvent<HTMLInputElement>['target']['value']]>>
-		& { required?: InputProps['required'], type?: InputProps['type'], value?: InputProps['value'] },
+		& {
+			required?: InputProps['required'],
+			title: Required<InputProps['title']>,
+			type?: InputProps['type'],
+			value?: InputProps['value'],
+		},
 ): React.ReactElement {
 	return <>
 		<span className={FLEX_BETWEEN}>
@@ -34,6 +39,7 @@ export function LabeledInput(
 			name={props.id}
 			onChange={e => props.onChange(e.target.value)}
 			required={props.required}
+			title={props.title}
 			type={props.type}
 			value={props.value}
 		/>
@@ -47,7 +53,11 @@ export function LabeledSelect(
 	props:
 		LabeledProps<'select'>
 		& Required<On<'change', [value: React.ChangeEvent<HTMLSelectElement>['target']['value']]>>
-		& { required?: SelectProps['required'], value?: SelectProps['value'] },
+		& {
+			required?: SelectProps['required'],
+			title: Required<SelectProps['title']>,
+			value?: SelectProps['value'],
+		},
 ): React.ReactElement {
 	return <>
 		<label className={props.labelClassName} htmlFor={props.id}>
@@ -60,6 +70,7 @@ export function LabeledSelect(
 			name={props.id}
 			onChange={e => props.onChange(e.target.value)}
 			required={props.required}
+			title={props.title}
 			value={props.value}
 		>
 			{props.children}

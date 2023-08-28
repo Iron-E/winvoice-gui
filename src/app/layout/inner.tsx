@@ -56,7 +56,7 @@ export function InnerRootLayout(props: w.Children): React.ReactElement {
 			<div className={css.PAD}>
 				{CLIENT == undefined
 					? <Guidance>connect</Guidance>
-					: CLIENT.address == undefined
+					: CLIENT.username == undefined
 						? <Guidance>sign in</Guidance>
 						: <api.Client.CONTEXT.Provider value={CLIENT}>
 							<api.Client.SET_EXPIRED_CONTEXT.Provider value={() => {

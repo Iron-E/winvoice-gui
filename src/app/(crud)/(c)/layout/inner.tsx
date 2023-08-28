@@ -10,7 +10,7 @@ export function InnerCreateLayout(): React.ReactElement {
 	const ROUTE = URL.substring(1, URL.length - SUFFIX);
 	return (
 		<h2 className='font-semibold text-xl mb-3'>
-			Create {ROUTE[0]?.toUpperCase() + ROUTE.substring(1)}
+			Create New {ROUTE[0]?.toUpperCase() + ROUTE.substring(1)}
 		</h2>
 	);
 }

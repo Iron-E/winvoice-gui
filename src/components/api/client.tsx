@@ -258,10 +258,10 @@ type SelectorModalProps = Omit<ModalProps, 'children'> & SelectorProps;
 function ModalForm(props: Children & Required<AsyncOn<'submit'> & On<'close'> & { button_text: string }>) {
 	return (
 		<Modal onClose={props.onClose}>
-			<Form className='flex flex-col [&>*:nth-child(even)]:mb-2' onSubmit={props.onSubmit}>
+			<Form onSubmit={props.onSubmit}>
 				{props.children}
 
-				<div className='text-center mt-1'>
+				<div className='text-center'>
 					<button className={`${SPACE} bg-modal-button-bg hover:bg-modal-button-bg-hover`}>
 						{props.button_text}
 					</button>

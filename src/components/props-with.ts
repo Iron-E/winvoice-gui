@@ -1,4 +1,4 @@
-import { type Fn } from '../utils';
+import { type Fn } from '@/utils';
 
 /** Properties of an {@link React.ReactElement | element} that include children a handler for the given `Event`. */
 export type AsyncOn<Event extends string, Params extends any[] = [], Return = void> = On<Event, Params, Promise<Return>>;

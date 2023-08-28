@@ -5,7 +5,6 @@ import React from 'react';
 import { SelectCurrency } from './currency';
 import { Currency, type Location } from '@/schema';
 import { Form } from '../../form';
-import { FLEX } from '../../css';
 
 /** @return a {@link React.JSX.IntrinsicElements.form | form} which will create a new {@link Location} on submit. */
 export function CreateLocationForm(props: Id): React.ReactElement {

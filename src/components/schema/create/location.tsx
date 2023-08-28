@@ -13,8 +13,8 @@ export function CreateLocationForm(props: Id): React.ReactElement {
 	const ID = props.id ?? 'create-location-form';
 
 	return (
-		<Form onSubmit={async () => {
-			console.log('Unimplemented');
+		<Form className={`flex flex-col`} onSubmit={async () => {
+			throw new Error('Unimplemented');
 		}}>
 			<SelectCurrency
 				id={`${ID}-currency`}

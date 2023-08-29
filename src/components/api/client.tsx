@@ -5,8 +5,8 @@ import type { AsyncOn, Children, Class, On } from '../props-with';
 import type { Fn, Maybe, Opt } from '@/utils';
 import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, WifiIcon } from '@heroicons/react/20/solid';
 import { Code, newRequest, request, response, Route, type Request, type Status } from '@/api';
-import { Form } from '../form';
-import { ICON, SPACE } from '../css';
+import { Form, FormButton } from '../form';
+import { ICON } from '../css';
 import { LabeledInput } from '../labeled';
 import { Modal, type Props as ModalProps } from '../modal';
 import { SHOW_MESSAGE_CONTEXT, type ShowMessage } from '../messages';
@@ -262,9 +262,9 @@ function ModalForm(props: Children & Required<AsyncOn<'submit'> & On<'close'> & 
 				{props.children}
 
 				<div className='text-center'>
-					<button className={`${SPACE} bg-modal-button-bg hover:bg-modal-button-bg-hover`}>
+					<FormButton>
 						{props.button_text}
-					</button>
+					</FormButton>
 				</div>
 			</Form>
 		</Modal>
@@ -288,7 +288,7 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 				label='Address'
 				onChange={setUrl}
 				required={true}
-				title="Input the winvoice-server's address"
+				title="The winvoice-server's address"
 				type='url'
 				value={URL}
 			/>
@@ -314,7 +314,7 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 				label='Username'
 				onChange={setUsername}
 				required={true}
-				title='Input your username'
+				title='Your username'
 				type='text'
 				value={USERNAME}
 			/>
@@ -324,7 +324,7 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 				label='Password'
 				onChange={setPassword}
 				required={true}
-				title='Input your password'
+				title='Your password'
 				type='password'
 				value={PASSWORD}
 			/>

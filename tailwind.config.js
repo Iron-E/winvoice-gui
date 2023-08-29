@@ -16,18 +16,31 @@ module.exports = {
 			},
 
 			colors: {
-				'crud-page': {
-					button: {
-						bg: COLORS.gray[200],
-						border: COLORS.gray[400],
-						'bg-hover': COLORS.gray[300],
-					},
+				/** `<body>` tag */
+				body: {
+					bg: COLORS.gray[200],
 				},
 
+				/** `<Dim>` component u*/
 				dim: {
 					bg: COLORS.black,
 				},
 
+				/** `<Form>` component u*/
+				form: {
+					button: {
+						bg: COLORS.white,
+						border: COLORS.gray[400],
+						'bg-hover': COLORS.sky[300],
+						'border-hover': COLORS.sky[200],
+					},
+
+					field: {
+						bg: COLORS.white,
+					},
+				},
+
+				/** `<Header>` component u*/
 				header: {
 					bg: COLORS.green[400],
 					border: COLORS.green[700],
@@ -42,14 +55,12 @@ module.exports = {
 					},
 				},
 
+				/** `<Modal>` component u*/
 				modal: {
 					bg: COLORS.gray[300],
-					button: {
-						bg: COLORS.white,
-						'bg-hover': COLORS.sky[400],
-					},
 				},
 
+				/** `<Navbar>` component u*/
 				navbar: {
 					entry: {
 						'bg-current': COLORS.green[300],
@@ -62,12 +73,14 @@ module.exports = {
 					},
 				},
 
+				/** `<Message>` component u*/
 				message: {
 					'bg-error': COLORS.rose[400],
 					'bg-info': COLORS.sky[300],
 					'bg-warn': COLORS.orange[400],
 				},
 
+				/** `<XButton>` component u*/
 				x: {
 					'bg-hover': COLORS.rose[400],
 				},

@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Children, Class, Id, On } from './props-with';
-import { FLEX_BETWEEN } from './css';
+import { FLEX_BETWEEN, SPACE } from './css';
 
 /** Properties shared by all labeled elements. */
 type LabeledProps<ElementName extends string> =
@@ -10,6 +10,9 @@ type LabeledProps<ElementName extends string> =
 	& Required<Id>
 	& { label: string }
 	;
+
+/** The style of a form field. */
+const FIELD_STYLE = `${SPACE} bg-form-field-bg border-form-field-border hover:border-form-field-border-hover` as const;
 
 type InputProps = React.JSX.IntrinsicElements['input'];
 
@@ -34,7 +37,7 @@ export function LabeledInput(
 		</span>
 
 		<input
-			className={`p-1 rounded-md ${props.inputClassName}`}
+			className={`${FIELD_STYLE} ${props.inputClassName}`}
 			id={props.id}
 			name={props.id}
 			onChange={e => props.onChange(e.target.value)}
@@ -65,7 +68,7 @@ export function LabeledSelect(
 		</label>
 
 		<select
-			className={`p-1 rounded-md ${props.selectClassName}`}
+			className={`${FIELD_STYLE} ${props.selectClassName}`}
 			id={props.id}
 			name={props.id}
 			onChange={e => props.onChange(e.target.value)}

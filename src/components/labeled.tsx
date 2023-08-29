@@ -20,13 +20,16 @@ type InputProps = React.JSX.IntrinsicElements['input'];
 export function LabeledInput(
 	props:
 		LabeledProps<'input'>
-		& Required<On<'change', [value: React.ChangeEvent<HTMLInputElement>['target']['value']]>>
-		& {
-			required?: InputProps['required'],
-			title: Required<InputProps['title']>,
-			type?: InputProps['type'],
-			value?: InputProps['value'],
-		},
+		& Partial<{
+			inputRef: InputProps['ref'],
+			required: InputProps['required'],
+			type: InputProps['type'],
+			value: InputProps['value'],
+		}>
+		& Required<
+			On<'change', [value: React.ChangeEvent<HTMLInputElement>['target']['value']]>
+			& { title: InputProps['title'] }
+		>,
 ): React.ReactElement {
 	return <>
 		<span className={FLEX_BETWEEN}>
@@ -41,6 +44,7 @@ export function LabeledInput(
 			id={props.id}
 			name={props.id}
 			onChange={e => props.onChange(e.target.value)}
+			ref={props.inputRef}
 			required={props.required}
 			title={props.title}
 			type={props.type}
@@ -55,12 +59,11 @@ type SelectProps = React.JSX.IntrinsicElements['select'];
 export function LabeledSelect(
 	props:
 		LabeledProps<'select'>
-		& Required<On<'change', [value: React.ChangeEvent<HTMLSelectElement>['target']['value']]>>
-		& {
-			required?: SelectProps['required'],
-			title: Required<SelectProps['title']>,
-			value?: SelectProps['value'],
-		},
+		& Partial<{ required: SelectProps['required'], value: SelectProps['value'] }>
+		& Required<
+			On<'change', [value: React.ChangeEvent<HTMLSelectElement>['target']['value']]>
+			& { title: SelectProps['title'] }
+		>,
 ): React.ReactElement {
 	return <>
 		<label className={props.labelClassName} htmlFor={props.id}>

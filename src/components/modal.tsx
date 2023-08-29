@@ -2,7 +2,7 @@ import * as hooks from '@/hooks';
 import React from 'react';
 import type { Children, On } from './props-with';
 import { Dim } from './dim';
-import { XButton } from './x-button';
+import { XButton } from './buttons/x';
 
 /** properties for a {@link Modal}. */
 export type Props = Children & Required<On<'close'>>;

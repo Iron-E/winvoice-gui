@@ -12,7 +12,7 @@ const OPTIONS: ReadonlyArray<React.ReactElement> = [
 ];
 
 /** @return a {@link React.JSX.IntrinsicElements.select | select} to determine a given {@link Currency} */
-export function SelectCurrency(props: SelectProps<Maybe<Currency>>): React.ReactElement {
+export function SelectCurrency(props: Omit<SelectProps<Maybe<Currency>>, 'children'>): React.ReactElement {
 	return (
 		<LabeledSelect
 			id={props.id}

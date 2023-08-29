@@ -6,7 +6,7 @@ import React from 'react';
 import type { Children, Class } from '../props-with';
 import type { LookupTable, Props } from '@/utils';
 import { CLICKABLE } from './style';
-import { ICON } from '../css';
+import { HOVER, ICON } from '../css';
 import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { Route } from '@/api';
 
@@ -17,9 +17,9 @@ type LinkProps = Props<typeof Link>;
 function NavLink(props: Children & { href: LinkProps['href'] }): React.ReactElement {
 	return (
 		<Link
-			className='p-1 border-2 xl:border-0 w-[10vmax] xl:w-full rounded-md \
-hover:border-navbar-link-border bg-navbar-link-bg xl:bg-transparent xl:hover:bg-navbar-link-bg-hover-xl hover:shadow-md \
-text-center xl:text-left duration-200'
+			className={`${HOVER} p-1 border-2 xl:border-0 w-[10vmax] xl:w-full \
+hover:border-navbar-link-border bg-navbar-link-bg xl:bg-transparent xl:hover:bg-navbar-link-bg-hover-xl \
+text-center xl:text-left`}
 			href={props.href}
 		>
 			{props.children}

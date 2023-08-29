@@ -37,6 +37,7 @@ module.exports = {
 
 					field: {
 						bg: COLORS.white,
+						'bg-disabled': COLORS.slate[300],
 					},
 				},
 

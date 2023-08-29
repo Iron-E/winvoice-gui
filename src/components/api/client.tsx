@@ -6,7 +6,7 @@ import type { Fn, Maybe, Opt } from '@/utils';
 import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, WifiIcon } from '@heroicons/react/20/solid';
 import { Code, newRequest, request, response, Route, type Request, type Status } from '@/api';
 import { Form, FormButton } from '../form';
-import { ICON } from '../css';
+import { ICON, SPACE } from '../css';
 import { LabeledInput } from '../labeled';
 import { Modal, type Props as ModalProps } from '../modal';
 import { SHOW_MESSAGE_CONTEXT, type ShowMessage } from '../messages';
@@ -262,7 +262,7 @@ function ModalForm(props: Children & Required<AsyncOn<'submit'> & On<'close'> & 
 				{props.children}
 
 				<div className='text-center'>
-					<FormButton>
+					<FormButton className={SPACE}>
 						{props.button_text}
 					</FormButton>
 				</div>

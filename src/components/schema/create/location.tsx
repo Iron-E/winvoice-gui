@@ -4,8 +4,10 @@ import React from 'react';
 import type { Props } from '@/utils';
 import { Currency, type Location } from '@/schema';
 import { Form, FormButton } from '../../form';
+import { InputId } from './id';
 import { InputString } from './string';
 import { SelectCurrency } from './currency';
+import { SPACE } from '../../css';
 
 /** @return a {@link React.JSX.IntrinsicElements.form | form} which will create a new {@link Location} on submit. */
 export function CreateLocationForm(
@@ -13,6 +15,7 @@ export function CreateLocationForm(
 ): React.ReactElement {
 	const [CURRENCY, setCurrency] = React.useState<Currency>();
 	const [NAME, setName] = React.useState<string>();
+	const [OUTER, setOuter] = React.useState<Location>();
 
 	return (
 		<Form onSubmit={props.onSubmit}>
@@ -31,7 +34,17 @@ export function CreateLocationForm(
 				value={NAME}
 			/>
 
-			<FormButton />
+			<InputId
+				id={`${props.id}--outer`}
+				label='Outer Location'
+				onNew={async () => { throw new Error("Unimplemented") }}
+				onSearch={async () => { throw new Error("Unimplemented") }}
+				required={true}
+				title='The name of the location which is to be created'
+				value={OUTER?.id}
+			/>
+
+			<FormButton className={SPACE} />
 		</Form>
 	);
 }

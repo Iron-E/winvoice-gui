@@ -13,6 +13,8 @@ export function InputString(props: InputProps<string>): React.ReactElement {
 			title={props.title}
 			type={props.type}
 			value={props.value}
-		/>
+		>
+			{props.children}
+		</LabeledInput>
 	);
 }

@@ -2,12 +2,12 @@ import type { On } from '../../props-with';
 import type { Props, Spread } from '@/utils';
 import { LabeledInput, LabeledSelect } from '../../labeled';
 
-type OmitProps<T> = Omit<Props<T>, 'children' | 'inputClassName' | 'labelClassName' | 'onChange' | 'selectClassName'>
-type SpreadProps<Properties, OnChangeValue> = 'label' extends keyof Properties
+type OmitProps<T> = Omit<Props<T>, 'inputClassName' | 'onChange' | 'selectClassName'>
+type SpreadProps<Properties, OnChangeValue = string> = 'label' extends keyof Properties
 	? Spread<
 		Properties,
 		Pick<Partial<Properties>, 'label'>
-		& Required<On<'change', [value: OnChangeValue]>>
+		& On<'change', [value: OnChangeValue]>
 	>
 	: never;
 

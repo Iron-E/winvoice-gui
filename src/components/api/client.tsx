@@ -260,11 +260,9 @@ function ModalForm(props: Children & Required<AsyncOn<'submit'> & On<'close'> & 
 			<Form onSubmit={props.onSubmit}>
 				{props.children}
 
-				<div className='text-center'>
-					<FormButton className={SPACE}>
-						{props.button_text}
-					</FormButton>
-				</div>
+				<FormButton className={SPACE}>
+					{props.button_text}
+				</FormButton>
 			</Form>
 		</Modal>
 	);

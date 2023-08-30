@@ -27,7 +27,7 @@ type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.In
 	;
 
 /** The style of a form field. */
-const FIELD_STYLE = `${SPACE} \
+const FIELD_STYLE = `${SPACE} mb-2 \
 bg-form-field-bg disabled:bg-form-field-bg-disabled \
 border-form-field-border hover:border-form-field-border-hover` as const;
 

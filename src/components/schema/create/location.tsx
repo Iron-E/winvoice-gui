@@ -67,7 +67,7 @@ export function CreateLocationForm<Ret>(
 
 		{MODAL === 'new'
 			? <Modal onClose={() => setModal(null)}>
-				<CreateLocationForm id='abcd' onSubmit={setOuter} />
+				<CreateLocationForm id={`${props.id}--outer--form`} onSubmit={setOuter} />
 			</Modal>
 			: MODAL === 'search' && <Modal onClose={() => setModal(null)}>
 				Unimplemented

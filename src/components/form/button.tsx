@@ -4,7 +4,8 @@ import type { Children, Class, On } from "../props-with";
 export function FormButton<Ret = never>(props: Children & Class & On<'click', [e: React.MouseEvent], Ret>): React.ReactElement {
 	return (
 		<button
-			className={`border-[1px] \
+			className={`mt-1 border-[1px] \
+self-center \
 bg-form-button-bg hover:bg-form-button-bg-hover \
 border-form-button-border hover:border-form-button-border-hover \
 ${props.className}`}

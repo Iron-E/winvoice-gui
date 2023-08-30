@@ -1,6 +1,5 @@
 import type { InputProps } from './props';
 import type { On } from '../../props-with';
-import type { Props } from '@/utils';
 import { FormButton, Input } from '../../form';
 import { HOVER, ICON } from '../../css';
 import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/20/solid';
@@ -8,12 +7,11 @@ import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/20/solid';
 /** The style of a {@link React.JSX.IntrinsicElements.button | button}. */
 const BUTTON_STYLE = `px-1 py-0.5 mx-0 my-1 text-xs ${HOVER}` as const;
 
-type FormButtonClickHandler = Required<Props<typeof FormButton>>['onClick'];
-
 /** @return a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
 export function InputId(
 	props:
-		Partial<On<'new' | 'search', Parameters<FormButtonClickHandler>, ReturnType<FormButtonClickHandler>>>
+		On<'new', [value: 'new']>
+		& On<'search', [value: 'search']>
 		& Omit<InputProps<string>, 'children' | 'disabled'>,
 ): React.ReactElement {
 	return (
@@ -30,14 +28,14 @@ export function InputId(
 		>
 			<FormButton className={BUTTON_STYLE} onClick={e => {
 				e.preventDefault();
-				props.onNew?.(e);
+				props.onNew?.('new');
 			}}>
 				<PlusIcon className={ICON} /> New
 			</FormButton>
 
 			<FormButton className={BUTTON_STYLE} onClick={e => {
 				e.preventDefault();
-				props.onSearch?.(e);
+				props.onSearch?.('search');
 			}}>
 				<MagnifyingGlassIcon className={ICON} /> Search
 			</FormButton>

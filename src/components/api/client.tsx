@@ -151,7 +151,7 @@ export class Client {
 	/**
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @param route the {@link Route} to send the request to.
-	 * @param body the delete request.
+	 * @param body the get request.
 	 * @return whether the request succeeded.
 	 */
 	public async get<RequestBodyInner, ResponseBody>(
@@ -199,7 +199,7 @@ export class Client {
 	/**
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @param route the {@link Route} to send the request to.
-	 * @param body the delete request.
+	 * @param body the patch request.
 	 * @return whether the request succeeded.
 	 */
 	public async patch<RequestBodyInner>(
@@ -214,7 +214,7 @@ export class Client {
 	/**
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @param route the {@link Route} to send the request to.
-	 * @param body the delete request.
+	 * @param body the post request.
 	 * @return whether the request succeeded.
 	 */
 	public async post<RequestBodyInner, ResponseBody extends {}>(
@@ -223,7 +223,7 @@ export class Client {
 		route: UserInputRoute,
 		body: request.Post<RequestBodyInner>,
 		checkSchema: (json: unknown) => json is ResponseBody,
-	): OptBody<response.Post<ResponseBody>['entity']> {
+	): OptBody<Required<response.Post<ResponseBody>>['entity']> {
 		const RESULT = await (this as Client).caughtRequest(showMessage, route, { method: 'POST', body }, response.isPost);
 		return (RESULT !== null && checkSchema(RESULT.entity))
 			? RESULT.entity

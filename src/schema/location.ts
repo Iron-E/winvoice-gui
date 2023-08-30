@@ -8,3 +8,7 @@ export type Location = {
 	name: string,
 	outer?: Location,
 };
+
+export function isLocation(json: unknown): json is Location {
+	return json instanceof Object && 'id' in json && 'name' in json;
+}

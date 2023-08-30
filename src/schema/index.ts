@@ -6,7 +6,7 @@ export { type Expense } from './expense';
 export { type Id } from './id';
 export { type Invoice, type InvoiceDate } from './invoice';
 export { type Job } from './job';
-export { type Location } from './location';
+export { type Location, isLocation } from './location';
 export { type Money } from './money';
 export { type Organization } from './organization';
 export { type Role } from './role';

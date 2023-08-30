@@ -1,26 +1,44 @@
 'use client';
 
 import React from 'react';
+import type { On } from '../../props-with';
 import type { Props } from '@/utils';
-import { Currency, type Location } from '@/schema';
+import { Client } from '../../api';
+import { Currency, isLocation, type Location } from '@/schema';
 import { Form, FormButton } from '../../form';
 import { InputId } from './id';
 import { InputString } from './string';
 import { Modal } from '../../modal';
+import { Route } from '@/api';
 import { SelectCurrency } from './currency';
+import { SHOW_MESSAGE_CONTEXT } from '../../messages';
 import { SPACE } from '../../css';
 
 /** @return a {@link React.JSX.IntrinsicElements.form | form} which will create a new {@link Location} on submit. */
-export function CreateLocationForm(
-	props: Pick<Props<typeof Form>, 'onSubmit'> & Pick<Props<typeof SelectCurrency>, 'id'>,
+export function CreateLocationForm<Ret>(
+	props: On<'submit', [l: Location], Ret> & Pick<Props<typeof SelectCurrency>, 'id'>,
 ): React.ReactElement {
+	const CLIENT = React.useContext(Client.CONTEXT);
+	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
+
 	const [CURRENCY, setCurrency] = React.useState<Currency>();
 	const [NAME, setName] = React.useState<string>();
 	const [OUTER, setOuter] = React.useState<Location>();
-	const [SHOW_CREATE_OUTER_FORM, setShowCreateOuterForm] = React.useState(false);
+	const [MODAL, setModal] = React.useState<null | 'new' | 'search'>(null);
 
 	return <>
-		<Form onSubmit={props.onSubmit}>
+		<Form onSubmit={async () => {
+			const RESULT = await CLIENT.post(
+				showMessage,
+				Route.Location,
+				{ args: [CURRENCY, NAME, OUTER] },
+				isLocation,
+			);
+
+			if (RESULT !== null) {
+				await Promise.resolve(props.onSubmit?.(RESULT));
+			}
+		}}>
 			<SelectCurrency
 				id={`${props.id}--currency`}
 				onChange={setCurrency}
@@ -39,8 +57,8 @@ export function CreateLocationForm(
 			<InputId
 				id={`${props.id}--outer`}
 				label='Outer Location'
-				onNew={() => setShowCreateOuterForm(true)}
-				onSearch={async () => { throw new Error("Unimplemented") }}
+				onNew={setModal}
+				onSearch={setModal}
 				required={true}
 				title='The name of the location which is to be created'
 				value={OUTER?.id}
@@ -49,12 +67,13 @@ export function CreateLocationForm(
 			<FormButton className={SPACE} />
 		</Form>
 
-		{SHOW_CREATE_OUTER_FORM && <Modal onClose={() => setShowCreateOuterForm(false)}>
-			<CreateLocationForm
-				id='abcd'
-				onSubmit={async () => {
-				}}
-			/>
-		</Modal>}
+		{MODAL === 'new'
+			? <Modal onClose={() => setModal(null)}>
+				<CreateLocationForm id='abcd' onSubmit={setOuter} />
+			</Modal>
+			: MODAL === 'search' && <Modal onClose={() => setModal(null)}>
+				Unimplemented
+			</Modal>
+		}
 	</>;
 }

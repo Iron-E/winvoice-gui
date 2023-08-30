@@ -13,7 +13,7 @@ export function Modal(props: Props): React.ReactElement {
 
 	return (
 		<Dim onClick={props.onClose}>
-			<div className='relative bg-modal-bg rounded-md' onClick={e => e.stopPropagation()}>
+			<div className='relative bg-modal-bg rounded-md min-h-[1.7rem]' onClick={e => e.stopPropagation()}>
 				<XButton className='w-5 mt-1 mr-1 absolute top-0 right-0' onClick={props.onClose} />
 				<div className='my-3 mx-10'>
 					{props.children}

@@ -61,7 +61,10 @@ export function CreateLocationForm<Ret>(
 
 		{MODAL === 'new'
 			? <Modal onClose={setModal}>
-				<CreateLocationForm id={`${props.id}--outer--form`} onSubmit={setOuter} />
+				<CreateLocationForm id={`${props.id}--outer--form`} onSubmit={l => {
+					setOuter(l);
+					setModal(null);
+				}} />
 			</Modal>
 			: MODAL === 'search' && <Modal onClose={setModal}>
 				Unimplemented: allow searching for a location and choosing one

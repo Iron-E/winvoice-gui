@@ -12,13 +12,12 @@ export function InputId(
 	props:
 		On<'new', [value: 'new']>
 		& On<'search', [value: 'search']>
-		& Omit<InputProps<string>, 'children' | 'disabled' | 'inputRef'>,
+		& Omit<InputProps<string>, 'children' | 'disabled'>,
 ): React.ReactElement {
 	return (
 		<Input
 			disabled={true}
 			id={props.id}
-			inputRef={ref => ref?.setCustomValidity('TOOD: validate UUID')}
 			label={props.label ?? 'ID'}
 			onChange={props.onChange}
 			required={props.required}

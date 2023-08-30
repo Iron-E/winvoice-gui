@@ -6,7 +6,6 @@ export function InputString(props: InputProps<string>): React.ReactElement {
 	return (
 		<Input
 			id={props.id}
-			inputRef={props.inputRef}
 			label={props.label ?? 'Name'}
 			onChange={props.onChange}
 			required={props.required}

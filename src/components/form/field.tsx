@@ -35,7 +35,7 @@ type InputProps = React.JSX.IntrinsicElements['input'];
 
 /** @return an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
 export function Input(
-	props: FieldProps<HTMLInputElement, 'input'> & { inputRef?: InputProps['ref'], type?: InputProps['type'] },
+	props: FieldProps<HTMLInputElement, 'input'> & { type?: InputProps['type'] },
 ): React.ReactElement {
 	return <>
 		<span className={`${FLEX_BETWEEN} gap-5`}>
@@ -54,7 +54,6 @@ export function Input(
 			id={props.id}
 			name={props.id}
 			onChange={e => props.onChange?.(e.target.value)}
-			ref={props.inputRef}
 			required={props.required}
 			title={props.title}
 			type={props.type}

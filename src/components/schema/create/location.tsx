@@ -6,6 +6,7 @@ import { Currency, type Location } from '@/schema';
 import { Form, FormButton } from '../../form';
 import { InputId } from './id';
 import { InputString } from './string';
+import { Modal } from '../../modal';
 import { SelectCurrency } from './currency';
 import { SPACE } from '../../css';
 
@@ -16,8 +17,9 @@ export function CreateLocationForm(
 	const [CURRENCY, setCurrency] = React.useState<Currency>();
 	const [NAME, setName] = React.useState<string>();
 	const [OUTER, setOuter] = React.useState<Location>();
+	const [SHOW_CREATE_OUTER_FORM, setShowCreateOuterForm] = React.useState(false);
 
-	return (
+	return <>
 		<Form onSubmit={props.onSubmit}>
 			<SelectCurrency
 				id={`${props.id}--currency`}
@@ -37,7 +39,7 @@ export function CreateLocationForm(
 			<InputId
 				id={`${props.id}--outer`}
 				label='Outer Location'
-				onNew={async () => { throw new Error("Unimplemented") }}
+				onNew={() => setShowCreateOuterForm(true)}
 				onSearch={async () => { throw new Error("Unimplemented") }}
 				required={true}
 				title='The name of the location which is to be created'
@@ -46,5 +48,13 @@ export function CreateLocationForm(
 
 			<FormButton className={SPACE} />
 		</Form>
-	);
+
+		{SHOW_CREATE_OUTER_FORM && <Modal onClose={() => setShowCreateOuterForm(false)}>
+			<CreateLocationForm
+				id='abcd'
+				onSubmit={async () => {
+				}}
+			/>
+		</Modal>}
+	</>;
 }

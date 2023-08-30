@@ -2,6 +2,7 @@
 
 import React from 'react';
 import type { Children, Click } from './props-with';
+import { FLEX } from './css';
 
 /** The properties of a {@link Dim}. */
 export type Props = Children & Click;
@@ -25,10 +26,10 @@ export function Dim(props: Props): React.ReactElement {
 
 	return (
 		<div
-			className='fixed top-0 left-0 w-screen h-screen bg-dim-bg bg-opacity-70 DIM'
+			className={`${FLEX} justify-center fixed top-0 left-0 w-screen h-screen bg-dim-bg bg-opacity-70 DIM`}
 			onClick={props.onClick}
 			ref={REF}
-			style={{zIndex: Z_INDEX}}
+			style={{ zIndex: Z_INDEX }}
 		>
 			<Z_INDEX_CONTEXT.Provider value={Z_INDEX + 1}>
 				{props.children}

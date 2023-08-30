@@ -1,10 +1,10 @@
 import type { InputProps } from './props';
-import { LabeledInput } from '../../labeled';
+import { Input } from '../../form';
 
 /** @return a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
 export function InputString(props: InputProps<string>): React.ReactElement {
 	return (
-		<LabeledInput
+		<Input
 			id={props.id}
 			inputRef={props.inputRef}
 			label={props.label ?? 'Name'}
@@ -15,6 +15,6 @@ export function InputString(props: InputProps<string>): React.ReactElement {
 			value={props.value}
 		>
 			{props.children}
-		</LabeledInput>
+		</Input>
 	);
 }

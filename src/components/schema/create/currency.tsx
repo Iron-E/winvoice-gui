@@ -1,7 +1,7 @@
 import type { Maybe } from '@/utils';
 import type { SelectProps } from './props';
 import { Currency } from '@/schema';
-import { LabeledSelect } from '../../labeled';
+import { Select } from '../../form';
 
 /** All {@link Currency | Currencies} mapped to {@link React.JSX.IntrinsicElements.option | option}s  */
 const OPTIONS: ReadonlyArray<React.ReactElement> = [
@@ -14,7 +14,7 @@ const OPTIONS: ReadonlyArray<React.ReactElement> = [
 /** @return a {@link React.JSX.IntrinsicElements.select | select} to determine a given {@link Currency} */
 export function SelectCurrency(props: Omit<SelectProps<Maybe<Currency>>, 'children'>): React.ReactElement {
 	return (
-		<LabeledSelect
+		<Select
 			id={props.id}
 			label={props.label ?? 'Currency'}
 			// @ts-ignore: onChange can safely be accept a `Currency` param because all of the `values` are currency values
@@ -24,6 +24,6 @@ export function SelectCurrency(props: Omit<SelectProps<Maybe<Currency>>, 'childr
 			value={props.value}
 		>
 			{OPTIONS}
-		</LabeledSelect>
+		</Select>
 	);
 }

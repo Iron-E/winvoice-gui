@@ -1,10 +1,10 @@
 import React from 'react';
-import type { Children, Class, Id, On } from './props-with';
+import type { Children, Class, Id, On } from '../props-with';
 import type { IntrinsicProp } from '@/utils';
-import { FLEX, FLEX_BETWEEN, SPACE } from './css';
+import { FLEX, FLEX_BETWEEN, SPACE } from '../css';
 
 /** Properties shared by all labeled elements. */
-type LabeledProps<TElement extends Element, ElementName extends keyof React.JSX.IntrinsicElements> =
+type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.IntrinsicElements> =
 	Children
 	& Class<'label'>
 	& Class<ElementName>
@@ -30,13 +30,8 @@ border-form-field-border hover:border-form-field-border-hover` as const;
 type InputProps = React.JSX.IntrinsicElements['input'];
 
 /** @return an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
-export function LabeledInput(
-	props:
-		LabeledProps<HTMLInputElement, 'input'>
-		& {
-			inputRef?: InputProps['ref'],
-			type?: InputProps['type'],
-		}
+export function Input(
+	props: FieldProps<HTMLInputElement, 'input'> & { inputRef?: InputProps['ref'], type?: InputProps['type'] },
 ): React.ReactElement {
 	return <>
 		<span className={`${FLEX_BETWEEN} gap-5`}>
@@ -65,7 +60,7 @@ export function LabeledInput(
 }
 
 /** @return an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
-export function LabeledSelect(props: LabeledProps<HTMLSelectElement, 'select'>): React.ReactElement {
+export function Select(props: FieldProps<HTMLSelectElement, 'select'>): React.ReactElement {
 	return <>
 		<label className='ml-1 justify-end' htmlFor={props.id}>
 			{props.label}

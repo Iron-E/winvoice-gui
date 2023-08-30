@@ -1,9 +1,8 @@
 import type { InputProps } from './props';
 import type { On } from '../../props-with';
 import type { Props } from '@/utils';
-import { FormButton } from '../../form';
+import { FormButton, Input } from '../../form';
 import { HOVER, ICON } from '../../css';
-import { LabeledInput } from '../../labeled';
 import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/20/solid';
 
 /** The style of a {@link React.JSX.IntrinsicElements.button | button}. */
@@ -18,7 +17,7 @@ export function InputId(
 		& Omit<InputProps<string>, 'children' | 'disabled'>,
 ): React.ReactElement {
 	return (
-		<LabeledInput
+		<Input
 			disabled={true}
 			id={props.id}
 			inputRef={props.inputRef}
@@ -42,6 +41,6 @@ export function InputId(
 			}}>
 				<MagnifyingGlassIcon className={ICON} /> Search
 			</FormButton>
-		</LabeledInput>
+		</Input>
 	);
 }

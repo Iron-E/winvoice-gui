@@ -7,8 +7,8 @@ export default function Page(): React.ReactElement {
 	return (
 		<CreateLocationForm
 			id='new-location-form'
-			onSubmit={async () => {
-				throw new Error('Unimplemented')
+			onSubmit={async _l => {
+				throw new Error('Unimplemented: report created location in a tabular view')
 			}}
 		/>
 	);

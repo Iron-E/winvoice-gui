@@ -20,19 +20,13 @@ export function CreateLocationForm<Ret>(
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
 
 	const [CURRENCY, setCurrency] = React.useState<Currency>();
-	const [NAME, setName] = React.useState<string>();
+	const [NAME, setName] = React.useState('');
 	const [OUTER, setOuter] = React.useState<Location>();
 	const [MODAL, setModal] = React.useState<null | 'new' | 'search'>(null);
 
 	return <>
 		<Form onSubmit={async () => {
-			const RESULT = await CLIENT.post(
-				showMessage,
-				Route.Location,
-				{ args: [CURRENCY, NAME, OUTER] },
-				isLocation,
-			);
-
+			const RESULT = await CLIENT.post(showMessage, Route.Location, { args: [CURRENCY, NAME, OUTER] }, isLocation);
 			if (RESULT !== null) {
 				await Promise.resolve(props.onSubmit?.(RESULT));
 			}
@@ -59,18 +53,18 @@ export function CreateLocationForm<Ret>(
 				onSearch={setModal}
 				required={true}
 				title='The name of the location which is to be created'
-				value={OUTER?.id}
+				value={OUTER?.id ?? ''}
 			/>
 
 			<FormButton className={SPACE} />
 		</Form>
 
 		{MODAL === 'new'
-			? <Modal onClose={() => setModal(null)}>
+			? <Modal onClose={setModal}>
 				<CreateLocationForm id={`${props.id}--outer--form`} onSubmit={setOuter} />
 			</Modal>
-			: MODAL === 'search' && <Modal onClose={() => setModal(null)}>
-				Unimplemented
+			: MODAL === 'search' && <Modal onClose={setModal}>
+				Unimplemented: allow searching for a location and choosing one
 			</Modal>
 		}
 	</>;

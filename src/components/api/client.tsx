@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { AsyncOn, Children, Class, On } from '../props-with';
+import type { AsyncOn, Class, On } from '../props-with';
 import type { Fn, Maybe, Opt } from '@/utils';
 import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, WifiIcon } from '@heroicons/react/20/solid';
 import { Code, newRequest, request, response, Route, type Request, type Status } from '@/api';
@@ -254,7 +254,7 @@ type SelectorProps = Required<On<'setClient', [client: Client]>> & { client?: Re
 type SelectorModalProps = Omit<ModalProps, 'children'> & SelectorProps;
 
 /** @return A floating form. */
-function ModalForm(props: Children & Required<AsyncOn<'submit'> & On<'close'> & { button_text: string }>) {
+function ModalForm(props: Pick<ModalProps, 'children' | 'onClose'> & Required<AsyncOn<'submit'> & { button_text: string }>) {
 	return (
 		<Modal onClose={props.onClose}>
 			<Form onSubmit={props.onSubmit}>
@@ -278,7 +278,7 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 			const CLIENT: Client = new Client(URL);
 			if (!await CLIENT.setWhoIAm(showMessage)) { return; }
 			props.onSetClient(CLIENT);
-			props.onClose();
+			props.onClose(null);
 		}}>
 			<Input
 				id='client-connect-addr'
@@ -304,7 +304,7 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 			const CLIENT = new Client(props.client!.address, USERNAME);
 			if (!await CLIENT.login(showMessage, PASSWORD)) { return; }
 			props.onSetClient(CLIENT);
-			props.onClose();
+			props.onClose(null);
 		}}>
 			<Input
 				id='client-login-username'
@@ -360,6 +360,6 @@ export function ClientSelector(props: Class<'button'> & SelectorProps): React.Re
 			<WifiIcon className={ICON} /> Connect
 		</button>
 
-		{MODAL && <MODAL client={props.client} onClose={() => setModalVisibility(null)} onSetClient={props.onSetClient} />}
+		{MODAL && <MODAL client={props.client} onClose={setModalVisibility} onSetClient={props.onSetClient} />}
 	</>;
 }

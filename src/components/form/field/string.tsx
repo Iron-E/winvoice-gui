@@ -11,7 +11,7 @@ export function InputString(props: InputProps<string>): React.ReactElement {
 			onChange={props.onChange}
 			required={props.required}
 			title={props.title}
-			type={props.type}
+			type='text'
 			value={props.value}
 		>
 			{props.children}

@@ -3,6 +3,10 @@ import type { Children, Class, Id, On } from '../props-with';
 import type { IntrinsicProp } from '@/utils';
 import { FLEX, FLEX_BETWEEN, SPACE } from '../css';
 
+export { InputId } from './field/id';
+export { InputString } from './field/string';
+export { SelectCurrency } from './field/currency';
+
 /** Properties shared by all labeled elements. */
 type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.IntrinsicElements> =
 	Children

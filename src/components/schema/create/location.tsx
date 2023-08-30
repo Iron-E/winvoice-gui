@@ -5,12 +5,10 @@ import type { On } from '../../props-with';
 import type { Props } from '@/utils';
 import { Client } from '../../api';
 import { Currency, isLocation, type Location } from '@/schema';
-import { Form, FormButton } from '../../form';
-import { InputId } from './id';
-import { InputString } from './string';
+import { Form, FormButton, InputId, InputString } from '../../form';
 import { Modal } from '../../modal';
 import { Route } from '@/api';
-import { SelectCurrency } from './currency';
+import { SelectCurrency } from '../../form';
 import { SHOW_MESSAGE_CONTEXT } from '../../messages';
 import { SPACE } from '../../css';
 

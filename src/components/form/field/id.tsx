@@ -19,6 +19,7 @@ export function InputId(
 			disabled={true}
 			id={props.id}
 			label={props.label ?? 'ID'}
+			inputClassName='min-w-[36ch]'
 			onChange={props.onChange}
 			required={props.required}
 			title={props.title}

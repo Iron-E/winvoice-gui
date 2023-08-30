@@ -11,23 +11,30 @@ export type Request<T = never> = Omit<RequestInit, 'body' | 'credentials'> & {
 	method: 'DELETE' | 'GET' | 'PATCH' | 'POST',
 };
 
-/** The request header used to indicate the expected API version on the {@link https://github.com/Iron-E/winvoice-sevrer | winvoice-server}. */
-export const VERSION_HEADER = 'api-version' as const;
-export const VERSION_RANGE = '^0.1' as const;
-
 /**
  * @param <BodyInner> the content of e.g. {@link request.Get}, should it be the body.
  * @return an {@link RequestInit | APi request} which can be passed to {@link fetch}.
  */
 export function newRequest<BodyInner>(r: Request<BodyInner>): RequestInit {
+	/* body */
 	if (r.body != undefined) {
 		((r as unknown) as RequestInit).body = JSON.stringify(r.body);
 	}
 
+	/* credentials */
 	((r as unknown) as RequestInit).credentials = 'include';
-	r.headers = r.headers == undefined ?
-		{ [VERSION_HEADER]: VERSION_RANGE } :
-		{ [VERSION_HEADER]: VERSION_RANGE, ...r.headers };
 
+	/* headers */
+	if (r.headers == undefined) {
+		r.headers = {};
+	}
+
+	r.headers = {
+		...r.headers,
+		'api-version': '^0.1',
+		'content-type': 'application/json',
+	};
+
+	/* final cast */
 	return (r as unknown) as RequestInit;
 }

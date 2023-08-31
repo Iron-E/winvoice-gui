@@ -1,4 +1,4 @@
-import { type MatchExpense as M } from '../../src/match';
+import { type MatchExpense as M } from '@/match';
 import { Currency } from '../../src/schema';
 
 describe('testing MatchExpense', () => {

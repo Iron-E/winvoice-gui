@@ -1,4 +1,4 @@
-import { type MatchContact as M } from '../../src/match';
+import { type MatchContact as M } from '@/match';
 
 describe('testing MatchContact', () => {
 	test('JSON decoding', () => {

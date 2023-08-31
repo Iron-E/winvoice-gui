@@ -1,4 +1,4 @@
-import { type MatchEmployee as M } from '../../src/match';
+import { type MatchEmployee as M } from '@/match';
 
 describe('testing MatchEmployee', () => {
 	test('JSON decoding', () => {

@@ -1,4 +1,4 @@
-import { type MatchTimesheet as M } from '../../src/match';
+import { type MatchTimesheet as M } from '@/match';
 
 describe('testing MatchTimesheet', () => {
 	test('JSON decoding', () => {

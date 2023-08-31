@@ -1,4 +1,4 @@
-import { type MatchInvoice as M } from '../../src/match';
+import { type MatchInvoice as M } from '@/match';
 import { Currency } from '../../src/schema';
 
 describe('testing MatchInvoice', () => {

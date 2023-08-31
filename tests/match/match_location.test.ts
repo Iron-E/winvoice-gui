@@ -1,4 +1,4 @@
-import { type MatchLocation as M } from '../../src/match';
+import { type MatchLocation as M } from '@/match';
 import { Currency } from '../../src/schema';
 
 describe('testing MatchLocation', () => {

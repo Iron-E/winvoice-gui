@@ -1,4 +1,4 @@
-import type { Match, MatchOption } from '../../src/match';
+import type { Match, MatchOption } from '@/match';
 
 type M = MatchOption<Match<number>>
 describe('testing MatchOption', () => {

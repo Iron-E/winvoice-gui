@@ -1,4 +1,4 @@
-import { type MatchStr } from '../../src/match';
+import { type MatchStr } from '@/match';
 
 type M = MatchStr<string>
 describe('testing MatchStr', () => {

@@ -1,4 +1,4 @@
-import type { Match, MatchSet } from '../../src/match';
+import type { Match, MatchSet } from '@/match';
 
 type M = MatchSet<Match<number>>
 describe('testing MatchSet', () => {

@@ -9,7 +9,6 @@ export type WhoAmI = {
  */
 export function isWhoAmI(json: unknown): json is WhoAmI {
 	return json instanceof Object && (
-		'username' in json
-		&& typeof json.username === 'string'
+		'username' in json && typeof json.username === 'string'
 	);
 }

@@ -11,7 +11,6 @@ export type Delete = {
  */
 export function isDelete(json: unknown): json is Delete {
 	return json instanceof Object && (
-		'status' in json
-		&& isStatus(json.status)
+		'status' in json && isStatus(json.status)
 	);
 }

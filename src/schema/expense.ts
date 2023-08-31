@@ -1,5 +1,5 @@
-import { type Id } from './id';
-import { type Money } from './money';
+import { isId, type Id } from './id';
+import { type Money, isMoney } from './money';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-schema | `Expense`} type. */
 export type Expense = {
@@ -9,3 +9,17 @@ export type Expense = {
 	id: Id,
 	timesheet_id: Id,
 };
+
+/**
+ * @param json the value to check.
+ * @return whether the `json` is an instance of {@link Expense}.
+ */
+export function isExpense(json: unknown): json is Expense {
+	return json instanceof Object && (
+		'category' in json && typeof json.category === 'string'
+		&& 'cost' in json && typeof isMoney(json.cost)
+		&& 'description' in json && typeof json.description === 'string'
+		&& 'id' in json && typeof isId(json.id)
+		&& 'timesheet_id' in json && isId(json.timesheet_id)
+	);
+}

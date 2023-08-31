@@ -12,9 +12,7 @@ export type Export = {
  */
 export function isExport(json: unknown): json is Export {
 	return json instanceof Object && (
-		'exported' in json
-		&& json.exported instanceof Map
-		&& 'status' in json
-		&& isStatus(json.status)
+		'exported' in json && json.exported instanceof Map
+		&& 'status' in json && isStatus(json.status)
 	);
 }

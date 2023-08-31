@@ -14,9 +14,7 @@ export type Status = {
  */
 export function isStatus(json: unknown): json is Status {
 	return json instanceof Object && (
-		'code' in json
-		&& isCode(json.code)
-		&& 'message' in json
-		&& typeof json.message === 'string'
+		'code' in json && isCode(json.code)
+		&& 'message' in json && typeof json.message === 'string'
 	);
 }

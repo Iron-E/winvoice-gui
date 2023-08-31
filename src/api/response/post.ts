@@ -12,7 +12,6 @@ export type Post<T = unknown> = {
  */
 export function isPost(json: unknown): json is Post {
 	return json instanceof Object && (
-		'status' in json
-		&& isStatus(json.status)
+		'status' in json && isStatus(json.status)
 	);
 }

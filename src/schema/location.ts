@@ -1,3 +1,4 @@
+import { fieldMaybeIs } from '@/utils';
 import { Currency, isCurrency } from './currency';
 import { isId, type Id } from './id';
 
@@ -15,11 +16,9 @@ export type Location = {
  */
 export function isLocation(json: unknown): json is Location {
 	return json instanceof Object && (
-		(('currency' in json && isCurrency(json.currency)) || !('currency' in json))
-		&& 'id' in json
-		&& isId(json.id)
-		&& 'name' in json
-		&& typeof json.name === 'string'
-		&& (('outer' in json && isLocation(json.outer)) || !('outer' in json))
+		fieldMaybeIs(json, 'currency', isCurrency)
+		&& 'id' in json && isId(json.id)
+		&& 'name' in json && typeof json.name === 'string'
+		&& fieldMaybeIs(json, 'outer', isLocation)
 	);
 }

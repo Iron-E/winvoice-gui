@@ -1,6 +1,7 @@
-import { type Employee } from './employee';
-import { type Id } from './id';
-import { type Role } from './role';
+import { fieldMaybeIs } from '@/utils';
+import { isEmployee, type Employee } from './employee';
+import { isId, type Id } from './id';
+import { isRole, type Role } from './role';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-server | `User`} type. */
 export type User = {
@@ -11,3 +12,18 @@ export type User = {
 	role: Role,
 	username: string,
 };
+
+/**
+ * @param json the value to check.
+ * @return whether the `json` is an instance of {@link User}.
+ */
+export function isUser(json: unknown): json is User {
+	return json instanceof Object && (
+		fieldMaybeIs(json, 'employee', isEmployee)
+		&& 'id' in json && isId(json.id)
+		&& 'password' in json && typeof json.password === 'string'
+		&& fieldMaybeIs(json, 'password_expires', d => d instanceof Date)
+		&& 'role' in json && isRole(json.role)
+		&& 'username' in json && typeof json.username === 'string'
+	);
+}

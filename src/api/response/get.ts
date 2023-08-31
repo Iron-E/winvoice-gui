@@ -12,9 +12,7 @@ export type Get<T = unknown> = {
  */
 export function isGet(json: unknown): json is Get {
 	return json instanceof Object && (
-		'entities' in json
-		&& json.entities instanceof Array
-		&& 'status' in json
-		&& isStatus(json.status)
+		'entities' in json && json.entities instanceof Array
+		&& 'status' in json && isStatus(json.status)
 	);
 }

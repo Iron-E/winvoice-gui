@@ -1,6 +1,6 @@
 import { type MatchContactKind as M } from '@/match';
 
-describe('testing Match', () => {
+describe('Match', () => {
 	test('JSON decoding', () => {
 		expect(JSON.parse('{ "address": { "id": "3" } }')).toStrictEqual<M>({ address: { id: '3' } });
 		expect(JSON.parse('"any"')).toStrictEqual<M>("any");

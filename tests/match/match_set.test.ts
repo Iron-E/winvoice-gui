@@ -1,7 +1,7 @@
 import type { Match, MatchSet } from '@/match';
 
 type M = MatchSet<Match<number>>
-describe('testing MatchSet', () => {
+describe('MatchSet', () => {
 	test('JSON decoding', () => {
 		expect(JSON.parse(`{
 			"and": [

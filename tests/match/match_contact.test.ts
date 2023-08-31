@@ -1,6 +1,6 @@
 import { type MatchContact as M } from '@/match';
 
-describe('testing MatchContact', () => {
+describe('MatchContact', () => {
 	test('JSON decoding', () => {
 		expect(JSON.parse(`{
 			"kind": { "email": "foo@bar.io" },

@@ -2,7 +2,7 @@ import { fieldMaybeIs } from '@/utils';
 import { isInvoiceDate, type InvoiceDate } from './invoice/invoice-date';
 import { isMoney, type Money } from './money';
 
-export { type InvoiceDate };
+export { isInvoiceDate, type InvoiceDate };
 
 /** Same as {@link https://github.com/Iron-E/winvoice-schema | `Invoice`} type. */
 export type Invoice = {

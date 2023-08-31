@@ -1,7 +1,7 @@
 import { type MatchExpense as M } from '@/match';
 import { Currency } from '../../src/schema';
 
-describe('testing MatchExpense', () => {
+describe('MatchExpense', () => {
 	test('JSON decoding', () => {
 		expect(JSON.parse(`{
 			"category": {"regex": "^s*([Ff]ood|[Tt]ravel)s*$"},

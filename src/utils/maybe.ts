@@ -13,7 +13,7 @@ export function fieldMaybeIs<Obj extends {}>(obj: Obj, field: FieldName, check: 
 	if (field in obj) {
 		const VALUE = (obj as Record<FieldName, unknown>)[field];
 		if (VALUE != undefined) {
-			return check((obj as Record<FieldName, unknown>)[field]);
+			return check(VALUE);
 		}
 	}
 

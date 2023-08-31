@@ -1,6 +1,6 @@
 import { type MatchJob as M } from '@/match';
 
-describe('testing MatchJob', () => {
+describe('MatchJob', () => {
 	test('JSON decoding', () => {
 		expect(JSON.parse(`{
 			"client": { "location": { "name": {"contains": "New"} } },

@@ -1,6 +1,6 @@
 import { type MatchOrganization as M } from '@/match';
 
-describe('testing MatchOrganization', () => {
+describe('MatchOrganization', () => {
 	test('JSON decoding', () => {
 		expect(JSON.parse(`{
 			"id": "any",

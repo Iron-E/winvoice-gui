@@ -17,9 +17,9 @@ export type Expense = {
 export function isExpense(json: unknown): json is Expense {
 	return json instanceof Object && (
 		'category' in json && typeof json.category === 'string'
-		&& 'cost' in json && typeof isMoney(json.cost)
+		&& 'cost' in json && isMoney(json.cost)
 		&& 'description' in json && typeof json.description === 'string'
-		&& 'id' in json && typeof isId(json.id)
+		&& 'id' in json && isId(json.id)
 		&& 'timesheet_id' in json && isId(json.timesheet_id)
 	);
 }

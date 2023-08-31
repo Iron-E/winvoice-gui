@@ -1,6 +1,6 @@
 import { type MatchTimesheet as M } from '@/match';
 
-describe('testing MatchTimesheet', () => {
+describe('MatchTimesheet', () => {
 	test('JSON decoding', () => {
 		expect(JSON.parse(`{
 			"id": "any",

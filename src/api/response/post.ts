@@ -1,4 +1,4 @@
-import { type Status } from '../status';
+import { isStatus, type Status } from '../status';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-server | `api::response::Post`}. */
 export type Post<T = unknown> = {
@@ -11,5 +11,8 @@ export type Post<T = unknown> = {
  * @return whether the `json` is an instance of {@link Post}.
  */
 export function isPost(json: unknown): json is Post {
-	return json instanceof Object && 'entity' in json && 'status' in json;
+	return json instanceof Object && (
+		'status' in json
+		&& isStatus(json.status)
+	);
 }

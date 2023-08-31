@@ -33,3 +33,20 @@ export enum Currency {
 	Usd = 'USD',
 	Zar = 'ZAR',
 }
+
+/** The values of the Currency, */
+const CURRENCY_VALUES: Readonly<Record<string, true>> = Object.values(Currency).reduce(
+	(previous, current) => {
+		previous[current] = true;
+		return previous;
+	},
+	{} as Record<Currency, true>,
+)
+
+/**
+ * @param json the value to check.
+ * @return whether the `json` is an instance of {@link Currency}.
+ */
+export function isCurrency(json: unknown): json is Currency {
+	return typeof json === 'string' && CURRENCY_VALUES[json] != undefined;
+}

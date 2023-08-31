@@ -1,4 +1,4 @@
-import { type Status } from '../status';
+import { isStatus, type Status } from '../status';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-server | `api::response::Export`}. */
 export type Export = {
@@ -11,5 +11,10 @@ export type Export = {
  * @return whether the `json` is an instance of {@link Export}.
  */
 export function isExport(json: unknown): json is Export {
-	return json instanceof Object && 'exported' in json && 'status' in json;
+	return json instanceof Object && (
+		'exported' in json
+		&& json.exported instanceof Map
+		&& 'status' in json
+		&& isStatus(json.status)
+	);
 }

@@ -1,9 +1,9 @@
 import * as request from './request';
 
 export * as response from './response';
-export { Code, type Status } from './status';
+export * from './route';
+export * from './status';
 export { request };
-export { Route } from './route';
 
 /** What information is used to spawn a new API request.  */
 export type Request<T = never> = Omit<RequestInit, 'body' | 'credentials'> & {

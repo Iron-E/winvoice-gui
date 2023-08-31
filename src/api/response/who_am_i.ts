@@ -8,5 +8,8 @@ export type WhoAmI = {
  * @return whether the `json` is an instance of `WhoAmI`.
  */
 export function isWhoAmI(json: unknown): json is WhoAmI {
-	return json instanceof Object && 'username' in json;
+	return json instanceof Object && (
+		'username' in json
+		&& typeof json.username === 'string'
+	);
 }

@@ -1,7 +1,8 @@
 'use client';
 
 import {
-	api,
+	Client,
+	ClientSelector,
 	css,
 	Header,
 	HEADER_CSS,
@@ -25,7 +26,7 @@ function Guidance(props: w.Children): React.ReactElement {
  * @return the API provider for an entire page of the application.
  */
 export function InnerRootLayout(props: w.Children): React.ReactElement {
-	const [CLIENT, setClient] = React.useState<Readonly<api.Client>>();
+	const [CLIENT, setClient] = React.useState<Readonly<Client>>();
 	const [MESSAGES, setMessages] = React.useState<Message[]>([]);
 	const showMessage: ShowMessage = (level, text) => setMessages(
 		messages => [{ key: crypto.randomUUID(), level, text }, ...messages],
@@ -35,8 +36,8 @@ export function InnerRootLayout(props: w.Children): React.ReactElement {
 		const ITEM = localStorage.getItem('client');
 		if (ITEM != undefined) {
 			try {
-				const FIELDS = JSON.parse(ITEM) as JsonFields<api.Client>;
-				const CLIENT = new api.Client(FIELDS.address);
+				const FIELDS = JSON.parse(ITEM) as JsonFields<Client>;
+				const CLIENT = new Client(FIELDS.address);
 				CLIENT.setWhoIAm(showMessage).then(b => b && setClient(CLIENT));
 			} catch (e: unknown) {
 				console.error(e);
@@ -47,7 +48,7 @@ export function InnerRootLayout(props: w.Children): React.ReactElement {
 	return <>
 		<SHOW_MESSAGE_CONTEXT.Provider value={showMessage}>
 			<Header>
-				<api.ClientSelector buttonClassName={HEADER_CSS.button} client={CLIENT} onSetClient={c => {
+				<ClientSelector buttonClassName={HEADER_CSS.button} client={CLIENT} onSetClient={c => {
 					setClient(c);
 					localStorage.setItem('client', JSON.stringify(c));
 				}} />
@@ -58,14 +59,14 @@ export function InnerRootLayout(props: w.Children): React.ReactElement {
 					? <Guidance>connect</Guidance>
 					: CLIENT.username == undefined
 						? <Guidance>sign in</Guidance>
-						: <api.Client.CONTEXT.Provider value={CLIENT}>
-							<api.Client.SET_EXPIRED_CONTEXT.Provider value={() => {
-								setClient(new api.Client(CLIENT.address));
+						: <Client.CONTEXT.Provider value={CLIENT}>
+							<Client.SET_EXPIRED_CONTEXT.Provider value={() => {
+								setClient(new Client(CLIENT.address));
 								showMessage('info', 'Your session has expired. Please login again.');
 							}}>
 								{props.children}
-							</api.Client.SET_EXPIRED_CONTEXT.Provider>
-						</api.Client.CONTEXT.Provider>
+							</Client.SET_EXPIRED_CONTEXT.Provider>
+						</Client.CONTEXT.Provider>
 				}
 			</div>
 		</SHOW_MESSAGE_CONTEXT.Provider>

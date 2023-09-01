@@ -9,7 +9,7 @@ export function InnerCreateLayout(): React.ReactElement {
 	const URL = navigation.usePathname();
 	const ROUTE = URL.substring(1, URL.length - SUFFIX);
 	return (
-		<h2 className='font-semibold text-xl mb-3'>
+		<h2 className='font-semibold text-xl'>
 			Create New {ROUTE[0]?.toUpperCase() + ROUTE.substring(1)}
 		</h2>
 	);

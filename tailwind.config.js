@@ -21,12 +21,12 @@ module.exports = {
 					bg: COLORS.gray[200],
 				},
 
-				/** `<Dim>` component u*/
+				/** `<Dim>` component */
 				dim: {
 					bg: COLORS.black,
 				},
 
-				/** `<Form>` component u*/
+				/** `<Form>` component */
 				form: {
 					button: {
 						bg: COLORS.white,
@@ -41,7 +41,7 @@ module.exports = {
 					},
 				},
 
-				/** `<Header>` component u*/
+				/** `<Header>` component */
 				header: {
 					bg: COLORS.green[400],
 					border: COLORS.green[700],
@@ -56,12 +56,12 @@ module.exports = {
 					},
 				},
 
-				/** `<Modal>` component u*/
+				/** `<Modal>` component */
 				modal: {
 					bg: COLORS.gray[300],
 				},
 
-				/** `<Navbar>` component u*/
+				/** `<Navbar>` component */
 				navbar: {
 					entry: {
 						'bg-current': COLORS.green[300],
@@ -74,14 +74,34 @@ module.exports = {
 					},
 				},
 
-				/** `<Message>` component u*/
+				/** `<Message>` component */
 				message: {
 					'bg-error': COLORS.rose[400],
 					'bg-info': COLORS.sky[300],
 					'bg-warn': COLORS.orange[400],
 				},
 
-				/** `<XButton>` component u*/
+				/** `<Table>` component */
+				table: {
+					border: COLORS.black,
+					button: {
+						bg: COLORS.white,
+						'bg-hover': COLORS.sky[300],
+					},
+					col: {
+						border: COLORS.black,
+					},
+					heading: {
+						bg: COLORS.green[100],
+					},
+					row: {
+						border: COLORS.black,
+						'bg-odd': COLORS.gray[200],
+						'bg-even': COLORS.gray[300],
+					},
+				},
+
+				/** `<XButton>` component */
 				x: {
 					'bg-hover': COLORS.rose[400],
 				},

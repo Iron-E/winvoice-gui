@@ -91,8 +91,13 @@ module.exports = {
 					col: {
 						border: COLORS.black,
 					},
-					heading: {
+					header: {
 						bg: COLORS.green[100],
+						button: {
+							'fg': COLORS.gray[400],
+							'fg-active': COLORS.black,
+
+						},
 					},
 					row: {
 						border: COLORS.black,

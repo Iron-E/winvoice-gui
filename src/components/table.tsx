@@ -1,10 +1,12 @@
-'use client';
-
-import { PencilIcon, TrashIcon } from '@heroicons/react/20/solid';
+import { ChevronDownIcon, ChevronUpIcon, PencilIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { FLEX, HOVER, ICON, PAD } from './css';
 import type { Children, Click, On } from './props-with';
+import React from 'react';
 
 export * from './table/location';
+
+/** The order by which rows are sorted. */
+export type RowOrder<T> = { header: T, ascending: boolean };
 
 const COL_STYLE = `${PAD} [&:not(:last-child)]:border-r-[1px] border-table-col-border` as const;
 
@@ -59,17 +61,37 @@ odd:bg-table-row-bg-odd even:bg-table-row-bg-even border-table-row-border`}
 }
 
 /** @return a `<table>` with the standard winvoice appearance. */
-export function Table(props: Children & { headings: string[] }): React.ReactElement {
+export function Table<T extends string>(
+	props: Children & On<'sort', [order: Readonly<RowOrder<T>>]> & { headers: ReadonlyArray<T>, order: Readonly<RowOrder<T>> },
+): React.ReactElement {
+	/** @return the style for the sort icon in each header. */
+	function sortIconStyle(header: T, ascending: boolean): string {
+		return ((props.order.header === header && props.order.ascending === ascending)
+			? 'text-table-header-button-fg-active'
+			: 'text-table-header-button-fg'
+		);
+	}
+
 	return (
 		<div className={`${HOVER} border-2 [main>&]:max-w-full max-w-fit rounded-md \
 border-table-border \
-overflow-y-scroll bg-table-heading-bg`}>
+overflow-y-scroll bg-table-header-bg`}>
 			<table className='max-w-fit'>
 				<thead className='border-b-2 border-table-row-border'>
 					<tr>
-						{props.headings.map(h => (
-							<th className={COL_STYLE} key={h}>
-								{h}
+						{props.headers.map(header => (
+							<th className={`${COL_STYLE} text-left whitespace-nowrap`} key={header}>
+								<button onClick={() => {
+									props.onSort?.({ header, ascending: props.order.header === header ? !props.order.ascending : false });
+								}}>
+									<span className={`${FLEX} justify-left gap-2`}>
+										{header}
+										<span className={`${FLEX} flex-col [&>*]:w-3`}>
+											<ChevronUpIcon className={sortIconStyle(header, true)} />
+											<ChevronDownIcon className={sortIconStyle(header, false)} />
+										</span>
+									</span>
+								</button>
 							</th>
 						))}
 						<th>{/* delete/edit */}</th>

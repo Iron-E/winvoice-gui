@@ -1,12 +1,12 @@
 import React from 'react';
-import { Column, Row, Table, useRowOrder } from '../table';
+import { Column, Row, Table, useOrder } from '../table';
 import { type Location } from '@/schema'
 
 /** the headers of the {@link LocationTable}. */
 const HEADERS = ['Name', 'ID', 'Currency', 'Outer'] as const;
 
 export function LocationTable(props: { data: ReadonlyArray<Location> }): React.ReactElement {
-	const [ORDER, ORDERED_DATA, setOrder] = useRowOrder('name', props.data);
+	const [ORDER, ORDERED_DATA, setOrder] = useOrder('name', props.data);
 
 	return (
 		<Table

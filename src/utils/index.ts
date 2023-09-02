@@ -5,6 +5,7 @@ export type { JsonFields } from './json-fields';
 export type { LookupTable } from './lookup-table';
 export type { Opt } from './opt';
 export type { Props } from './props';
+export type { Snakecase } from './snake-case';
 export type { Spread } from './spread';
 export type { UnionToKeys } from './union-to-keys';
 export { equalsIgnoreCase } from './equals-ignore-case';

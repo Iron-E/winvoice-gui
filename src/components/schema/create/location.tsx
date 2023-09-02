@@ -1,8 +1,9 @@
 'use client';
 
+import * as hooks from '@/hooks';
 import React from 'react';
 import type { On } from '../../props-with';
-import type { Opt, Props } from '@/utils';
+import type { Props } from '@/utils';
 import { Client } from '../../api';
 import { Currency, isLocation, type Location } from '@/schema';
 import { Form, FormButton, InputId, InputString } from '../../form';
@@ -20,9 +21,9 @@ export function CreateLocationForm<Ret>(
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
 
 	const [CURRENCY, setCurrency] = React.useState<Currency>();
+	const [MODAL_VISIBLE, setModalVisible] = hooks.useModalVisibility<'new' | 'search'>();
 	const [NAME, setName] = React.useState('');
 	const [OUTER, setOuter] = React.useState<Location>();
-	const [MODAL, setModal] = React.useState<Opt<'new' | 'search'>>(null);
 
 	return <>
 		<Form onSubmit={async () => {
@@ -49,8 +50,8 @@ export function CreateLocationForm<Ret>(
 			<InputId
 				id={`${props.id}--outer`}
 				label='Outer Location'
-				onNew={setModal}
-				onSearch={setModal}
+				onNew={setModalVisible}
+				onSearch={setModalVisible}
 				required={true}
 				title='The name of the location which is to be created'
 				value={OUTER?.id ?? ''}
@@ -59,14 +60,14 @@ export function CreateLocationForm<Ret>(
 			<FormButton className={SPACE} />
 		</Form>
 
-		{MODAL === 'new'
-			? <Modal onClose={setModal}>
+		{MODAL_VISIBLE === 'new'
+			? <Modal onClose={setModalVisible}>
 				<CreateLocationForm id={`${props.id}--outer--form`} onSubmit={l => {
 					setOuter(l);
-					setModal(null);
+					setModalVisible(null);
 				}} />
 			</Modal>
-			: MODAL === 'search' && <Modal onClose={setModal}>
+			: MODAL_VISIBLE === 'search' && <Modal onClose={setModalVisible}>
 				Unimplemented: allow searching for a location and choosing one
 			</Modal>
 		}

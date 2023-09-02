@@ -2,7 +2,7 @@ import { ChevronDownIcon, ChevronUpIcon, PencilIcon, TrashIcon } from '@heroicon
 import { FLEX, HOVER, ICON, PAD } from './css';
 import type { Children, Click, On } from './props-with';
 import React from 'react';
-import { equalsIgnoreCase } from '@/utils';
+import { Snakecase, equalsIgnoreCase } from '@/utils';
 
 export * from './table/location';
 
@@ -87,12 +87,14 @@ export function useRowOrder<T>(
 	return [ORDER, ORDERED_DATA, setOrder];
 }
 
+type TableProps<T extends string> = {
+	headers: ReadonlyArray<T>,
+	order: Readonly<RowOrder<Snakecase<T>>>,
+};
+
 /** @return a `<table>` with the standard winvoice appearance. */
 export function Table<T extends string>(
-	props:
-		Children
-		& On<'sort', [order: Readonly<RowOrder<Lowercase<T>>>]>
-		& { headers: ReadonlyArray<T>, order: Readonly<RowOrder<Lowercase<T>>> },
+	props: Children & On<'sort', [order: TableProps<T>['order']]> & TableProps<T>,
 ): React.ReactElement {
 	/** @return the style for the sort icon in each header. */
 	function sortIconStyle(header: T, ascending: boolean): string {
@@ -112,7 +114,7 @@ overflow-y-scroll bg-table-header-bg`}>
 						{props.headers.map(header => (
 							<th className={`${COL_STYLE} text-left whitespace-nowrap`} key={header}>
 								<button onClick={() => {
-									const HEADER = header.toLowerCase() as Lowercase<T>;
+									const HEADER = header.toLowerCase().replaceAll(' ', '_') as Snakecase<T>;
 									props.onSort?.({
 										ascending: equalsIgnoreCase(props.order.header, HEADER) ? !props.order.ascending : false,
 										header: HEADER,

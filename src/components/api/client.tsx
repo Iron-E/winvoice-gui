@@ -1,5 +1,6 @@
 'use client';
 
+import * as hooks from '@/hooks';
 import React from 'react';
 import type { AsyncOn, Class, On } from '../props-with';
 import type { Fn, Maybe, Opt } from '@/utils';
@@ -331,15 +332,16 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 
 /** @return an API {@link State} selector. */
 export function ClientSelector(props: Class<'button'> & SelectorProps): React.ReactElement {
-	const [MODAL_VISIBILITY, setModalVisibility] = React.useState<Opt<'connect' | 'login'>>(null);
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
-	const CLIENT = props.client;
+	const [MODAL_VISIBLE, setModalVisible] = hooks.useModalVisibility<'connect' | 'login'>();
 
+	const CLIENT = props.client;
 	let account_button: Maybe<React.ReactElement>;
+
 	if (CLIENT != undefined) {
 		props.client
 		let [Icon, content, onClick] = CLIENT.username == undefined
-			? [ArrowRightOnRectangleIcon, 'Login', () => setModalVisibility('login')]
+			? [ArrowRightOnRectangleIcon, 'Login', () => setModalVisible('login')]
 			: [ArrowLeftOnRectangleIcon, 'Logout', async () => {
 				if (!await CLIENT.logout(showMessage)) { return; }
 				props.onSetClient(new Client(CLIENT.address));
@@ -353,13 +355,13 @@ export function ClientSelector(props: Class<'button'> & SelectorProps): React.Re
 		);
 	}
 
-	const MODAL = (MODAL_VISIBILITY == 'connect' && ConnectModal) || (MODAL_VISIBILITY == 'login' && LoginModal);
+	const MODAL = (MODAL_VISIBLE == 'connect' && ConnectModal) || (MODAL_VISIBLE == 'login' && LoginModal);
 	return <>
 		{account_button}
-		<button className={props.buttonClassName} onClick={() => setModalVisibility('connect')}>
+		<button className={props.buttonClassName} onClick={() => setModalVisible('connect')}>
 			<WifiIcon className={ICON} /> Connect
 		</button>
 
-		{MODAL && <MODAL client={props.client} onClose={setModalVisibility} onSetClient={props.onSetClient} />}
+		{MODAL && <MODAL client={props.client} onClose={setModalVisible} onSetClient={props.onSetClient} />}
 	</>;
 }

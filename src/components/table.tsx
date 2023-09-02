@@ -2,6 +2,7 @@ import { ChevronDownIcon, ChevronUpIcon, PencilIcon, TrashIcon } from '@heroicon
 import { FLEX, HOVER, ICON, PAD } from './css';
 import type { Children, Click, On } from './props-with';
 import React from 'react';
+import { equalsIgnoreCase } from '@/utils';
 
 export * from './table/location';
 
@@ -60,13 +61,42 @@ odd:bg-table-row-bg-odd even:bg-table-row-bg-even border-table-row-border`}
 	);
 }
 
+/**
+ * A hook that memoizes the ordering of the `data`.
+ * @param defaultHeader the header which is used to sort the rows by default.
+ * @param data the rows to sort.
+ * @return the {@link RowOrder | order} of the data, the ordered data, and a {@Link React.Dispatch | dispatch action} to set the order of the data.
+ */
+export function useRowOrder<T>(
+	defaultHeader: keyof T,
+	data: ReadonlyArray<T>,
+): [Readonly<RowOrder<keyof T>>, ReadonlyArray<T>, React.Dispatch<React.SetStateAction<RowOrder<keyof T>>>] {
+	const [ORDER, setOrder] = React.useState<RowOrder<keyof T>>({ header: defaultHeader, ascending: false });
+	const ORDERED_DATA = React.useMemo(() => [...data].sort((d1, d2) => {
+		if (d1[ORDER.header] < d2[ORDER.header]) {
+			var value = -1;
+		} else if (d1[ORDER.header] > d2[ORDER.header]) {
+			var value = 1;
+		} else {
+			var value = 0;
+		}
+
+		return ORDER.ascending ? value * -1 : value;
+	}), [ORDER, data]);
+
+	return [ORDER, ORDERED_DATA, setOrder];
+}
+
 /** @return a `<table>` with the standard winvoice appearance. */
 export function Table<T extends string>(
-	props: Children & On<'sort', [order: Readonly<RowOrder<T>>]> & { headers: ReadonlyArray<T>, order: Readonly<RowOrder<T>> },
+	props:
+		Children
+		& On<'sort', [order: Readonly<RowOrder<Lowercase<T>>>]>
+		& { headers: ReadonlyArray<T>, order: Readonly<RowOrder<Lowercase<T>>> },
 ): React.ReactElement {
 	/** @return the style for the sort icon in each header. */
 	function sortIconStyle(header: T, ascending: boolean): string {
-		return ((props.order.header === header && props.order.ascending === ascending)
+		return ((equalsIgnoreCase(props.order.header, header) && props.order.ascending === ascending)
 			? 'text-table-header-button-fg-active'
 			: 'text-table-header-button-fg'
 		);
@@ -82,7 +112,11 @@ overflow-y-scroll bg-table-header-bg`}>
 						{props.headers.map(header => (
 							<th className={`${COL_STYLE} text-left whitespace-nowrap`} key={header}>
 								<button onClick={() => {
-									props.onSort?.({ header, ascending: props.order.header === header ? !props.order.ascending : false });
+									const HEADER = header.toLowerCase() as Lowercase<T>;
+									props.onSort?.({
+										ascending: equalsIgnoreCase(props.order.header, HEADER) ? !props.order.ascending : false,
+										header: HEADER,
+									});
 								}}>
 									<span className={`${FLEX} justify-left gap-2`}>
 										{header}

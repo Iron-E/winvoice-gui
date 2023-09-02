@@ -7,4 +7,5 @@ export type { Opt } from './opt';
 export type { Props } from './props';
 export type { Spread } from './spread';
 export type { UnionToKeys } from './union-to-keys';
-export { fieldMaybeIs, type Maybe} from './maybe';
+export { equalsIgnoreCase } from './equals-ignore-case';
+export { fieldMaybeIs, type Maybe } from './maybe';

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { On } from '../../props-with';
-import type { Props } from '@/utils';
+import type { Opt, Props } from '@/utils';
 import { Client } from '../../api';
 import { Currency, isLocation, type Location } from '@/schema';
 import { Form, FormButton, InputId, InputString } from '../../form';
@@ -22,7 +22,7 @@ export function CreateLocationForm<Ret>(
 	const [CURRENCY, setCurrency] = React.useState<Currency>();
 	const [NAME, setName] = React.useState('');
 	const [OUTER, setOuter] = React.useState<Location>();
-	const [MODAL, setModal] = React.useState<null | 'new' | 'search'>(null);
+	const [MODAL, setModal] = React.useState<Opt<'new' | 'search'>>(null);
 
 	return <>
 		<Form onSubmit={async () => {

@@ -1,25 +1,24 @@
 import React from 'react';
-import { Column, Row, RowOrder, Table } from '../table';
+import { Column, Row, Table, useRowOrder } from '../table';
 import { type Location } from '@/schema'
 
-const HEADERS = ['Currency', 'ID', 'Name', 'Outer'] as const;
+/** the headers of the {@link LocationTable}. */
+const HEADERS = ['Name', 'ID', 'Currency', 'Outer'] as const;
 
-export function LocationTable(props: { data: Location[] }): React.ReactElement {
-	const [ORDER, setOrder] = React.useState<RowOrder<typeof HEADERS[number]>>({ header: 'Name', ascending: false });
+export function LocationTable(props: { data: ReadonlyArray<Location> }): React.ReactElement {
+	const [ORDER, ORDERED_DATA, setOrder] = useRowOrder('name', props.data);
 
 	return (
 		<Table
 			headers={HEADERS}
-			onSort={order => {
-				setOrder(order);
-			}}
+			onSort={order =>  setOrder(order)}
 			order={ORDER}
 		>
-			{props.data.map(l => (
+			{ORDERED_DATA.map(l => (
 				<Row key={l.id}>
-					<Column>{l.currency}</Column>
-					<Column>{l.id}</Column>
 					<Column>{l.name}</Column>
+					<Column>{l.id}</Column>
+					<Column>{l.currency}</Column>
 					<Column>{l.outer && <LocationTable data={[l.outer]} />}</Column>
 				</Row>
 			))}

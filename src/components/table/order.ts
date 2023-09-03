@@ -10,8 +10,8 @@ export type Order<T> = Readonly<{
 }>;
 
 export type OrderedData<T> = Readonly<{
-	data: readonly T[],
-	order: Order<keyof T>,
+	data: Readonly<{ get: readonly T[], set: (data: readonly T[]) => void }>,
+	order: Readonly<{ get: Order<keyof T>, set: (order: Order<keyof T>) => void }>,
 }>;
 
 /**
@@ -23,7 +23,7 @@ export function useOrder<T>(defaultColumn: T): [Order<T>, React.Dispatch<React.S
 }
 
 /** @return the `data` sorted according to the `order`. */
-function orderData<T>(data: ReadonlyArray<T>, order: Order<keyof T>): ReadonlyArray<T> {
+export function orderData<T>(data: readonly T[], order: Order<keyof T>): readonly T[] {
 	return [...data].sort((d1, d2) => {
 		if (d1[order.column] < d2[order.column]) {
 			var value = -1;
@@ -44,16 +44,18 @@ function orderData<T>(data: ReadonlyArray<T>, order: Order<keyof T>): ReadonlyAr
  */
 export function useOrderedData<T>(
 	defaultColumn: keyof T,
-): [OrderedData<T>, (data: OrderedData<T>['data']) => void, (order: OrderedData<T>['order']) => void] {
+): OrderedData<T> {
 	const [DATA, setData] = React.useState<readonly T[]>([]);
 	const [ORDER, setOrder] = useOrder<keyof T>(defaultColumn);
 
-	return [
-		{ data: DATA, order: ORDER },
-		d => setData(orderData(d, ORDER)),
-		o => {
-			setData(orderData(DATA, o));
-			setOrder(o);
+	return {
+		data: {
+			get: DATA,
+			set: d => setData(orderData(d, ORDER)),
 		},
-	];
+		order: {
+			get: ORDER,
+			set: o => { setData(orderData(DATA, o)); setOrder(o); },
+		},
+	};
 }

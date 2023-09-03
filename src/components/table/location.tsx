@@ -1,27 +1,30 @@
 import React from 'react';
-import { Column, OnReorder, OrderedData, Row, Table, useOrder } from '../table';
+import { Column, OrderedData, Row, Table, useOrder } from '../table';
 import { type Location } from '@/schema'
 
 /** the headers of the {@link LocationTable}. */
 const HEADERS = ['Name', 'ID', 'Currency', 'Outer'] as const;
 
-export function LocationTable(props: OnReorder<keyof Location> & { orderedData: OrderedData<Location> }): React.ReactElement {
+export function LocationTable(props: { orderedData: OrderedData<Location> }): React.ReactElement {
 	const [OUTER_ORDER, setOuterOrder] = useOrder<keyof Location>('name');
 
 	return (
 		<Table
 			headers={HEADERS}
-			onReorder={props.onReorder}
-			order={props.orderedData.order}
+			onReorder={props.orderedData.order.set}
+			order={props.orderedData.order.get}
 		>
-			{props.orderedData.data.map(l => (
+			{props.orderedData.data.get.map(l => (
 				<Row key={l.id}>
 					<Column>{l.name}</Column>
 					<Column>{l.id}</Column>
 					<Column>{l.currency}</Column>
 					<Column>
 						{l.outer && (
-							<LocationTable onReorder={setOuterOrder} orderedData={{ data: l.outer instanceof Array ? l.outer : [l.outer], order: OUTER_ORDER }} />
+							<LocationTable orderedData={{
+								data: { get: [l.outer], set: () => {/* do  nothing, it's only one value*/ } },
+								order: { get: OUTER_ORDER, set: order => setOuterOrder(order) },
+							}} />
 						)}
 					</Column>
 				</Row>

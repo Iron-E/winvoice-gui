@@ -5,31 +5,28 @@ import { CreateLocationForm, LocationTable, useOrderedData } from '@/components'
 import { Currency, Location } from '@/schema';
 
 export default function Page(): React.ReactElement {
-	const [ORDERED_DATA, setCreated, setOrder] = useOrderedData<Location>('name');
+	const ORDERED_DATA = useOrderedData<Location>('name');
 
 	const [INIT, setInit] = React.useState(false);
 	if (INIT === false) {
-		setCreated([
+		ORDERED_DATA.data.set([
 			{
-				id: '3f5ae42b-9d6f-4810-97da-1ca6d6a1c09d',
-				name: 'phoenix',
-				outer: [
-					{ id: '303daa3f-2140-4be1-a0b3-77e4c06e76b0', name: 'Cuba' },
-					{ id: 'e4f056a0-a5b5-40a0-9214-9353364faadb', name: 'Arizona' },
-				],
+				id: '55a81cc7-2d7b-477c-afd7-35e3bf8f9994',
+				name: 'shoenix',
+				outer: { id: '9ff5e8fd-f05f-48c6-b155-93bdab5c91bd', name: 'Arizona' },
 			},
 			{
-				id: 'cd4069b9-ebc5-4dbf-aa21-18df2bdf2743',
+				id: '86822505-6282-4a57-b521-721d4102858f',
 				name: 'Phoenix',
 				outer: {
-					id: 'e4f056a0-a5b5-40a0-9214-9353364faadb',
+					id: '4060f712-304d-4067-bb54-0ebaf0719d52',
 					name: 'Arizona',
 					outer: {
 						currency: Currency.Usd,
-						id: 'e4f056a0-a5b5-40a0-9214-9353364faadb',
+						id: 'd350237f-a5aa-4525-b702-e64a6c7aa9e9',
 						name: 'USA',
 						outer: {
-							id: 'e4f056a0-a5b5-40a0-9214-9353364faadb',
+							id: 'dc8ec01c-2c6f-406d-8d07-2b88fe97c1f5',
 							name: 'Earth',
 						},
 					},
@@ -42,9 +39,9 @@ export default function Page(): React.ReactElement {
 	return <>
 		<CreateLocationForm
 			id='new-location-form'
-			onSubmit={l => setCreated([...ORDERED_DATA.data, l])}
+			onSubmit={l => ORDERED_DATA.data.set([...ORDERED_DATA.data.get, l])}
 		/>
 
-		<LocationTable orderedData={ORDERED_DATA} onReorder={setOrder} />
+		<LocationTable orderedData={ORDERED_DATA} />
 	</>;
 }

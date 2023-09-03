@@ -12,12 +12,12 @@ export * from './table/order';
 export * from './table/row';
 
 type TableProps<T extends string> = {
-	headers: ReadonlyArray<T>,
+	headers: readonly T[],
 	order: Order<Snakecase<T>>,
 };
 
 /** An action to take when the {@link Table} is reordered. */
-export type OnReorder<T extends string> = Required<On<'reorder', [order: TableProps<T>['order']]>>;
+type OnReorder<T extends string> = Required<On<'reorder', [order: TableProps<T>['order']]>>;
 
 /** The icons which are used to indicate the sort order for a given {@link Table}. */
 function SortIcons<T extends string>(props: { header: T, order: TableProps<T>['order'] }): React.ReactElement {

@@ -13,10 +13,10 @@ export default function Page(): React.ReactElement {
 			{
 				id: '3f5ae42b-9d6f-4810-97da-1ca6d6a1c09d',
 				name: 'phoenix',
-				outer: {
-					id: 'e4f056a0-a5b5-40a0-9214-9353364faadb',
-					name: 'Arizona',
-				},
+				outer: [
+					{ id: '303daa3f-2140-4be1-a0b3-77e4c06e76b0', name: 'Cuba' },
+					{ id: 'e4f056a0-a5b5-40a0-9214-9353364faadb', name: 'Arizona' },
+				],
 			},
 			{
 				id: 'cd4069b9-ebc5-4dbf-aa21-18df2bdf2743',

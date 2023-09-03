@@ -21,7 +21,7 @@ export function LocationTable(props: OnReorder<keyof Location> & { orderedData: 
 					<Column>{l.currency}</Column>
 					<Column>
 						{l.outer && (
-							<LocationTable onReorder={setOuterOrder} orderedData={{ data: [l.outer], order: OUTER_ORDER }} />
+							<LocationTable onReorder={setOuterOrder} orderedData={{ data: l.outer instanceof Array ? l.outer : [l.outer], order: OUTER_ORDER }} />
 						)}
 					</Column>
 				</Row>

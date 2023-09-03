@@ -1,44 +1,50 @@
 'use client';
 
 import React from 'react';
-import { CreateLocationForm, LocationTable } from '@/components';
+import { CreateLocationForm, LocationTable, useOrderedData } from '@/components';
 import { Currency, Location } from '@/schema';
 
 export default function Page(): React.ReactElement {
-	const [CREATED, setCreated] = React.useState<Location[]>([
-		{
-			id: '3f5ae42b-9d6f-4810-97da-1ca6d6a1c09d',
-			name: 'phoenix',
-			outer: {
-				id: 'e4f056a0-a5b5-40a0-9214-9353364faadb',
-				name: 'Arizona',
-			},
-		},
-		{
-			id: 'cd4069b9-ebc5-4dbf-aa21-18df2bdf2743',
-			name: 'Phoenix',
-			outer: {
-				id: 'e4f056a0-a5b5-40a0-9214-9353364faadb',
-				name: 'Arizona',
+	const [ORDERED_DATA, setCreated, setOrder] = useOrderedData<Location>('name');
+
+	const [INIT, setInit] = React.useState(false);
+	if (INIT === false) {
+		setCreated([
+			{
+				id: '3f5ae42b-9d6f-4810-97da-1ca6d6a1c09d',
+				name: 'phoenix',
 				outer: {
-					currency: Currency.Usd,
 					id: 'e4f056a0-a5b5-40a0-9214-9353364faadb',
-					name: 'USA',
+					name: 'Arizona',
+				},
+			},
+			{
+				id: 'cd4069b9-ebc5-4dbf-aa21-18df2bdf2743',
+				name: 'Phoenix',
+				outer: {
+					id: 'e4f056a0-a5b5-40a0-9214-9353364faadb',
+					name: 'Arizona',
 					outer: {
+						currency: Currency.Usd,
 						id: 'e4f056a0-a5b5-40a0-9214-9353364faadb',
-						name: 'Earth',
+						name: 'USA',
+						outer: {
+							id: 'e4f056a0-a5b5-40a0-9214-9353364faadb',
+							name: 'Earth',
+						},
 					},
 				},
 			},
-		},
-	]);
+		]);
+		setInit(true);
+	}
 
 	return <>
 		<CreateLocationForm
 			id='new-location-form'
-			onSubmit={l => setCreated([...CREATED, l])}
+			onSubmit={l => setCreated([...ORDERED_DATA.data, l])}
 		/>
 
-		<LocationTable data={CREATED} />
+		<LocationTable orderedData={ORDERED_DATA} onReorder={setOrder} />
 	</>;
 }

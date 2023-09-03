@@ -1,5 +1,6 @@
 import React from 'react';
-import { Column, Row, Table, useOrder } from '../table';
+import { Column } from './column';
+import { Row, Table, useOrder } from '../table';
 import { type Location } from '@/schema'
 
 /** the headers of the {@link LocationTable}. */

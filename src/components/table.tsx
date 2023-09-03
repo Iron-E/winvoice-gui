@@ -1,10 +1,12 @@
-import { ChevronDownIcon, ChevronUpIcon, PencilIcon, TrashIcon } from '@heroicons/react/20/solid';
-import { FLEX, HOVER, ICON, PAD } from './css';
-import type { Children, Click, On } from './props-with';
 import React from 'react';
+import type { Children, Click, On } from './props-with';
+import { ChevronDownIcon, ChevronUpIcon, PencilIcon, TrashIcon } from '@heroicons/react/20/solid';
+import { COLUMN_STYLE, Column } from './table/column';
+import { FLEX, HOVER, ICON, PAD } from './css';
 import { Snakecase, equalsIgnoreCase } from '@/utils';
 
 export * from './table/location';
+export { COLUMN_STYLE, Column };
 
 /** The order by which rows are sorted. */
 export type RowOrder<T> = Readonly<{ header: T, ascending: boolean }>;
@@ -13,8 +15,6 @@ type TableProps<T extends string> = {
 	headers: ReadonlyArray<T>,
 	order: RowOrder<Snakecase<T>>,
 };
-
-const COL_STYLE = `${PAD} [&:not(:last-child)]:border-r-[1px] border-table-col-border` as const;
 
 /**
  * A hook that memoizes the ordering of the `data`.
@@ -55,15 +55,6 @@ function Button(props: Children & Click): React.ReactElement {
 		>
 			{props.children}
 		</button>
-	);
-}
-
-/** @return a `<td>` with the standard winvoice appearance. */
-export function Column(props: Children): React.ReactElement {
-	return (
-		<td className={COL_STYLE}>
-			{props.children}
-		</td>
 	);
 }
 
@@ -124,7 +115,7 @@ overflow-y-scroll bg-table-header-bg`}>
 				<thead className='border-b-2 border-table-row-border'>
 					<tr>
 						{props.headers.map(header => (
-							<th className={`${COL_STYLE} text-left whitespace-nowrap`} key={header}>
+							<th className={`${COLUMN_STYLE} text-left whitespace-nowrap`} key={header}>
 								<button onClick={() => {
 									const HEADER = header.toLowerCase() as Lowercase<T>;
 									props.onSort?.({

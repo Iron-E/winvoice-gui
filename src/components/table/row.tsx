@@ -30,7 +30,7 @@ odd:bg-table-row-bg-odd even:bg-table-row-bg-even border-table-row-border`}
 			{props.children}
 
 			<Column>
-				<span className={`${FLEX} justify-between gap-2`}>
+				<span className={`${FLEX} py-1 justify-between gap-2`}>
 					<Button onClick={props.onDelete}>
 						<TrashIcon className={ICON} /> Delete
 					</Button>

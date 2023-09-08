@@ -1,12 +1,24 @@
 import React from 'react';
+import type { On } from '../props-with';
 import { Column, OrderedData, Row, Table, useOrder } from '../table';
 import { type Location } from '@/schema'
 
 /** the headers of the {@link LocationTable}. */
 const HEADERS = ['Name', 'ID', 'Currency', 'Outer'] as const;
 
-export function LocationTable(props: { orderedData: OrderedData<Location> }): React.ReactElement {
-	const [OUTER_ORDER, setOuterOrder] = useOrder<keyof Location>('name');
+/** @return {@link useOrder} specialized for a {@link Location}. */
+export function useLocationOrder(): ReturnType<typeof useOrder<keyof Location>> {
+	return useOrder<keyof Location>('name');
+}
+
+type LocationOrder = ReturnType<typeof useLocationOrder>;
+
+export function LocationTable(
+	props:
+		Required<On<'reorderOuter', Parameters<LocationOrder[1]>>>
+		& { outerOrder: LocationOrder[0], orderedData: OrderedData<Location> },
+): React.ReactElement {
+	const [OUTER_ORDER, setOuterOrder] = useLocationOrder(); // TODO: remove this, as the infinite potential recursion here will break inner table sorting
 
 	return (
 		<Table
@@ -21,10 +33,14 @@ export function LocationTable(props: { orderedData: OrderedData<Location> }): Re
 					<Column>{l.currency}</Column>
 					<Column>
 						{l.outer && (
-							<LocationTable orderedData={{
-								data: { get: [l.outer], set: () => {/* do  nothing, it's only one value*/ } },
-								order: { get: OUTER_ORDER, set: order => setOuterOrder(order) },
-							}} />
+							<LocationTable
+								onReorderOuter={setOuterOrder}
+								orderedData={{
+									data: { get: [l.outer] },
+									order: { get: props.outerOrder, set: props.onReorderOuter },
+								}}
+								outerOrder={OUTER_ORDER}
+							/>
 						)}
 					</Column>
 				</Row>

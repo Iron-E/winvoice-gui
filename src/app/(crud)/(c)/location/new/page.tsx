@@ -1,15 +1,16 @@
 'use client';
 
 import React from 'react';
-import { CreateLocationForm, LocationTable, useOrderedData } from '@/components';
+import { CreateLocationForm, LocationTable, useLocationOrder, useOrderedData } from '@/components';
 import { Currency, Location } from '@/schema';
 
 export default function Page(): React.ReactElement {
+	const [OUTER_ORDER, setOuterOrder] = useLocationOrder();
 	const ORDERED_DATA = useOrderedData<Location>('name');
 
 	const [INIT, setInit] = React.useState(false);
 	if (INIT === false) {
-		ORDERED_DATA.data.set([
+		ORDERED_DATA.data.set?.([
 			{
 				id: '55a81cc7-2d7b-477c-afd7-35e3bf8f9994',
 				name: 'shoenix',
@@ -20,7 +21,7 @@ export default function Page(): React.ReactElement {
 				name: 'Phoenix',
 				outer: {
 					id: '4060f712-304d-4067-bb54-0ebaf0719d52',
-					name: 'Arizona',
+					name: 'arizona',
 					outer: {
 						currency: Currency.Usd,
 						id: 'd350237f-a5aa-4525-b702-e64a6c7aa9e9',
@@ -42,6 +43,19 @@ export default function Page(): React.ReactElement {
 			onSubmit={l => ORDERED_DATA.data.set([...ORDERED_DATA.data.get, l])}
 		/>
 
-		<LocationTable orderedData={ORDERED_DATA} />
+		<LocationTable
+			onReorderOuter={order => {
+				setOuterOrder(order);
+				ORDERED_DATA.data.set(ORDERED_DATA.data.get, { outer: o => o[order.column] });
+			}}
+			orderedData={{
+				...ORDERED_DATA,
+				order: {
+					...ORDERED_DATA.order,
+					set: order => ORDERED_DATA.order.set(order, { outer: o => o[OUTER_ORDER.column] }),
+				},
+			}}
+			outerOrder={OUTER_ORDER}
+		/>
 	</>;
 }

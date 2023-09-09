@@ -4,7 +4,7 @@ import { Currency } from '@/schema';
 import { Select } from '../../form';
 
 /** All {@link Currency | Currencies} mapped to {@link React.JSX.IntrinsicElements.option | option}s  */
-const OPTIONS: ReadonlyArray<React.ReactElement> = [
+const OPTIONS: readonly React.ReactElement[] = [
 	(<option key='no currency'>N/a</option>),
 	...Object.entries(Currency).map(([k, v]) => (
 		<option key={k} value={v}>{v}</option>

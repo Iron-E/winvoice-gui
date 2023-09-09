@@ -85,7 +85,7 @@ const ROUTE_HIDDEN: Partial<LookupTable<Route, true>> = {
 };
 
 /** The {@link Link}s which are to be shown in the {@link Navbar}. */
-const ROUTES: ReadonlyArray<[string, Route]> = Object.entries(Route).filter(([_, route]) => !ROUTE_HIDDEN[route]);
+const ROUTES: readonly [string, Route][] = Object.entries(Route).filter(([_, route]) => !ROUTE_HIDDEN[route]);
 
 
 /** @return the navigation bar for the given `current` page. */

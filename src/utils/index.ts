@@ -8,5 +8,6 @@ export type { Props } from './props';
 export type { Snakecase } from './snake-case';
 export type { Spread } from './spread';
 export type { UnionToKeys } from './union-to-keys';
+export type { ValueOf } from './value-of';
 export { equalsIgnoreCase } from './equals-ignore-case';
 export { fieldMaybeIs, type Maybe } from './maybe';

@@ -6,11 +6,11 @@ import { Currency, Location } from '@/schema';
 
 export default function Page(): React.ReactElement {
 	const [OUTER_ORDER, setOuterOrder] = useLocationOrder();
-	const ORDERED_DATA = useOrderedData<Location>('name');
+	const ORDERED_DATA = useOrderedData<Location>('name', { outer: o => o[OUTER_ORDER.column] });
 
 	const [INIT, setInit] = React.useState(false);
 	if (INIT === false) {
-		ORDERED_DATA.data.set?.([
+		ORDERED_DATA.setData?.([
 			{
 				id: '55a81cc7-2d7b-477c-afd7-35e3bf8f9994',
 				name: 'shoenix',
@@ -40,21 +40,15 @@ export default function Page(): React.ReactElement {
 	return <>
 		<CreateLocationForm
 			id='new-location-form'
-			onSubmit={l => ORDERED_DATA.data.set([...ORDERED_DATA.data.get, l])}
+			onSubmit={ORDERED_DATA.appendData}
 		/>
 
 		<LocationTable
 			onReorderOuter={order => {
 				setOuterOrder(order);
-				ORDERED_DATA.data.set(ORDERED_DATA.data.get, { outer: o => o[order.column] });
+				ORDERED_DATA.refresh({ outer: o => o[order.column] });
 			}}
-			orderedData={{
-				...ORDERED_DATA,
-				order: {
-					...ORDERED_DATA.order,
-					set: order => ORDERED_DATA.order.set(order, { outer: o => o[OUTER_ORDER.column] }),
-				},
-			}}
+			orderedData={ORDERED_DATA}
 			outerOrder={OUTER_ORDER}
 		/>
 	</>;

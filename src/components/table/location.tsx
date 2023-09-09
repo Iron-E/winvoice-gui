@@ -23,10 +23,10 @@ export function LocationTable(
 	return (
 		<Table
 			headers={HEADERS}
-			onReorder={props.orderedData.order.set}
-			order={props.orderedData.order.get}
+			onReorder={props.orderedData.setOrder}
+			order={props.orderedData.order}
 		>
-			{props.orderedData.data.get.map(l => (
+			{props.orderedData.data.map(l => (
 				<Row key={l.id}>
 					<Column>{l.name}</Column>
 					<Column>{l.id}</Column>
@@ -35,10 +35,7 @@ export function LocationTable(
 						{l.outer && (
 							<LocationTable
 								onReorderOuter={setOuterOrder}
-								orderedData={{
-									data: { get: [l.outer] },
-									order: { get: props.outerOrder, set: props.onReorderOuter },
-								}}
+								orderedData={new OrderedData(props.outerOrder, props.onReorderOuter, [l.outer])}
 								outerOrder={OUTER_ORDER}
 							/>
 						)}

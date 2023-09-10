@@ -21,7 +21,7 @@ type TableProps<T extends string> = {
 type OnReorder<T extends string> = Required<On<'reorder', [order: TableProps<T>['order']]>>;
 
 /** {@link COLUMN_STYLE} adapted for `<th>`. */
-const HEADING_STYLE = `${COLUMN_STYLE} text-left whitespace-nowrap` as const;
+const HEADING_STYLE = `${COLUMN_STYLE} text-left` as const;
 
 /** The icons which are used to indicate the sort order for a given {@link Table}. */
 function SortIcons<T extends string>(props: { header: T, order: TableProps<T>['order'] }): React.ReactElement {
@@ -51,7 +51,7 @@ export function Table<T extends string>(
 		<div className={`${HOVER} border-2 [main>&]:max-w-full max-w-fit rounded-md \
 border-table-border \
 overflow-y-scroll bg-table-header-bg`}>
-			<table className='max-w-fit [&>tbody>tr:not(:nth-child(1_of_:has(td>div>table)))>td>div>table>thead]:hidden'>
+			<table className='max-w-fit [&>tbody>tr:not(:nth-child(1_of_:has(td>div>table)))>td>div>table>thead]:hidden whitespace-nowrap'>
 				<thead className='border-b-2 border-table-row-border'>
 					<tr>
 						<th className={HEADING_STYLE}>

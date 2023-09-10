@@ -29,6 +29,14 @@ export default function Page(): React.ReactElement {
 					outer: {
 						id: 'dc8ec01c-2c6f-406d-8d07-2b88fe97c1f5',
 						name: 'Earth',
+						outer: {
+							name: 'Milky Way',
+							id: '1c7efea1-b4e2-42ca-b94e-239f02499176',
+							outer: {
+								name: 'asdlkjasldkj',
+								id: 'gdlkjfgkjhfghk',
+							},
+						},
 					},
 				},
 			},

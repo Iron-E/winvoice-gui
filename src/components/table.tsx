@@ -6,6 +6,7 @@ import { COLUMN_STYLE } from './table/column';
 import { FLEX, HOVER } from './css';
 import { Snakecase, equalsIgnoreCase } from '@/utils';
 
+export * from './table/button';
 export * from './table/column';
 export * from './table/location';
 export * from './table/order';

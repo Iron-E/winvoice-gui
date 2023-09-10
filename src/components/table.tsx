@@ -51,7 +51,7 @@ export function Table<T extends string>(
 		<div className={`${HOVER} border-2 [main>&]:max-w-full max-w-fit rounded-md \
 border-table-border \
 overflow-y-scroll bg-table-header-bg`}>
-			<table className='max-w-fit'>
+			<table className='max-w-fit [&>tbody>tr:not(:nth-child(1_of_:has(td>div>table)))>td>div>table>thead]:hidden'>
 				<thead className='border-b-2 border-table-row-border'>
 					<tr>
 						<th className={HEADING_STYLE}>

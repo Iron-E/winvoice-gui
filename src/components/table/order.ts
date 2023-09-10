@@ -73,10 +73,10 @@ export class OrderedData<T> {
 
 			if (d1Value < d2Value || d1Value == undefined && d2Value != undefined) {
 				var value = -1;
-			} else if (d1Value === d2Value) {
-				var value = 0;
-			} else /* d1Value > d2Value */ {
+			} else if (d1Value > d2Value || d1Value != undefined && d2Value == undefined) {
 				var value = 1;
+			} else /* d1Value === d2Value */ {
+				var value = 0;
 			}
 
 			return order.ascending ? value * -1 : value;

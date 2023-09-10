@@ -12,8 +12,6 @@ export function Tr(props: Children & Click & On<'delete'> & On<'edit'>): React.R
 odd:bg-table-row-bg-odd even:bg-table-row-bg-even border-table-row-border`}
 			onClick={props.onClick}
 		>
-			{props.children}
-
 			<Td>
 				<span className={`${FLEX} py-1 justify-between gap-2`}>
 					<TableButton onClick={props.onDelete}>
@@ -25,6 +23,8 @@ odd:bg-table-row-bg-odd even:bg-table-row-bg-even border-table-row-border`}
 					</TableButton>
 				</span>
 			</Td>
+
+			{props.children}
 		</tr>
 	);
 }

@@ -20,6 +20,9 @@ type TableProps<T extends string> = {
 /** An action to take when the {@link Table} is reordered. */
 type OnReorder<T extends string> = Required<On<'reorder', [order: TableProps<T>['order']]>>;
 
+/** {@link COLUMN_STYLE} adapted for `<th>`. */
+const HEADING_STYLE = `${COLUMN_STYLE} text-left whitespace-nowrap` as const;
+
 /** The icons which are used to indicate the sort order for a given {@link Table}. */
 function SortIcons<T extends string>(props: { header: T, order: TableProps<T>['order'] }): React.ReactElement {
 	const SNAKE = props.header.replaceAll(' ', '_');
@@ -51,8 +54,12 @@ overflow-y-scroll bg-table-header-bg`}>
 			<table className='max-w-fit'>
 				<thead className='border-b-2 border-table-row-border'>
 					<tr>
+						<th className={HEADING_STYLE}>
+							Actions
+						</th>
+
 						{props.headers.map(header => (
-							<th className={`${COLUMN_STYLE} text-left whitespace-nowrap`} key={header}>
+							<th className={HEADING_STYLE} key={header}>
 								<button onClick={() => {
 									const HEADER = header.toLowerCase() as Lowercase<T>;
 									props.onReorder({
@@ -67,7 +74,6 @@ overflow-y-scroll bg-table-header-bg`}>
 								</button>
 							</th>
 						))}
-						<th>{/* delete/edit */}</th>
 					</tr>
 				</thead>
 				<tbody>

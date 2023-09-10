@@ -98,5 +98,5 @@ function OuterLocationTable(props: { orderedData: OrderedData<Location> }): Reac
 				</span>
 			)}
 		/>
-	 );
+	);
 }

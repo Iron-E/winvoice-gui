@@ -30,6 +30,9 @@ export function CreateLocationForm<Ret>(
 			const RESULT = await CLIENT.post(showMessage, Route.Location, { args: [CURRENCY, NAME, OUTER] }, isLocation);
 			if (RESULT !== null) {
 				await Promise.resolve(props.onSubmit?.(RESULT));
+				setCurrency(undefined);
+				setName('');
+				setOuter(undefined);
 			}
 		}}>
 			<SelectCurrency

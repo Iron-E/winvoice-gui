@@ -35,6 +35,7 @@ export function useLocationOrder(): ReturnType<typeof useOrder<keyof Location>> 
 
 /** @returns a table which displays {@link Location}s in a customizable manner. */
 function BaseLocationTable(props: {
+	deletable?: boolean,
 	mapOuter: (l: Location) => React.ReactElement,
 	orderedData: OrderedData<Location>,
 }): React.ReactElement {
@@ -51,7 +52,10 @@ function BaseLocationTable(props: {
 				<Tr
 					key={l.id}
 					onClick={() => { throw new Error('Unimplemented: select row') }}
-					onDelete={async () => await props.orderedData.delete(CLIENT, showMessage, Route.Location, [l])}
+					onDelete={props.deletable === true
+						? async () => await props.orderedData.delete(CLIENT, showMessage, Route.Location, [l])
+						: undefined
+					}
 					onEdit={() => { throw new Error('Unimplemented: edit') }}
 				>
 					<Td>{l.name}</Td>
@@ -76,6 +80,7 @@ export function LocationTable(
 ): React.ReactElement {
 	return (
 		<BaseLocationTable
+			deletable={true}
 			orderedData={props.orderedData}
 			mapOuter={o => (
 				<OuterLocationTable
@@ -111,11 +116,10 @@ function OuterLocationTable(props: { orderedData: OrderedData<Location> }): Reac
 			mapOuter={o => (
 				<span className={`${FLEX} justify-between gap-2`}>
 					{o.name}
-					{o.outer != null && (
-						<TableButton onClick={() => setModalVisible(o.id)}>
-							<EllipsisHorizontalCircleIcon className={ICON} /> Show more
-						</TableButton>
-					)}
+					<TableButton onClick={() => setModalVisible(o.id)}>
+						<EllipsisHorizontalCircleIcon className={ICON} /> Show more
+					</TableButton>
+
 
 					{MODAL_VISIBLE === o.id && (
 						<Modal onClose={() => setModalVisible(null)}>

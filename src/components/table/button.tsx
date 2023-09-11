@@ -6,10 +6,10 @@ export function TableButton(props: Children & Click): React.ReactElement {
 	return (
 		<button
 			className={`${PAD} ${HOVER} bg-table-button-bg hover:bg-table-button-bg-hover whitespace-nowrap`}
-			onClick={props.onClick && (e => {
+			onClick={props.onClick && (async e => {
 				e.preventDefault();
-				// @ts-ignore
-				props.onClick(e)
+				// @ts-ignore: not null because `props.onclick &&` above
+				await Promise.resolve(props.onClick(e));
 			})}
 		>
 			{props.children}

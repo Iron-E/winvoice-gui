@@ -1,11 +1,16 @@
+'use client';
+
 import * as hooks from '@/hooks';
 import React from 'react';
 import type { On } from '../props-with';
+import { Client } from '../api';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/20/solid';
 import { FLEX, ICON } from '../css';
+import { Modal } from '../modal';
 import { OrderedData, Table, TableButton, Td, Tr, type Valuators, useOrder } from '../table';
+import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { type Location } from '@/schema'
-import { Modal } from '..';
+import { Route } from '@/api';
 
 /** the headers of the {@link LocationTable}. */
 const HEADERS = ['Name', 'ID', 'Currency', 'Outer'] as const;
@@ -29,9 +34,13 @@ export function useLocationOrder(): ReturnType<typeof useOrder<keyof Location>> 
 }
 
 /** @returns a table which displays {@link Location}s in a customizable manner. */
-function BaseLocationTable(
-	props: { mapOuter: (l: Location) => React.ReactElement, orderedData: OrderedData<Location> },
-): React.ReactElement {
+function BaseLocationTable(props: {
+	mapOuter: (l: Location) => React.ReactElement,
+	orderedData: OrderedData<Location>,
+}): React.ReactElement {
+	const CLIENT = React.useContext(Client.CONTEXT);
+	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
+
 	return (
 		<Table
 			headers={HEADERS}
@@ -39,7 +48,12 @@ function BaseLocationTable(
 			order={props.orderedData.order}
 		>
 			{props.orderedData.data.map(l => (
-				<Tr key={l.id}>
+				<Tr
+					key={l.id}
+					onClick={() => { throw new Error('Unimplemented: select row') }}
+					onDelete={async () => await props.orderedData.delete(CLIENT, showMessage, Route.Location, [l])}
+					onEdit={() => { throw new Error('Unimplemented: edit') }}
+				>
 					<Td>{l.name}</Td>
 					<Td>{l.id}</Td>
 					<Td>{l.currency}</Td>

@@ -12,7 +12,7 @@ export default function Page(): React.ReactElement {
 		<CreateLocationForm
 			id='new-location-form'
 			// WARN: passing function (i.e. not using closure) changes 'this' context
-			onSubmit={l => ORDERED_DATA.appendData(l)}
+			onSubmit={l => ORDERED_DATA.append(l)}
 		/>
 
 		{ORDERED_DATA.data.length > 0 && (

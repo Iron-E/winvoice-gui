@@ -1,5 +1,8 @@
-import type { Fn, ValueOf } from "@/utils";
 import React from "react";
+import type { Fn, ValueOf } from "@/utils";
+import type { ShowMessage } from "../messages";
+import { Client } from "../api";
+import { Route } from "@/api";
 
 /**
  * How {@link Order} should be valuated when a given {@link Order.column} leads to an ambiguous ordering.
@@ -114,13 +117,34 @@ export class OrderedData<T> {
 	}
 
 	/** Append `value` to the {@link OrderedData.data | existing data}. */
-	public appendData(this: OrderedData<T>, value: T): void {
+	public append(this: OrderedData<T>, value: T): void {
 		this.setData?.([...this.data, value]);
+	}
+
+	/**
+	 * Similar to {@link OrderedData.remove}, but also makes an {@link Client.delete | API request} to permanently remove
+	 * the data.
+	 */
+	public async delete(
+		this: OrderedData<T>,
+		client: Readonly<Client>,
+		showMessage: ShowMessage,
+		route: Route,
+		values: readonly T[],
+	): Promise<void> {
+		if (await client.delete(showMessage, route, { entities: values })) {
+			this.remove(values);
+		}
 	}
 
 	/** Reruns the previous {@link reorder} operation, except with different `valuators`. */
 	public refresh(this: OrderedData<T>, valuators: Valuators<NonNullable<T>>): void {
 		this.setData?.(this.data, valuators);
+	}
+
+	/** Filter out the `value` from the {@link OrderedData.data}. */
+	public remove(this: OrderedData<T>, values: readonly T[]): void {
+		this.setData?.(this.data.filter(d => values.some(v => v !== d)));
 	}
 }
 

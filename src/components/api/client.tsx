@@ -92,17 +92,17 @@ export class Client {
 	): Promise<Opt<ResponseBody | UnauthenticatedError>> {
 		try {
 			const RESULT: Readonly<Response> = await fetch(`${this.address}${route}`, newRequest(requestParams));
-			if (RESULT.ok) {
-				try {
-					const OBJECT = await RESULT.json() as unknown;
-					if (checkSchema(OBJECT)) {
-						return OBJECT;
-					}
-				} catch {
-					// NOTE: `!checkSchema` and `SyntaxError` logic are the same
-				}
-			} else if (RESULT.status === 401) {
+			if (RESULT.status === 401) {
 				return (this as Client).unauthenticated();
+			}
+
+			try {
+				const OBJECT = await RESULT.json() as unknown;
+				if (checkSchema(OBJECT)) {
+					return OBJECT;
+				}
+			} catch {
+				// NOTE: `!checkSchema` and `SyntaxError` logic are the same
 			}
 
 			showMessage('error', (this as Client).unexpectedResponse().message);
@@ -132,7 +132,7 @@ export class Client {
 	public async delete<RequestBodyInner>(
 		this: Readonly<Client>,
 		showMessage: ShowMessage,
-		route: UserInputRoute,
+		route: Route,
 		body: request.Delete<RequestBodyInner>,
 	): RequestSuccess {
 		return await (this as Client).caughtRequest(showMessage, route, { method: 'DELETE', body }, response.isDelete) !== null;

@@ -3,10 +3,10 @@ import { Code, isCode } from './status/code';
 export { Code, isCode };
 
 /** Same as {@link https://github.com/Iron-E/winvoice-server | `api::Status`}. */
-export type Status = {
+export type Status = Readonly<{
 	code: Code,
 	message: string,
-};
+}>;
 
 /**
  * @param json the value to check.

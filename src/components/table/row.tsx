@@ -5,12 +5,16 @@ import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { TableButton } from './button';
 
 /** @return a `<tr>` with the standard winvoice appearance. */
-export function Tr(props: Children & Click & On<'delete'> & On<'edit'>): React.ReactElement {
+export function Tr(props: Children & Click & Required<On<'delete'> & On<'edit'>>): React.ReactElement {
 	return (
 		<tr
 			className={`${HOVER} [&:not(:last-child)]:border-b-[1px] \
 odd:bg-table-row-bg-odd even:bg-table-row-bg-even border-table-row-border`}
-			onClick={props.onClick}
+			onClick={props.onClick && (e => {
+				e.stopPropagation();
+				// @ts-ignore: not null because `props.onclick &&` above
+				props.onClick(e);
+			})}
 		>
 			<Td>
 				<span className={`${FLEX} py-1 justify-between gap-2`}>

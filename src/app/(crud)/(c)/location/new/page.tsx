@@ -11,7 +11,8 @@ export default function Page(): React.ReactElement {
 	return <>
 		<CreateLocationForm
 			id='new-location-form'
-			onSubmit={ORDERED_DATA.appendData}
+			// WARN: passing function (i.e. not using closure) changes 'this' context
+			onSubmit={l => ORDERED_DATA.appendData(l)}
 		/>
 
 		<LocationTable

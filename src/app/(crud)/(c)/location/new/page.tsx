@@ -15,13 +15,15 @@ export default function Page(): React.ReactElement {
 			onSubmit={l => ORDERED_DATA.appendData(l)}
 		/>
 
-		<LocationTable
-			onReorderOuter={order => {
-				setOuterOrder(order);
-				ORDERED_DATA.refresh(locationValuators(order.column));
-			}}
-			orderedData={ORDERED_DATA}
-			outerOrder={OUTER_ORDER}
-		/>
+		{ORDERED_DATA.data.length > 0 && (
+			<LocationTable
+				onReorderOuter={order => {
+					setOuterOrder(order);
+					ORDERED_DATA.refresh(locationValuators(order.column));
+				}}
+				orderedData={ORDERED_DATA}
+				outerOrder={OUTER_ORDER}
+			/>
+		)}
 	</>;
 }

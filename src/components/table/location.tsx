@@ -3,12 +3,25 @@ import React from 'react';
 import type { On } from '../props-with';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/20/solid';
 import { FLEX, ICON } from '../css';
-import { OrderedData, Table, TableButton, Td, Tr, useOrder } from '../table';
+import { OrderedData, Table, TableButton, Td, Tr, type Valuators, useOrder } from '../table';
 import { type Location } from '@/schema'
 import { Modal } from '..';
 
 /** the headers of the {@link LocationTable}. */
 const HEADERS = ['Name', 'ID', 'Currency', 'Outer'] as const;
+
+/**
+ * @param outerOrder the
+ * @returns {@link Valuators} for a {@link Location}
+ */
+export function locationValuators(outerKey: keyof Location): Valuators<Location> {
+	return {
+		outer: {
+			key: outerKey,
+			valuators: { outer: { key: 'name' } },
+		}
+	};
+}
 
 /** @return {@link useOrder} specialized for a {@link Location}. */
 export function useLocationOrder(): ReturnType<typeof useOrder<keyof Location>> {

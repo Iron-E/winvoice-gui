@@ -2,10 +2,25 @@ import type { Fn, ValueOf } from "@/utils";
 import React from "react";
 
 /**
- * Valuators for the {@link useOrderedData}.
- * For example, this enforces that for some type `{a: {b: string, c: number}}`, `a` must be mapped to either `b` or `c`.
+ * How {@link Order} should be valuated when a given {@link Order.column} leads to an ambiguous ordering.
+ *
+ * @example
+ * ```typescript
+ * // Given the following type and order…
+ * type T = {a: {b: string, c: number}, d: boolean};
+ * const ORDER: Order<T> = { column: 'a', ascending: true };
+ *
+ * // …How can we compare `T.a`? Even if one is 'greater' than the other, they will both be treated as equal by JS.
+ * // Answer: disambiguate by using a Valuator.
+ *
+ * // This valuator says that when the `Order.column` is `a`, it should use the `b` key to determine the order.
+ * const VALUATORS: Valuators<T> = { a: { key: 'b' } };
+ *
+ * // If `a.b` also contained objects, we could valuate further:
+ * const VALUATORS: Valuators<T> = { a: { key: 'b', valuators: { foo: { key: 'bar' } } } };
+ * ```
  */
-type Valuators<T> = {
+export type Valuators<T> = {
 	[key in keyof T]?: {
 		key: keyof NonNullable<T[key]>,
 		valuators?: Valuators<NonNullable<T[key]>>,

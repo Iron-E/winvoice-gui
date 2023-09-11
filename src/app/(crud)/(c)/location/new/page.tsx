@@ -1,12 +1,12 @@
 'use client';
 
 import React from 'react';
-import { CreateLocationForm, LocationTable, useLocationOrder, useOrderedData } from '@/components';
+import { CreateLocationForm, LocationTable, locationValuators, useLocationOrder, useOrderedData } from '@/components';
 import { Currency, Location } from '@/schema';
 
 export default function Page(): React.ReactElement {
 	const [OUTER_ORDER, setOuterOrder] = useLocationOrder();
-	const ORDERED_DATA = useOrderedData<Location>('name', { outer: { key: OUTER_ORDER.column } });
+	const ORDERED_DATA = useOrderedData<Location>('name', locationValuators(OUTER_ORDER.column));
 
 	const [INIT, setInit] = React.useState(false);
 	if (INIT === false) {
@@ -53,7 +53,7 @@ export default function Page(): React.ReactElement {
 		<LocationTable
 			onReorderOuter={order => {
 				setOuterOrder(order);
-				ORDERED_DATA.refresh({ outer: { key: order.column } });
+				ORDERED_DATA.refresh(locationValuators(order.column));
 			}}
 			orderedData={ORDERED_DATA}
 			outerOrder={OUTER_ORDER}

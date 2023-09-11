@@ -8,8 +8,7 @@ export function TableButton(props: Children & Click): React.ReactElement {
 			className={`${PAD} ${HOVER} bg-table-button-bg hover:bg-table-button-bg-hover whitespace-nowrap`}
 			onClick={props.onClick && (async e => {
 				e.preventDefault();
-				// @ts-ignore: not null because `props.onclick &&` above
-				await Promise.resolve(props.onClick(e));
+				await Promise.resolve(props.onClick!(e));
 			})}
 		>
 			{props.children}

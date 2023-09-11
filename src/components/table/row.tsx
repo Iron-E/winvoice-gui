@@ -12,8 +12,7 @@ export function Tr(props: Children & Click & On<'delete'> & On<'edit'>): React.R
 odd:bg-table-row-bg-odd even:bg-table-row-bg-even border-table-row-border`}
 			onClick={props.onClick && (e => {
 				e.stopPropagation();
-				// @ts-ignore: not null because `props.onclick &&` above
-				props.onClick(e);
+				props.onClick!(e);
 			})}
 		>
 			<Td>

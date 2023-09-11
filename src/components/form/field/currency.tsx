@@ -17,8 +17,7 @@ export function SelectCurrency(props: Omit<SelectProps<Maybe<Currency>>, 'childr
 		<Select
 			id={props.id}
 			label={props.label ?? 'Currency'}
-			// @ts-ignore: onChange can safely be accept a `Currency` param because all of the `values` are currency values
-			onChange={props.onChange}
+			onChange={props.onChange as (currency: string) => void} // NOTE: safe upcast, the `OPTIONS` are all Currencies
 			required={props.required}
 			title={props.title}
 			value={props.value}

@@ -2,7 +2,7 @@
 
 import * as hooks from '@/hooks';
 import React from 'react';
-import type { Id, On } from '../props-with';
+import type { On } from '../props-with';
 import { Client } from '../api';
 import { ConfirmModal, Modal } from '../modal';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/20/solid';
@@ -11,7 +11,7 @@ import { OrderedData, Table, TableButton, Td, Tr, type Valuators, useOrder, RowA
 import { Props } from '@/utils';
 import { Route } from '@/api';
 import { SHOW_MESSAGE_CONTEXT } from '../messages';
-import { type Location } from '@/schema'
+import { Id, type Location } from '@/schema'
 import { LocationForm } from '../form';
 
 /** the headers of the {@link LocationTable}. */
@@ -57,6 +57,7 @@ function BaseLocationTable(props:
 		>
 			{props.orderedData.data.map(l => (
 				<Tr
+					selected={l.id === props.selectedRow}
 					key={l.id}
 					onClick={props.onRowSelect && (() => props.onRowSelect!(l))}
 					onDelete={props.deletable === true ? () => setModalVisible({ action: 'delete', data: l }) : undefined}
@@ -104,19 +105,21 @@ type LocationOrder = ReturnType<typeof useLocationOrder>;
 
 /** @returns a {@link Table} that displays a {@link Location} and its outer location. */
 export function LocationTable(props:
-	& Pick<Props<typeof BaseLocationTable>, 'onRowSelect'>
+	& Omit<Props<typeof BaseLocationTable>, 'deletable' | 'mapOuter'>
 	& Required<On<'reorderOuter', Parameters<LocationOrder[1]>>>
-	& { outerOrder: LocationOrder[0], orderedData: OrderedData<Location> },
+	& { outerOrder: LocationOrder[0] },
 ): React.ReactElement {
 	return (
 		<BaseLocationTable
 			deletable={true}
+			onRowSelect={props.onRowSelect}
 			orderedData={props.orderedData}
 			mapOuter={o => (
 				<OuterLocationTable
 					orderedData={new OrderedData(props.outerOrder, props.onReorderOuter, [o])}
 				/>
 			)}
+			selectedRow={props.selectedRow}
 		/>
 	);
 }

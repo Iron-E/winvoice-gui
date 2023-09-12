@@ -11,11 +11,12 @@ export type RowAction<T> = {
 };
 
 /** @returns a `<tr>` with the standard winvoice appearance. */
-export function Tr(props: Children & Click & On<'delete'> & On<'edit'>): React.ReactElement {
+export function Tr(props: Children & Click & On<'delete'> & On<'edit'> & { selected?: boolean }): React.ReactElement {
 	return (
 		<tr
 			className={`${HOVER} [&:not(:last-child)]:border-b-[1px] \
-odd:bg-table-row-bg-odd even:bg-table-row-bg-even border-table-row-border`}
+${props.selected ? 'bg-gradient-radial from-table-row-bg-even from-95% to-table-row-bg-selected' : 'odd:bg-table-row-bg-odd even:bg-table-row-bg-even'} \
+border-table-row-border gradient-conic`}
 			onClick={props.onClick && (e => {
 				e.stopPropagation();
 				props.onClick!(e);

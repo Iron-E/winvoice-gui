@@ -12,7 +12,7 @@ module.exports = {
 		extend: {
 			backgroundImage: {
 				'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+				'gradient-radial': 'radial-gradient(circle farthest-side at 50% 50%, var(--tw-gradient-stops))',
 			},
 
 			colors: {
@@ -103,6 +103,7 @@ module.exports = {
 						border: COLORS.black,
 						'bg-odd': COLORS.gray[200],
 						'bg-even': COLORS.gray[300],
+						'bg-selected': COLORS.sky[300],
 					},
 				},
 
@@ -110,6 +111,10 @@ module.exports = {
 				x: {
 					'bg-hover': COLORS.rose[400],
 				},
+			},
+			content: {
+				/** an empty string*/
+				empty: '',
 			},
 		},
 	},

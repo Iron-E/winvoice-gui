@@ -14,8 +14,9 @@ import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { SPACE } from '../css';
 
 /** @returns a {@link React.JSX.IntrinsicElements.form | form} which will create a new {@link Location} on submit. */
-export function LocationForm<Ret>(
-	props: On<'submit', [l: Location], Ret> & Pick<Props<typeof SelectCurrency>, 'id'>,
+export function LocationForm<Ret>(props:
+	& On<'submit', [l: Location], Ret>
+	& Pick<Props<typeof SelectCurrency>, 'id'>,
 ): React.ReactElement {
 	const CLIENT = React.useContext(Client.CONTEXT);
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);

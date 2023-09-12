@@ -44,8 +44,10 @@ function SortIcons<T extends string>(props: { header: T, order: TableProps<T>['o
 }
 
 /** @returns a `<table>` with the standard winvoice appearance. */
-export function Table<T extends string>(
-	props: Children & OnReorder<T> & TableProps<T>,
+export function Table<T extends string>(props:
+	& Children
+	& OnReorder<T>
+	& TableProps<T>,
 ): React.ReactElement {
 	return (
 		<div className={`${HOVER} border-2 [main>&]:max-w-full max-w-fit rounded-md \

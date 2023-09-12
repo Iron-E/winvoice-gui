@@ -34,8 +34,9 @@ border-form-field-border hover:border-form-field-border-hover` as const;
 type InputProps = React.JSX.IntrinsicElements['input'];
 
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
-export function Input(
-	props: FieldProps<HTMLInputElement, 'input'> & { type?: InputProps['type'] },
+export function Input(props:
+	& FieldProps<HTMLInputElement, 'input'>
+	& { type?: InputProps['type'] },
 ): React.ReactElement {
 	return <>
 		<span className={`${FLEX_BETWEEN} gap-5`}>

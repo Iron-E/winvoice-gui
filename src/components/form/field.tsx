@@ -33,7 +33,7 @@ border-form-field-border hover:border-form-field-border-hover` as const;
 
 type InputProps = React.JSX.IntrinsicElements['input'];
 
-/** @return an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
+/** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
 export function Input(
 	props: FieldProps<HTMLInputElement, 'input'> & { type?: InputProps['type'] },
 ): React.ReactElement {
@@ -62,7 +62,7 @@ export function Input(
 	</>;
 }
 
-/** @return an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
+/** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
 export function Select(props: FieldProps<HTMLSelectElement, 'select'>): React.ReactElement {
 	return <>
 		<label className='ml-1 justify-end' htmlFor={props.id}>

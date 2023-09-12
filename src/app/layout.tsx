@@ -12,7 +12,7 @@ export const metadata: Readonly<Metadata> = {
 	description: 'A graphical manager for invoices',
 };
 
-/** @return the layout used for all pages in the application. */
+/** @returns the layout used for all pages in the application. */
 export default function RootLayout(props: w.Children): React.ReactElement {
 	return (
 		<html lang='en'>

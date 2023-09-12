@@ -41,7 +41,7 @@ export type Order<T> = Readonly<{
 
 /**
  * @param defaultColumn the {@link Order.column | column} that is used to sort the data by default.
- * @return {@link Order<T>} (w/ {@link Order.ascending | `ascending === false`}) as {@link React.useState | state}.
+ * @returns {@link Order<T>} (w/ {@link Order.ascending | `ascending === false`}) as {@link React.useState | state}.
  */
 export function useOrder<T>(defaultColumn: T): [Order<T>, Fn<[order: Order<T>]>] {
 	return React.useState<Order<T>>({ ascending: false, column: defaultColumn });
@@ -81,7 +81,7 @@ export class OrderedData<T> {
 	 * @param data what to sort
 	 * @param order what to sort by. `undefined` values are treated as less than all others.
 	 * @param valuators what to sort by when the `order` indicates that the {@link Order.column} is an {@link object}.
-	 * @return the `data` sorted according to the `order`.
+	 * @returns the `data` sorted according to the `order`.
 	 */
 	private static reorder<T>(data: readonly T[], order: Order<keyof NonNullable<T>>, valuators?: Valuators<NonNullable<T>>): readonly T[] {
 		const VALUATORS = { key: order.column, valuators };
@@ -101,7 +101,7 @@ export class OrderedData<T> {
 		});
 	}
 
-	/** @return the value `obj[key]` based on the {@link Valuators} provided. */
+	/** @returns the value `obj[key]` based on the {@link Valuators} provided. */
 	private static valueOf<T>(
 		value1: ValueOf<T>,
 		value2: ValueOf<T>,
@@ -151,7 +151,7 @@ export class OrderedData<T> {
 /**
  * A hook that stores some data and its order in {@link React.useState | state}.
  * @param defaultColumn the column which is used to sort the rows by default.
- * @return two sets of {@link React.useState}'s return: the first for the data, the second for the {@link Order}.
+ * @returns two sets of {@link React.useState}'s return: the first for the data, the second for the {@link Order}.
  */
 export function useOrderedData<T>(defaultColumn: keyof T, defaultValuators?: Valuators<NonNullable<T>>): OrderedData<T> {
 	const [DATA, setData] = React.useState<readonly T[]>([]);

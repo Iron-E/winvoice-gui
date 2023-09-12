@@ -59,7 +59,7 @@ export type ShowMessage = (level: Level, text: string) => void;
 /** The context used to provide a message creator. */
 export const SHOW_MESSAGE_CONTEXT: Readonly<React.Context<ShowMessage>> = React.createContext<ShowMessage>(() => { });
 
-/** @return a {@link Message} as a */
+/** @returns a {@link Message} as a */
 function Message_(props: Omit<Readonly<Message>, 'key'> & Required<On<'hide'>>): React.ReactElement {
 	const DATA = LEVELS[props.level];
 	return (
@@ -75,7 +75,7 @@ function Message_(props: Omit<Readonly<Message>, 'key'> & Required<On<'hide'>>):
 	);
 }
 
-/** @return an {@link React.ReactElement | element} which floats messages at the bottom of the screen, and a function to show new messages. */
+/** @returns an {@link React.ReactElement | element} which floats messages at the bottom of the screen, and a function to show new messages. */
 export function Messages(props: Class & Required<On<'hideMessage', [key: string]>> & Readonly<{ messages: Message[] }>): React.ReactElement {
 	return (
 		<div className={props.className}>

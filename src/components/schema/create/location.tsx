@@ -13,7 +13,7 @@ import { SelectCurrency } from '../../form';
 import { SHOW_MESSAGE_CONTEXT } from '../../messages';
 import { SPACE } from '../../css';
 
-/** @return a {@link React.JSX.IntrinsicElements.form | form} which will create a new {@link Location} on submit. */
+/** @returns a {@link React.JSX.IntrinsicElements.form | form} which will create a new {@link Location} on submit. */
 export function CreateLocationForm<Ret>(
 	props: On<'submit', [l: Location], Ret> & Pick<Props<typeof SelectCurrency>, 'id'>,
 ): React.ReactElement {

@@ -4,7 +4,7 @@ import { FLEX, HOVER, ICON } from "../css";
 import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { TableButton } from './button';
 
-/** @return a `<tr>` with the standard winvoice appearance. */
+/** @returns a `<tr>` with the standard winvoice appearance. */
 export function Tr(props: Children & Click & On<'delete'> & On<'edit'>): React.ReactElement {
 	return (
 		<tr

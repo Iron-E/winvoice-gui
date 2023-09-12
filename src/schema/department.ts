@@ -8,7 +8,7 @@ export type Department = {
 
 /**
  * @param json the value to check.
- * @return whether the `json` is an instance of {@link Department}.
+ * @returns whether the `json` is an instance of {@link Department}.
  */
 export function isDepartment(json: unknown): json is Department {
 	return json instanceof Object && (

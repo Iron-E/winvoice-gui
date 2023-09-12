@@ -11,7 +11,7 @@ const OPTIONS: readonly React.ReactElement[] = [
 	))
 ];
 
-/** @return a {@link React.JSX.IntrinsicElements.select | select} to determine a given {@link Currency} */
+/** @returns a {@link React.JSX.IntrinsicElements.select | select} to determine a given {@link Currency} */
 export function SelectCurrency(props: Omit<SelectProps<Maybe<Currency>>, 'children'>): React.ReactElement {
 	return (
 		<Select

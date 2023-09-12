@@ -27,7 +27,7 @@ const HEADING_STYLE = `${COLUMN_STYLE} text-left` as const;
 function SortIcons<T extends string>(props: { header: T, order: TableProps<T>['order'] }): React.ReactElement {
 	const SNAKE = props.header.replaceAll(' ', '_');
 
-	/** @return the style for the sort icon in each header. */
+	/** @returns the style for the sort icon in each header. */
 	function sortIconStyle(ascending: boolean): string {
 		return ((equalsIgnoreCase(SNAKE, props.order.column) && props.order.ascending === ascending)
 			? 'text-table-header-button-fg-active'
@@ -43,7 +43,7 @@ function SortIcons<T extends string>(props: { header: T, order: TableProps<T>['o
 	);
 }
 
-/** @return a `<table>` with the standard winvoice appearance. */
+/** @returns a `<table>` with the standard winvoice appearance. */
 export function Table<T extends string>(
 	props: Children & OnReorder<T> & TableProps<T>,
 ): React.ReactElement {

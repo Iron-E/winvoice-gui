@@ -1,7 +1,7 @@
 import type { Children, Click } from "../props-with";
 import { HOVER, PAD } from "../css";
 
-/** @return a `<button>` with the standard winvoice appearance. */
+/** @returns a `<button>` with the standard winvoice appearance. */
 export function TableButton(props: Children & Click): React.ReactElement {
 	return (
 		<button

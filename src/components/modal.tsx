@@ -11,7 +11,7 @@ type OnClose = Required<On<'close', [value: null]>>;
 /** properties for a {@link Modal}. */
 export type Props = Children & OnClose;
 
-/** @return a div which will show above all other content on the page. */
+/** @returns a div which will show above all other content on the page. */
 export function Modal(props: Props): React.ReactElement {
 	function onClose(): void {
 		props.onClose(null);

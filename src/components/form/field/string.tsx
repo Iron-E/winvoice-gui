@@ -1,7 +1,7 @@
 import type { InputProps } from './props';
 import { Input } from '../../form';
 
-/** @return a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
+/** @returns a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
 export function InputString(props: InputProps<string>): React.ReactElement {
 	return (
 		<Input

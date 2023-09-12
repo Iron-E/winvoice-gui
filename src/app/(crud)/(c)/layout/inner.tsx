@@ -4,7 +4,7 @@ import * as navigation from 'next/navigation';
 
 const SUFFIX = '/new'.length;
 
-/** @return a part of the `CreateLayout` which must be rendered on the client-side. */
+/** @returns a part of the `CreateLayout` which must be rendered on the client-side. */
 export function InnerCreateLayout(): React.ReactElement {
 	const URL = navigation.usePathname();
 	const ROUTE = URL.substring(1, URL.length - SUFFIX);

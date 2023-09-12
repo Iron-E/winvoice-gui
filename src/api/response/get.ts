@@ -8,7 +8,7 @@ export type Get<T = unknown> = {
 
 /**
  * @param json the value to check.
- * @return whether the `json` is an instance of {@link Get}.
+ * @returns whether the `json` is an instance of {@link Get}.
  */
 export function isGet(json: unknown): json is Get {
 	return json instanceof Object && (

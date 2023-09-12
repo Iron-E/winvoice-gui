@@ -6,7 +6,7 @@ export type Id = string;
 
 /**
  * @param json the value to check.
- * @return whether the `json` is an instance of {@link Id}.
+ * @returns whether the `json` is an instance of {@link Id}.
  */
 export function isId(json: unknown): json is Id {
 	return typeof json === 'string';

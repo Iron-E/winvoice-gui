@@ -6,7 +6,7 @@ export type Contact = ContactKind & { label: string };
 
 /**
  * @param json the value to check.
- * @return whether the `json` is an instance of {@link Contact}.
+ * @returns whether the `json` is an instance of {@link Contact}.
  */
 export function isContact(json: unknown): json is Contact {
 	return isContactKind(json) && (

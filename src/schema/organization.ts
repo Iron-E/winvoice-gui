@@ -10,7 +10,7 @@ export type Organization = {
 
 /**
  * @param json the value to check.
- * @return whether the `json` is an instance of {@link Organization}.
+ * @returns whether the `json` is an instance of {@link Organization}.
  */
 export function isOrganization(json: unknown): json is Organization {
 	return json instanceof Object && (

@@ -12,7 +12,7 @@ export type Employee = {
 
 /**
  * @param json the value to check.
- * @return whether the `json` is an instance of {@link Employee}.
+ * @returns whether the `json` is an instance of {@link Employee}.
  */
 export function isEmployee(json: unknown): json is Employee {
 	return json instanceof Object && (

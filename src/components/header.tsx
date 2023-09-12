@@ -30,7 +30,7 @@ shadow-lg rounded-b-2xl'
 
 /**
  * @param children additional elements shown inside the header.
- * @return the header for the given `current` page.
+ * @returns the header for the given `current` page.
  */
 export function Header(props: Children): React.ReactElement {
 	const [DROPDOWN_VISIBLE, setDropdownVisible] = React.useState(false);

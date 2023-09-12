@@ -15,7 +15,7 @@ import {
 import React from 'react';
 import type { JsonFields } from '@/utils';
 
-/** @return a guidance message to help users get started using winvoice. */
+/** @returns a guidance message to help users get started using winvoice. */
 function Guidance(props: w.Children): React.ReactElement {
 	return (<p>Please <b>{props.children}</b> to continue.</p>);
 }
@@ -23,7 +23,7 @@ function Guidance(props: w.Children): React.ReactElement {
 /**
  * A provider for the {@link Context} that wraps around a page.
  * @param children additional elements shown inside this one.
- * @return the API provider for an entire page of the application.
+ * @returns the API provider for an entire page of the application.
  */
 export function InnerRootLayout(props: w.Children): React.ReactElement {
 	const [CLIENT, setClient] = React.useState<Readonly<Client>>();

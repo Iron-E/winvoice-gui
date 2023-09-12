@@ -20,7 +20,7 @@ export enum Code {
 
 /**
  * @param json the value to check.
- * @return whether the `json` is an instance of {@link Code}.
+ * @returns whether the `json` is an instance of {@link Code}.
  */
 export function isCode(json: unknown): json is Code {
 	return typeof json === 'number' && Code[json] != undefined;

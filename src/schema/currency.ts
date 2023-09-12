@@ -45,7 +45,7 @@ const CURRENCY_VALUES: Readonly<Record<string, true>> = Object.values(Currency).
 
 /**
  * @param json the value to check.
- * @return whether the `json` is an instance of {@link Currency}.
+ * @returns whether the `json` is an instance of {@link Currency}.
  */
 export function isCurrency(json: unknown): json is Currency {
 	return typeof json === 'string' && CURRENCY_VALUES[json] != undefined;

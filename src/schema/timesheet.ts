@@ -17,7 +17,7 @@ export type Timesheet = {
 
 /**
  * @param json the value to check.
- * @return whether the `json` is an instance of {@link Timesheet}.
+ * @returns whether the `json` is an instance of {@link Timesheet}.
  */
 export function isTimesheet(json: unknown): json is Timesheet {
 	return json instanceof Object && (

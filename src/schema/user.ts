@@ -15,7 +15,7 @@ export type User = {
 
 /**
  * @param json the value to check.
- * @return whether the `json` is an instance of {@link User}.
+ * @returns whether the `json` is an instance of {@link User}.
  */
 export function isUser(json: unknown): json is User {
 	return json instanceof Object && (

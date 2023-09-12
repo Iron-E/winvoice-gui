@@ -8,7 +8,7 @@ export type InvoiceDate = {
 
 /**
  * @param json the value to check.
- * @return whether the `json` is an instance of {@link InvoiceDate}.
+ * @returns whether the `json` is an instance of {@link InvoiceDate}.
  */
 export function isInvoiceDate(json: unknown): json is InvoiceDate {
 	return json instanceof Object && (

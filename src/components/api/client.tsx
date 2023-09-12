@@ -48,7 +48,7 @@ export class Client {
 	 * @param route the {@link Route} to send the request to.
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @param checkSchema ensure that the response body deserializes to
-	 * @return the response body, or {@link null} if an error was handled.
+	 * @returns the response body, or {@link null} if an error was handled.
 	 */
 	private async caughtRequest<RequestBodyInner = never, ResponseBody extends { status: Status } = { status: Status }>(
 		this: Readonly<Client>,
@@ -81,7 +81,7 @@ export class Client {
 	 * @param route the {@link Route} to send the request to.
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @param checkSchema ensure that the response body deserializes to
-	 * @return the response body, {@link null} if an error {@link fetch}ing was handled, or an error if one was unable to be handled in a manner compatible with all possible request purposes.
+	 * @returns the response body, {@link null} if an error {@link fetch}ing was handled, or an error if one was unable to be handled in a manner compatible with all possible request purposes.
 	 */
 	private async request<RequestBodyInner = never, ResponseBody extends {} = {}>(
 		this: Readonly<Client>,
@@ -127,7 +127,7 @@ export class Client {
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @param route the {@link Route} to send the request to.
 	 * @param body the delete request.
-	 * @return whether the request succeeded.
+	 * @returns whether the request succeeded.
 	 */
 	public async delete<RequestBodyInner>(
 		this: Readonly<Client>,
@@ -142,7 +142,7 @@ export class Client {
 	 * Attempt to login to the {@link Client.address} using the defined {@link Client.username} and `password`.
 	 * @param password the user's password.
 	 * @param showMessage a function that will be used to notify a user of errors.
-	 * @return whether the request succeeded.
+	 * @returns whether the request succeeded.
 	 */
 	public async export(this: Readonly<Client>, showMessage: ShowMessage, body: request.Export): OptBody<response.Export['exported']> {
 		const RESULT = await (this as Client).caughtRequest(showMessage, Route.Export, { method: 'GET', body }, response.isExport);
@@ -153,7 +153,7 @@ export class Client {
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @param route the {@link Route} to send the request to.
 	 * @param body the get request.
-	 * @return whether the request succeeded.
+	 * @returns whether the request succeeded.
 	 */
 	public async get<RequestBodyInner, ResponseBody>(
 		this: Readonly<Client>,
@@ -177,7 +177,7 @@ export class Client {
 	 * Attempt to login to the {@link Client.address} using the defined {@link Client.username} and `password`.
 	 * @param password the user's password.
 	 * @param showMessage a function that will be used to notify a user of errors.
-	 * @return whether the request succeeded.
+	 * @returns whether the request succeeded.
 	 */
 	public async login(this: Readonly<Client>, showMessage: ShowMessage, password: string): RequestSuccess {
 		return await (this as Client).caughtRequest(
@@ -191,7 +191,7 @@ export class Client {
 	/**
 	 * Make a request on the {@link Route.Logout}.
 	 * @param showMessage a function that will be used to notify a user of errors.
-	 * @return the response or an error.
+	 * @returns the response or an error.
 	 */
 	public async logout(this: Readonly<Client>, showMessage: ShowMessage): RequestSuccess {
 		return await (this as Client).caughtRequest(showMessage, Route.Logout, { method: 'GET' }, response.isDelete) !== null;
@@ -201,7 +201,7 @@ export class Client {
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @param route the {@link Route} to send the request to.
 	 * @param body the patch request.
-	 * @return whether the request succeeded.
+	 * @returns whether the request succeeded.
 	 */
 	public async patch<RequestBodyInner>(
 		this: Readonly<Client>,
@@ -216,7 +216,7 @@ export class Client {
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @param route the {@link Route} to send the request to.
 	 * @param body the post request.
-	 * @return whether the request succeeded.
+	 * @returns whether the request succeeded.
 	 */
 	public async post<RequestBodyInner, ResponseBody extends {}>(
 		this: Readonly<Client>,
@@ -234,7 +234,7 @@ export class Client {
 	/**
 	 * Update `this` {@link Client} based on information from a {@link Route.WhoAmI} request.
 	 * @param showMessage a function that will be used to notify a user of errors.
-	 * @return whether the request succeeded.
+	 * @returns whether the request succeeded.
 	 */
 	public async setWhoIAm(this: Client, showMessage: ShowMessage): RequestSuccess {
 		const RESULT = await this.request(showMessage, Route.WhoAmI, { method: 'GET' }, response.isWhoAmI);
@@ -254,7 +254,7 @@ type SelectorProps = Required<On<'setClient', [client: Client]>> & { client?: Re
 /** Properties used by {@link Modal}s in the {@link ClientSelector}. */
 type SelectorModalProps = Omit<ModalProps, 'children'> & SelectorProps;
 
-/** @return A floating form. */
+/** @returns A floating form. */
 function ModalForm(props: Pick<ModalProps, 'children' | 'onClose'> & Required<AsyncOn<'submit'> & { button_text: string }>) {
 	return (
 		<Modal onClose={props.onClose}>
@@ -269,7 +269,7 @@ function ModalForm(props: Pick<ModalProps, 'children' | 'onClose'> & Required<As
 	);
 }
 
-/** @return the {@link Modal} to use when connecting to the {@link State | API}. */
+/** @returns the {@link Modal} to use when connecting to the {@link State | API}. */
 function ConnectModal(props: SelectorModalProps): React.ReactElement {
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
 	const [URL, setUrl] = React.useState<string>(props.client?.address || '');
@@ -294,7 +294,7 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 	);
 }
 
-/** @return the {@link Modal} to use when logging in to the {@link State | API}. */
+/** @returns the {@link Modal} to use when logging in to the {@link State | API}. */
 function LoginModal(props: SelectorModalProps): React.ReactElement {
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
 	const [USERNAME, setUsername] = React.useState<string>(props.client?.username || '');
@@ -330,7 +330,7 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 	);
 }
 
-/** @return an API {@link State} selector. */
+/** @returns an API {@link State} selector. */
 export function ClientSelector(props: Class<'button'> & SelectorProps): React.ReactElement {
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
 	const [MODAL_VISIBLE, setModalVisible] = hooks.useModalVisibility<'connect' | 'login'>();

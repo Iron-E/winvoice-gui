@@ -8,7 +8,7 @@ export type Export = {
 
 /**
  * @param json the value to check.
- * @return whether the `json` is an instance of {@link Export}.
+ * @returns whether the `json` is an instance of {@link Export}.
  */
 export function isExport(json: unknown): json is Export {
 	return json instanceof Object && (

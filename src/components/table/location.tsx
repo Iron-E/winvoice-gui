@@ -30,7 +30,7 @@ export function locationValuators(outerKey: keyof Location): Valuators<Location>
 	};
 }
 
-/** @return {@link useOrder} specialized for a {@link Location}. */
+/** @returns {@link useOrder} specialized for a {@link Location}. */
 export function useLocationOrder(): ReturnType<typeof useOrder<keyof Location>> {
 	return useOrder<keyof Location>('name');
 }

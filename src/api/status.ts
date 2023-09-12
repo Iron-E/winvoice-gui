@@ -10,7 +10,7 @@ export type Status = Readonly<{
 
 /**
  * @param json the value to check.
- * @return whether the `json` is an instance of {@link Status}.
+ * @returns whether the `json` is an instance of {@link Status}.
  */
 export function isStatus(json: unknown): json is Status {
 	return json instanceof Object && (

@@ -88,7 +88,7 @@ const ROUTE_HIDDEN: Partial<LookupTable<Route, true>> = {
 const ROUTES: readonly [string, Route][] = Object.entries(Route).filter(([_, route]) => !ROUTE_HIDDEN[route]);
 
 
-/** @return the navigation bar for the given `current` page. */
+/** @returns the navigation bar for the given `current` page. */
 export function NavBar(props: Class): React.ReactElement {
 	const URL = navigation.usePathname();
 	return (

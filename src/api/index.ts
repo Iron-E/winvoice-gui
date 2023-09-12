@@ -13,7 +13,7 @@ export type Request<T = never> = Omit<RequestInit, 'body' | 'credentials'> & {
 
 /**
  * @param <BodyInner> the content of e.g. {@link request.Get}, should it be the body.
- * @return an {@link RequestInit | APi request} which can be passed to {@link fetch}.
+ * @returns an {@link RequestInit | APi request} which can be passed to {@link fetch}.
  */
 export function newRequest<BodyInner>(r: Request<BodyInner>): RequestInit {
 	/* body */

@@ -7,7 +7,7 @@ import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/20/solid';
 /** The style of a {@link React.JSX.IntrinsicElements.button | button}. */
 const BUTTON_STYLE = `px-1 py-0.5 mx-0 my-1 text-xs ${HOVER}` as const;
 
-/** @return a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
+/** @returns a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
 export function InputId(
 	props:
 		On<'new', [value: 'new']>

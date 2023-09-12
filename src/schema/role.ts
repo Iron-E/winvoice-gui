@@ -10,7 +10,7 @@ export type Role = {
 
 /**
  * @param json the value to check.
- * @return whether the `json` is an instance of {@link Role}.
+ * @returns whether the `json` is an instance of {@link Role}.
  */
 export function isRole(json: unknown): json is Role {
 	return json instanceof Object && (

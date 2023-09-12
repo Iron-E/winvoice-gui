@@ -142,7 +142,7 @@ function OuterLocationTable(props: { orderedData: OrderedData<Location> }): Reac
 		/>
 
 		{MODAL_VISIBLE && (
-			<Modal onClose={() => setModalVisible(null)}>
+			<Modal onClose={setModalVisible}>
 				<ShowAllLocations current={MODAL_VISIBLE} />
 			</Modal>
 		)}

@@ -7,11 +7,12 @@ import { Client } from '../api';
 import { ConfirmModal, Modal } from '../modal';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/20/solid';
 import { FLEX, ICON } from '../css';
-import { OrderedData, Table, TableButton, Td, Tr, type Valuators, useOrder } from '../table';
+import { OrderedData, Table, TableButton, Td, Tr, type Valuators, useOrder, RowAction } from '../table';
 import { Props } from '@/utils';
 import { Route } from '@/api';
 import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { type Location } from '@/schema'
+import { LocationForm } from '../form';
 
 /** the headers of the {@link LocationTable}. */
 const HEADERS = ['Name', 'ID', 'Currency', 'Outer'] as const;
@@ -46,7 +47,7 @@ function BaseLocationTable(props:
 ): React.ReactElement {
 	const CLIENT = React.useContext(Client.CONTEXT);
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
-	const [MODAL_VISIBLE, setModalVisible] = hooks.useModalVisibility<Location>();
+	const [MODAL_VISIBLE, setModalVisible] = hooks.useModalVisibility<RowAction<Location>>();
 
 	return <>
 		<Table
@@ -58,9 +59,9 @@ function BaseLocationTable(props:
 				<Tr
 					key={l.id}
 					onClick={props.onRowSelect && (() => props.onRowSelect!(l))}
-					onDelete={props.deletable === true ? () => setModalVisible(l) : undefined}
+					onDelete={props.deletable === true ? () => setModalVisible({ action: 'delete', data: l }) : undefined}
 					// ?
-					onEdit={() => { throw new Error('Unimplemented: edit') }}
+					onEdit={() => setModalVisible({ action: 'edit', data: l })}
 				>
 					<Td>{l.name}</Td>
 					<Td>{l.id}</Td>
@@ -72,12 +73,29 @@ function BaseLocationTable(props:
 			))}
 		</Table>
 
-		{MODAL_VISIBLE != undefined && (
-			<ConfirmModal
+		{MODAL_VISIBLE != undefined && (MODAL_VISIBLE.action === 'delete'
+			? <ConfirmModal
 				onClose={setModalVisible}
-				onConfirm={async () => await props.orderedData.delete(CLIENT, showMessage, Route.Location, [MODAL_VISIBLE])}
-				message={<>the location {MODAL_VISIBLE.id} "{MODAL_VISIBLE.name}" should be <b>permanently</b> deleted</>}
+				onConfirm={async () => await props.orderedData.delete(
+					CLIENT,
+					showMessage,
+					Route.Location,
+					[MODAL_VISIBLE.data],
+				)}
+				message={<>
+					the location {MODAL_VISIBLE.data.id} "{MODAL_VISIBLE.data.name}" should be <b>permanently</b> deleted
+				</>}
 			/>
+			: <Modal onClose={setModalVisible}>
+				<LocationForm
+					id='edit-location-form'
+					initialValues={MODAL_VISIBLE.data}
+					onSubmit={async l => {
+						await props.orderedData.edit(CLIENT, showMessage, Route.Location, { [l.id]: l }, l => l.id);
+						setModalVisible(null);
+					}}
+				/>
+			</Modal>
 		)}
 	</>;
 }

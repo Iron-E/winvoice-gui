@@ -4,6 +4,12 @@ import { FLEX, HOVER, ICON } from "../css";
 import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { TableButton } from './button';
 
+/** The actions which may be performed on a row. */
+export type RowAction<T> = {
+	action: 'delete' | 'edit',
+	data: T,
+};
+
 /** @returns a `<tr>` with the standard winvoice appearance. */
 export function Tr(props: Children & Click & On<'delete'> & On<'edit'>): React.ReactElement {
 	return (

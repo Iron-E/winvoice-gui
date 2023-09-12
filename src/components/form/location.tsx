@@ -5,36 +5,49 @@ import React from 'react';
 import type { On } from '../props-with';
 import type { Props } from '@/utils';
 import { Client } from '../api';
-import { Currency, isLocation, type Location } from '@/schema';
 import { Form, FormButton, InputId, InputString } from '../form';
+import { isLocation, type Location } from '@/schema';
 import { Modal } from '../modal';
 import { Route } from '@/api';
 import { SelectCurrency } from '../form';
 import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { SPACE } from '../css';
 
-/** @returns a {@link React.JSX.IntrinsicElements.form | form} which will create a new {@link Location} on submit. */
+/**
+ * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Location} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
+ */
 export function LocationForm<Ret>(props:
 	& On<'submit', [l: Location], Ret>
-	& Pick<Props<typeof SelectCurrency>, 'id'>,
+	& Pick<Props<typeof SelectCurrency>, 'id'>
+	& { initialValues?: Location }
 ): React.ReactElement {
+	const [MODAL_VISIBLE, setModalVisible] = hooks.useModalVisibility<'new' | 'search'>();
 	const CLIENT = React.useContext(Client.CONTEXT);
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
 
-	const [CURRENCY, setCurrency] = React.useState<Currency>();
-	const [MODAL_VISIBLE, setModalVisible] = hooks.useModalVisibility<'new' | 'search'>();
-	const [NAME, setName] = React.useState('');
-	const [OUTER, setOuter] = React.useState<Location>();
+	const INITIAL_CURRENCY = props.initialValues?.currency;
+	const [CURRENCY, setCurrency] = React.useState(INITIAL_CURRENCY);
+
+	const INITIAL_NAME = props.initialValues?.name ?? '';
+	const [NAME, setName] = React.useState(INITIAL_NAME);
+
+	const INITIAL_OUTER = props.initialValues?.outer;
+	const [OUTER, setOuter] = React.useState(INITIAL_OUTER);
 
 	return <>
 		<Form onSubmit={async () => {
-			const RESULT = await CLIENT.post(showMessage, Route.Location, { args: [CURRENCY, NAME, OUTER] }, isLocation);
-			if (RESULT !== null) {
-				await Promise.resolve(props.onSubmit?.(RESULT));
-				setCurrency(undefined);
-				setName('');
-				setOuter(undefined);
+			if (props.initialValues == undefined) {
+				const RESULT = await CLIENT.post(showMessage, Route.Location, { args: [CURRENCY, NAME, OUTER] }, isLocation);
+				if (RESULT === null) { return; }
+				var result = RESULT;
+			} else {
+				var result: Location = { ...props.initialValues, currency: CURRENCY, name: NAME, outer: OUTER };
 			}
+
+			await Promise.resolve(props.onSubmit?.(result));
+			setCurrency(INITIAL_CURRENCY);
+			setName(INITIAL_NAME);
+			setOuter(INITIAL_OUTER);
 		}}>
 			<SelectCurrency
 				id={`${props.id}--currency`}

@@ -42,3 +42,6 @@ export enum Route {
 	/** Same as {@link https://github.com/Iron-E/winvoice-server | `api::routes::USER`}. */
 	WhoAmI = '/whoami',
 }
+
+/** Routes that require user input to make a complete request. */
+export type UserInputRoute = Exclude<Route, Route.Export | Route.Login | Route.Logout | Route.WhoAmI>;

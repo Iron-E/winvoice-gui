@@ -1,8 +1,8 @@
 import React from "react";
-import type { Fn, ValueOf } from "@/utils";
+import type { FieldName, Fn, ValueOf } from "@/utils";
 import type { ShowMessage } from "../messages";
 import { Client } from "../api";
-import { Route } from "@/api";
+import { UserInputRoute } from "@/api";
 
 /**
  * How {@link Order} should be valuated when a given {@link Order.column} leads to an ambiguous ordering.
@@ -129,11 +129,27 @@ export class OrderedData<T> {
 		this: OrderedData<T>,
 		client: Readonly<Client>,
 		showMessage: ShowMessage,
-		route: Route,
-		values: readonly T[],
+		route: UserInputRoute,
+		entities: readonly T[],
 	): Promise<void> {
-		if (await client.delete(showMessage, route, { entities: values })) {
-			this.remove(values);
+		if (await client.delete(showMessage, route, { entities })) {
+			this.remove(entities);
+		}
+	}
+
+	/**
+	 * Make an {@link Client.edit | API request} to permanently change the given, and also change it in the stored data.
+	 */
+	public async edit<Id extends FieldName>(
+		this: OrderedData<T>,
+		client: Readonly<Client>,
+		showMessage: ShowMessage,
+		route: UserInputRoute,
+		entities: Partial<Record<Id, T>>,
+		getId: (value: T) => Id,
+	): Promise<void> {
+		if (await client.patch(showMessage, route, { entities: Object.values(entities) })) {
+			this.setData?.(this.data.map(value => entities[getId(value)] ?? value));
 		}
 	}
 

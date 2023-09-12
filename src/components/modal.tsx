@@ -40,7 +40,10 @@ export function ConfirmModal(props:
 	return (
 		<Modal onClose={props.onClose}>
 			<p>Please confirm that {props.message}.</p>
-			<FormButton className={SPACE} onClick={props.onConfirm}>
+			<FormButton className={SPACE} onClick={async () => {
+				await Promise.resolve(props.onConfirm());
+				props.onClose(null);
+			}}>
 				Confirm
 			</FormButton>
 		</Modal>

@@ -5,7 +5,7 @@ import React from 'react';
 import type { AsyncOn, Class, On } from '../props-with';
 import type { Fn, Maybe, Opt } from '@/utils';
 import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, WifiIcon } from '@heroicons/react/20/solid';
-import { Code, newRequest, request, response, Route, type Request, type Status } from '@/api';
+import { Code, newRequest, request, response, Route, type Request, type Status, UserInputRoute } from '@/api';
 import { Form, FormButton, Input } from '../form';
 import { ICON, SPACE } from '../css';
 import { Modal, type Props as ModalProps } from '../modal';
@@ -18,9 +18,6 @@ type OptBody<T = unknown> = Promise<Opt<T>>;
 
 /** Whether a request succeeded. */
 type RequestSuccess = Promise<boolean>;
-
-/** Routes that require user input to make a complete request. */
-type UserInputRoute = Exclude<Route, Route.Export | Route.Login | Route.Logout | Route.WhoAmI>;
 
 /**
  * The information which is kept in order to make api requests / provide relevant UI elements (e.g. whether the user is currently signed in).
@@ -132,7 +129,7 @@ export class Client {
 	public async delete<RequestBodyInner>(
 		this: Readonly<Client>,
 		showMessage: ShowMessage,
-		route: Route,
+		route: UserInputRoute,
 		body: request.Delete<RequestBodyInner>,
 	): RequestSuccess {
 		return await (this as Client).caughtRequest(showMessage, route, { method: 'DELETE', body }, response.isDelete) !== null;

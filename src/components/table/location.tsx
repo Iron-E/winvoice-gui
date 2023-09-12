@@ -4,15 +4,14 @@ import * as hooks from '@/hooks';
 import React from 'react';
 import type { Id, On } from '../props-with';
 import { Client } from '../api';
-import { EllipsisHorizontalCircleIcon } from '@heroicons/react/20/solid';
-import { FLEX, ICON, SPACE } from '../css';
 import { ConfirmModal, Modal } from '../modal';
+import { EllipsisHorizontalCircleIcon } from '@heroicons/react/20/solid';
+import { FLEX, ICON } from '../css';
 import { OrderedData, Table, TableButton, Td, Tr, type Valuators, useOrder } from '../table';
+import { Props } from '@/utils';
+import { Route } from '@/api';
 import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { type Location } from '@/schema'
-import { Route } from '@/api';
-import { Props } from '@/utils';
-import { FormButton } from '../form';
 
 /** the headers of the {@link LocationTable}. */
 const HEADERS = ['Name', 'ID', 'Currency', 'Outer'] as const;
@@ -76,12 +75,7 @@ function BaseLocationTable(props:
 		{MODAL_VISIBLE != undefined && (
 			<ConfirmModal
 				onClose={setModalVisible}
-				onConfirm={async () => await props.orderedData.delete(
-					CLIENT,
-					showMessage,
-					Route.Location,
-					[MODAL_VISIBLE],
-				)}
+				onConfirm={async () => await props.orderedData.delete(CLIENT, showMessage, Route.Location, [MODAL_VISIBLE])}
 				message={<>the location {MODAL_VISIBLE.id} "{MODAL_VISIBLE.name}" should be <b>permanently</b> deleted</>}
 			/>
 		)}

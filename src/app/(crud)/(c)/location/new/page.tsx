@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { CreateLocationForm, LocationTable, locationValuators, useLocationOrder, useOrderedData } from '@/components';
+import { LocationForm, LocationTable, locationValuators, useLocationOrder, useOrderedData } from '@/components';
 import { Location } from '@/schema';
 
 export default function Page(): React.ReactElement {
@@ -9,7 +9,7 @@ export default function Page(): React.ReactElement {
 	const ORDERED_DATA = useOrderedData<Location>('name', locationValuators(OUTER_ORDER.column));
 
 	return <>
-		<CreateLocationForm
+		<LocationForm
 			id='new-location-form'
 			// WARN: passing function (i.e. not using closure) changes 'this' context
 			onSubmit={l => ORDERED_DATA.append(l)}

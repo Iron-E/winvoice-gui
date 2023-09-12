@@ -3,7 +3,6 @@ export * as propsWith from './props-with';
 export * from './api';
 export * from './buttons';
 export * from './form';
-export * from './schema';
 export * from './table';
 export { Dim, type Props as DimProps } from './dim';
 export { Header, HEADER_CSS } from './header';

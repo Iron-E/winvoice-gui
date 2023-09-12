@@ -2,19 +2,19 @@
 
 import * as hooks from '@/hooks';
 import React from 'react';
-import type { On } from '../../props-with';
+import type { On } from '../props-with';
 import type { Props } from '@/utils';
-import { Client } from '../../api';
+import { Client } from '../api';
 import { Currency, isLocation, type Location } from '@/schema';
-import { Form, FormButton, InputId, InputString } from '../../form';
-import { Modal } from '../../modal';
+import { Form, FormButton, InputId, InputString } from '../form';
+import { Modal } from '../modal';
 import { Route } from '@/api';
-import { SelectCurrency } from '../../form';
-import { SHOW_MESSAGE_CONTEXT } from '../../messages';
-import { SPACE } from '../../css';
+import { SelectCurrency } from '../form';
+import { SHOW_MESSAGE_CONTEXT } from '../messages';
+import { SPACE } from '../css';
 
 /** @returns a {@link React.JSX.IntrinsicElements.form | form} which will create a new {@link Location} on submit. */
-export function CreateLocationForm<Ret>(
+export function LocationForm<Ret>(
 	props: On<'submit', [l: Location], Ret> & Pick<Props<typeof SelectCurrency>, 'id'>,
 ): React.ReactElement {
 	const CLIENT = React.useContext(Client.CONTEXT);
@@ -65,14 +65,19 @@ export function CreateLocationForm<Ret>(
 
 		{MODAL_VISIBLE === 'new'
 			? <Modal onClose={setModalVisible}>
-				<CreateLocationForm id={`${props.id}--outer--form`} onSubmit={l => {
-					setOuter(l);
-					setModalVisible(null);
-				}} />
+				<LocationForm
+					id={`${props.id}--outer--form`}
+					onSubmit={l => {
+						setOuter(l);
+						setModalVisible(null);
+					}}
+				/>
 			</Modal>
-			: MODAL_VISIBLE === 'search' && <Modal onClose={setModalVisible}>
-				Unimplemented: allow searching for a location and choosing one
-			</Modal>
+			: MODAL_VISIBLE === 'search' && (
+				<Modal onClose={setModalVisible}>
+					Unimplemented: allow searching for a location and choosing one
+				</Modal>
+			)
 		}
 	</>;
 }

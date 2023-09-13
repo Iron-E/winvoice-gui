@@ -65,8 +65,7 @@ export function LocationForm(props:
 				label='Outer Location'
 				onNew={setIdEvent}
 				onSearch={setIdEvent}
-				required={true}
-				title='The name of the location which is to be created'
+				title='The location outside this one'
 				value={OUTER?.id ?? ''}
 			/>
 

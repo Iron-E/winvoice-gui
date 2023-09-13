@@ -7,6 +7,7 @@ export type { Opt } from './opt';
 export type { Props } from './props';
 export type { Snakecase } from './snake-case';
 export type { Spread } from './spread';
+export type { UnionKeys } from './union-keys';
 export type { UnionToKeys } from './union-to-keys';
 export type { ValueOf } from './value-of';
 export { equalsIgnoreCase } from './equals-ignore-case';

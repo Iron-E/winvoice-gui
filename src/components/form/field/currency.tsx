@@ -1,7 +1,7 @@
 import type { Maybe } from '@/utils';
 import type { SelectProps } from './props';
 import { Currency } from '@/schema';
-import { Select } from '../../form';
+import { Select } from '../field';
 
 /** All {@link Currency | Currencies} mapped to {@link React.JSX.IntrinsicElements.option | option}s  */
 const OPTIONS: readonly React.ReactElement[] = [

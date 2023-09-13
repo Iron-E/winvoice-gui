@@ -4,10 +4,10 @@ import * as hooks from '@/hooks';
 import React from 'react';
 import type { On } from '../props-with';
 import { Client } from '../api';
-import { ConfirmModal, Modal } from '../modal';
+import { Modal } from '../modal';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/20/solid';
 import { FLEX, ICON } from '../css';
-import { OrderedData, Table, TableButton, Td, Tr, type Valuators, useOrder, RowAction } from '../table';
+import { OrderedData, Table, TableButton, Td, Tr, type Valuators, useOrder, useRowAction } from '../table';
 import { Props } from '@/utils';
 import { Route } from '@/api';
 import { SHOW_MESSAGE_CONTEXT } from '../messages';
@@ -47,7 +47,12 @@ function BaseLocationTable(props:
 ): React.ReactElement {
 	const CLIENT = React.useContext(Client.CONTEXT);
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
-	const [MODAL_VISIBLE, setModalVisible] = hooks.useModalVisibility<RowAction<Location>>();
+	const [ROW_ACTION, setRowAction] = useRowAction(
+		props.orderedData, CLIENT, showMessage, Route.Location,
+		l => `location ${l.id} "${l.name}"`,
+		l => l.id,
+		(props) => <LocationForm  {...props} id='edit-location-form' />,
+	);
 
 	return <>
 		<Table
@@ -60,9 +65,9 @@ function BaseLocationTable(props:
 					selected={l.id === props.selectedRow}
 					key={l.id}
 					onClick={props.onRowSelect && (() => props.onRowSelect!(l))}
-					onDelete={props.deletable === true ? () => setModalVisible({ action: 'delete', data: l }) : undefined}
+					onDelete={props.deletable === true ? () => setRowAction({ action: 'delete', data: l }) : undefined}
 					// ?
-					onEdit={() => setModalVisible({ action: 'edit', data: l })}
+					onEdit={() => setRowAction({ action: 'edit', data: l })}
 				>
 					<Td>{l.name}</Td>
 					<Td>{l.id}</Td>
@@ -74,30 +79,7 @@ function BaseLocationTable(props:
 			))}
 		</Table>
 
-		{MODAL_VISIBLE != undefined && (MODAL_VISIBLE.action === 'delete'
-			? <ConfirmModal
-				onClose={setModalVisible}
-				onConfirm={async () => await props.orderedData.delete(
-					CLIENT,
-					showMessage,
-					Route.Location,
-					[MODAL_VISIBLE.data],
-				)}
-				message={<>
-					the location {MODAL_VISIBLE.data.id} "{MODAL_VISIBLE.data.name}" should be <b>permanently</b> deleted
-				</>}
-			/>
-			: <Modal onClose={setModalVisible}>
-				<LocationForm
-					id='edit-location-form'
-					initialValues={MODAL_VISIBLE.data}
-					onSubmit={async l => {
-						await props.orderedData.edit(CLIENT, showMessage, Route.Location, { [l.id]: l }, l => l.id);
-						setModalVisible(null);
-					}}
-				/>
-			</Modal>
-		)}
+		{ROW_ACTION}
 	</>;
 }
 

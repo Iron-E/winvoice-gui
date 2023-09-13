@@ -10,7 +10,7 @@ import { Route } from '@/api';
 import { SelectCurrency } from '../form';
 import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { SPACE } from '../css';
-import { useIdActionHandlers } from './field/id';
+import { useIdEventHandlers } from './field/id';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Location} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
@@ -32,7 +32,7 @@ export function LocationForm<Ret>(props:
 	const INITIAL_OUTER = props.initialValues?.outer;
 	const [OUTER, setOuter] = React.useState(INITIAL_OUTER);
 
-	const [HANDLER, setIdAction] = useIdActionHandlers(
+	const [HANDLER, setIdEvent] = useIdEventHandlers(
 		setOuter,
 		p => <LocationForm {...p} id={`${props.id}--outer--form`} />,
 	);
@@ -70,8 +70,8 @@ export function LocationForm<Ret>(props:
 			<InputId
 				id={`${props.id}--outer`}
 				label='Outer Location'
-				onNew={setIdAction}
-				onSearch={setIdAction}
+				onNew={setIdEvent}
+				onSearch={setIdEvent}
 				required={true}
 				title='The name of the location which is to be created'
 				value={OUTER?.id ?? ''}

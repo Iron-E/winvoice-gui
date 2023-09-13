@@ -12,13 +12,13 @@ import { useModalVisibility } from "@/hooks";
 import { UserInputRoute } from "@/api";
 
 /** The actions which may be performed on a row. */
-type RowAction<T> = {
+type RowEvent<T> = {
 	action: 'delete' | 'edit',
 	data: T,
 };
 
 /** @returns a tuple which first contains the handler for the given {@link Tr | row} action, and second, a setter for the current row action. */
-export function useRowActionHandlers<T, Id extends FieldName>(
+export function useRowEventHandlers<T, Id extends FieldName>(
 	orderedData: OrderedData<T>,
 	client: Readonly<Client>,
 	showMessage: ShowMessage,
@@ -26,8 +26,8 @@ export function useRowActionHandlers<T, Id extends FieldName>(
 	confirmDeleteMessage: (value: T) => string,
 	getId: (value: T) => Id,
 	EditForm: (props: AsyncOn<'submit', [value: T]> & { initialValues: T }) => React.ReactElement,
-): [Opt<React.ReactElement>, ReturnType<typeof useModalVisibility<RowAction<T>>>[1]] {
-	const [MODAL_VISIBLE, setModalVisible] = useModalVisibility<RowAction<T>>();
+): [Opt<React.ReactElement>, ReturnType<typeof useModalVisibility<RowEvent<T>>>[1]] {
+	const [MODAL_VISIBLE, setModalVisible] = useModalVisibility<RowEvent<T>>();
 	return [
 		MODAL_VISIBLE && (MODAL_VISIBLE.action === 'delete'
 			? <ConfirmModal

@@ -11,7 +11,7 @@ import { Modal } from '@/components';
 const BUTTON_STYLE = `px-1 py-0.5 mx-0 my-1 text-xs ${HOVER}` as const;
 
 /** @returns a tuple which first contains the handler for the given {@link InputID} action, and second, a setter for the current ID action. */
-export function useIdActionHandlers<T>(
+export function useIdEventHandlers<T>(
 	onChange: Fn<[value: T]>,
 	NewForm: (props: On<'submit', [value: T]>) => React.ReactElement,
 ): [Opt<React.ReactElement>, ReturnType<typeof useModalVisibility<'new' | 'search'>>[1]] {

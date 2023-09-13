@@ -25,7 +25,7 @@ export function DepartmentForm(props:
 	return <>
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
-				const RESULT = await CLIENT.post(showMessage, Route.Department, { args: [NAME] }, isDepartment);
+				const RESULT = await CLIENT.post(showMessage, Route.Department, { args: NAME }, isDepartment);
 				if (RESULT === null) { return; }
 				var result = RESULT;
 			} else {

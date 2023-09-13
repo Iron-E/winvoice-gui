@@ -4,13 +4,12 @@ import React from 'react';
 import type { On } from '../props-with';
 import type { Props } from '@/utils';
 import { Client } from '../api';
-import { Form, FormButton, InputId, InputString } from '../form';
+import { Form, FormButton, InputId, InputString, useIdEventHandlers } from '../form';
 import { isLocation, type Location } from '@/schema';
 import { Route } from '@/api';
 import { SelectCurrency } from '../form';
 import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { SPACE } from '../css';
-import { useIdEventHandlers } from './field/id';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Location} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).

@@ -3,7 +3,7 @@ import type { Children, Class, Id, On } from '../props-with';
 import type { IntrinsicProp } from '@/utils';
 import { FLEX, FLEX_BETWEEN, SPACE } from '../css';
 
-export { InputId } from './field/id';
+export { InputId, useIdEventHandlers } from './field/id';
 export { InputString } from './field/string';
 export { SelectCurrency } from './field/currency';
 

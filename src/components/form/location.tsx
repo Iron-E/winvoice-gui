@@ -1,17 +1,16 @@
 'use client';
 
-import * as hooks from '@/hooks';
 import React from 'react';
 import type { On } from '../props-with';
 import type { Props } from '@/utils';
 import { Client } from '../api';
 import { Form, FormButton, InputId, InputString } from '../form';
 import { isLocation, type Location } from '@/schema';
-import { Modal } from '../modal';
 import { Route } from '@/api';
 import { SelectCurrency } from '../form';
 import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { SPACE } from '../css';
+import { useIdActionHandlers } from './field/id';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Location} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
@@ -21,7 +20,6 @@ export function LocationForm<Ret>(props:
 	& Pick<Props<typeof SelectCurrency>, 'id'>
 	& { initialValues?: Location }
 ): React.ReactElement {
-	const [MODAL_VISIBLE, setModalVisible] = hooks.useModalVisibility<'new' | 'search'>();
 	const CLIENT = React.useContext(Client.CONTEXT);
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
 
@@ -33,6 +31,11 @@ export function LocationForm<Ret>(props:
 
 	const INITIAL_OUTER = props.initialValues?.outer;
 	const [OUTER, setOuter] = React.useState(INITIAL_OUTER);
+
+	const [HANDLER, setIdAction] = useIdActionHandlers(
+		setOuter,
+		p => <LocationForm {...p} id={`${props.id}--outer--form`} />,
+	);
 
 	return <>
 		<Form onSubmit={async () => {
@@ -67,8 +70,8 @@ export function LocationForm<Ret>(props:
 			<InputId
 				id={`${props.id}--outer`}
 				label='Outer Location'
-				onNew={setModalVisible}
-				onSearch={setModalVisible}
+				onNew={setIdAction}
+				onSearch={setIdAction}
 				required={true}
 				title='The name of the location which is to be created'
 				value={OUTER?.id ?? ''}
@@ -77,21 +80,6 @@ export function LocationForm<Ret>(props:
 			<FormButton className={SPACE} />
 		</Form>
 
-		{MODAL_VISIBLE === 'new'
-			? <Modal onClose={setModalVisible}>
-				<LocationForm
-					id={`${props.id}--outer--form`}
-					onSubmit={l => {
-						setOuter(l);
-						setModalVisible(null);
-					}}
-				/>
-			</Modal>
-			: MODAL_VISIBLE === 'search' && (
-				<Modal onClose={setModalVisible}>
-					Unimplemented: allow searching for a location and choosing one
-				</Modal>
-			)
-		}
+		{HANDLER}
 	</>;
 }

@@ -7,7 +7,7 @@ import { Client } from '../api';
 import { Modal } from '../modal';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/20/solid';
 import { FLEX, ICON } from '../css';
-import { OrderedData, Table, TableButton, Td, Tr, type Valuators, useOrder, useRowAction } from '../table';
+import { OrderedData, Table, TableButton, Td, Tr, type Valuators, useOrder, useRowActionHandlers } from '../table';
 import { Props } from '@/utils';
 import { Route } from '@/api';
 import { SHOW_MESSAGE_CONTEXT } from '../messages';
@@ -47,7 +47,7 @@ function BaseLocationTable(props:
 ): React.ReactElement {
 	const CLIENT = React.useContext(Client.CONTEXT);
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
-	const [ROW_ACTION, setRowAction] = useRowAction(
+	const [HANDLER, setRowAction] = useRowActionHandlers(
 		props.orderedData, CLIENT, showMessage, Route.Location,
 		l => `location ${l.id} "${l.name}"`,
 		l => l.id,
@@ -79,7 +79,7 @@ function BaseLocationTable(props:
 			))}
 		</Table>
 
-		{ROW_ACTION}
+		{HANDLER}
 	</>;
 }
 

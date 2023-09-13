@@ -1,5 +1,5 @@
-import type { AsyncFn, FieldName, Opt } from "@/utils";
-import type { Children, Click, On } from "../props-with";
+import type { FieldName, Opt } from "@/utils";
+import type { AsyncOn, Children, Click, On } from "../props-with";
 import { Client } from "../api";
 import { ConfirmModal, Modal } from "../modal";
 import { FLEX, HOVER, ICON } from "../css";
@@ -17,15 +17,15 @@ type RowAction<T> = {
 	data: T,
 };
 
-/** @returns a tuple which first contains either `null` or a modal containing the row action, and second, a setter for the row action. */
-export function useRowAction<T, Id extends FieldName>(
+/** @returns a tuple which first contains the handler for the given {@link Tr | row} action, and second, a setter for the current row action. */
+export function useRowActionHandlers<T, Id extends FieldName>(
 	orderedData: OrderedData<T>,
 	client: Readonly<Client>,
 	showMessage: ShowMessage,
 	route: UserInputRoute,
 	confirmDeleteMessage: (value: T) => string,
 	getId: (value: T) => Id,
-	EditForm: (props: { initialValues: T, onSubmit: AsyncFn<[value: T]> }) => React.ReactElement,
+	EditForm: (props: AsyncOn<'submit', [value: T]> & { initialValues: T }) => React.ReactElement,
 ): [Opt<React.ReactElement>, ReturnType<typeof useModalVisibility<RowAction<T>>>[1]] {
 	const [MODAL_VISIBLE, setModalVisible] = useModalVisibility<RowAction<T>>();
 	return [

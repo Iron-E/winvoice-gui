@@ -52,17 +52,11 @@ export function InputId(props:
 			type='text'
 			value={props.value}
 		>
-			<FormButton className={BUTTON_STYLE} onClick={e => {
-				e.preventDefault();
-				props.onNew?.('new');
-			}}>
+			<FormButton className={BUTTON_STYLE} onClick={props.onNew && (() => props.onNew!('new'))}>
 				<PlusIcon className={ICON} /> New
 			</FormButton>
 
-			<FormButton className={BUTTON_STYLE} onClick={e => {
-				e.preventDefault();
-				props.onSearch?.('search');
-			}}>
+			<FormButton className={BUTTON_STYLE} onClick={props.onSearch && (() => props.onSearch!('search'))}>
 				<MagnifyingGlassIcon className={ICON} /> Search
 			</FormButton>
 		</Input>

@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { On } from '../props-with';
-import type { Props } from '@/utils';
+import type { Id, On } from '../props-with';
 import { Client } from '../api';
 import { Form, FormButton, InputId, InputString, useIdEventHandlers } from '../form';
 import { isLocation, type Location } from '@/schema';
@@ -14,22 +13,17 @@ import { SPACE } from '../css';
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Location} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
-export function LocationForm<Ret>(props:
-	& On<'submit', [l: Location], Ret>
-	& Pick<Props<typeof SelectCurrency>, 'id'>
+export function LocationForm(props:
+	& On<'submit', [l: Location]>
+	& Id
 	& { initialValues?: Location }
 ): React.ReactElement {
 	const CLIENT = React.useContext(Client.CONTEXT);
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
 
-	const INITIAL_CURRENCY = props.initialValues?.currency;
-	const [CURRENCY, setCurrency] = React.useState(INITIAL_CURRENCY);
-
-	const INITIAL_NAME = props.initialValues?.name ?? '';
-	const [NAME, setName] = React.useState(INITIAL_NAME);
-
-	const INITIAL_OUTER = props.initialValues?.outer;
-	const [OUTER, setOuter] = React.useState(INITIAL_OUTER);
+	const [CURRENCY, setCurrency] = React.useState(props.initialValues?.currency);
+	const [NAME, setName] = React.useState(props.initialValues?.currency ?? '');
+	const [OUTER, setOuter] = React.useState(props.initialValues?.outer);
 
 	const [HANDLER, setIdEvent] = useIdEventHandlers(
 		setOuter,
@@ -47,9 +41,9 @@ export function LocationForm<Ret>(props:
 			}
 
 			await Promise.resolve(props.onSubmit?.(result));
-			setCurrency(INITIAL_CURRENCY);
-			setName(INITIAL_NAME);
-			setOuter(INITIAL_OUTER);
+			setCurrency(undefined);
+			setName('');
+			setOuter(undefined);
 		}}>
 			<SelectCurrency
 				id={`${props.id}--currency`}

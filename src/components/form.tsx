@@ -1,6 +1,7 @@
 import type { AsyncOn, Children } from './props-with';
 
 export * from './form/button';
+export * from './form/department';
 export * from './form/field';
 export * from './form/location';
 

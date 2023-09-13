@@ -10,7 +10,7 @@ import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { Table, Td, Tr, useOrder, useRowEventHandlers } from '../table';
 
 /** the headers of the {@link DepartmentTable}. */
-const HEADERS = ['Name', 'ID', 'Currency', 'Outer'] as const;
+const HEADERS = ['Name', 'ID'] as const;
 
 /** @returns {@link useOrder} specialized for a {@link Department}. */
 export function useDepartmentOrder(): ReturnType<typeof useOrder<keyof Department>> {
@@ -39,7 +39,7 @@ export function DepartmentTable(props: BaseProps<Department, Id>): React.ReactEl
 					selected={d.id === props.selectedRow}
 					key={d.id}
 					onClick={props.onRowSelect && (() => props.onRowSelect!(d))}
-					onDelete={props.deletable === true ? () => setRowEvent({ action: 'delete', data: d }) : undefined}
+					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: d }) : undefined}
 					// ?
 					onEdit={() => setRowEvent({ action: 'edit', data: d })}
 				>

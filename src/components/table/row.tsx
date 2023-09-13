@@ -55,7 +55,9 @@ export function Tr(props: Children & Click & On<'delete'> & On<'edit'> & { selec
 		<tr
 			className={`${HOVER} [&:not(:last-child)]:border-b-[1px] \
 ${props.selected ? 'bg-gradient-radial from-table-row-bg-even from-95% to-table-row-bg-selected' : 'odd:bg-table-row-bg-odd even:bg-table-row-bg-even'} \
-border-table-row-border gradient-conic`}
+border-table-row-border \
+${props.onClick != undefined ? 'cursor-pointer' : ''}`}
+			title={props.onClick && 'Click to select this row as the item you were searching for'}
 			onClick={props.onClick && (e => {
 				e.stopPropagation();
 				props.onClick!(e);

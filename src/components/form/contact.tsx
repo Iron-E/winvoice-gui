@@ -2,21 +2,18 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Client } from '../api';
 import { Form, FormButton, InputString, LocationForm, } from '../form';
 import { Route } from '@/api';
-import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { SPACE } from '../css';
 import { SelectContactKind } from './field/contact-kind';
 import { isContact, type Contact, type Location, ContactKinds } from '@/schema';
+import { useApiContext } from '../api';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Contact} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
 export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
-	const CLIENT = React.useContext(Client.CONTEXT);
-	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
-
+	const [CLIENT, showMessage] = useApiContext();
 	const [KIND, setKind] = React.useState<ContactKinds>(
 		(props.initialValues && Object.keys(props.initialValues).filter(k => k === 'label')[0] as ContactKinds) ?? 'email'
 	);

@@ -2,12 +2,11 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Client } from '../api';
+import type { Department } from '@/schema'
 import { DepartmentForm } from '../form';
-import { Id, type Department } from '@/schema'
 import { Route } from '@/api';
-import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { Table, Td, Tr, useOrder, useRowEventHandlers } from '../table';
+import { useApiContext } from '../api';
 
 /** the headers of the {@link DepartmentTable}. */
 const HEADERS = ['Name', 'ID'] as const;
@@ -18,9 +17,8 @@ export function useDepartmentOrder(): ReturnType<typeof useOrder<keyof Departmen
 }
 
 /** @returns a {@link Table} that displays a {@link Department} and its outer department. */
-export function DepartmentTable(props: BaseProps<Department, Id>): React.ReactElement {
-	const CLIENT = React.useContext(Client.CONTEXT);
-	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
+export function DepartmentTable(props: BaseProps<Department, 'id'>): React.ReactElement {
+	const [CLIENT, showMessage] = useApiContext();
 	const [HANDLER, setRowEvent] = useRowEventHandlers(
 		props.orderedData, CLIENT, showMessage, Route.Department,
 		d => `department ${d.id} "${d.name}"`,

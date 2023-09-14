@@ -2,20 +2,17 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Client } from '../api';
 import { Form, FormButton, InputString } from '../form';
 import { Route } from '@/api';
-import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { SPACE } from '../css';
 import { isDepartment, type Department } from '@/schema';
+import { useApiContext } from '../api';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Department} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
 export function DepartmentForm(props: BaseProps<Department>): React.ReactElement {
-	const CLIENT = React.useContext(Client.CONTEXT);
-	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
-
+	const [CLIENT, showMessage] = useApiContext();
 	const [NAME, setName] = React.useState(props.initialValues?.name ?? '');
 
 	return (

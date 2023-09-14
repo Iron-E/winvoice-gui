@@ -3,17 +3,16 @@
 import * as hooks from '@/hooks';
 import React from 'react';
 import type { BaseProps } from './props';
+import type { Location } from '@/schema'
 import type { On } from '../props-with';
 import type { Props } from '@/utils';
-import { Client } from '../api';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/20/solid';
 import { FLEX, ICON } from '../css';
-import { Id, type Location } from '@/schema'
 import { LocationForm } from '../form';
 import { Modal } from '../modal';
 import { OrderedData, Table, TableButton, Td, Tr, type Valuators, useOrder, useRowEventHandlers } from '../table';
 import { Route } from '@/api';
-import { SHOW_MESSAGE_CONTEXT } from '../messages';
+import { useApiContext } from '../api';
 
 /** the headers of the {@link LocationTable}. */
 const HEADERS = ['Name', 'ID', 'Currency', 'Outer'] as const;
@@ -31,18 +30,20 @@ export function locationValuators(outerKey: keyof Location): Valuators<Location>
 	};
 }
 
+/** The {@link Order} of {@link Location}s. */
+export type LocationOrder = ReturnType<typeof useOrder<keyof Location>>;
+
 /** @returns {@link useOrder} specialized for a {@link Location}. */
-export function useLocationOrder(): ReturnType<typeof useOrder<keyof Location>> {
+export function useLocationOrder(): LocationOrder {
 	return useOrder<keyof Location>('name');
 }
 
 /** @returns a table which displays {@link Location}s in a customizable manner. */
 function BaseLocationTable(props:
-	& BaseProps<Location, Id>
+	& BaseProps<Location, 'id'>
 	& { mapOuter: (l: Location) => React.ReactElement }
 ): React.ReactElement {
-	const CLIENT = React.useContext(Client.CONTEXT);
-	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
+	const [CLIENT, showMessage] = useApiContext();
 	const [HANDLER, setRowEvent] = useRowEventHandlers(
 		props.orderedData, CLIENT, showMessage, Route.Location,
 		l => `location ${l.id} "${l.name}"`,
@@ -78,8 +79,6 @@ function BaseLocationTable(props:
 		{HANDLER}
 	</>;
 }
-
-type LocationOrder = ReturnType<typeof useLocationOrder>;
 
 /** @returns a {@link Table} that displays a {@link Location} and its outer location. */
 export function LocationTable(props:

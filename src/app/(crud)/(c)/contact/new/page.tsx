@@ -5,8 +5,12 @@ import { Contact } from '@/schema';
 import { ContactForm, ContactTable, contactValuators, useLocationOrder, useOrderedData } from '@/components';
 
 export default function Page(): React.ReactElement {
-	const [OUTER_ORDER, setOuterOrder] = useLocationOrder();
-	const ORDERED_DATA = useOrderedData<Contact>('label', contactValuators(OUTER_ORDER.column));
+	const [ADDRESS_ORDER, setAddressOrder] = useLocationOrder();
+	const [OUTER_ADDRESS_ORDER, setOuterAddressOrder] = useLocationOrder();
+	const ORDERED_DATA = useOrderedData<Contact>('label', contactValuators(
+		ADDRESS_ORDER.column,
+		OUTER_ADDRESS_ORDER.column,
+	));
 
 	return <>
 		<ContactForm
@@ -17,12 +21,17 @@ export default function Page(): React.ReactElement {
 
 		{ORDERED_DATA.data.length > 0 && (
 			<ContactTable
-				onReorderOuter={order => {
-					setOuterOrder(order);
-					ORDERED_DATA.refresh(contactValuators(order.column));
+				addressOrder={ADDRESS_ORDER}
+				onReorderAddress={order => {
+					setAddressOrder(order);
+					ORDERED_DATA.refresh(contactValuators(order.column, OUTER_ADDRESS_ORDER.column));
+				}}
+				onReorderOuterAddress={order => {
+					setOuterAddressOrder(order);
+					ORDERED_DATA.refresh(contactValuators(ADDRESS_ORDER.column, order.column));
 				}}
 				orderedData={ORDERED_DATA}
-				outerOrder={OUTER_ORDER}
+				outerAddressorder={OUTER_ADDRESS_ORDER}
 			/>
 		)}
 	</>;

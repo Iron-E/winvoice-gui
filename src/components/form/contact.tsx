@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputString, LocationForm, } from '../form';
+import { Form, FormButton, InputId, InputString, LocationForm, useIdEventHandlers, } from '../form';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { SelectContactKind } from './field/contact-kind';
@@ -20,7 +20,12 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 	const [LABEL, setLabel] = React.useState(props.initialValues?.label ?? '');
 	const [VALUE, setValue] = React.useState<Location | string>('');
 
-	return (
+	const [HANDLER, setIdEvent] = useIdEventHandlers(
+		setValue,
+		p => <LocationForm {...p} id={`${props.id}--address--form`} />,
+	);
+
+	return <>
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
 				const RESULT = await CLIENT.post(showMessage, Route.Contact, { args: [{ [KIND]: VALUE }, LABEL] }, isContact);
@@ -52,6 +57,7 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 
 			<InputString
 				id={`${props.id}--label`}
+				label='Label'
 				onChange={setLabel}
 				required={true}
 				title='The name of the location which is to be created'
@@ -59,7 +65,14 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 			/>
 
 			{KIND === 'address'
-				? <LocationForm onSubmit={setValue} id={`${props.id}--value`} />
+				? <InputId
+					id={`${props.id}--address`}
+					label='Location'
+					onNew={setIdEvent}
+					onSearch={setIdEvent}
+					title='The location outside this one'
+					value={(VALUE as Location).id ?? ''}
+				/>
 				: <InputString
 					id={`${props.id}--value`}
 					onChange={setValue}
@@ -72,5 +85,7 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 
 			<FormButton className={SPACE} />
 		</Form>
-	);
+
+		{HANDLER}
+	</>;
 }

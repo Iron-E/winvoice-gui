@@ -17,11 +17,10 @@ type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.In
 		: never
 	)
 	& Required<Id>
+	& { [key in 'required' | 'value']?: IntrinsicProp<ElementName, key> }
 	& {
 		label: string,
-		required?: IntrinsicProp<ElementName, 'required'>,
 		title: IntrinsicProp<ElementName, 'title'>,
-		value?: IntrinsicProp<ElementName, 'value'>,
 	}
 	;
 
@@ -35,7 +34,7 @@ type InputProps = React.JSX.IntrinsicElements['input'];
 export function Input(props:
 	& FieldProps<HTMLInputElement, 'input'>
 	& ReadOnly
-	& { type?: InputProps['type'] },
+	& { [key in 'pattern' | 'type']?: InputProps[key] }
 ): React.ReactElement {
 	return <>
 		<span className={`${FLEX_BETWEEN} gap-5`}>
@@ -53,6 +52,7 @@ export function Input(props:
 			id={props.id}
 			name={props.id}
 			onChange={e => props.onChange?.(e.target.value)}
+			pattern={props.pattern}
 			required={props.required}
 			title={props.title}
 			type={props.type}

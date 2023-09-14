@@ -2,12 +2,24 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputId, InputString, useLocationIdEventHandlers } from '../form';
+import { Form, FormButton, Input, InputId, InputString, useLocationIdEventHandlers } from '../form';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { SelectContactKind } from './field/contact-kind';
 import { isContact, type Contact, type Location, ContactKinds } from '@/schema';
 import { useApiContext } from '../api';
+
+const KIND_INPUT_TITLES: Record<ContactKinds, string> = {
+	address: 'The physical address',
+	email: 'The email address',
+	other: 'The other information',
+	phone: 'The phone number; digits (0–9) and dashes ("-") only',
+};
+
+const KIND_INPUT_TYPES: Partial<Record<ContactKinds, React.HTMLInputTypeAttribute>> = {
+	email: 'email',
+	phone: 'tel',
+};
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Contact} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
@@ -67,15 +79,17 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 					onNew={setIdEvent}
 					onSearch={setIdEvent}
 					required={true}
-					title='The location outside this one'
+					title={KIND_INPUT_TITLES.address}
 					value={(VALUE as Location).id}
 				/>
-				: <InputString
+				: <Input
 					id={`${props.id}--value`}
 					label={KIND}
 					onChange={setValue}
+					pattern={KIND === 'phone' ? '^[0-9\\- ]+$' : undefined}
 					required={true}
-					title='The name of the location which is to be created'
+					title={KIND_INPUT_TITLES[KIND]}
+					type={KIND_INPUT_TYPES[KIND] ?? 'text'}
 					value={VALUE as string}
 				/>
 

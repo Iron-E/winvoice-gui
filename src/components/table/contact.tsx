@@ -38,7 +38,7 @@ export function ContactTable(props:
 ): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
 	const [HANDLER, setRowEvent] = useRowEventHandlers(
-		props.orderedData, CLIENT, showMessage, Route.Location,
+		props.orderedData, CLIENT, showMessage, Route.Contact,
 		c => `contact "${c.label}"`,
 		c => c.label,
 		(props) => <ContactForm  {...props} id='edit-location-form' />,
@@ -68,9 +68,9 @@ export function ContactTable(props:
 							/>
 						)}
 					</Td>
-					<Td>{(c as any).email}</Td>
-					<Td>{(c as any).other}</Td>
-					<Td>{(c as any).phone}</Td>
+					<Td>{'email' in c && c.email}</Td>
+					<Td>{'other' in c && c.other}</Td>
+					<Td>{'phone' in c && c.phone}</Td>
 				</Tr>
 			))}
 		</Table>

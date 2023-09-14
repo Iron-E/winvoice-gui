@@ -38,7 +38,7 @@ export function useIdEventHandlers<T>(
 export function InputId(props:
 	& On<'new', [value: 'new']>
 	& On<'search', [value: 'search']>
-	& Omit<InputProps<string>, 'children' | 'disabled'>,
+	& Omit<InputProps<string>, 'children'>,
 ): React.ReactElement {
 	return (
 		<Input

@@ -49,7 +49,7 @@ export function LocationForm(props: BaseProps<Location>): React.ReactElement {
 			<SelectCurrency
 				id={`${props.id}--currency`}
 				onChange={setCurrency}
-				title='The currency which is used by this location, if it is different than surrounding locations'
+				title='The currency used by this location, if it is different than surrounding locations'
 				value={CURRENCY}
 			/>
 
@@ -57,7 +57,7 @@ export function LocationForm(props: BaseProps<Location>): React.ReactElement {
 				id={`${props.id}--name`}
 				onChange={setName}
 				required={true}
-				title='The name of the location which is to be created'
+				title='The name for the location which is to be created'
 				value={NAME}
 			/>
 

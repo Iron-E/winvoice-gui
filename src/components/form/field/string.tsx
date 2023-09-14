@@ -2,7 +2,7 @@ import type { InputProps } from './props';
 import { Input } from '../../form';
 
 /** @returns a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
-export function InputString(props: InputProps<string>): React.ReactElement {
+export function InputString(props: Omit<InputProps<string>, 'children'>): React.ReactElement {
 	return (
 		<Input
 			id={props.id}
@@ -12,8 +12,6 @@ export function InputString(props: InputProps<string>): React.ReactElement {
 			title={props.title}
 			type='text'
 			value={props.value}
-		>
-			{props.children}
-		</Input>
+		/>
 	);
 }

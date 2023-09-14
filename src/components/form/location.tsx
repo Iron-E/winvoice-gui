@@ -1,23 +1,19 @@
 'use client';
 
 import React from 'react';
-import type { Id, On } from '../props-with';
+import type { BaseProps } from './props';
 import { Client } from '../api';
 import { Form, FormButton, InputId, InputString, useIdEventHandlers } from '../form';
-import { isLocation, type Location } from '@/schema';
 import { Route } from '@/api';
-import { SelectCurrency } from '../form';
 import { SHOW_MESSAGE_CONTEXT } from '../messages';
 import { SPACE } from '../css';
+import { SelectCurrency } from '../form';
+import { isLocation, type Location } from '@/schema';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Location} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
-export function LocationForm(props:
-	& On<'submit', [l: Location]>
-	& Id
-	& { initialValues?: Location }
-): React.ReactElement {
+export function LocationForm(props: BaseProps<Location>): React.ReactElement {
 	const CLIENT = React.useContext(Client.CONTEXT);
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
 

@@ -1,11 +1,14 @@
 import { type Location, isLocation } from '../location';
-import { type UnionToKeys } from '@/utils';
+import type { UnionKeys, UnionToKeys } from '@/utils';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-schema | `ContactKind`} type. */
 export type ContactKind =
 	| { address: Location }
 	| UnionToKeys<'email' | 'other' | 'phone', string>
 	;
+
+/** The kinds of contact that there are. */
+export type ContactKinds = UnionKeys<ContactKind>;
 
 /**
  * @param json the value to check.

@@ -1,5 +1,5 @@
-import { isContactKind, type ContactKind } from './contact/contact-kind';
-export { isContactKind, type ContactKind };
+import { isContactKind, type ContactKind, type ContactKinds } from './contact/contact-kind';
+export { isContactKind, type ContactKind, type ContactKinds };
 
 /** Same as {@link https://github.com/Iron-E/winvoice-schema | `Contact`} type. */
 export type Contact = ContactKind & { label: string };

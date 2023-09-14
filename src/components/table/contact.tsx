@@ -6,9 +6,8 @@ import type { Contact, Location } from '@/schema'
 import type { On } from '../props-with';
 import { ContactForm } from '../form';
 import { Route } from '@/api';
-import { Table, Td, Tr, type Valuators, useOrder, useRowEventHandlers, LocationOrder } from '../table';
+import { Table, Td, Tr, type Valuators, useRowEventHandlers, LocationOrder, LocationTable, OrderedData } from '../table';
 import { useApiContext } from '../api';
-import { UnionToKeys } from '@/utils';
 
 /** the headers of the {@link ContactTable}. */
 const HEADERS = ['Label', 'Address', 'Email', 'Other', 'Phone'] as const;
@@ -31,16 +30,11 @@ export function contactValuators(addressKey: keyof Location, outerAddressKey: ke
 	};
 }
 
-/** @returns {@link useOrder} specialized for a {@link Location}. */
-export function useContactOrder(): ReturnType<typeof useOrder<keyof Contact>> {
-	return useOrder<keyof Contact>('label');
-}
-
 /** @returns a {@link Table} that displays a {@link Location} and its outer location. */
 export function ContactTable(props:
 	& BaseProps<Contact, 'label'>
 	& Required<On<'reorderAddress' | 'reorderOuterAddress', Parameters<LocationOrder[1]>>>
-	& UnionToKeys<'addressOrder' | 'outerAddressorder', LocationOrder[0]>
+	& Record<'addressOrder' | 'outerAddressorder', LocationOrder[0]>
 ): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
 	const [HANDLER, setRowEvent] = useRowEventHandlers(
@@ -56,21 +50,28 @@ export function ContactTable(props:
 			onReorder={props.orderedData.setOrder}
 			order={props.orderedData.order}
 		>
-			{props.orderedData.data.map(l => (
+			{props.orderedData.data.map(c => (
 				<Tr
-					selected={l.id === props.selectedRow}
-					key={l.id}
-					onClick={props.onRowSelect && (() => props.onRowSelect!(l))}
-					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: l }) : undefined}
+					selected={c.label === props.selectedRow}
+					key={c.label}
+					onClick={props.onRowSelect && (() => props.onRowSelect!(c))}
+					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: c }) : undefined}
 					// ?
-					onEdit={() => setRowEvent({ action: 'edit', data: l })}
+					onEdit={() => setRowEvent({ action: 'edit', data: c })}
 				>
-					<Td>{l.name}</Td>
-					<Td>{l.id}</Td>
-					<Td>{l.currency}</Td>
+					<Td>{c.label}</Td>
 					<Td>
-						{l.outer != undefined && props.mapOuter(l.outer)}
+						{'address' in c && (
+							<LocationTable
+								onReorderOuter={props.onReorderOuterAddress}
+								orderedData={new OrderedData(props.addressOrder, props.onReorderAddress, [c.address])}
+								outerOrder={props.outerAddressorder}
+							/>
+						)}
 					</Td>
+					<Td>{'email' in c && c.email}</Td>
+					<Td>{'other' in c && c.other}</Td>
+					<Td>{'phone' in c && c.phone}</Td>
 				</Tr>
 			))}
 		</Table>

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputId, InputString, LocationForm, useIdEventHandlers, } from '../form';
+import { Form, FormButton, InputId, InputString, LocationForm, useIdEventHandlers, useLocationIdEventHandlers, } from '../form';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { SelectContactKind } from './field/contact-kind';
@@ -19,11 +19,7 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 	);
 	const [LABEL, setLabel] = React.useState(props.initialValues?.label ?? '');
 	const [VALUE, setValue] = React.useState<Location | string>('');
-
-	const [HANDLER, setIdEvent] = useIdEventHandlers(
-		setValue,
-		p => <LocationForm {...p} id={`${props.id}--address--form`} />,
-	);
+	const [HANDLER, setIdEvent] = useLocationIdEventHandlers(props.id, setValue);
 
 	return <>
 		<Form onSubmit={async () => {

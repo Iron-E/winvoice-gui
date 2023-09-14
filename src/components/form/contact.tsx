@@ -66,11 +66,13 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 					label='Location'
 					onNew={setIdEvent}
 					onSearch={setIdEvent}
+					required={true}
 					title='The location outside this one'
 					value={(VALUE as Location).id ?? ''}
 				/>
 				: <InputString
 					id={`${props.id}--value`}
+					label={KIND}
 					onChange={setValue}
 					required={true}
 					title='The name of the location which is to be created'
@@ -79,7 +81,7 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 
 			}
 
-			<FormButton className={SPACE} />
+			<FormButton className={SPACE} disabled={(typeof VALUE === 'string' ? VALUE : VALUE.id).length < 1} />
 		</Form>
 
 		{HANDLER}

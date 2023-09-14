@@ -18,6 +18,11 @@ export type Children = Readonly<{
 /** Properties of an {@link React.ReactElement | element} that include click handlers. */
 export type Click = On<'click', [event: React.MouseEvent]>;
 
+/** Whether this particular element is disabled. */
+export type Disabled = {
+	disabled?: boolean,
+};
+
 /** Properties of an {@link React.ReactElement | element} that include children. */
 export type Id = Readonly<{
 	/** An `#id` for the element . */

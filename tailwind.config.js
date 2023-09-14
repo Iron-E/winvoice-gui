@@ -30,8 +30,9 @@ module.exports = {
 				form: {
 					button: {
 						bg: COLORS.white,
-						border: COLORS.gray[400],
+						'bg-disabled': COLORS.gray[200],
 						'bg-hover': COLORS.sky[300],
+						border: COLORS.gray[400],
 						'border-hover': COLORS.sky[200],
 					},
 

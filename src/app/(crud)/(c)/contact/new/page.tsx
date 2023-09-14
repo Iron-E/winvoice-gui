@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { ContactForm, LocationTable, locationValuators, useLocationOrder, useOrderedData } from '@/components';
-import { Contact, Location } from '@/schema';
+import { Contact } from '@/schema';
+import { ContactForm, ContactTable, contactValuators, useLocationOrder, useOrderedData } from '@/components';
 
 export default function Page(): React.ReactElement {
 	const [OUTER_ORDER, setOuterOrder] = useLocationOrder();
@@ -16,10 +16,10 @@ export default function Page(): React.ReactElement {
 		/>
 
 		{ORDERED_DATA.data.length > 0 && (
-			<LocationTable
+			<ContactTable
 				onReorderOuter={order => {
 					setOuterOrder(order);
-					ORDERED_DATA.refresh(locationValuators(order.column));
+					ORDERED_DATA.refresh(contactValuators(order.column));
 				}}
 				orderedData={ORDERED_DATA}
 				outerOrder={OUTER_ORDER}

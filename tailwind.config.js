@@ -30,7 +30,6 @@ module.exports = {
 				form: {
 					button: {
 						bg: COLORS.white,
-						'bg-disabled': COLORS.gray[200],
 						'bg-hover': COLORS.sky[300],
 						border: COLORS.gray[400],
 						'border-hover': COLORS.sky[200],
@@ -38,7 +37,7 @@ module.exports = {
 
 					field: {
 						bg: COLORS.white,
-						'bg-disabled': COLORS.slate[400],
+						'bg-readonly': COLORS.slate[400],
 					},
 				},
 

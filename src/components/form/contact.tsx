@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputId, InputString, LocationForm, useIdEventHandlers, useLocationIdEventHandlers, } from '../form';
+import { Form, FormButton, InputId, InputString, useLocationIdEventHandlers } from '../form';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { SelectContactKind } from './field/contact-kind';
@@ -68,7 +68,7 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 					onSearch={setIdEvent}
 					required={true}
 					title='The location outside this one'
-					value={(VALUE as Location).id ?? ''}
+					value={(VALUE as Location).id}
 				/>
 				: <InputString
 					id={`${props.id}--value`}
@@ -81,7 +81,7 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 
 			}
 
-			<FormButton className={SPACE} disabled={(typeof VALUE === 'string' ? VALUE : VALUE.id).length < 1} />
+			<FormButton className={SPACE} />
 		</Form>
 
 		{HANDLER}

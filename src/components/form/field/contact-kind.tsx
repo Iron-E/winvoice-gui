@@ -4,10 +4,10 @@ import { Select } from '../field';
 
 /** All {@link ContactKind | Currencies} mapped to {@link React.JSX.IntrinsicElements.option | option}s  */
 const OPTIONS: readonly React.ReactElement[] = [
-	<option value={'email' as ContactKinds}>Email Address</option>,
-	<option value={'address' as ContactKinds}>Physical Address</option>,
-	<option value={'phone' as ContactKinds}>Phone Number</option>,
-	<option value={'other' as ContactKinds}>Other</option>,
+	<option key='email' value={'email' as ContactKinds}>Email Address</option>,
+	<option key='address' value={'address' as ContactKinds}>Physical Address</option>,
+	<option key='phone' value={'phone' as ContactKinds}>Phone Number</option>,
+	<option key='other' value={'other' as ContactKinds}>Other</option>,
 ];
 
 /** @returns a {@link React.JSX.IntrinsicElements.select | select} to determine a given {@link ContactKind} */

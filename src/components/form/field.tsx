@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Children, Class, Id, On } from '../props-with';
+import type { Children, Class, Id, On, ReadOnly } from '../props-with';
 import type { IntrinsicProp } from '@/utils';
 import { FLEX, FLEX_BETWEEN, SPACE } from '../css';
 
@@ -18,7 +18,6 @@ type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.In
 	)
 	& Required<Id>
 	& {
-		disabled?: IntrinsicProp<ElementName, 'disabled'>,
 		label: string,
 		required?: IntrinsicProp<ElementName, 'required'>,
 		title: IntrinsicProp<ElementName, 'title'>,
@@ -28,14 +27,14 @@ type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.In
 
 /** The style of a form field. */
 const FIELD_STYLE = `${SPACE} mb-2 \
-bg-form-field-bg disabled:bg-form-field-bg-disabled \
-border-form-field-border hover:border-form-field-border-hover` as const;
+bg-form-field-bg border-form-field-border hover:border-form-field-border-hover` as const;
 
 type InputProps = React.JSX.IntrinsicElements['input'];
 
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
 export function Input(props:
 	& FieldProps<HTMLInputElement, 'input'>
+	& ReadOnly
 	& { type?: InputProps['type'] },
 ): React.ReactElement {
 	return <>
@@ -50,8 +49,7 @@ export function Input(props:
 		</span>
 
 		<input
-			className={`${FIELD_STYLE} ${props.inputClassName}`}
-			disabled={props.disabled}
+			className={`${FIELD_STYLE} ${props.readOnly && 'bg-form-field-bg-readonly pointer-events:none'} ${props.inputClassName}`}
 			id={props.id}
 			name={props.id}
 			onChange={e => props.onChange?.(e.target.value)}
@@ -72,7 +70,6 @@ export function Select(props: FieldProps<HTMLSelectElement, 'select'>): React.Re
 
 		<select
 			className={`${FIELD_STYLE} ${props.selectClassName}`}
-			disabled={props.disabled}
 			id={props.id}
 			name={props.id}
 			onChange={(e => props.onChange?.(e.target.value))}

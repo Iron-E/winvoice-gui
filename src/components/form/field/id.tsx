@@ -42,11 +42,11 @@ export function InputId(props:
 ): React.ReactElement {
 	return (
 		<Input
-			disabled={true}
 			id={props.id}
-			label={props.label ?? 'ID'}
 			inputClassName='min-w-[36ch]'
+			label={props.label ?? 'ID'}
 			onChange={props.onChange}
+			readOnly={true}
 			required={props.required}
 			title={props.title}
 			type='text'

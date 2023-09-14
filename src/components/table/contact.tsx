@@ -47,7 +47,7 @@ export function ContactTable(props:
 	return <>
 		<Table
 			headers={HEADERS}
-			onReorder={props.orderedData.setOrder}
+			onReorder={props.orderedData.setOrder as any}
 			order={props.orderedData.order}
 		>
 			{props.orderedData.data.map(c => (
@@ -56,7 +56,6 @@ export function ContactTable(props:
 					key={c.label}
 					onClick={props.onRowSelect && (() => props.onRowSelect!(c))}
 					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: c }) : undefined}
-					// ?
 					onEdit={() => setRowEvent({ action: 'edit', data: c })}
 				>
 					<Td>{c.label}</Td>
@@ -69,9 +68,9 @@ export function ContactTable(props:
 							/>
 						)}
 					</Td>
-					<Td>{'email' in c && c.email}</Td>
-					<Td>{'other' in c && c.other}</Td>
-					<Td>{'phone' in c && c.phone}</Td>
+					<Td>{(c as any).email}</Td>
+					<Td>{(c as any).other}</Td>
+					<Td>{(c as any).phone}</Td>
 				</Tr>
 			))}
 		</Table>

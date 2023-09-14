@@ -19,8 +19,8 @@ export type Children = Readonly<{
 export type Click = On<'click', [event: React.MouseEvent]>;
 
 /** Whether this particular element is disabled. */
-export type Disabled = {
-	disabled?: boolean,
+export type ReadOnly = {
+	readOnly?: boolean,
 };
 
 /** Properties of an {@link React.ReactElement | element} that include children. */

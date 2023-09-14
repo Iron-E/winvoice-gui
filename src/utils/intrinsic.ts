@@ -18,5 +18,8 @@ export type IntrinsicProp<
 	ElementName extends keyof React.JSX.IntrinsicElements,
 	PropertyName extends FieldName,
 > = {
-	[key in keyof React.JSX.IntrinsicElements[ElementName]]-?: key extends PropertyName ? React.JSX.IntrinsicElements[ElementName][key] : never;
+	[key in keyof React.JSX.IntrinsicElements[ElementName]]-?:
+		key extends PropertyName
+		? React.JSX.IntrinsicElements[ElementName][key]
+		: never;
 }[keyof React.JSX.IntrinsicElements[ElementName]];

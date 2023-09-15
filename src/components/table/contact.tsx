@@ -62,6 +62,7 @@ export function ContactTable(props:
 					<Td>
 						{'address' in c && (
 							<LocationTable
+								deletable={false}
 								onReorderOuter={props.onReorderOuterAddress}
 								orderedData={new OrderedData(props.addressOrder, props.onReorderAddress, [c.address])}
 								outerOrder={props.outerAddressorder}

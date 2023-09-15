@@ -8,6 +8,7 @@ import { SPACE } from '../css';
 import { SelectContactKind } from './field/contact-kind';
 import { isContact, type Contact, type Location, ContactKinds } from '@/schema';
 import { useApiContext } from '../api';
+import { Maybe } from '@/utils';
 
 const KIND_INPUT_TITLES: Record<ContactKinds, string> = {
 	address: 'The physical address',
@@ -26,11 +27,16 @@ const KIND_INPUT_TYPES: Partial<Record<ContactKinds, React.HTMLInputTypeAttribut
  */
 export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
-	const [KIND, setKind] = React.useState<ContactKinds>(
-		(props.initialValues && Object.keys(props.initialValues).filter(k => k === 'label')[0] as ContactKinds) ?? 'email'
+
+	type InitialKind = Maybe<[ContactKinds, Location | string]>;
+	const INITIAL_KIND  = props.initialValues && Object.entries(props.initialValues).reduce<InitialKind>(
+		(previous_entry, entry) => (entry[0] === 'label' ? previous_entry : entry) as InitialKind,
+		undefined,
 	);
+
+	const [KIND, setKind] = React.useState(INITIAL_KIND?.[0] ?? 'email');
 	const [LABEL, setLabel] = React.useState(props.initialValues?.label ?? '');
-	const [VALUE, setValue] = React.useState<Location | string>('');
+	const [VALUE, setValue] = React.useState(INITIAL_KIND?.[1] ?? '');
 	const [HANDLER, setIdEvent] = useLocationIdEventHandlers(props.id, setValue);
 
 	return <>

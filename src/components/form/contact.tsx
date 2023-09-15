@@ -10,6 +10,13 @@ import { isContact, type Contact, type Location, ContactKinds } from '@/schema';
 import { useApiContext } from '../api';
 import { Maybe } from '@/utils';
 
+const KIND_INPUT_LABELS: Record<ContactKinds, string> = {
+	address: 'Location',
+	email: 'Email address',
+	other: 'Other information',
+	phone: 'Phone number',
+};
+
 const KIND_INPUT_TITLES: Record<ContactKinds, string> = {
 	address: 'The physical address',
 	email: 'The email address',
@@ -81,7 +88,7 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 			{KIND === 'address'
 				? <InputId
 					id={`${props.id}--address`}
-					label='Location'
+					label={KIND_INPUT_LABELS[KIND]}
 					onNew={setIdEvent}
 					onSearch={setIdEvent}
 					required={true}
@@ -89,8 +96,8 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 					value={(VALUE as Location).id}
 				/>
 				: <Input
-					id={`${props.id}--value`}
-					label={KIND}
+					id={`${props.id}--${KIND}`}
+					label={KIND_INPUT_LABELS[KIND]}
 					onChange={setValue}
 					pattern={KIND === 'phone' ? '^[0-9\\- ]+$' : undefined}
 					required={true}

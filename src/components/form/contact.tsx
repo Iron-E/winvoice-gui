@@ -53,13 +53,12 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 				if (RESULT === null) { return; }
 				var result = RESULT;
 			} else {
-				var result: Contact = { ...props.initialValues, [KIND]: VALUE, label: LABEL };
+				var result = { [KIND]: VALUE, label: LABEL } as Contact;
 			}
 
 			await Promise.resolve(props.onSubmit?.(result));
-			setKind('email');
 			setLabel('');
-			setValue('');
+			setValue(KIND === 'address' ? {id: '', name: ''} : '');
 		}}>
 			<SelectContactKind
 				id={`${props.id}--kind`}

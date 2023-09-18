@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
+import type { Location } from '@/schema';
 import { LocationForm, LocationTable, locationValuators, useLocationOrder, useOrderedData } from '@/components';
-import { Location } from '@/schema';
 
 export default function Page(): React.ReactElement {
 	const [OUTER_ORDER, setOuterOrder] = useLocationOrder();

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Contact } from '@/schema';
+import type { Contact } from '@/schema';
 import { ContactForm, ContactTable, contactValuators, useLocationOrder, useOrderedData } from '@/components';
 
 export default function Page(): React.ReactElement {

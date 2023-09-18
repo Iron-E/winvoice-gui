@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
+import type { Department } from '@/schema';
 import { DepartmentForm, DepartmentTable, useOrderedData } from '@/components';
-import { Department } from '@/schema';
 
 export default function Page(): React.ReactElement {
 	const ORDERED_DATA = useOrderedData<Department>('name');

@@ -5,8 +5,8 @@ import type { BaseProps } from './props';
 import type { Contact, Location } from '@/schema'
 import type { On } from '../props-with';
 import { ContactForm } from '../form';
+import { LocationOrder, LocationTable, OrderedData, Table, Td, Tr, type Valuators, useRowEventHandlers } from '../table';
 import { Route } from '@/api';
-import { Table, Td, Tr, type Valuators, useRowEventHandlers, LocationOrder, LocationTable, OrderedData } from '../table';
 import { useApiContext } from '../api';
 
 /** the headers of the {@link ContactTable}. */

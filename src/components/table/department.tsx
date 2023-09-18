@@ -11,8 +11,11 @@ import { useApiContext } from '../api';
 /** the headers of the {@link DepartmentTable}. */
 const HEADERS = ['Name', 'ID'] as const;
 
+/** The {@link Order} of {@link Location}s. */
+export type DepartmentOrder = ReturnType<typeof useOrder<keyof Department>>;
+
 /** @returns {@link useOrder} specialized for a {@link Department}. */
-export function useDepartmentOrder(): ReturnType<typeof useOrder<keyof Department>> {
+export function useDepartmentOrder(): DepartmentOrder {
 	return useOrder<keyof Department>('name');
 }
 

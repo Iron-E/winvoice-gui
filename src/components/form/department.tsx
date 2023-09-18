@@ -15,10 +15,7 @@ export function useDepartmentIdEventHandlers(
 	id: string,
 	setDepartment: Parameters<DepartmentIdEventHandlers>[0],
 ): ReturnType<DepartmentIdEventHandlers> {
-	return useIdEventHandlers(
-		setDepartment,
-		p => <DepartmentForm {...p} id={`${id}--department--form`} />,
-	);
+	return useIdEventHandlers(setDepartment, p => <DepartmentForm {...p} id={`${id}--department--form`} />);
 }
 
 /**
@@ -35,7 +32,7 @@ export function DepartmentForm(props: BaseProps<Department>): React.ReactElement
 				if (RESULT === null) { return; }
 				var result = RESULT;
 			} else {
-				var result: Department = { ...props.initialValues, name: NAME };
+				var result = { ...props.initialValues, name: NAME };
 			}
 
 			await Promise.resolve(props.onSubmit?.(result));

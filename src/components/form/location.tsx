@@ -14,21 +14,18 @@ export function useLocationIdEventHandlers(
 	id: string,
 	setLocation: Parameters<typeof useIdEventHandlers<Location>>[0],
 ): ReturnType<typeof useIdEventHandlers<Location>> {
-	return useIdEventHandlers(
-		setLocation,
-		p => <LocationForm {...p} id={`${id}--location--form`} />,
-	);
+	return useIdEventHandlers(setLocation, p => <LocationForm {...p} id={`${id}--location--form`} />);
 }
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Location} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
 export function LocationForm(props: BaseProps<Location>): React.ReactElement {
-	const [CLIENT, showMessage] = useApiContext();
-
 	const [CURRENCY, setCurrency] = React.useState(props.initialValues?.currency);
-	const [NAME, setName] = React.useState(props.initialValues?.currency ?? '');
+	const [NAME, setName] = React.useState(props.initialValues?.name ?? '');
 	const [OUTER, setOuter] = React.useState(props.initialValues?.outer);
+
+	const [CLIENT, showMessage] = useApiContext();
 	const [HANDLER, setIdEvent] = useLocationIdEventHandlers(props.id, setOuter);
 
 	return <>

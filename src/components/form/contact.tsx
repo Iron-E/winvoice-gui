@@ -33,8 +33,6 @@ const KIND_INPUT_TYPES: Partial<Record<ContactKinds, React.HTMLInputTypeAttribut
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Contact} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
 export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
-	const [CLIENT, showMessage] = useApiContext();
-
 	type InitialKind = Maybe<[ContactKinds, Location | string]>;
 	const INITIAL_KIND  = props.initialValues && Object.entries(props.initialValues).reduce<InitialKind>(
 		(previous_entry, entry) => (entry[0] === 'label' ? previous_entry : entry) as InitialKind,
@@ -44,6 +42,8 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 	const [KIND, setKind] = React.useState(INITIAL_KIND?.[0] ?? 'email');
 	const [LABEL, setLabel] = React.useState(props.initialValues?.label ?? '');
 	const [VALUE, setValue] = React.useState(INITIAL_KIND?.[1] ?? '');
+
+	const [CLIENT, showMessage] = useApiContext();
 	const [HANDLER, setIdEvent] = useLocationIdEventHandlers(props.id, setValue);
 
 	return <>

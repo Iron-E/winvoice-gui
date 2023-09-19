@@ -61,7 +61,7 @@ export function LocationForm(props: BaseProps<Location>): React.ReactElement {
 				label='Outer Location'
 				onNew={setIdEvent}
 				onSearch={setIdEvent}
-				title='The location outside this one'
+				title='The location outside this (e.g. Phoenix is outside Arizona)'
 				value={OUTER?.id ?? ''}
 			/>
 

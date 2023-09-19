@@ -70,7 +70,7 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 
 					setKind(k);
 				}}
-				title='The currency which is used by this location, if it is different than surrounding locations'
+				title='The type of contact information'
 				value={KIND}
 			/>
 
@@ -79,7 +79,7 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 				label='Label'
 				onChange={setLabel}
 				required={true}
-				title='The name of the location which is to be created'
+				title='An easy-to-remember name for the contact information'
 				value={LABEL}
 			/>
 

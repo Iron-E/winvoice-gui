@@ -43,7 +43,6 @@ export function EmployeeForm(props: BaseProps<Employee>): React.ReactElement {
 		}}>
 			{props.allFields && (
 				<Checkbox
-					inputClassName='self-start'
 					checked={ACTIVE}
 					id={`${props.id}--active`}
 					onChange={a => { console.log(a ?? 'foobar'); setActive(active => !active); }}

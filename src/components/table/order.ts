@@ -30,7 +30,7 @@ type GetId<T, Id> = (value: T) => Id;
  * ```
  */
 export type Valuators<T> = {
-	[key in keyof T]?: {
+	[key in keyof T]?: { map: (value: NonNullable<T[key]>) => any } | {
 		key: keyof NonNullable<T[key]>,
 		valuators?: Valuators<NonNullable<T[key]>>,
 	};
@@ -114,6 +114,12 @@ export class OrderedData<T> {
 		valuator: NonNullable<Valuators<T>[keyof T]>,
 	): [any, any] {
 		while ((value1 && value2 && valuator) != undefined) {
+			if ('map' in valuator) {
+				value1 = valuator.map(value1 as NonNullable<ValueOf<T>>);
+				value2 = valuator.map(value2 as NonNullable<ValueOf<T>>);
+				break;
+			}
+
 			value1 = (value1 as NonNullable<ValueOf<T>>)[valuator.key] as any;
 			value2 = (value2 as NonNullable<ValueOf<T>>)[valuator.key] as any;
 			valuator = valuator.valuators?.[valuator.key] as any;

@@ -6,6 +6,7 @@ export * from './form/department';
 export * from './form/employee';
 export * from './form/field';
 export * from './form/location';
+export * from './form/organization';
 
 /** A `form` which prevents the page from refreshing on submit. */
 export function Form(props: Children & Required<AsyncOn<'submit'>>): React.ReactElement {

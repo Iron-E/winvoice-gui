@@ -38,9 +38,7 @@ export function EmployeeForm(props: BaseProps<Employee>): React.ReactElement {
 			}
 
 			await Promise.resolve(props.onSubmit?.(result));
-			setDepartment(undefined);
 			setName('');
-			setTitle('');
 		}}>
 			<InputId
 				id={`${props.id}--outer`}

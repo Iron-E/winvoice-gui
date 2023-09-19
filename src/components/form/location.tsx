@@ -39,9 +39,7 @@ export function LocationForm(props: BaseProps<Location>): React.ReactElement {
 			}
 
 			await Promise.resolve(props.onSubmit?.(result));
-			setCurrency(undefined);
 			setName('');
-			setOuter(undefined);
 		}}>
 			<SelectCurrency
 				id={`${props.id}--currency`}

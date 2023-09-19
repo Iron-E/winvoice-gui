@@ -13,6 +13,7 @@ export * from './table/department';
 export * from './table/employee';
 export * from './table/location';
 export * from './table/order';
+export * from './table/organization';
 export * from './table/row';
 
 type TableProps<T extends string> = {

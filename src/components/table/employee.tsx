@@ -57,7 +57,7 @@ export function EmployeeTable(props:
 					// ?
 					onEdit={() => setRowEvent({ action: 'edit', data: e })}
 				>
-					<Td>{e.active.toString()}</Td>
+					<Td>{e.active ? 'Yes' : 'No'}</Td>
 					<Td>
 						<DepartmentTable
 							deletable={false}

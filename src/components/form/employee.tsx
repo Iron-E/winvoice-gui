@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputId, InputString, useDepartmentIdEventHandlers, useIdEventHandlers } from '../form';
+import { Checkbox, Form, FormButton, InputId, InputString, useDepartmentIdEventHandlers, useIdEventHandlers } from '../form';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { isEmployee, type Employee } from '@/schema';
@@ -20,6 +20,7 @@ export function useEmployeeIdEventHandlers(
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Employee} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
 export function EmployeeForm(props: BaseProps<Employee>): React.ReactElement {
+	const [ACTIVE, setActive] = React.useState(props.initialValues?.active ?? true);
 	const [DEPARTMENT, setDepartment] = React.useState(props.initialValues?.department);
 	const [NAME, setName] = React.useState(props.initialValues?.name ?? '');
 	const [TITLE, setTitle] = React.useState(props.initialValues?.title ?? '');
@@ -34,14 +35,26 @@ export function EmployeeForm(props: BaseProps<Employee>): React.ReactElement {
 				if (RESULT === null) { return; }
 				var result = RESULT;
 			} else {
-				var result = { ...props.initialValues, department: DEPARTMENT!, name: NAME, title: TITLE };
+				var result = { ...props.initialValues, active: ACTIVE, department: DEPARTMENT!, name: NAME, title: TITLE };
 			}
 
 			await Promise.resolve(props.onSubmit?.(result));
 			setName('');
 		}}>
+			{props.allFields && (
+				<Checkbox
+					inputClassName='self-start'
+					checked={ACTIVE}
+					id={`${props.id}--active`}
+					onChange={a => { console.log(a ?? 'foobar'); setActive(active => !active); }}
+					title='Whether the employee is active at the company'
+				>
+					Active
+				</Checkbox>
+			)}
+
 			<InputId
-				id={`${props.id}--outer`}
+				id={`${props.id}--department`}
 				label='Department'
 				onNew={setIdEvent}
 				onSearch={setIdEvent}

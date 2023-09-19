@@ -31,6 +31,29 @@ bg-form-field-bg border-form-field-border hover:border-form-field-border-hover` 
 type InputProps = React.JSX.IntrinsicElements['input'];
 
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
+export function Checkbox(props:
+	& Omit<FieldProps<HTMLInputElement, 'input'>, 'label' | 'onChange' | 'required' | 'value'>
+	& On<'change', [value: boolean]>
+	& { [key in 'checked']?: InputProps[key] }
+): React.ReactElement {
+	return (
+		<label>
+			<input
+				checked={props.checked}
+				className={`${FIELD_STYLE} ${props.inputClassName}`}
+				name={props.id}
+				onChange={props.onChange && (() => props.onChange!(props.checked ?? false))}
+				title={props.title}
+				type='checkbox'
+				value={props.checked ? 'true' : 'false'}
+			/>
+
+			{props.children}
+		</label>
+	);
+}
+
+/** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
 export function Input(props:
 	& FieldProps<HTMLInputElement, 'input'>
 	& { [key in 'pattern' | 'type']?: InputProps[key] }
@@ -50,7 +73,7 @@ export function Input(props:
 			className={`${FIELD_STYLE} ${props.inputClassName}`}
 			id={props.id}
 			name={props.id}
-			onChange={e => props.onChange?.(e.target.value)}
+			onChange={props.onChange && (e => props.onChange!(e.target.value))}
 			pattern={props.pattern}
 			required={props.required}
 			title={props.title}
@@ -71,7 +94,7 @@ export function Select(props: FieldProps<HTMLSelectElement, 'select'>): React.Re
 			className={`${FIELD_STYLE} ${props.selectClassName}`}
 			id={props.id}
 			name={props.id}
-			onChange={(e => props.onChange?.(e.target.value))}
+			onChange={props.onChange && (e => props.onChange!(e.target.value))}
 			required={props.required}
 			title={props.title}
 			value={props.value}

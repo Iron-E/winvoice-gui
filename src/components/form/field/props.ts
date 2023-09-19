@@ -2,7 +2,7 @@ import type { On } from '../../props-with';
 import type { Props, Spread } from '@/utils';
 import { Input, Select } from '../../form';
 
-type OmitProps<T> = Omit<Props<T>, 'inputClassName' | 'onChange' | 'pattern' | 'readOnly' | 'selectClassName' | 'type'>
+type OmitProps<T> = Omit<Props<T>, 'checked' | 'inputClassName' | 'onChange' | 'pattern' | 'selectClassName' | 'type'>
 type SpreadProps<Properties, OnChangeValue = string> = 'label' extends keyof Properties
 	? Spread<
 		Properties,

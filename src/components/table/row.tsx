@@ -25,7 +25,7 @@ export function useRowEventHandlers<T, Id extends FieldName>(
 	route: UserInputRoute,
 	confirmDeleteMessage: (value: T) => string,
 	getId: (value: T) => Id,
-	EditForm: (props: AsyncOn<'submit', [value: T]> & { initialValues: T }) => React.ReactElement,
+	EditForm: (props: AsyncOn<'submit', [value: T]> & { allFields: true, initialValues: T }) => React.ReactElement,
 ): [Opt<React.ReactElement>, ReturnType<typeof useModalVisibility<RowEvent<T>>>[1]] {
 	const [MODAL_VISIBLE, setModalVisible] = useModalVisibility<RowEvent<T>>();
 	return [
@@ -37,6 +37,7 @@ export function useRowEventHandlers<T, Id extends FieldName>(
 			/>
 			: <Modal onClose={setModalVisible}>
 				<EditForm
+					allFields={true}
 					initialValues={MODAL_VISIBLE.data}
 					onSubmit={async l => {
 						await orderedData.edit(client, showMessage, route, { [getId(l)]: l } as Record<Id, T>, getId);

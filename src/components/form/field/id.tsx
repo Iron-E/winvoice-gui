@@ -43,10 +43,9 @@ export function InputId(props:
 	return (
 		<Input
 			id={props.id}
-			inputClassName='min-w-[36ch]'
+			inputClassName='min-w-[36ch] bg-form-field-bg-readonly'
 			label={props.label ?? 'ID'}
 			onChange={props.onChange}
-			readOnly={true}
 			required={props.required}
 			title={props.title}
 			type='text'

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Children, Class, Id, On, ReadOnly } from '../props-with';
+import type { Children, Class, Id, On } from '../props-with';
 import type { IntrinsicProp } from '@/utils';
 import { FLEX, FLEX_BETWEEN, SPACE } from '../css';
 
@@ -33,7 +33,6 @@ type InputProps = React.JSX.IntrinsicElements['input'];
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
 export function Input(props:
 	& FieldProps<HTMLInputElement, 'input'>
-	& ReadOnly
 	& { [key in 'pattern' | 'type']?: InputProps[key] }
 ): React.ReactElement {
 	return <>
@@ -48,7 +47,7 @@ export function Input(props:
 		</span>
 
 		<input
-			className={`${FIELD_STYLE} ${props.readOnly && 'bg-form-field-bg-readonly pointer-events:none'} ${props.inputClassName}`}
+			className={`${FIELD_STYLE} ${props.inputClassName}`}
 			id={props.id}
 			name={props.id}
 			onChange={e => props.onChange?.(e.target.value)}

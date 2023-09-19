@@ -5,7 +5,7 @@ import React from 'react';
 import type { BaseProps } from './props';
 import type { Location } from '@/schema'
 import type { On } from '../props-with';
-import type { Props } from '@/utils';
+import { getId, type Props } from '@/utils';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/20/solid';
 import { FLEX, ICON } from '../css';
 import { LocationForm } from '../form';
@@ -47,8 +47,8 @@ function BaseLocationTable(props:
 	const [HANDLER, setRowEvent] = useRowEventHandlers(
 		props.orderedData, CLIENT, showMessage, Route.Location,
 		l => `location ${l.id} "${l.name}"`,
-		l => l.id,
-		(props) => <LocationForm  {...props} id='edit-location-form' />,
+		getId,
+		props => <LocationForm  {...props} id='edit-location-form' />,
 	);
 
 	return <>
@@ -97,7 +97,7 @@ export function LocationTable(props:
 						props.outerOrder,
 						props.onReorderOuter,
 						[o],
-						d => props.orderedData.map(v =>  v.outer === o ? { ...v, outer: d[0] } : v),
+						d => props.orderedData.swap(v => v.outer?.id, o.id, { ...o, outer: d[0] }),
 					)}
 				/>
 			)}

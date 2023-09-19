@@ -8,6 +8,7 @@ import { DepartmentOrder, DepartmentTable, OrderedData, Table, Td, Tr, type Valu
 import { EmployeeForm } from '../form';
 import { Route } from '@/api';
 import { useApiContext } from '../api';
+import { getId } from '@/utils';
 
 /** the headers of the {@link EmployeeTable}. */
 const HEADERS = ['ID', 'Active', 'Name', 'Title', 'Department'] as const;
@@ -38,8 +39,8 @@ export function EmployeeTable(props:
 	const [HANDLER, setRowEvent] = useRowEventHandlers(
 		props.orderedData, CLIENT, showMessage, Route.Employee,
 		e => `employee ${e.id} "${e.name}"`,
-		e => e.id,
-		(props) => <EmployeeForm  {...props} id='edit-employee-form' />,
+		getId,
+		props => <EmployeeForm  {...props} id='edit-employee-form' />,
 	);
 
 	return <>
@@ -68,7 +69,7 @@ export function EmployeeTable(props:
 								props.departmentOrder,
 								props.onReorderDepartment,
 								[e.department],
-								d => props.orderedData.swap(e, { ...e, department: d[0]! }),
+								d => props.orderedData.swap(getId, e.id, { ...e, department: d[0]! }),
 							)}
 						/>
 					</Td>

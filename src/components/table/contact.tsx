@@ -13,6 +13,14 @@ import { useApiContext } from '../api';
 const HEADERS = ['Label', 'Email', 'Other', 'Phone', 'Address'] as const;
 
 /**
+ * @param c the contact to get the label of.
+ * @returns the label of the contact.
+ */
+function label(c: Contact): Contact['label'] {
+	return c.label;
+}
+
+/**
  * @param outerOrder the
  * @returns {@link Valuators} for a {@link Location}
  */
@@ -40,7 +48,7 @@ export function ContactTable(props:
 	const [HANDLER, setRowEvent] = useRowEventHandlers(
 		props.orderedData, CLIENT, showMessage, Route.Contact,
 		c => `contact "${c.label}"`,
-		c => c.label,
+		label,
 		(props) => <ContactForm  {...props} id='edit-location-form' />,
 	);
 
@@ -71,7 +79,7 @@ export function ContactTable(props:
 									props.addressOrder,
 									props.onReorderAddress,
 									[c.address],
-									d => props.orderedData.swap(c, { ...c, address: d[0]! }),
+									d => props.orderedData.swap(label, c.label, { ...c, address: d[0]! }),
 								)}
 								outerOrder={props.outerAddressorder}
 							/>

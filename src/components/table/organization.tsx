@@ -7,6 +7,7 @@ import type { On } from '../props-with';
 import { LocationOrder, LocationTable, OrderedData, Table, Td, Tr, type Valuators, useOrder, useRowEventHandlers } from '../table';
 import { OrganizationForm } from '../form';
 import { Route } from '@/api';
+import { getId } from '@/utils';
 import { useApiContext } from '../api';
 
 /** the headers of the {@link OrganizationTable}. */
@@ -43,8 +44,8 @@ export function OrganizationTable(props:
 	const [HANDLER, setRowEvent] = useRowEventHandlers(
 		props.orderedData, CLIENT, showMessage, Route.Organization,
 		e => `organization ${e.id} "${e.name}"`,
-		e => e.id,
-		(props) => <OrganizationForm  {...props} id='edit-organization-form' />,
+		getId,
+		props => <OrganizationForm  {...props} id='edit-organization-form' />,
 	);
 
 	return <>
@@ -59,7 +60,6 @@ export function OrganizationTable(props:
 					key={o.id}
 					onClick={props.onRowSelect && (() => props.onRowSelect!(o))}
 					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: o }) : undefined}
-					// ?
 					onEdit={() => setRowEvent({ action: 'edit', data: o })}
 				>
 					<Td>{o.id}</Td>
@@ -72,7 +72,7 @@ export function OrganizationTable(props:
 								props.locationOrder,
 								props.onReorderLocation,
 								[o.location],
-								d => props.orderedData.swap(o, { ...o, location: d[0]! }),
+								d => props.orderedData.swap(getId, o.id, { ...o, location: d[0]! }),
 							)}
 							outerOrder={props.outerLocationOrder}
 						/>

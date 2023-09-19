@@ -5,6 +5,12 @@ import { Client } from "../api";
 import { UserInputRoute } from "@/api";
 
 /**
+ * @param value the value to retrieve the id of
+ * @returns the `<Id>` of the `value`.
+ */
+type GetId<T, Id> = (value: T) => Id;
+
+/**
  * How {@link Order} should be valuated when a given {@link Order.column} leads to an ambiguous ordering.
  *
  * @example
@@ -146,7 +152,7 @@ export class OrderedData<T> {
 		showMessage: ShowMessage,
 		route: UserInputRoute,
 		entities: Partial<Record<Id, T>>,
-		getId: (value: T) => Id,
+		getId: GetId<T, Id>,
 	): Promise<void> {
 		if (await client.patch(showMessage, route, { entities: Object.values(entities) })) {
 			this.map(value => entities[getId(value)] ?? value);
@@ -174,8 +180,8 @@ export class OrderedData<T> {
 	}
 
 	/** Filter out the `value` from the {@link OrderedData.data}. */
-	public swap(this: OrderedData<T>, value: T, replacement: T): void {
-		this.map(v => v === value ? replacement : v);
+	public swap<Id>(this: OrderedData<T>, getId: GetId<T, Id>, replacedId: Id, replacement: T): void {
+		this.map(v => getId(v) === replacedId ? replacement : v);
 	}
 }
 

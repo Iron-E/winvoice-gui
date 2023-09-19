@@ -12,3 +12,4 @@ export type { UnionToKeys } from './union-to-keys';
 export type { ValueOf } from './value-of';
 export { equalsIgnoreCase } from './equals-ignore-case';
 export { fieldMaybeIs, type Maybe } from './maybe';
+export { getId } from './get-id';

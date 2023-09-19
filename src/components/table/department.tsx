@@ -6,6 +6,7 @@ import type { Department } from '@/schema'
 import { DepartmentForm } from '../form';
 import { Route } from '@/api';
 import { Table, Td, Tr, useOrder, useRowEventHandlers } from '../table';
+import { getId } from '@/utils';
 import { useApiContext } from '../api';
 
 /** the headers of the {@link DepartmentTable}. */
@@ -25,8 +26,8 @@ export function DepartmentTable(props: BaseProps<Department, 'id'>): React.React
 	const [HANDLER, setRowEvent] = useRowEventHandlers(
 		props.orderedData, CLIENT, showMessage, Route.Department,
 		d => `department ${d.id} "${d.name}"`,
-		d => d.id,
-		(props) => <DepartmentForm  {...props} id='edit-department-form' />,
+		getId,
+		props => <DepartmentForm  {...props} id='edit-department-form' />,
 	);
 
 	return <>

@@ -10,7 +10,7 @@ import { Route } from '@/api';
 import { useApiContext } from '../api';
 
 /** the headers of the {@link EmployeeTable}. */
-const HEADERS = ['Active', 'Department', 'ID', 'Name', 'Title'] as const;
+const HEADERS = ['ID', 'Active', 'Name', 'Title', 'Department'] as const;
 
 /**
  * @param outerOrder the
@@ -57,7 +57,10 @@ export function EmployeeTable(props:
 					// ?
 					onEdit={() => setRowEvent({ action: 'edit', data: e })}
 				>
+					<Td>{e.id}</Td>
 					<Td>{e.active ? 'Yes' : 'No'}</Td>
+					<Td>{e.name}</Td>
+					<Td>{e.title}</Td>
 					<Td>
 						<DepartmentTable
 							deletable={false}
@@ -69,9 +72,6 @@ export function EmployeeTable(props:
 							)}
 						/>
 					</Td>
-					<Td>{e.id}</Td>
-					<Td>{e.name}</Td>
-					<Td>{e.title}</Td>
 				</Tr>
 			))}
 		</Table>

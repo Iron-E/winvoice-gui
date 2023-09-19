@@ -9,7 +9,7 @@ import { Table, Td, Tr, useOrder, useRowEventHandlers } from '../table';
 import { useApiContext } from '../api';
 
 /** the headers of the {@link DepartmentTable}. */
-const HEADERS = ['Name', 'ID'] as const;
+const HEADERS = ['ID', 'Name'] as const;
 
 /** The {@link Order} of {@link Location}s. */
 export type DepartmentOrder = ReturnType<typeof useOrder<keyof Department>>;
@@ -44,8 +44,8 @@ export function DepartmentTable(props: BaseProps<Department, 'id'>): React.React
 					// ?
 					onEdit={() => setRowEvent({ action: 'edit', data: d })}
 				>
-					<Td>{d.name}</Td>
 					<Td>{d.id}</Td>
+					<Td>{d.name}</Td>
 				</Tr>
 			))}
 		</Table>

@@ -10,7 +10,7 @@ import { Route } from '@/api';
 import { useApiContext } from '../api';
 
 /** the headers of the {@link OrganizationTable}. */
-const HEADERS = ['ID', 'Location', 'Name'] as const;
+const HEADERS = ['ID', 'Name', 'Location'] as const;
 
 /**
  * @param outerOrder the
@@ -63,6 +63,7 @@ export function OrganizationTable(props:
 					onEdit={() => setRowEvent({ action: 'edit', data: o })}
 				>
 					<Td>{o.id}</Td>
+					<Td>{o.name}</Td>
 					<Td>
 						<LocationTable
 							deletable={false}
@@ -76,7 +77,6 @@ export function OrganizationTable(props:
 							outerOrder={props.outerLocationOrder}
 						/>
 					</Td>
-					<Td>{o.name}</Td>
 				</Tr>
 			))}
 		</Table>

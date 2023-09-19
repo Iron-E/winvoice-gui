@@ -15,7 +15,7 @@ import { Route } from '@/api';
 import { useApiContext } from '../api';
 
 /** the headers of the {@link LocationTable}. */
-const HEADERS = ['Name', 'ID', 'Currency', 'Outer'] as const;
+const HEADERS = ['ID', 'Currency', 'Name', 'Outer'] as const;
 
 /**
  * @param outerOrder the
@@ -66,9 +66,9 @@ function BaseLocationTable(props:
 					// ?
 					onEdit={() => setRowEvent({ action: 'edit', data: l })}
 				>
-					<Td>{l.name}</Td>
 					<Td>{l.id}</Td>
 					<Td>{l.currency}</Td>
+					<Td>{l.name}</Td>
 					<Td>
 						{l.outer != undefined && props.mapOuter(l.outer)}
 					</Td>

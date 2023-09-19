@@ -10,7 +10,7 @@ import { Route } from '@/api';
 import { useApiContext } from '../api';
 
 /** the headers of the {@link ContactTable}. */
-const HEADERS = ['Label', 'Address', 'Email', 'Other', 'Phone'] as const;
+const HEADERS = ['Label', 'Email', 'Other', 'Phone', 'Address'] as const;
 
 /**
  * @param outerOrder the
@@ -59,6 +59,9 @@ export function ContactTable(props:
 					selected={c.label === props.selectedRow}
 				>
 					<Td>{c.label}</Td>
+					<Td>{'email' in c && c.email}</Td>
+					<Td>{'other' in c && c.other}</Td>
+					<Td>{'phone' in c && c.phone}</Td>
 					<Td>
 						{'address' in c && (
 							<LocationTable
@@ -74,9 +77,6 @@ export function ContactTable(props:
 							/>
 						)}
 					</Td>
-					<Td>{'email' in c && c.email}</Td>
-					<Td>{'other' in c && c.other}</Td>
-					<Td>{'phone' in c && c.phone}</Td>
 				</Tr>
 			))}
 		</Table>

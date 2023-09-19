@@ -93,7 +93,12 @@ export function LocationTable(props:
 			orderedData={props.orderedData}
 			mapOuter={o => (
 				<OuterLocationTable
-					orderedData={new OrderedData(props.outerOrder, props.onReorderOuter, [o])}
+					orderedData={new OrderedData(
+						props.outerOrder,
+						props.onReorderOuter,
+						[o],
+						d => props.orderedData.map(v =>  v.outer === o ? { ...v, outer: d[0] } : v),
+					)}
 				/>
 			)}
 			selectedRow={props.selectedRow}

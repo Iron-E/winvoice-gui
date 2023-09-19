@@ -149,8 +149,18 @@ export class OrderedData<T> {
 		getId: (value: T) => Id,
 	): Promise<void> {
 		if (await client.patch(showMessage, route, { entities: Object.values(entities) })) {
-			this.setData?.(this.data.map(value => entities[getId(value)] ?? value));
+			this.map(value => entities[getId(value)] ?? value);
 		}
+	}
+
+	/**
+	 * {@link OrderedData.setData | Set the data} to the result of a `mapping` operation performed on the
+	 * {@link OrderedData.data | existing data }.
+	 *
+	 * @param mapping the function to call on the existing data.
+	 */
+	public map(this: OrderedData<T>, mapping: (value: T, index: number, array: readonly T[]) => T): void {
+		this.setData?.(this.data.map(mapping));
 	}
 
 	/** Reruns the previous {@link reorder} operation, except with different `valuators`. */
@@ -161,6 +171,11 @@ export class OrderedData<T> {
 	/** Filter out the `value` from the {@link OrderedData.data}. */
 	public remove(this: OrderedData<T>, values: readonly T[]): void {
 		this.setData?.(this.data.filter(d => values.some(v => v !== d)));
+	}
+
+	/** Filter out the `value` from the {@link OrderedData.data}. */
+	public swap(this: OrderedData<T>, value: T, replacement: T): void {
+		this.map(v => v === value ? replacement : v);
 	}
 }
 

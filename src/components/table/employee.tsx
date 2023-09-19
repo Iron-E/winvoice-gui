@@ -57,11 +57,16 @@ export function EmployeeTable(props:
 					// ?
 					onEdit={() => setRowEvent({ action: 'edit', data: e })}
 				>
-					<Td>{e.active}</Td>
+					<Td>{e.active.toString()}</Td>
 					<Td>
 						<DepartmentTable
 							deletable={false}
-							orderedData={new OrderedData(props.departmentOrder, props.onReorderDepartment, [e.department])}
+							orderedData={new OrderedData(
+								props.departmentOrder,
+								props.onReorderDepartment,
+								[e.department],
+								d => props.orderedData.swap(e, { ...e, department: d[0]! }),
+							)}
 						/>
 					</Td>
 					<Td>{e.id}</Td>

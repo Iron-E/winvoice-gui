@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputId, InputString, useIdEventHandlers } from '../form';
+import { Form, FormButton, InputId, InputString, useDepartmentIdEventHandlers, useIdEventHandlers } from '../form';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { isEmployee, type Employee } from '@/schema';
@@ -25,7 +25,7 @@ export function EmployeeForm(props: BaseProps<Employee>): React.ReactElement {
 	const [TITLE, setTitle] = React.useState(props.initialValues?.title ?? '');
 
 	const [CLIENT, showMessage] = useApiContext();
-	const [HANDLER, setIdEvent] = useEmployeeIdEventHandlers(props.id, setDepartment);
+	const [HANDLER, setIdEvent] = useDepartmentIdEventHandlers(props.id, setDepartment);
 
 	return <>
 		<Form onSubmit={async () => {

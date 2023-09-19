@@ -64,7 +64,12 @@ export function ContactTable(props:
 							<LocationTable
 								deletable={false}
 								onReorderOuter={props.onReorderOuterAddress}
-								orderedData={new OrderedData(props.addressOrder, props.onReorderAddress, [c.address])}
+								orderedData={new OrderedData(
+									props.addressOrder,
+									props.onReorderAddress,
+									[c.address],
+									d => props.orderedData.swap(c, { ...c, address: d[0]! }),
+								)}
 								outerOrder={props.outerAddressorder}
 							/>
 						)}

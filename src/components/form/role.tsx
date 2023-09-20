@@ -50,10 +50,11 @@ export function RoleForm(props: BaseProps<Role>): React.ReactElement {
 			/>
 
 			<InputDuration
-				id={`${props.id}--name`}
+				id={`${props.id}--password-ttl`}
 				label='Password TTL'
 				onChange={setPasswordTtl}
 				title="The duration for which a user with this role's password will be valid before requiring rotation"
+				value={PASSWORD_TTL}
 			/>
 
 			<FormButton className={SPACE} />

@@ -1,6 +1,7 @@
 import React from 'react';
 import type { InputProps } from './props';
 import { Input } from '../../form';
+import { HOVER } from '../../css';
 
 /** @returns a duration out of the parameters formatted in such a way that it can be accepted by both {@link https://docs.rs/humantime | humantime} and {@link https://github.com/jkroso/parse-duration | parse-duration} */
 function fmtDuration(minutes: number, hours: number, days: number, weeks: number, months: number, years: number): string {
@@ -19,8 +20,24 @@ function toNumber(s: string): number {
 	return Math.round(parseFloat(s));
 }
 
+function InputNumber(props: InputProps<string>): React.ReactElement {
+	return (
+		<span className='max-w-[5vmax] [&>*]:max-w-full'>
+			<Input
+				id={props.id}
+				label={props.label ?? 'Duration'}
+				onChange={props.onChange}
+				required={props.required}
+				title={props.title}
+				type='number'
+				value={props.value}
+			/>
+		</span>
+	);
+}
+
 /** @returns a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
-export function InputDuration(props: Omit<InputProps<string>, 'children' | 'value'>): React.ReactElement {
+export function InputDuration(props: InputProps<string>): React.ReactElement {
 	const [MINUTES, setMinutes] = React.useState(0);
 	const [HOURS, setHours] = React.useState(0);
 	const [DAYS, setDays] = React.useState(0);
@@ -28,11 +45,12 @@ export function InputDuration(props: Omit<InputProps<string>, 'children' | 'valu
 	const [MONTHS, setMonths] = React.useState(0);
 	const [YEARS, setYears] = React.useState(0);
 
-	return (
-		<div>
-			<Input
+	return <>
+		<span className='ml-1'>{props.label}</span>
+		<div className={`pl-1 pr-2 py-0.5 ${HOVER} flex flex-row gap-2 border-[1px] border-form-field-border overflow-x-scroll`}>
+			<InputNumber
 				id={`${props.id}--years`}
-				label={props.label ?? 'ID'}
+				label='Years'
 				onChange={props.onChange && (years => {
 					const NUM = toNumber(years);
 					setYears(NUM);
@@ -40,13 +58,12 @@ export function InputDuration(props: Omit<InputProps<string>, 'children' | 'valu
 				})}
 				required={props.required}
 				title={props.title}
-				type='number'
 				value={YEARS}
 			/>
 
-			<Input
+			<InputNumber
 				id={`${props.id}--months`}
-				label={props.label ?? 'ID'}
+				label='Months'
 				onChange={props.onChange && (months => {
 					const NUM = toNumber(months);
 					setMonths(NUM);
@@ -54,13 +71,12 @@ export function InputDuration(props: Omit<InputProps<string>, 'children' | 'valu
 				})}
 				required={props.required}
 				title={props.title}
-				type='number'
 				value={MONTHS}
 			/>
 
-			<Input
+			<InputNumber
 				id={`${props.id}--weeks`}
-				label={props.label ?? 'ID'}
+				label='Weeks'
 				onChange={props.onChange && (weeks => {
 					const NUM = toNumber(weeks);
 					setWeeks(NUM);
@@ -68,13 +84,12 @@ export function InputDuration(props: Omit<InputProps<string>, 'children' | 'valu
 				})}
 				required={props.required}
 				title={props.title}
-				type='number'
 				value={WEEKS}
 			/>
 
-			<Input
+			<InputNumber
 				id={`${props.id}--days`}
-				label={props.label ?? 'ID'}
+				label='Days'
 				onChange={props.onChange && (days => {
 					const NUM = toNumber(days);
 					setDays(NUM);
@@ -82,13 +97,12 @@ export function InputDuration(props: Omit<InputProps<string>, 'children' | 'valu
 				})}
 				required={props.required}
 				title={props.title}
-				type='number'
 				value={DAYS}
 			/>
 
-			<Input
+			<InputNumber
 				id={`${props.id}--hours`}
-				label={props.label ?? 'ID'}
+				label='Hours'
 				onChange={props.onChange && (hours => {
 					const NUM = toNumber(hours);
 					setHours(NUM);
@@ -96,13 +110,12 @@ export function InputDuration(props: Omit<InputProps<string>, 'children' | 'valu
 				})}
 				required={props.required}
 				title={props.title}
-				type='number'
 				value={HOURS}
 			/>
 
-			<Input
+			<InputNumber
 				id={`${props.id}--minutes`}
-				label={props.label ?? 'ID'}
+				label='Minutes'
 				onChange={props.onChange && (minutes => {
 					const NUM = toNumber(minutes);
 					setMinutes(NUM);
@@ -110,9 +123,8 @@ export function InputDuration(props: Omit<InputProps<string>, 'children' | 'valu
 				})}
 				required={props.required}
 				title={props.title}
-				type='number'
 				value={MINUTES}
 			/>
 		</div>
-	);
+	</>;
 }

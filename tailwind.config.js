@@ -38,6 +38,7 @@ module.exports = {
 					field: {
 						bg: COLORS.white,
 						'bg-readonly': COLORS.slate[400],
+						border: COLORS.black,
 					},
 				},
 

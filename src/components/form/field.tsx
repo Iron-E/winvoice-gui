@@ -10,7 +10,6 @@ export { SelectCurrency } from './field/currency';
 /** Properties shared by all labeled elements. */
 type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.IntrinsicElements> =
 	Children
-	& Class<'label'>
 	& Class<ElementName>
 	& (React.ChangeEvent<TElement> extends { target: { value: infer Value } }
 		? On<'change', [value: Value]>

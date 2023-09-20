@@ -11,7 +11,7 @@ const OPTIONS: readonly React.ReactElement[] = [
 ];
 
 /** @returns a {@link React.JSX.IntrinsicElements.select | select} to determine a given {@link ContactKind} */
-export function SelectContactKind(props: Omit<SelectProps<ContactKinds>, 'children'>): React.ReactElement {
+export function SelectContactKind(props: SelectProps<ContactKinds>): React.ReactElement {
 	return (
 		<Select
 			id={props.id}

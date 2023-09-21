@@ -63,7 +63,7 @@ export function Input(props:
 ): React.ReactElement {
 	return <>
 		<span className={`${FLEX_BETWEEN} gap-5`}>
-			<label className='ml-1 self-end' htmlFor={props.id} title={props.required ? 'This field is required' : undefined}>
+			<label className='ml-1 self-end' htmlFor={props.id} title={`This field is ${props.required ? 'required' : 'optional'}`}>
 				{props.label}
 				{props.required && <span className='text-form-label-fg-required'> *</span>}
 			</label>

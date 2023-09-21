@@ -64,10 +64,10 @@ overflow-y-scroll bg-table-header-bg`}>
 						{props.headers.map(header => (
 							<th className={HEADING_STYLE} key={header}>
 								<button onClick={() => {
-									const HEADER = header.toLowerCase() as Lowercase<T>;
+									const HEADER = header.toLowerCase().replaceAll(/[ -]/g, '_') as Snakecase<T>;
 									props.onReorder({
 										ascending: equalsIgnoreCase(props.order.column, HEADER) ? !props.order.ascending : false,
-										column: HEADER.replaceAll(/[ -]/g, '_') as Snakecase<T>,
+										column: HEADER,
 									});
 								}}>
 									<span className={`${FLEX} justify-left gap-2`}>

@@ -2,10 +2,10 @@
 
 import React from 'react';
 import type { Role } from '@/schema';
-import { RoleForm, RoleTable, useOrderedData } from '@/components';
+import { ROLE_VALUATORS, RoleForm, RoleTable, useOrderedData } from '@/components';
 
 export default function Page(): React.ReactElement {
-	const ORDERED_DATA = useOrderedData<Role>('name');
+	const ORDERED_DATA = useOrderedData<Role>('name', ROLE_VALUATORS);
 
 	return <>
 		<RoleForm

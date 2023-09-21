@@ -57,6 +57,7 @@ export function EmployeeForm(props: BaseProps<Employee>): React.ReactElement {
 				label='Department'
 				onNew={setIdEvent}
 				onSearch={setIdEvent}
+				required={true}
 				title='The department the employee is assigned to'
 				value={DEPARTMENT?.id ?? ''}
 			/>

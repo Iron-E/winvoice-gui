@@ -38,7 +38,11 @@ module.exports = {
 					field: {
 						bg: COLORS.white,
 						'bg-readonly': COLORS.slate[400],
-						border: COLORS.black,
+					},
+
+					label: {
+						'fg-invalid': COLORS.red[400],
+						'fg-required': COLORS.red[500],
 					},
 				},
 

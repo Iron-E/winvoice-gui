@@ -34,17 +34,26 @@ export function useIdEventHandlers<T>(
 	];
 }
 
+
+/**
+ * HACK: next.js complains that this component cannot be written to, while `readOnly` is not set.
+ *       however, setting `readOnly` disables the posibility of adding `required`. and linking with
+ *       foreign keys is *often* `required`. Thus, this design is intentional, and this empty function
+ *       shuts next.js up
+ */
+function doNothing(): void {}
+
 /** @returns a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
 export function InputId(props:
 	& On<'action', [value: 'new' | 'search']>
-	& InputProps<string>
+	& Omit<InputProps<string>, 'onChange'>
 ): React.ReactElement {
 	return (
 		<Input
 			id={props.id}
 			inputClassName='min-w-[36ch] bg-form-field-bg-readonly'
 			label={props.label ?? 'ID'}
-			onChange={props.onChange}
+			onChange={doNothing}
 			required={props.required}
 			title={props.title}
 			type='text'

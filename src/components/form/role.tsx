@@ -2,12 +2,11 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputString, useIdEventHandlers } from '../form';
+import { Form, FormButton, InputDuration, InputString, useIdEventHandlers } from '../form';
+import { isRole, type Role } from '@/schema';
 import { Route } from '@/api';
 import { SPACE } from '../css';
-import { isRole, type Role } from '@/schema';
 import { useApiContext } from '../api';
-import { InputDuration } from './field/duration';
 
 type RoleIdEventHandlers = typeof useIdEventHandlers<Role>;
 

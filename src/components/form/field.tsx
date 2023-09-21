@@ -4,9 +4,12 @@ import type { IntrinsicProp } from '@/utils';
 import { FLEX, FLEX_BETWEEN, SPACE } from '../css';
 import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
 
-export { InputId, useIdEventHandlers } from './field/id';
-export { InputString } from './field/string';
-export { SelectCurrency } from './field/currency';
+export * from './field/contact-kind';
+export * from './field/currency';
+export * from './field/date';
+export * from './field/duration';
+export * from './field/id';
+export * from './field/string';
 
 /** Properties shared by all labeled elements. */
 type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.IntrinsicElements> =

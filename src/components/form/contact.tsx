@@ -2,13 +2,12 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, Input, InputId, InputString, useLocationIdEventHandlers } from '../form';
+import { Form, FormButton, Input, InputId, InputString, SelectContactKind, useLocationIdEventHandlers } from '../form';
+import { isContact, type Contact, type Location, ContactKinds } from '@/schema';
+import { Maybe } from '@/utils';
 import { Route } from '@/api';
 import { SPACE } from '../css';
-import { SelectContactKind } from './field/contact-kind';
-import { isContact, type Contact, type Location, ContactKinds } from '@/schema';
 import { useApiContext } from '../api';
-import { Maybe } from '@/utils';
 
 const KIND_INPUT_LABELS: Record<ContactKinds, string> = {
 	address: 'Location',

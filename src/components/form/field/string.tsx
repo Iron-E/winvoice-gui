@@ -8,6 +8,7 @@ export function InputString(props: InputProps<string>): React.ReactElement {
 			id={props.id}
 			label={props.label ?? 'Name'}
 			onChange={props.onChange}
+			placeholder={props.placeholder ?? 'John Doe'}
 			required={props.required}
 			title={props.title}
 			type='text'

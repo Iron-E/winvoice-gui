@@ -55,7 +55,7 @@ export function Checkbox(props:
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
 export function Input(props:
 	& FieldProps<HTMLInputElement, 'input'>
-	& { [key in 'pattern' | 'type']?: InputProps[key] }
+	& { [key in 'pattern' | 'placeholder' | 'type']?: InputProps[key] }
 ): React.ReactElement {
 	return <>
 		<span className={`${FLEX_BETWEEN} gap-5`}>
@@ -74,6 +74,7 @@ export function Input(props:
 			name={props.id}
 			onChange={props.onChange && (e => props.onChange!(e.target.value))}
 			pattern={props.pattern}
+			placeholder={props.placeholder}
 			required={props.required}
 			title={props.title}
 			type={props.type}

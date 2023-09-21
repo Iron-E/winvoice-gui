@@ -73,6 +73,7 @@ export function EmployeeForm(props: BaseProps<Employee>): React.ReactElement {
 				id={`${props.id}--title`}
 				label='Title'
 				onChange={setTitle}
+				placeholder='Manager'
 				required={true}
 				title='The title of the employee'
 				value={TITLE}

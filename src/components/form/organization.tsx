@@ -51,6 +51,7 @@ export function OrganizationForm(props: BaseProps<Organization>): React.ReactEle
 			<InputString
 				id={`${props.id}--name`}
 				onChange={setName}
+				placeholder='ACME Incorporated'
 				required={true}
 				title='The name of the organization'
 				value={NAME}

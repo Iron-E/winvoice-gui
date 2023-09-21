@@ -51,6 +51,7 @@ export function LocationForm(props: BaseProps<Location>): React.ReactElement {
 			<InputString
 				id={`${props.id}--name`}
 				onChange={setName}
+				placeholder='London'
 				required={true}
 				title='The name for the location which is to be created'
 				value={NAME}

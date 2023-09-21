@@ -44,6 +44,7 @@ export function RoleForm(props: BaseProps<Role>): React.ReactElement {
 			<InputString
 				id={`${props.id}--name`}
 				onChange={setName}
+				placeholder='Admin'
 				required={true}
 				title='The name of the role which is to be created'
 				value={NAME}

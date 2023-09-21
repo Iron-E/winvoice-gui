@@ -41,6 +41,7 @@ export function DepartmentForm(props: BaseProps<Department>): React.ReactElement
 			<InputString
 				id={`${props.id}--name`}
 				onChange={setName}
+				placeholder='Accounting'
 				required={true}
 				title='The name of the department which is to be created'
 				value={NAME}

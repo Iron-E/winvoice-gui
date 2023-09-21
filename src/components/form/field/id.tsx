@@ -36,8 +36,7 @@ export function useIdEventHandlers<T>(
 
 /** @returns a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
 export function InputId(props:
-	& On<'new', [value: 'new']>
-	& On<'search', [value: 'search']>
+	& On<'action', [value: 'new' | 'search']>
 	& InputProps<string>
 ): React.ReactElement {
 	return (
@@ -51,11 +50,11 @@ export function InputId(props:
 			type='text'
 			value={props.value}
 		>
-			<FormButton className={BUTTON_STYLE} onClick={props.onNew && (() => props.onNew!('new'))}>
+			<FormButton className={BUTTON_STYLE} onClick={props.onAction && (() => props.onAction!('new'))}>
 				<PlusIcon className={ICON} /> New
 			</FormButton>
 
-			<FormButton className={BUTTON_STYLE} onClick={props.onSearch && (() => props.onSearch!('search'))}>
+			<FormButton className={BUTTON_STYLE} onClick={props.onAction && (() => props.onAction!('search'))}>
 				<MagnifyingGlassIcon className={ICON} /> Search
 			</FormButton>
 		</Input>

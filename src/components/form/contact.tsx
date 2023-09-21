@@ -86,8 +86,7 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 				? <InputId
 					id={`${props.id}--address`}
 					label={KIND_INPUT_LABELS[KIND]}
-					onNew={setIdEvent}
-					onSearch={setIdEvent}
+					onAction={setIdEvent}
 					required={true}
 					title={KIND_INPUT_TITLES.address}
 					value={(VALUE as Location).id}

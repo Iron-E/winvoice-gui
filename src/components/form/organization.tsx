@@ -42,8 +42,7 @@ export function OrganizationForm(props: BaseProps<Organization>): React.ReactEle
 			<InputId
 				id={`${props.id}--location`}
 				label='Location'
-				onNew={setIdEvent}
-				onSearch={setIdEvent}
+				onAction={setIdEvent}
 				title='Where this organization is located'
 				value={LOCATION?.id ?? ''}
 			/>

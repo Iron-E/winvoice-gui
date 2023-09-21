@@ -45,12 +45,11 @@ export function RoleTable(props: BaseProps<Role, 'id'>): React.ReactElement {
 		>
 			{props.orderedData.data.map(r => (
 				<Tr
-					selected={r.id === props.selectedRow}
 					key={r.id}
 					onClick={props.onRowSelect && (() => props.onRowSelect!(r))}
 					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: r }) : undefined}
-					// ?
 					onEdit={() => setRowEvent({ action: 'edit', data: r })}
+					selected={r.id === props.selectedRow}
 				>
 					<Td>{r.id}</Td>
 					<Td>{r.name}</Td>

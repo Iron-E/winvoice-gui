@@ -59,12 +59,11 @@ function BaseLocationTable(props:
 		>
 			{props.orderedData.data.map(l => (
 				<Tr
-					selected={l.id === props.selectedRow}
 					key={l.id}
 					onClick={props.onRowSelect && (() => props.onRowSelect!(l))}
 					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: l }) : undefined}
-					// ?
 					onEdit={() => setRowEvent({ action: 'edit', data: l })}
+					selected={l.id === props.selectedRow}
 				>
 					<Td>{l.id}</Td>
 					<Td>{l.currency}</Td>

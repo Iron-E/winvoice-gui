@@ -14,8 +14,6 @@ export default function Page(): React.ReactElement {
 			onSubmit={d => ORDERED_DATA.append(d)}
 		/>
 
-		{ORDERED_DATA.data.length > 0 && (
-			<DepartmentTable orderedData={ORDERED_DATA} />
-		)}
+		{ORDERED_DATA.data.length > 0 && <DepartmentTable orderedData={ORDERED_DATA} />}
 	</>;
 }

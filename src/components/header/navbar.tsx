@@ -60,7 +60,7 @@ function NavEntry(props: Class & Children & { route: Route }): React.ReactElemen
 			</span>
 
 			<div className={`xl:fixed flex flex-grow gap-1 justify-end xl:hidden xl:group-hover:flex xl:flex-col xl:justify-around \
-xl:p-2 min-w-[10rem] xl:top-[2.5rem] xl:rounded-b-md xl:rounded-tr-md \
+xl:p-2 min-w-[10rem] xl:top-[2.4rem] xl:rounded-b-md xl:rounded-tr-md \
 ${ENTRY_XL_TRANSLATION_OFF_BY_ONE[props.route] ? 'xl:-translate-x-[0.57rem]' : 'xl:-translate-x-[0.56rem]'} \
 ${ENTRY_2XL_TRANSLATION_OFF_BY_ONE[props.route] ? '2xl:-translate-x-[0.57rem]' : '2xl:-translate-x-[0.56rem]'} \
 xl:bg-navbar-entry-bg-current`}>

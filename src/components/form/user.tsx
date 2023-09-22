@@ -38,6 +38,7 @@ export function UserForm(props: BaseProps<User>): React.ReactElement {
 
 			await Promise.resolve(props.onSubmit?.(result));
 			setUsername('');
+			setPassword('');
 		}}>
 			<InputId
 				id={`${props.id}--employee`}

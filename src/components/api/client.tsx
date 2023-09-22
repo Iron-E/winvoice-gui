@@ -3,7 +3,7 @@
 import * as hooks from '@/hooks';
 import React from 'react';
 import type { AsyncOn, Class, On } from '../props-with';
-import type { Fn, Maybe, Opt } from '@/utils';
+import type { Fn, Maybe, Opt, Reviver } from '@/utils';
 import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, WifiIcon } from '@heroicons/react/20/solid';
 import { Code, newRequest, request, response, Route, type Request, type Status, UserInputRoute } from '@/api';
 import { Form, FormButton, Input, InputString } from '../form';
@@ -54,8 +54,9 @@ export class Client {
 		route: Route,
 		requestParams: Request<RequestBodyInner>,
 		checkSchema: (json: unknown) => json is ResponseBody,
+		reviver?: Reviver,
 	): OptBody<ResponseBody> {
-		const RESULT = await (this as Client).request(showMessage, route, requestParams, checkSchema);
+		const RESULT = await (this as Client).request(showMessage, route, requestParams, checkSchema, reviver);
 		if (RESULT instanceof UnauthenticatedError) {
 			showMessage('error', RESULT.message);
 		} else if (RESULT !== null) {
@@ -87,6 +88,7 @@ export class Client {
 		route: Route,
 		requestParams: Request<RequestBodyInner>,
 		checkSchema: (json: unknown) => json is ResponseBody,
+		reviver?: Reviver,
 	): Promise<Opt<ResponseBody | UnauthenticatedError>> {
 		try {
 			const RESULT: Readonly<Response> = await fetch(`${this.address}${route}`, newRequest(requestParams));
@@ -95,7 +97,8 @@ export class Client {
 			}
 
 			try {
-				const OBJECT = await RESULT.json() as unknown;
+				const JSON_ = await RESULT.text();
+				const OBJECT = JSON.parse(JSON_, reviver);
 				if (checkSchema(OBJECT)) {
 					return OBJECT;
 				}
@@ -222,8 +225,9 @@ export class Client {
 		route: UserInputRoute,
 		body: request.Post<RequestBodyInner>,
 		checkSchema: (json: unknown) => json is ResponseBody,
+		reviver?: Reviver,
 	): OptBody<Required<response.Post<ResponseBody>>['entity']> {
-		const RESULT = await (this as Client).caughtRequest(showMessage, route, { method: 'POST', body }, response.isPost);
+		const RESULT = await (this as Client).caughtRequest(showMessage, route, { method: 'POST', body }, response.isPost, reviver);
 		return (RESULT !== null && checkSchema(RESULT.entity))
 			? RESULT.entity
 			: null;
@@ -234,7 +238,7 @@ export class Client {
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @returns whether the request succeeded.
 	 */
-	public async setWhoIAm(this: Client, showMessage: ShowMessage): RequestSuccess {
+	public async setWhoIAm(this: Client, showMessage: ShowMessage, ): RequestSuccess {
 		const RESULT = await this.request(showMessage, Route.WhoAmI, { method: 'GET' }, response.isWhoAmI);
 		if (RESULT === null) { return false; }
 

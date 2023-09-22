@@ -3,12 +3,12 @@ import type { InputProps } from './props';
 import { Input } from '../../form';
 
 /** @returns a {@link React.JSX.IntrinsicElements.input | input} to gather a `string` which can be used to construct a {@link Date}. */
-export function InputDate(props: Omit<InputProps<string>, 'placeholder'>): React.ReactElement {
+export function InputDate(props: Omit<InputProps<Date>, 'placeholder'>): React.ReactElement {
 	return (
 		<Input
 			id={props.id}
 			label={props.label ?? 'Date'}
-			onChange={props.onChange}
+			onChange={props.onChange && (date => props.onChange!(new Date(date)))}
 			required={props.required}
 			title={props.title}
 			type='datetime-local'

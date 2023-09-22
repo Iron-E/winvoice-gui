@@ -39,25 +39,8 @@ export function UserForm(props: BaseProps<User>): React.ReactElement {
 				id={`${props.id}--employee`}
 				label='Employee'
 				onAction={setEmployeeIdEvent}
-				title='The employee associated with this user'
+				title='The employee associated with this user; used to track contribution to Jobs, etc.'
 				value={EMPLOYEE?.id ?? ''}
-			/>
-
-			<InputPassword
-				id={`${props.id}--password`}
-				onChange={setPassword}
-				required={true}
-				title='The name of this user; must be unique among other users'
-				value={USERNAME}
-			/>
-
-			<InputId
-				id={`${props.id}--role`}
-				label='Role'
-				onAction={setRoleIdEvent}
-				required={true}
-				title='The employee associated with this user'
-				value={ROLE?.id ?? ''}
 			/>
 
 			<InputString
@@ -68,6 +51,23 @@ export function UserForm(props: BaseProps<User>): React.ReactElement {
 				required={true}
 				title='The name of this user; must be unique among other users'
 				value={USERNAME}
+			/>
+
+			<InputPassword
+				id={`${props.id}--password`}
+				onChange={setPassword}
+				required={true}
+				title="The user's password"
+				value={PASSWORD}
+			/>
+
+			<InputId
+				id={`${props.id}--role`}
+				label='Role'
+				onAction={setRoleIdEvent}
+				required={true}
+				title='The role of the user; controls the majority of their permissions'
+				value={ROLE?.id ?? ''}
 			/>
 
 			<FormButton className={SPACE} />

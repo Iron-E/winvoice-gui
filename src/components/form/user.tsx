@@ -10,6 +10,9 @@ import { SPACE } from '../css';
 import { useApiContext } from '../api';
 import { dateReviver } from '@/utils';
 
+/** The {@link Reviver} for {@link User}s. */
+const REVIVER = dateReviver<User>('password_expires');
+
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link User} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
@@ -26,13 +29,7 @@ export function UserForm(props: BaseProps<User>): React.ReactElement {
 	return <>
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
-				const RESULT = await CLIENT.post(
-					showMessage,
-					Route.User,
-					{ args: [EMPLOYEE, PASSWORD, ROLE, USERNAME] },
-					isUser,
-					dateReviver<User>('password_expires'),
-				);
+				const RESULT = await CLIENT.post(showMessage, Route.User, { args: [EMPLOYEE, PASSWORD, ROLE, USERNAME] }, isUser, REVIVER);
 				if (RESULT === null) { return; }
 				var result = RESULT;
 			} else {

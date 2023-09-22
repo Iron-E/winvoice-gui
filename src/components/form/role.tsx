@@ -23,7 +23,7 @@ export function useRoleIdEventHandlers(
  */
 export function RoleForm(props: BaseProps<Role>): React.ReactElement {
 	const [NAME, setName] = React.useState(props.initialValues?.name ?? '');
-	const [PASSWORD_TTL, setPasswordTtl] = React.useState(props.initialValues?.password_ttl);
+	const [PASSWORD_TTL, setPasswordTtl] = React.useState(props.initialValues?.password_ttl ?? '');
 
 	const [CLIENT, showMessage] = useApiContext();
 

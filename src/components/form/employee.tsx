@@ -41,7 +41,7 @@ export function EmployeeForm(props: BaseProps<Employee>): React.ReactElement {
 			await Promise.resolve(props.onSubmit?.(result));
 			setName('');
 		}}>
-			{props.allFields && (
+			{props.initialValues && (
 				<Checkbox
 					checked={ACTIVE}
 					id={`${props.id}--active`}

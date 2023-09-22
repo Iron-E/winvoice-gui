@@ -18,7 +18,10 @@ const REVIVER = dateReviver<User>('password_expires');
  */
 export function UserForm(props: BaseProps<User>): React.ReactElement {
 	const [EMPLOYEE, setEmployee] = React.useState(props.initialValues?.employee);
-	const [PASSWORD, setPassword] = React.useState(props.initialValues?.password ?? '');
+	// NOTE: explicitly ignoring the initial value because the user's password should never be shown.
+	//       the winvoice-server prevents takes measures to prevent password leaking, but it is better
+	//       to act as if those measures will fail and simply not show the password not matter what.
+	const [PASSWORD, setPassword] = React.useState('');
 	const [ROLE, setRole] = React.useState(props.initialValues?.role);
 	const [USERNAME, setUsername] = React.useState(props.initialValues?.username ?? '');
 
@@ -61,6 +64,7 @@ export function UserForm(props: BaseProps<User>): React.ReactElement {
 			<InputPassword
 				id={`${props.id}--password`}
 				onChange={setPassword}
+				placeholder={props.initialValues && 'Type here to set a new password'}
 				required={true}
 				title="The user's password"
 				value={PASSWORD}

@@ -27,7 +27,7 @@ import { getId } from '@/utils';
 import { useApiContext } from '../api';
 
 /** the headers of the {@link UserTable}. */
-const HEADERS = ['Employee', 'ID', 'Password Expires', 'Role', 'Username'] as const;
+const HEADERS = ['ID', 'Password Expires', 'Username', 'Employee', 'Role'] as const;
 
 /**
  * @param outerOrder the

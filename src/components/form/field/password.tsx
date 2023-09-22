@@ -8,7 +8,7 @@ export function InputPassword(props: InputProps<string>): React.ReactElement {
 			id={props.id}
 			label={props.label ?? 'Password'}
 			onChange={props.onChange}
-			placeholder={props.placeholder ?? 'Securely generate and store your passwords!'}
+			placeholder={props.placeholder ?? 'Securely generate & store passwords!'}
 			required={props.required}
 			title={props.title}
 			type='password'

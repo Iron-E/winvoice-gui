@@ -55,12 +55,14 @@ export function UserForm(props: BaseProps<User>): React.ReactElement {
 				id={`${props.id}--role`}
 				label='Role'
 				onAction={setRoleIdEvent}
+				required={true}
 				title='The employee associated with this user'
 				value={ROLE?.id ?? ''}
 			/>
 
 			<InputString
 				id={`${props.id}--username`}
+				label='Username'
 				onChange={setUsername}
 				placeholder='john_doe_45'
 				required={true}

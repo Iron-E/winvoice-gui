@@ -1,9 +1,6 @@
 /** A function which can be used with {@link JSON.parse} to help deserialize values. */
 export type Reviver = NonNullable<Parameters<JSON['parse']>[1]>;
 
-/** The `key` parameter to {@link Reviver} functions. */
-type Key = Parameters<Reviver>[0];
-
 /**
  * @param revivers the {@link Reviver} functions to combine.
  * @returns a function which will call all of the `revivers` in order.
@@ -20,6 +17,6 @@ export function chainRevivers(revivers: Reviver[]): Reviver {
 }
 
 /** @returns a {@link Reviver} for a {@link Date} with the given `key`. */
-export function dateReviver(key: Key): Reviver {
+export function dateReviver<T>(key: keyof T): Reviver {
 	return (k, v) => key === k ? new Date(v) : v;
 }

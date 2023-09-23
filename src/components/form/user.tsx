@@ -65,7 +65,7 @@ export function UserForm(props: BaseProps<User>): React.ReactElement {
 				id={`${props.id}--password`}
 				onChange={setPassword}
 				placeholder={props.initialValues && 'Type here to set a new password'}
-				required={true}
+				required={props.initialValues === undefined}
 				title="The user's password"
 				value={PASSWORD}
 			/>

@@ -1,19 +1,19 @@
 'use client';
 
 import React from 'react';
-import type { BaseProps } from './props';
+import type { BaseProps, OrderProps } from './props';
 import type { Department, Employee, Role, User } from '@/schema'
 import {
 	EmployeeTable,
 	employeeValuators,
 	Order,
 	OrderedData,
-	OrderProps,
 	ROLE_VALUATORS,
 	RoleTable,
 	Table,
 	Td,
 	Tr,
+	type UseOrder,
 	type Valuators,
 	useOrder,
 	useRowEventHandlers,
@@ -38,8 +38,8 @@ export function userValuators(employeeKey: keyof Employee, employeeDepartmentKey
 }
 
 /** @returns {@link useOrder} specialized for a {@link User}. */
-export function useUserOrder(): ReturnType<typeof useOrder<keyof User>> {
-	return useOrder<keyof User>('username');
+export function useUserOrder(): UseOrder<User> {
+	return useOrder('username');
 }
 
 /** @returns a table which displays {@link User}s in a customizable manner. */

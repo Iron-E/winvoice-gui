@@ -1,9 +1,19 @@
 'use client';
 
 import React from 'react';
-import type { BaseProps } from './props';
+import type { BaseProps, OrderProps} from './props';
 import type { Department, Employee } from '@/schema'
-import { DepartmentTable, OrderedData, Table, Td, Tr, type Valuators, useOrder, useRowEventHandlers, OrderProps as OrderProps } from '../table';
+import {
+	DepartmentTable,
+	OrderedData,
+	Table,
+	Td,
+	Tr,
+	type UseOrder,
+	type Valuators,
+	useOrder,
+	useRowEventHandlers,
+} from '../table';
 import { EmployeeForm } from '../form';
 import { Route } from '@/api';
 import { useApiContext } from '../api';
@@ -21,8 +31,8 @@ export function employeeValuators(departmentKey: keyof Department): Valuators<Em
 }
 
 /** @returns {@link useOrder} specialized for a {@link Employee}. */
-export function useEmployeeOrder(): ReturnType<typeof useOrder<keyof Employee>> {
-	return useOrder<keyof Employee>('name');
+export function useEmployeeOrder(): UseOrder<Employee> {
+	return useOrder('name');
 }
 
 /** @returns a table which displays {@link Employee}s in a customizable manner. */

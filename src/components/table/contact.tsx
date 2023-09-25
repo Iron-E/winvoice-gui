@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import type { BaseProps } from './props';
+import type { BaseProps, OrderProps } from './props';
 import type { Contact, Location } from '@/schema'
 import { ContactForm } from '../form';
-import { LocationTable, OrderedData, Table, Td, Tr, type Valuators, useRowEventHandlers, OrderProps } from '../table';
+import { LocationTable, OrderedData, Table, Td, Tr, type Valuators, useRowEventHandlers } from '../table';
 import { Route } from '@/api';
 import { useApiContext } from '../api';
 

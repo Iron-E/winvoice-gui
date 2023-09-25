@@ -4,7 +4,7 @@ import parse from 'parse-duration';
 import React from 'react';
 import type { BaseProps } from './props';
 import type { Role } from '@/schema'
-import { Table, Td, Tr, type Valuators, useOrder, useRowEventHandlers } from '../table';
+import { Table, Td, Tr, type Valuators, type UseOrder, useOrder, useRowEventHandlers } from '../table';
 import { getId } from '@/utils';
 import { RoleForm } from '../form';
 import { Route } from '@/api';
@@ -20,8 +20,8 @@ const HEADERS = ['ID', 'Name', 'Password TTL'] as const;
 export const ROLE_VALUATORS: Readonly<Valuators<Role>> = { password_ttl: { map: parse } };
 
 /** @returns {@link useOrder} specialized for a {@link Role}. */
-export function useRoleOrder(): ReturnType<typeof useOrder<keyof Role>> {
-	return useOrder<keyof Role>('name');
+export function useRoleOrder(): UseOrder<Role> {
+	return useOrder('name');
 }
 
 /** @returns a table which displays {@link Role}s in a customizable manner. */

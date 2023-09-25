@@ -2,14 +2,24 @@
 
 import * as hooks from '@/hooks';
 import React from 'react';
-import type { BaseProps } from './props';
+import type { BaseProps, OrderProps } from './props';
 import type { Location } from '@/schema'
 import { getId, type Props } from '@/utils';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/20/solid';
 import { FLEX, ICON } from '../css';
 import { LocationForm } from '../form';
 import { Modal } from '../modal';
-import { OrderedData, Table, TableButton, Td, Tr, type Valuators, useOrder, useRowEventHandlers, OrderProps } from '../table';
+import {
+	OrderedData,
+	Table,
+	TableButton,
+	Td,
+	Tr,
+	type UseOrder,
+	type Valuators,
+	useOrder,
+	useRowEventHandlers,
+} from '../table';
 import { Route } from '@/api';
 import { useApiContext } from '../api';
 
@@ -30,8 +40,8 @@ export function locationValuators(outerKey: keyof Location): Valuators<Location>
 }
 
 /** @returns {@link useOrder} specialized for a {@link Location}. */
-export function useLocationOrder(): ReturnType<typeof useOrder<keyof Location>> {
-	return useOrder<keyof Location>('name');
+export function useLocationOrder(): UseOrder<Location> {
+	return useOrder('name');
 }
 
 /** @returns a table which displays {@link Location}s in a customizable manner. */

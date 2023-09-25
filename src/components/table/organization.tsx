@@ -1,9 +1,19 @@
 'use client';
 
 import React from 'react';
-import type { BaseProps } from './props';
+import type { BaseProps, OrderProps } from './props';
 import type { Location, Organization } from '@/schema'
-import { LocationTable, OrderedData, Table, Td, Tr, type Valuators, useOrder, useRowEventHandlers, OrderProps } from '../table';
+import {
+	LocationTable,
+	OrderedData,
+	Table,
+	Td,
+	Tr,
+	type UseOrder,
+	type Valuators,
+	useOrder,
+	useRowEventHandlers,
+} from '../table';
 import { OrganizationForm } from '../form';
 import { Route } from '@/api';
 import { getId } from '@/utils';
@@ -26,8 +36,8 @@ export function organizationValuators(locationKey: keyof Location, outerLocation
 }
 
 /** @returns {@link useOrder} specialized for a {@link Organization}. */
-export function useOrganizationOrder(): ReturnType<typeof useOrder<keyof Organization>> {
-	return useOrder<keyof Organization>('name');
+export function useOrganizationOrder(): UseOrder<Organization> {
+	return useOrder('name');
 }
 
 /** @returns a table which displays {@link Organization}s in a customizable manner. */

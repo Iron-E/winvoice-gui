@@ -5,7 +5,14 @@ import type { BaseProps } from './props';
 import type { Department } from '@/schema'
 import { DepartmentForm } from '../form';
 import { Route } from '@/api';
-import { Table, Td, Tr, useOrder, useRowEventHandlers } from '../table';
+import {
+	Table,
+	Td,
+	Tr,
+	type UseOrder,
+	useOrder,
+	useRowEventHandlers,
+} from '../table';
 import { getId } from '@/utils';
 import { useApiContext } from '../api';
 
@@ -13,8 +20,8 @@ import { useApiContext } from '../api';
 const HEADERS = ['ID', 'Name'] as const;
 
 /** @returns {@link useOrder} specialized for a {@link Department}. */
-export function useDepartmentOrder(): ReturnType<typeof useOrder<keyof Department>> {
-	return useOrder<keyof Department>('name');
+export function useDepartmentOrder(): UseOrder<Department> {
+	return useOrder('name');
 }
 
 /** @returns a {@link Table} that displays a {@link Department} and its outer department. */

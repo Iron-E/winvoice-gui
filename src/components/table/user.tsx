@@ -27,7 +27,7 @@ import { getId } from '@/utils';
 import { useApiContext } from '../api';
 
 /** the headers of the {@link UserTable}. */
-const HEADERS = ['ID', 'Password Expires', 'Username', 'Employee', 'Role'] as const;
+const HEADERS = ['ID', 'Password Set', 'Username', 'Employee', 'Role'] as const;
 
 /**
  * @param outerOrder the
@@ -83,7 +83,7 @@ export function UserTable(props:
 					selected={u.id === props.selectedRow}
 				>
 					<Td>{u.id}</Td>
-					<Td>{u.password_expires?.toLocaleString()}</Td>
+					<Td>{u.password_set?.toLocaleString()}</Td>
 					<Td>{u.username}</Td>
 					<Td>
 						{u.employee && (

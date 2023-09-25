@@ -11,7 +11,7 @@ const USER: Readonly<User> = {
 	},
 	id: 'asldkj',
 	password: 'asldkj',
-	password_expires: new Date(),
+	password_set: new Date(),
 	role: { id: 'asldkj', name: 'asdlkj' },
 	username: 'alskdj',
 };
@@ -23,7 +23,7 @@ describe('isUser', () => {
 		['employee', 3, true],
 		['id', 3],
 		['password', 3],
-		['password_expires', 3, true],
+		['password_set', 3, true],
 		['role', 3],
 		['username', 3],
 	]);

@@ -8,7 +8,7 @@ export type User = {
 	employee?: Employee,
 	id: Id,
 	password: string,
-	password_expires?: Date,
+	password_set?: Date,
 	role: Role,
 	username: string,
 };
@@ -22,7 +22,7 @@ export function isUser(json: unknown): json is User {
 		fieldMaybeIs(json, 'employee', isEmployee)
 		&& 'id' in json && isId(json.id)
 		&& 'password' in json && typeof json.password === 'string'
-		&& fieldMaybeIs(json, 'password_expires', d => d instanceof Date)
+		&& fieldMaybeIs(json, 'password_set', d => d instanceof Date)
 		&& 'role' in json && isRole(json.role)
 		&& 'username' in json && typeof json.username === 'string'
 	);

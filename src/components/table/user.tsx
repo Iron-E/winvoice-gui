@@ -51,7 +51,26 @@ export function UserTable(props:
 ): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
 	const [HANDLER, setRowEvent] = useRowEventHandlers(
-		props.orderedData, CLIENT, showMessage, Route.User,
+		new OrderedData(
+			props.orderedData.order,
+			props.orderedData.setOrder,
+			props.orderedData.data,
+			props.orderedData.setData && (data => {
+				props.orderedData.setData!(data.map(user => {
+					if (
+						user.password !== ''
+						&& user.password !== props.orderedData.data.find(v => v.id === user.id)?.password
+					) { // NOTE: the server separately stores its own value, but this is purely for cosmetics' sake
+						user = { ...user, password_set: new Date() };
+					}
+
+					return user;
+				}));
+			}),
+		),
+		CLIENT,
+		showMessage,
+		Route.User,
 		e => `user ${e.id} "${e.username}"`,
 		getId,
 		props => <UserForm  {...props} id='edit-user-form' />,

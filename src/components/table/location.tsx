@@ -4,13 +4,12 @@ import * as hooks from '@/hooks';
 import React from 'react';
 import type { BaseProps } from './props';
 import type { Location } from '@/schema'
-import type { On } from '../props-with';
 import { getId, type Props } from '@/utils';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/20/solid';
 import { FLEX, ICON } from '../css';
 import { LocationForm } from '../form';
 import { Modal } from '../modal';
-import { OrderedData, Table, TableButton, Td, Tr, type Valuators, useOrder, useRowEventHandlers } from '../table';
+import { OrderedData, Table, TableButton, Td, Tr, type Valuators, useOrder, useRowEventHandlers, OrderProps } from '../table';
 import { Route } from '@/api';
 import { useApiContext } from '../api';
 
@@ -30,11 +29,8 @@ export function locationValuators(outerKey: keyof Location): Valuators<Location>
 	};
 }
 
-/** The {@link Order} of {@link Location}s. */
-export type LocationOrder = ReturnType<typeof useOrder<keyof Location>>;
-
 /** @returns {@link useOrder} specialized for a {@link Location}. */
-export function useLocationOrder(): LocationOrder {
+export function useLocationOrder(): ReturnType<typeof useOrder<keyof Location>> {
 	return useOrder<keyof Location>('name');
 }
 
@@ -82,8 +78,7 @@ function BaseLocationTable(props:
 /** @returns a {@link Table} that displays a {@link Location} and its outer location. */
 export function LocationTable(props:
 	& Omit<Props<typeof BaseLocationTable>, 'mapOuter'>
-	& Required<On<'reorderOuter', Parameters<LocationOrder[1]>>>
-	& { outerOrder: LocationOrder[0] },
+	& OrderProps<'outer', Location>
 ): React.ReactElement {
 	return (
 		<BaseLocationTable

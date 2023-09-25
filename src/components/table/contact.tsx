@@ -3,9 +3,8 @@
 import React from 'react';
 import type { BaseProps } from './props';
 import type { Contact, Location } from '@/schema'
-import type { On } from '../props-with';
 import { ContactForm } from '../form';
-import { LocationOrder, LocationTable, OrderedData, Table, Td, Tr, type Valuators, useRowEventHandlers } from '../table';
+import { LocationTable, OrderedData, Table, Td, Tr, type Valuators, useRowEventHandlers, OrderProps } from '../table';
 import { Route } from '@/api';
 import { useApiContext } from '../api';
 
@@ -41,8 +40,7 @@ export function contactValuators(addressKey: keyof Location, outerAddressKey: ke
 /** @returns a {@link Table} that displays a {@link Location} and its outer location. */
 export function ContactTable(props:
 	& BaseProps<Contact, 'label'>
-	& Required<On<'reorderAddress' | 'reorderOuterAddress', Parameters<LocationOrder[1]>>>
-	& Record<'addressOrder' | 'outerAddressorder', LocationOrder[0]>
+	& OrderProps<'address' | 'outerAddress', Location>
 ): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
 	const [HANDLER, setRowEvent] = useRowEventHandlers(
@@ -81,7 +79,7 @@ export function ContactTable(props:
 									[c.address],
 									d => props.orderedData.swap(label, c.label, { ...c, address: d[0]! }),
 								)}
-								outerOrder={props.outerAddressorder}
+								outerOrder={props.outerAddressOrder}
 							/>
 						)}
 					</Td>

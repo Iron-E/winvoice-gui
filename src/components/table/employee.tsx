@@ -3,8 +3,7 @@
 import React from 'react';
 import type { BaseProps } from './props';
 import type { Department, Employee } from '@/schema'
-import type { On } from '../props-with';
-import { DepartmentOrder, DepartmentTable, OrderedData, Table, Td, Tr, type Valuators, useOrder, useRowEventHandlers } from '../table';
+import { DepartmentTable, OrderedData, Table, Td, Tr, type Valuators, useOrder, useRowEventHandlers, OrderProps as OrderProps } from '../table';
 import { EmployeeForm } from '../form';
 import { Route } from '@/api';
 import { useApiContext } from '../api';
@@ -21,19 +20,15 @@ export function employeeValuators(departmentKey: keyof Department): Valuators<Em
 	return { department: { key: departmentKey } };
 }
 
-/** The {@link Order} of {@link Employee}s. */
-export type EmployeeOrder = ReturnType<typeof useOrder<keyof Employee>>;
-
 /** @returns {@link useOrder} specialized for a {@link Employee}. */
-export function useEmployeeOrder(): EmployeeOrder {
+export function useEmployeeOrder(): ReturnType<typeof useOrder<keyof Employee>> {
 	return useOrder<keyof Employee>('name');
 }
 
 /** @returns a table which displays {@link Employee}s in a customizable manner. */
 export function EmployeeTable(props:
 	& BaseProps<Employee, 'id'>
-	& Required<On<'reorderDepartment', Parameters<DepartmentOrder[1]>>>
-	& { departmentOrder: DepartmentOrder[0] }
+	& OrderProps<'department', Department>
 ): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
 	const [HANDLER, setRowEvent] = useRowEventHandlers(

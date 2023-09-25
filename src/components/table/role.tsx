@@ -19,11 +19,8 @@ const HEADERS = ['ID', 'Name', 'Password TTL'] as const;
  */
 export const ROLE_VALUATORS: Readonly<Valuators<Role>> = { password_ttl: { map: parse } };
 
-/** The {@link Order} of {@link Role}s. */
-export type RoleOrder = ReturnType<typeof useOrder<keyof Role>>;
-
 /** @returns {@link useOrder} specialized for a {@link Role}. */
-export function useRoleOrder(): RoleOrder {
+export function useRoleOrder(): ReturnType<typeof useOrder<keyof Role>> {
 	return useOrder<keyof Role>('name');
 }
 

@@ -31,7 +31,7 @@ export default function Page(): React.ReactElement {
 					ORDERED_DATA.refresh(contactValuators(ADDRESS_ORDER.column, order.column));
 				}}
 				orderedData={ORDERED_DATA}
-				outerAddressorder={OUTER_ADDRESS_ORDER}
+				outerAddressOrder={OUTER_ADDRESS_ORDER}
 			/>
 		)}
 	</>;

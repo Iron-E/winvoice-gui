@@ -1,5 +1,6 @@
 import React from "react";
 import type { FieldName, Fn, ValueOf } from "@/utils";
+import type { On } from "../props-with";
 import type { ShowMessage } from "../messages";
 import { Client } from "../api";
 import { UserInputRoute } from "@/api";
@@ -52,6 +53,12 @@ export type Order<T> = Readonly<{
 export function useOrder<T>(defaultColumn: T): [Order<T>, Fn<[order: Order<T>]>] {
 	return React.useState<Order<T>>({ ascending: false, column: defaultColumn });
 }
+
+/** The {@link ReturnType} of {@link useOrder} structured as properties of a {@link React.ReactElement}. */
+export type OrderProps<K extends string, T> =
+	& Required<On<`reorder${Capitalize<K>}`, Parameters<ReturnType<typeof useOrder<keyof T>>[1]>>>
+	& Record<`${Uncapitalize<K>}Order`,ReturnType<typeof useOrder<keyof T>>[0]>
+	;
 
 export class OrderedData<T> {
 	/** mutate the  {@link OrderedData.data} */

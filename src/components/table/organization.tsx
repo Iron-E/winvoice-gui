@@ -3,8 +3,7 @@
 import React from 'react';
 import type { BaseProps } from './props';
 import type { Location, Organization } from '@/schema'
-import type { On } from '../props-with';
-import { LocationOrder, LocationTable, OrderedData, Table, Td, Tr, type Valuators, useOrder, useRowEventHandlers } from '../table';
+import { LocationTable, OrderedData, Table, Td, Tr, type Valuators, useOrder, useRowEventHandlers, OrderProps } from '../table';
 import { OrganizationForm } from '../form';
 import { Route } from '@/api';
 import { getId } from '@/utils';
@@ -26,19 +25,15 @@ export function organizationValuators(locationKey: keyof Location, outerLocation
 	};
 }
 
-/** The {@link Order} of {@link Organization}s. */
-export type OrganizationOrder = ReturnType<typeof useOrder<keyof Organization>>;
-
 /** @returns {@link useOrder} specialized for a {@link Organization}. */
-export function useOrganizationOrder(): OrganizationOrder {
+export function useOrganizationOrder(): ReturnType<typeof useOrder<keyof Organization>> {
 	return useOrder<keyof Organization>('name');
 }
 
 /** @returns a table which displays {@link Organization}s in a customizable manner. */
 export function OrganizationTable(props:
 	& BaseProps<Organization, 'id'>
-	& Required<On<'reorderLocation' | 'reorderOuterLocation', Parameters<LocationOrder[1]>>>
-	& Record<'locationOrder' | 'outerLocationOrder', LocationOrder[0]>
+	& OrderProps<'location' | 'outerLocation', Location>
 ): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
 	const [HANDLER, setRowEvent] = useRowEventHandlers(

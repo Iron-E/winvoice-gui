@@ -3,16 +3,13 @@
 import React from 'react';
 import type { BaseProps } from './props';
 import type { Department, Employee, Role, User } from '@/schema'
-import type { On } from '../props-with';
 import {
-	DepartmentOrder,
-	EmployeeOrder,
 	EmployeeTable,
 	employeeValuators,
 	Order,
 	OrderedData,
+	OrderProps,
 	ROLE_VALUATORS,
-	RoleOrder,
 	RoleTable,
 	Table,
 	Td,
@@ -40,25 +37,17 @@ export function userValuators(employeeKey: keyof Employee, employeeDepartmentKey
 	};
 }
 
-/** The {@link Order} of {@link User}s. */
-export type UserOrder = ReturnType<typeof useOrder<keyof User>>;
-
 /** @returns {@link useOrder} specialized for a {@link User}. */
-export function useUserOrder(): UserOrder {
+export function useUserOrder(): ReturnType<typeof useOrder<keyof User>> {
 	return useOrder<keyof User>('username');
 }
 
 /** @returns a table which displays {@link User}s in a customizable manner. */
 export function UserTable(props:
 	& BaseProps<User, 'id'>
-	& Required<On<'reorderEmployee', Parameters<EmployeeOrder[1]>>>
-	& Required<On<'reorderEmployeeDepartment', Parameters<DepartmentOrder[1]>>>
-	& Required<On<'reorderRole', Parameters<RoleOrder[1]>>>
-	& {
-		employeeOrder: EmployeeOrder[0],
-		employeeDepartmentOrder: DepartmentOrder[0],
-		roleOrder: RoleOrder[0],
-	},
+	& OrderProps<'employee', Employee>
+	& OrderProps<'employeeDepartment', Department>
+	& OrderProps<'role', Role>
 ): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
 	const [HANDLER, setRowEvent] = useRowEventHandlers(

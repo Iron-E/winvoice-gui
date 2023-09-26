@@ -1,9 +1,17 @@
 import React from 'react';
 import type { InputProps } from './props';
+import type { Maybe } from '@/utils';
 import { Input } from '../../form';
 
+const MILLISECONDS_PER_MINUTE = 60000;
+
 /** @returns a {@link React.JSX.IntrinsicElements.input | input} to gather a `string` which can be used to construct a {@link Date}. */
-export function InputDate(props: Omit<InputProps<Date>, 'placeholder'>): React.ReactElement {
+export function InputDate(props: Omit<InputProps<Date>, 'placeholder' | 'value'> & { value?: Date }): React.ReactElement {
+	if (props.value != undefined) {
+		const ISO_STRING = new Date(props.value.getTime() + (props.value.getTimezoneOffset() * MILLISECONDS_PER_MINUTE)).toISOString();
+		var localDate: Maybe<string> = ISO_STRING.substring(0, ISO_STRING.length - 1);
+	}
+
 	return (
 		<Input
 			id={props.id}
@@ -12,7 +20,7 @@ export function InputDate(props: Omit<InputProps<Date>, 'placeholder'>): React.R
 			required={props.required}
 			title={props.title}
 			type='datetime-local'
-			value={props.value}
+			value={localDate ?? ''}
 		/>
 	);
 }

@@ -65,6 +65,21 @@ function Label(props: Children & Class & { required?: boolean, htmlFor: string }
 	);
 }
 
+/** A `<form>` which has indicators to show whether it is invalid. */
+function Validatable(props: Children): React.ReactElement {
+	return (
+		<span className='relative'>
+			{props.children}
+
+			<ExclamationCircleIcon
+				className='absolute top-1.5 w-[1.25em] right-1 rounded-2xl \
+bg-form-field-bg text-form-label-fg-invalid invisible peer-invalid:visible'
+				title='This value is invalid'
+			/>
+		</span>
+	);
+}
+
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
 export function Input(props:
 	& FieldProps<HTMLInputElement, 'input'>
@@ -81,7 +96,7 @@ export function Input(props:
 			</span>
 		</span>
 
-		<span className='relative'>
+		<Validatable>
 			<input
 				className={`${FIELD_STYLE} ${props.inputClassName} peer w-full`}
 				id={props.id}
@@ -94,13 +109,7 @@ export function Input(props:
 				type={props.type}
 				value={props.value}
 			/>
-
-			<ExclamationCircleIcon
-				className='absolute top-1.5 w-[1.25em] right-1 rounded-2xl \
-bg-form-field-bg text-form-label-fg-invalid invisible peer-invalid:visible'
-				title='This value is invalid'
-			/>
-		</span>
+		</Validatable>
 	</>;
 }
 
@@ -124,20 +133,29 @@ export function Select(props: FieldProps<HTMLSelectElement, 'select'>): React.Re
 	</>;
 }
 
+type TextareaProps = React.JSX.IntrinsicElements['textarea'];
+
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
-export function Textarea(props: FieldProps<HTMLTextAreaElement, 'textarea'>): React.ReactElement {
+export function Textarea(props:
+	& FieldProps<HTMLTextAreaElement, 'textarea'>
+	& { [key in 'placeholder']?: TextareaProps[key] }
+): React.ReactElement {
 	return <>
 		<Label className='justify-end' htmlFor={props.id} required={props.required}>
 			{props.label}
 		</Label>
 
-		<textarea
-			className={`${FIELD_STYLE} w-full ${props.textareaClassName}`}
-			id={props.id}
-			name={props.id}
-			onChange={props.onChange && (e => props.onChange!(e.target.value))}
-			title={props.title}
-			value={props.value}
-		/>
+		<Validatable>
+			<textarea
+				className={`${FIELD_STYLE} ${props.textareaClassName} peer w-full`}
+				id={props.id}
+				name={props.id}
+				onChange={props.onChange && (e => props.onChange!(e.target.value))}
+				placeholder={props.placeholder}
+				required={props.required}
+				title={props.title}
+				value={props.value}
+			/>
+		</Validatable>
 	</>;
 }

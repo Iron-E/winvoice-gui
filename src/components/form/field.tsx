@@ -20,7 +20,7 @@ type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.In
 		: never
 	)
 	& Required<Id>
-	& { [key in 'value']?: IntrinsicProp<ElementName, key> }
+	& { [key in 'required' | 'value']?: IntrinsicProp<ElementName, key> }
 	& {
 		label: string,
 		title: IntrinsicProp<ElementName, 'title'>,
@@ -55,17 +55,26 @@ export function Checkbox(props:
 	);
 }
 
+/** A `<label>` for winvoice `<form>` fields. */
+function Label(props: Children & Class & { required?: boolean, htmlFor: string }): React.ReactElement {
+	return (
+		<label className={`ml-1 ${props.className}`} htmlFor={props.htmlFor} title={`This field is ${props.required ? 'required' : 'optional'}`}>
+			{props.children}
+			{props.required && <span className='text-form-label-fg-required'> *</span>}
+		</label>
+	);
+}
+
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
 export function Input(props:
 	& FieldProps<HTMLInputElement, 'input'>
-	& { [key in 'pattern' | 'placeholder' | 'required' | 'type']?: InputProps[key] }
+	& { [key in 'pattern' | 'placeholder' | 'type']?: InputProps[key] }
 ): React.ReactElement {
 	return <>
 		<span className={`${FLEX_BETWEEN} gap-5`}>
-			<label className='ml-1 self-end' htmlFor={props.id} title={`This field is ${props.required ? 'required' : 'optional'}`}>
+			<Label className='self-end' htmlFor={props.id} required={props.required} >
 				{props.label}
-				{props.required && <span className='text-form-label-fg-required'> *</span>}
-			</label>
+			</Label>
 
 			<span className={`${FLEX} justify-right mr-[-0.25rem] gap-1`}>
 				{props.children}
@@ -98,9 +107,9 @@ bg-form-field-bg text-form-label-fg-invalid invisible peer-invalid:visible'
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
 export function Select(props: FieldProps<HTMLSelectElement, 'select'>): React.ReactElement {
 	return <>
-		<label className='ml-1 justify-end' htmlFor={props.id}>
+		<Label className='justify-end' htmlFor={props.id} required={props.required}>
 			{props.label}
-		</label>
+		</Label>
 
 		<select
 			className={`${FIELD_STYLE} w-full ${props.selectClassName}`}
@@ -112,5 +121,23 @@ export function Select(props: FieldProps<HTMLSelectElement, 'select'>): React.Re
 		>
 			{props.children}
 		</select>
+	</>;
+}
+
+/** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
+export function Textarea(props: FieldProps<HTMLTextAreaElement, 'textarea'>): React.ReactElement {
+	return <>
+		<Label className='justify-end' htmlFor={props.id} required={props.required}>
+			{props.label}
+		</Label>
+
+		<textarea
+			className={`${FIELD_STYLE} w-full ${props.textareaClassName}`}
+			id={props.id}
+			name={props.id}
+			onChange={props.onChange && (e => props.onChange!(e.target.value))}
+			title={props.title}
+			value={props.value}
+		/>
 	</>;
 }

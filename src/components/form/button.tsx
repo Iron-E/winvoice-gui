@@ -1,7 +1,11 @@
-import type { Children, Class, On } from "../props-with";
+import type { Children, Class, Click } from "../props-with";
+import { HOVER } from "../css";
+
+/** The style of a {@link React.JSX.IntrinsicElements.button | button}. */
+export const LABEL_BUTTON_STYLE = `px-1 py-0.5 mx-0 my-1 text-xs ${HOVER}` as const;
 
 /** A button for a form. */
-export function FormButton(props: Children & Class & On<'click', [e: React.MouseEvent]>): React.ReactElement {
+export function FormButton(props: Children & Class & Click): React.ReactElement {
 	return (
 		<button
 			className={`mt-1 border-[1px] \

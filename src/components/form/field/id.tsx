@@ -1,14 +1,11 @@
-import type { InputProps } from './props';
-import type { On } from '../../props-with';
+import type { Children, On } from '../../props-with';
 import type { Fn, Opt } from '@/utils';
-import { FormButton, Input } from '../../form';
-import { HOVER, ICON } from '../../css';
-import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/20/solid';
-import { useModalVisibility } from '@/hooks';
+import type { InputProps } from './props';
+import { FormButton, Input, LABEL_BUTTON_STYLE } from '../../form';
 import { Modal } from '@/components';
-
-/** The style of a {@link React.JSX.IntrinsicElements.button | button}. */
-const BUTTON_STYLE = `px-1 py-0.5 mx-0 my-1 text-xs ${HOVER}` as const;
+import { useModalVisibility } from '@/hooks';
+import { NewIcon } from '@/components/icons';
+import { SearchIcon } from '@/components/icons/search';
 
 /** @returns a tuple which first contains the handler for the given {@link InputID} action, and second, a setter for the current ID action. */
 export function useIdEventHandlers<T>(
@@ -41,12 +38,13 @@ export function useIdEventHandlers<T>(
  *       foreign keys is *often* `required`. Thus, this design is intentional, and this empty function
  *       shuts next.js up
  */
-function doNothing(): void {}
+function doNothing(): void { }
 
 /** @returns a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
 export function InputId(props:
-	& On<'action', [value: 'new' | 'search']>
+	& Children
 	& Omit<InputProps<string>, 'onChange'>
+	& On<'action', [value: 'new' | 'search']>
 ): React.ReactElement {
 	return (
 		<Input
@@ -59,12 +57,14 @@ export function InputId(props:
 			type='text'
 			value={props.value}
 		>
-			<FormButton className={BUTTON_STYLE} onClick={props.onAction && (() => props.onAction!('new'))}>
-				<PlusIcon className={ICON} /> New
+			{props.children}
+
+			<FormButton className={LABEL_BUTTON_STYLE} onClick={props.onAction && (() => props.onAction!('new'))}>
+				<NewIcon />
 			</FormButton>
 
-			<FormButton className={BUTTON_STYLE} onClick={props.onAction && (() => props.onAction!('search'))}>
-				<MagnifyingGlassIcon className={ICON} /> Search
+			<FormButton className={LABEL_BUTTON_STYLE} onClick={props.onAction && (() => props.onAction!('search'))}>
+				<SearchIcon />
 			</FormButton>
 		</Input>
 	);

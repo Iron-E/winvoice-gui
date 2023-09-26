@@ -6,9 +6,10 @@ import React from 'react';
 import type { Children, Class } from '../props-with';
 import type { LookupTable, Props } from '@/utils';
 import { CLICKABLE } from './style';
-import { HOVER, ICON } from '../css';
-import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/20/solid';
+import { HOVER } from '../css';
+import { NewIcon } from '../icons';
 import { Route } from '@/api';
+import { SearchIcon } from '../icons/search';
 
 /** Properties accepted by a {@link Link}. */
 type LinkProps = Props<typeof Link>;
@@ -65,11 +66,11 @@ ${ENTRY_XL_TRANSLATION_OFF_BY_ONE[props.route] ? 'xl:-translate-x-[0.57rem]' : '
 ${ENTRY_2XL_TRANSLATION_OFF_BY_ONE[props.route] ? '2xl:-translate-x-[0.57rem]' : '2xl:-translate-x-[0.56rem]'} \
 xl:bg-navbar-entry-bg-current`}>
 				<NavLink href={`${props.route}/new`}>
-					<PlusIcon className={ICON} /> New
+					<NewIcon />
 				</NavLink>
 
 				<NavLink href={props.route}>
-					<MagnifyingGlassIcon className={ICON} /> Search
+					<SearchIcon />
 				</NavLink>
 			</div>
 		</div>

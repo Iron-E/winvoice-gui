@@ -30,7 +30,6 @@ type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.In
 /** The style of a form field. */
 const FIELD_STYLE = `${SPACE} mb-2 bg-form-field-bg` as const;
 
-
 type InputProps = React.JSX.IntrinsicElements['input'];
 
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */

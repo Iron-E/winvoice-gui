@@ -1,10 +1,11 @@
-import type { FieldName, Opt } from "@/utils";
 import type { AsyncOn, Children, Click, On } from "../props-with";
+import type { FieldName, Opt } from "@/utils";
 import { Client } from "../api";
 import { ConfirmModal, Modal } from "../modal";
-import { FLEX, HOVER, ICON } from "../css";
+import { DeleteIcon } from "../icons";
+import { EditIcon } from "../icons/edit";
+import { FLEX, HOVER } from "../css";
 import { OrderedData } from "./order";
-import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { ShowMessage } from "../messages";
 import { TableButton } from './button';
 import { Td } from "./column";
@@ -67,13 +68,13 @@ ${props.onClick != undefined ? 'cursor-pointer' : ''}`}
 				<span className={`${FLEX} py-1 justify-between gap-2`}>
 					{props.onDelete && (
 						<TableButton onClick={props.onDelete}>
-							<TrashIcon className={ICON} /> Delete
+							<DeleteIcon />
 						</TableButton>
 					)}
 
 					{props.onEdit && (
 						<TableButton onClick={props.onEdit}>
-							<PencilIcon className={ICON} /> Edit
+							<EditIcon />
 						</TableButton>
 					)}
 				</span>

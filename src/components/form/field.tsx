@@ -154,7 +154,7 @@ export function Textarea(props:
 
 		<Validatable>
 			<textarea
-				className={`${FIELD_STYLE} ${props.textareaClassName} peer w-full`}
+				className={`${FIELD_STYLE} ${props.textareaClassName} peer w-full min-h-[2rem]`}
 				id={props.id}
 				name={props.id}
 				onChange={props.onChange && (e => props.onChange!(e.target.value))}

@@ -21,14 +21,22 @@ export function InputInvoice(props: CompositeProps<Invoice>): React.ReactElement
 			<InputInvoiceDate
 				id={`${props.id}--invoice--date`}
 				label='Date'
-				onChange={setDate}
+				onChange={date => {
+					setDate(date);
+					if (HOURLY_RATE != undefined) {
+						props.onChange({ date: date, hourly_rate: HOURLY_RATE });
+					}
+				}}
 				value={DATE}
 			/>
 
 			<InputMoney
 				id={`${props.id}--invoice--hourly-rate`}
 				label='Hourly Rate'
-				onChange={setHourlyRate}
+				onChange={hourly_rate => {
+					setHourlyRate(hourly_rate);
+					props.onChange({ date: DATE, hourly_rate });
+				}}
 				value={HOURLY_RATE}
 			/>
 		</BorderLabelField>

@@ -19,6 +19,7 @@ module.exports = {
 				/** `<body>` tag */
 				body: {
 					bg: COLORS.gray[200],
+					fg: COLORS.black,
 				},
 
 				/** `<Dim>` component */

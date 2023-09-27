@@ -58,9 +58,13 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
-				const RESULT = await API_CLIENT.post(showMessage, Route.Job, {
-					args: [CLIENT, DATE_CLOSE, DATE_OPEN, DEPARTMENTS, INCREMENT, INVOICE, NOTES, OBJECTIVES]
-				}, isJob);
+				const RESULT = await API_CLIENT.post(
+					showMessage,
+					Route.Job,
+					{args: [CLIENT, DATE_CLOSE, DATE_OPEN, DEPARTMENTS, INCREMENT, INVOICE, NOTES, OBJECTIVES]},
+					isJob,
+				);
+
 				if (RESULT === null) { return; }
 				var result = RESULT;
 			} else {
@@ -111,7 +115,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 			{DEPARTMENTS.map((d, i) => (
 				<InputId
 					id={`${props.id}--department-${i + 1}`}
-					label={`Department ${i + 1}`}
+					label={`Department${i > 0 ? ` ${i + 1}` : ''}`}
 					onAction={action => {
 						setIndex(i);
 						setDepartmentIdEvent(action);
@@ -120,9 +124,14 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 					title='A department assigned to this Job'
 					value={d?.id ?? ''}
 				>
-					<FormButton className={LABEL_BUTTON_STYLE} onClick={() => setDepartments(DEPARTMENTS.filter((_, j) => j !== i))}>
-						<DeleteIcon />
-					</FormButton>
+					{DEPARTMENTS.length > 1 && (
+						<FormButton
+							className={LABEL_BUTTON_STYLE}
+							onClick={() => setDepartments(DEPARTMENTS.filter((_, j) => j !== i))}
+						>
+							<DeleteIcon />
+						</FormButton>
+					)}
 				</InputId>
 			))}
 

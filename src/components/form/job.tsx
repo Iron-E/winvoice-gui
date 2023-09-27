@@ -2,6 +2,7 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
+import { DeleteIcon } from '../icons';
 import { Department, isJob, type Job } from '@/schema';
 import {
 	Form,
@@ -9,6 +10,7 @@ import {
 	InputDate,
 	InputDuration,
 	InputId,
+	InputInvoice,
 	LABEL_BUTTON_STYLE,
 	Textarea,
 	useDepartmentIdEventHandlers,
@@ -16,8 +18,9 @@ import {
 	useOrganizationIdEventHandlers,
 } from '../form';
 import { Route } from '@/api';
+import { SPACE } from '../css';
 import { useApiContext } from '../api';
-import { DeleteIcon } from '../icons';
+import { Opt } from '@/utils';
 
 /** Event handlers for a {@link Job} ID. */
 export function useJobIdEventHandlers(
@@ -34,7 +37,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 	const [CLIENT, setClient] = React.useState(props.initialValues?.client);
 	const [DATE_CLOSE, setDateClose] = React.useState(props.initialValues?.date_close);
 	const [DATE_OPEN, setDateOpen] = React.useState(props.initialValues?.date_open ?? new Date());
-	const [DEPARTMENTS, setDepartments] = React.useState<Department[]>(props.initialValues?.departments ?? []);
+	const [DEPARTMENTS, setDepartments] = React.useState<Opt<Department>[]>(props.initialValues?.departments ?? [null]);
 	const [INCREMENT, setIncrement] = React.useState(props.initialValues?.increment ?? '');
 	const [INVOICE, setInvoice] = React.useState(props.initialValues?.invoice);
 	const [NOTES, setNotes] = React.useState(props.initialValues?.notes ?? '');
@@ -44,7 +47,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 	const [INDEX, setIndex] = React.useState(-1);
 	const [CLIENT_HANDLER, setClientIdEvent] = useOrganizationIdEventHandlers(props.id, setClient);
 	const [DEPARTMENTS_HANDLER, setDepartmentIdEvent] = useDepartmentIdEventHandlers(props.id, d => {
-		setDepartments(DEPARTMENTS.map((v, i) => v.id === d.id || i === INDEX ? d : v));
+		setDepartments(DEPARTMENTS.map((v, i) => i === INDEX ? d : v));
 		setIndex(-1);
 	});
 
@@ -66,7 +69,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 					client: CLIENT!,
 					date_close: DATE_CLOSE,
 					date_open: DATE_OPEN,
-					departments: DEPARTMENTS,
+					departments: DEPARTMENTS as Department[],
 					increment: INCREMENT,
 					invoice: INVOICE!,
 					notes: NOTES,
@@ -113,8 +116,9 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 						setIndex(i);
 						setDepartmentIdEvent(action);
 					}}
+					required={true}
 					title='A department assigned to this Job'
-					value={d.id}
+					value={d?.id ?? ''}
 				>
 					<FormButton className={LABEL_BUTTON_STYLE} onClick={() => setDepartments(DEPARTMENTS.filter((_, j) => j !== i))}>
 						<DeleteIcon />
@@ -131,7 +135,11 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 				value={INCREMENT}
 			/>
 
-			{/* TODO: invoice */}
+			<InputInvoice
+				id={`${props.id}--invoice`}
+				onChange={setInvoice}
+				value={INVOICE}
+			/>
 
 			<Textarea
 				id={`${props.id}--objectives`}
@@ -149,6 +157,8 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 				title='Miscellaneous, non-objective text'
 				value={NOTES}
 			/>
+
+			<FormButton className={SPACE} />
 		</Form>
 
 		{CLIENT_HANDLER}

@@ -17,6 +17,7 @@ export function SelectContactKind(props: SelectProps<ContactKinds>): React.React
 			id={props.id}
 			label={props.label ?? 'Contact kind'}
 			onChange={props.onChange as (currency: string) => void} // NOTE: safe upcast, the `OPTIONS` are all Kinds
+			required={props.required}
 			title={props.title}
 			value={props.value}
 		>

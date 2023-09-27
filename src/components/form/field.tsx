@@ -9,6 +9,8 @@ export * from './field/currency';
 export * from './field/date';
 export * from './field/duration';
 export * from './field/id';
+export * from './field/invoice';
+export * from './field/money';
 export * from './field/string';
 
 /** Properties shared by all labeled elements. */
@@ -120,16 +122,19 @@ export function Select(props: FieldProps<HTMLSelectElement, 'select'>): React.Re
 			{props.label}
 		</Label>
 
-		<select
-			className={`${FIELD_STYLE} w-full ${props.selectClassName}`}
-			id={props.id}
-			name={props.id}
-			onChange={props.onChange && (e => props.onChange!(e.target.value))}
-			title={props.title}
-			value={props.value}
-		>
-			{props.children}
-		</select>
+		<Validatable>
+			<select
+				className={`${FIELD_STYLE} ${props.selectClassName} peer w-full`}
+				id={props.id}
+				name={props.id}
+				onChange={props.onChange && (e => props.onChange!(e.target.value))}
+				required={props.required}
+				title={props.title}
+				value={props.value}
+			>
+				{props.children}
+			</select>
+		</Validatable>
 	</>;
 }
 

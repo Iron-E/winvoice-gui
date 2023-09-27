@@ -8,7 +8,7 @@ import { FLEX } from './css';
 export type Props = Children & Click;
 
 /** How high up the current {@link Dim} is. */
-const Z_INDEX_CONTEXT: Readonly<React.Context<number>> = React.createContext(0);
+const Z_INDEX_CONTEXT: Readonly<React.Context<number>> = React.createContext(1);
 
 /** @returns a floating `div` which dims the screen at `z-0`. */
 export function Dim(props: Props): React.ReactElement {

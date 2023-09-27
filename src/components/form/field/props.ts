@@ -1,4 +1,4 @@
-import type { On } from '../../props-with';
+import type { Id, On } from '../../props-with';
 import type { Props, Spread } from '@/utils';
 import { Input, Select } from '../../form';
 
@@ -17,6 +17,9 @@ type OmitProps<T> = Omit<
 	| 'selectClassName'
 	| 'type'
 >
+
+/** The properties used for composite fields. */
+export type CompositeProps<T> = Required<Id & On<'change', [date: T]>> & { value?: T };
 
 /** The properties used for a `<input>` element as part of the schema. */
 export type InputProps<T> = SpreadProps<OmitProps<typeof Input>, T>;

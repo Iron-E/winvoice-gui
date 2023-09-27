@@ -18,6 +18,7 @@ export function SelectCurrency(props: SelectProps<Maybe<Currency>>): React.React
 			id={props.id}
 			label={props.label ?? 'Currency'}
 			onChange={props.onChange as (currency: string) => void} // NOTE: safe upcast, the `OPTIONS` are all Currencies
+			required={props.required}
 			title={props.title}
 			value={props.value}
 		>

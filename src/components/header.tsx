@@ -38,7 +38,7 @@ export function Header(props: Children): React.ReactElement {
 	return (
 		<header
 			className={`${FLEX_BETWEEN} \
-sticky top-0 \
+sticky top-0 z-[1] \
 p-1.5 w-fit min-w-full border-b-2 \
 bg-header-bg border-b-header-border`}
 		>

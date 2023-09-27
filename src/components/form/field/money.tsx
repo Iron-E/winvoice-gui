@@ -2,6 +2,7 @@
 
 import React from 'react';
 import type { Money } from '@/schema';
+import { BorderLabelField } from './border-label';
 import { CompositeProps } from './props';
 import { Input, SelectCurrency } from '../field';
 
@@ -13,10 +14,10 @@ export function InputMoney(props: CompositeProps<Money>): React.ReactElement {
 	const [CURRENCY, setCurrency] = React.useState(props.value?.currency);
 
 	return (
-		<div className='grid grid-rows-[1.5rem_1fr] grid-flow-col gap-x-2 [&_select]:h-[80%]'>
+		<BorderLabelField className='grid grid-rows-[1.5rem_1fr] grid-flow-col gap-x-2 [&_select]:h-[80%]' label={props.label}>
 			<SelectCurrency
 				id={`${props.id}--currency`}
-				label={`${props.label} Currency`}
+				label='Currency'
 				onChange={currency => {
 					setCurrency(currency)
 					if (AMOUNT && currency) { props.onChange({ amount: AMOUNT, currency }); }
@@ -27,7 +28,7 @@ export function InputMoney(props: CompositeProps<Money>): React.ReactElement {
 
 			<Input
 				id={`${props.id}--amount`}
-				label={`${props.label} Amount`}
+				label='Amount'
 				onChange={amount => {
 					setAmount(amount);
 					if (CURRENCY) { props.onChange({ amount, currency: CURRENCY }); }
@@ -37,6 +38,6 @@ export function InputMoney(props: CompositeProps<Money>): React.ReactElement {
 				title='The amount of money'
 				value={AMOUNT ?? ''}
 			/>
-		</div>
+		</BorderLabelField>
 	);
 }

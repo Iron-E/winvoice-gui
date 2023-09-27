@@ -3,6 +3,7 @@
 import React from 'react';
 import type { CompositeProps } from './props';
 import type { Invoice, InvoiceDate, Money } from '@/schema';
+import { BorderLabelField } from './border-label';
 import { InputInvoiceDate } from './invoice/invoice-date';
 import { InputMoney } from './money';
 
@@ -15,19 +16,21 @@ export function InputInvoice(props: CompositeProps<Invoice>): React.ReactElement
 	const [DATE, setDate] = React.useState<InvoiceDate>();
 	const [HOURLY_RATE, setHourlyRate] = React.useState<Money>();
 
-	return <>
-		<InputInvoiceDate
-			id={`${props.id}--invoice--date`}
-			label={`${props.label} Date`}
-			onChange={setDate}
-			value={DATE}
-		/>
+	return (
+		<BorderLabelField className='w-full' label={props.label}>
+			<InputInvoiceDate
+				id={`${props.id}--invoice--date`}
+				label='Date'
+				onChange={setDate}
+				value={DATE}
+			/>
 
-		<InputMoney
-			id={`${props.id}--invoice--hourly-rate`}
-			label={`${props.label} Hourly Rate`}
-			onChange={setHourlyRate}
-			value={HOURLY_RATE}
-		/>
-	</>;
+			<InputMoney
+				id={`${props.id}--invoice--hourly-rate`}
+				label='Hourly Rate'
+				onChange={setHourlyRate}
+				value={HOURLY_RATE}
+			/>
+		</BorderLabelField>
+	);
 }

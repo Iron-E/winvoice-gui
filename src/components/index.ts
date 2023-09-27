@@ -1,6 +1,7 @@
 export * as css from './css';
 export * as propsWith from './props-with';
 export * from './api';
+export * from './border-label';
 export * from './buttons';
 export * from './form';
 export * from './icons';

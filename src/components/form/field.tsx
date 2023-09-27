@@ -74,7 +74,7 @@ function Validatable(props: Children): React.ReactElement {
 			{props.children}
 
 			<ExclamationCircleIcon
-				className='absolute top-1.5 w-[1.25em] right-1 rounded-2xl \
+				className='absolute top-1.5 w-[1.25em] right-1 [select+&]:right-3 rounded-2xl \
 bg-form-field-bg text-form-label-fg-invalid invisible peer-invalid:visible'
 				title='This value is invalid'
 			/>

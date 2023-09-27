@@ -3,7 +3,6 @@
 import React from 'react';
 import type { Money } from '@/schema';
 import { CompositeProps } from './props';
-import { FLEX } from '../../css';
 import { Input, SelectCurrency } from '../field';
 
 /**
@@ -14,33 +13,29 @@ export function InputMoney(props: CompositeProps<Money>): React.ReactElement {
 	const [CURRENCY, setCurrency] = React.useState(props.value?.currency);
 
 	return (
-		<div className={`${FLEX} flex-row justify-between [&>div]:flex [&>div]:flex-col`}>
-			<div>
-				<SelectCurrency
-					id={`${props.id}--currency`}
-					onChange={currency => {
-						setCurrency(currency)
-						if (AMOUNT && currency) { props.onChange({ amount: AMOUNT, currency }); }
-					}}
-					required={true}
-					title='The currency of money'
-				/>
-			</div>
+		<div className='grid grid-rows-[1.5rem_1fr] grid-flow-col gap-x-2 [&_select]:h-[80%]'>
+			<SelectCurrency
+				id={`${props.id}--currency`}
+				onChange={currency => {
+					setCurrency(currency)
+					if (AMOUNT && currency) { props.onChange({ amount: AMOUNT, currency }); }
+				}}
+				required={true}
+				title='The currency of money'
+			/>
 
-			<div>
-				<Input
-					id={`${props.id}--amount`}
-					label='Amount'
-					onChange={amount => {
-						setAmount(amount);
-						if (CURRENCY) { props.onChange({ amount, currency: CURRENCY }); }
-					}}
-					pattern='^\d+(\.\d+)?$'
-					required={true}
-					title='The amount of money'
-					value={AMOUNT ?? ''}
-				/>
-			</div>
+			<Input
+				id={`${props.id}--amount`}
+				label='Amount'
+				onChange={amount => {
+					setAmount(amount);
+					if (CURRENCY) { props.onChange({ amount, currency: CURRENCY }); }
+				}}
+				pattern='^\d+(\.\d+)?$'
+				required={true}
+				title='The amount of money'
+				value={AMOUNT ?? ''}
+			/>
 		</div>
 	);
 }

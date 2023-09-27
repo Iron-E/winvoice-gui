@@ -118,9 +118,11 @@ export function Input(props:
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
 export function Select(props: FieldProps<HTMLSelectElement, 'select'>): React.ReactElement {
 	return <>
-		<Label className='justify-end' htmlFor={props.id} required={props.required}>
-			{props.label}
-		</Label>
+		<span className='flex'>
+			<Label className='self-end' htmlFor={props.id} required={props.required} >
+				{props.label}
+			</Label>
+		</span>
 
 		<Validatable>
 			<select

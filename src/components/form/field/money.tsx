@@ -14,7 +14,7 @@ export function InputMoney(props: CompositeProps<Money>): React.ReactElement {
 	const [CURRENCY, setCurrency] = React.useState(props.value?.currency);
 
 	return (
-		<BorderLabelField className='grid grid-rows-[1.5rem_1fr] grid-flow-col gap-x-2 [&_select]:h-[80%]' label={props.label}>
+		<BorderLabelField className='grid grid-rows-[1.5rem_1fr] grid-flow-col gap-x-2' label={props.label}>
 			<SelectCurrency
 				id={`${props.id}--currency`}
 				label='Currency'

@@ -30,7 +30,7 @@ type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.In
 	;
 
 /** The style of a form field. */
-const FIELD_STYLE = `${SPACE} mb-2 bg-form-field-bg` as const;
+const FIELD_STYLE = `${SPACE} bg-form-field-bg h-full` as const;
 
 type InputProps = React.JSX.IntrinsicElements['input'];
 
@@ -70,12 +70,12 @@ function Label(props: Children & Class & { required?: boolean, htmlFor: string }
 /** A `<form>` which has indicators to show whether it is invalid. */
 function Validatable(props: Children): React.ReactElement {
 	return (
-		<span className='relative'>
+		<span className='relative mb-3'>
 			{props.children}
 
 			<ExclamationCircleIcon
-				className='absolute top-1.5 w-[1.25em] right-1 [select+&]:right-3 rounded-2xl \
-bg-form-field-bg text-form-label-fg-invalid invisible peer-invalid:visible'
+				className='absolute top-[18%] w-[1.25em] right-1 [select+&]:right-3 [input[type="datetime-local"]+&]:right-7 \
+rounded-2xl bg-form-field-bg text-form-label-fg-invalid invisible peer-invalid:visible'
 				title='This value is invalid'
 			/>
 		</span>

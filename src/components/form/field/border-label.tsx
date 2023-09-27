@@ -6,7 +6,7 @@ import { BorderLabel } from "@/components";
  */
 export function BorderLabelField(props: Children & Class & { label: React.ReactNode }): React.ReactElement {
 	return (
-		<BorderLabel className={`left-1 my-2 pt-2 pl-1 pr-3 ${props.className}`} label={props.label}>
+		<BorderLabel className={`left-1 mt-4 mb-2 pt-2 pl-1 pr-3 ${props.className}`} label={props.label}>
 			{props.children}
 		</BorderLabel>
 	);

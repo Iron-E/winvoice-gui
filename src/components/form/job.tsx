@@ -99,7 +99,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 				id={`${props.id}--date--open`}
 				label='Date Open'
 				onChange={setDateOpen}
-				required={DATE_CLOSE != undefined}
+				required={true}
 				title='The date that this job was opened'
 				value={DATE_OPEN}
 			/>

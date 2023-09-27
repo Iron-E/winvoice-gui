@@ -13,29 +13,33 @@ export function InputInvoiceDate(props: CompositeProps<InvoiceDate>): React.Reac
 	const [PAID, setPaid] = React.useState(props.value?.paid);
 
 	return <>
-		<InputDate
-			id={`${props.id}--issued`}
-			label={`${props.label} Issued`}
-			onChange={issued => {
-				setIssued(issued);
-				props.onChange({ issued, paid: PAID });
-			}}
-			required={PAID != undefined}
-			title='The date that the invoice was issued'
-			value={ISSUED}
-		/>
+		<div className='mb-1 [&_svg]:top-0'>
+			<InputDate
+				id={`${props.id}--issued`}
+				label={`${props.label} Issued`}
+				onChange={issued => {
+					setIssued(issued);
+					props.onChange({ issued, paid: PAID });
+				}}
+				required={PAID != undefined}
+				title='The date that the invoice was issued'
+				value={ISSUED}
+			/>
+		</div>
 
-		<InputDate
-			id={`${props.id}--paid`}
-			label={`${props.label} Paid`}
-			onChange={paid => {
-				setPaid(paid);
-				if (ISSUED != undefined) {
-					props.onChange({ issued: ISSUED, paid });
-				}
-			}}
-			title='The date that the invoice was paid'
-			value={PAID}
-		/>
+		<div>
+			<InputDate
+				id={`${props.id}--paid`}
+				label={`${props.label} Paid`}
+				onChange={paid => {
+					setPaid(paid);
+					if (ISSUED != undefined) {
+						props.onChange({ issued: ISSUED, paid });
+					}
+				}}
+				title='The date that the invoice was paid'
+				value={PAID}
+			/>
+		</div>
 	</>;
 }

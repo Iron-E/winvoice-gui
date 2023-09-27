@@ -10,7 +10,10 @@ export function InputDate(props: Omit<InputProps<Date>, 'placeholder' | 'value'>
 	if (props.value != undefined) {
 		const TIMESTAMP = props.value.getTime();
 		if (!isNaN(TIMESTAMP)) {
-			const ISO_STRING = new Date(TIMESTAMP + (props.value.getTimezoneOffset() * MILLISECONDS_PER_MINUTE)).toISOString();
+			const DATE = new Date(TIMESTAMP - (props.value.getTimezoneOffset() * MILLISECONDS_PER_MINUTE));
+			DATE.setMilliseconds(0);
+
+			const ISO_STRING = DATE.toISOString();
 			var localDate: Maybe<string> = ISO_STRING.substring(0, ISO_STRING.length - 1);
 		}
 	}

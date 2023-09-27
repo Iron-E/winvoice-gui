@@ -8,8 +8,11 @@ const MILLISECONDS_PER_MINUTE = 60000;
 /** @returns a {@link React.JSX.IntrinsicElements.input | input} to gather a `string` which can be used to construct a {@link Date}. */
 export function InputDate(props: Omit<InputProps<Date>, 'placeholder' | 'value'> & { value?: Date }): React.ReactElement {
 	if (props.value != undefined) {
-		const ISO_STRING = new Date(props.value.getTime() + (props.value.getTimezoneOffset() * MILLISECONDS_PER_MINUTE)).toISOString();
-		var localDate: Maybe<string> = ISO_STRING.substring(0, ISO_STRING.length - 1);
+		const TIMESTAMP = props.value.getTime();
+		if (!isNaN(TIMESTAMP)) {
+			const ISO_STRING = new Date(TIMESTAMP + (props.value.getTimezoneOffset() * MILLISECONDS_PER_MINUTE)).toISOString();
+			var localDate: Maybe<string> = ISO_STRING.substring(0, ISO_STRING.length - 1);
+		}
 	}
 
 	return (

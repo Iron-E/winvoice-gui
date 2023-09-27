@@ -146,6 +146,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 
 			<InputInvoice
 				id={`${props.id}--invoice`}
+				label='Invoice'
 				onChange={setInvoice}
 				value={INVOICE}
 			/>

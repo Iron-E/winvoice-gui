@@ -18,12 +18,14 @@ export function InputInvoice(props: CompositeProps<Invoice>): React.ReactElement
 	return <>
 		<InputInvoiceDate
 			id={`${props.id}--invoice--date`}
+			label={`${props.label} Date`}
 			onChange={setDate}
 			value={DATE}
 		/>
 
 		<InputMoney
 			id={`${props.id}--invoice--hourly-rate`}
+			label={`${props.label} Hourly Rate`}
 			onChange={setHourlyRate}
 			value={HOURLY_RATE}
 		/>

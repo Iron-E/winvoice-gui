@@ -15,7 +15,7 @@ export function InputInvoiceDate(props: CompositeProps<InvoiceDate>): React.Reac
 	return <>
 		<InputDate
 			id={`${props.id}--issued`}
-			label='Date Invoice Issued'
+			label={`${props.label} Issued`}
 			onChange={issued => {
 				setIssued(issued);
 				props.onChange({ issued, paid: PAID });
@@ -27,7 +27,7 @@ export function InputInvoiceDate(props: CompositeProps<InvoiceDate>): React.Reac
 
 		<InputDate
 			id={`${props.id}--paid`}
-			label='Date Invoice Paid'
+			label={`${props.label} Paid`}
 			onChange={paid => {
 				setPaid(paid);
 				if (ISSUED != undefined) {

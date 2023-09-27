@@ -19,7 +19,7 @@ type OmitProps<T> = Omit<
 >
 
 /** The properties used for composite fields. */
-export type CompositeProps<T> = Required<Id & On<'change', [date: T]>> & { value?: T };
+export type CompositeProps<T> = Required<Id & On<'change', [date: T]>> & { label: string, value?: T };
 
 /** The properties used for a `<input>` element as part of the schema. */
 export type InputProps<T> = SpreadProps<OmitProps<typeof Input>, T>;

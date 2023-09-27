@@ -16,6 +16,7 @@ export function InputMoney(props: CompositeProps<Money>): React.ReactElement {
 		<div className='grid grid-rows-[1.5rem_1fr] grid-flow-col gap-x-2 [&_select]:h-[80%]'>
 			<SelectCurrency
 				id={`${props.id}--currency`}
+				label={`${props.label} Currency`}
 				onChange={currency => {
 					setCurrency(currency)
 					if (AMOUNT && currency) { props.onChange({ amount: AMOUNT, currency }); }
@@ -26,7 +27,7 @@ export function InputMoney(props: CompositeProps<Money>): React.ReactElement {
 
 			<Input
 				id={`${props.id}--amount`}
-				label='Amount'
+				label={`${props.label} Amount`}
 				onChange={amount => {
 					setAmount(amount);
 					if (CURRENCY) { props.onChange({ amount, currency: CURRENCY }); }

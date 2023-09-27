@@ -106,7 +106,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 
 			<InputDate
 				id={`${props.id}--date--close`}
-				label='Date Open'
+				label='Date Close'
 				onChange={setDateClose}
 				required={INVOICE?.date?.issued != undefined}
 				title='The date that this job was opened'

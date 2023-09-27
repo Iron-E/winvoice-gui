@@ -5,7 +5,7 @@ import { Select } from '../field';
 
 /** All {@link Currency | Currencies} mapped to {@link React.JSX.IntrinsicElements.option | option}s  */
 const OPTIONS: readonly React.ReactElement[] = [
-	(<option key='no currency'>N/a</option>),
+	(<option key='no currency' value=''>N/a</option>),
 	...Object.entries(Currency).map(([k, v]) => (
 		<option key={k} value={v}>{v}</option>
 	))
@@ -17,7 +17,9 @@ export function SelectCurrency(props: SelectProps<Maybe<Currency>>): React.React
 		<Select
 			id={props.id}
 			label={props.label ?? 'Currency'}
-			onChange={props.onChange as (currency: string) => void} // NOTE: safe upcast, the `OPTIONS` are all Currencies
+			onChange={props.onChange && (currency => props.onChange!(
+				currency === '' ? undefined : currency as Currency,
+			))}
 			required={props.required}
 			title={props.title}
 			value={props.value}

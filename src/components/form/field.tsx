@@ -26,6 +26,8 @@ type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.In
 	& {
 		label: string,
 		title: IntrinsicProp<ElementName, 'title'>,
+		validateIconRight?: string,
+		validateIconTop?: string,
 	}
 	;
 
@@ -68,14 +70,14 @@ function Label(props: Children & Class & { required?: boolean, htmlFor: string }
 }
 
 /** A `<form>` which has indicators to show whether it is invalid. */
-function Validatable(props: Children): React.ReactElement {
+function ValidateIcon(props: Children & { iconRight?: string, iconTop?: string }): React.ReactElement {
 	return (
 		<span className='relative mb-3'>
 			{props.children}
 
 			<ExclamationCircleIcon
-				className='absolute top-[18%] w-[1.25em] right-1 [select+&]:right-3 [input[type="datetime-local"]+&]:right-7 \
-rounded-2xl bg-form-field-bg text-form-label-fg-invalid invisible peer-invalid:visible'
+				className={`absolute ${props.iconRight ?? 'right-1'} ${props.iconTop ?? 'top-[18%]'} w-[1.25em] \
+rounded-2xl bg-form-field-bg text-form-label-fg-invalid invisible peer-invalid:visible`}
 				title='This value is invalid'
 			/>
 		</span>
@@ -98,7 +100,7 @@ export function Input(props:
 			</span>
 		</span>
 
-		<Validatable>
+		<ValidateIcon iconRight={props.validateIconRight} iconTop={props.validateIconTop}>
 			<input
 				className={`${FIELD_STYLE} ${props.inputClassName} peer w-full`}
 				id={props.id}
@@ -111,7 +113,7 @@ export function Input(props:
 				type={props.type}
 				value={props.value}
 			/>
-		</Validatable>
+		</ValidateIcon>
 	</>;
 }
 
@@ -124,7 +126,7 @@ export function Select(props: FieldProps<HTMLSelectElement, 'select'>): React.Re
 			</Label>
 		</span>
 
-		<Validatable>
+		<ValidateIcon iconRight={props.validateIconRight ?? 'right-3'} iconTop={props.validateIconTop}>
 			<select
 				className={`${FIELD_STYLE} ${props.selectClassName} peer w-full`}
 				id={props.id}
@@ -136,7 +138,7 @@ export function Select(props: FieldProps<HTMLSelectElement, 'select'>): React.Re
 			>
 				{props.children}
 			</select>
-		</Validatable>
+		</ValidateIcon>
 	</>;
 }
 
@@ -152,7 +154,7 @@ export function Textarea(props:
 			{props.label}
 		</Label>
 
-		<Validatable>
+		<ValidateIcon iconRight={props.validateIconRight} iconTop={props.validateIconTop}>
 			<textarea
 				className={`${FIELD_STYLE} ${props.textareaClassName} peer w-full min-h-[2rem]`}
 				id={props.id}
@@ -163,6 +165,6 @@ export function Textarea(props:
 				title={props.title}
 				value={props.value}
 			/>
-		</Validatable>
+		</ValidateIcon>
 	</>;
 }

@@ -22,6 +22,10 @@ module.exports = {
 					fg: COLORS.black,
 				},
 
+				'bordered-label': {
+					border: COLORS.gray[500],
+				},
+
 				/** `<Dim>` component */
 				dim: {
 					bg: COLORS.black,

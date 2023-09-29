@@ -45,7 +45,7 @@ export function LocationForm(props: BaseProps<Location>): React.ReactElement {
 				id={`${props.id}--currency`}
 				onChange={setCurrency}
 				title='The currency used by this location, if it is different than surrounding locations'
-				value={CURRENCY}
+				value={CURRENCY ?? ''}
 			/>
 
 			<InputString

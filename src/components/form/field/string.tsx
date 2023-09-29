@@ -12,6 +12,8 @@ export function InputString(props: InputProps<string>): React.ReactElement {
 			required={props.required}
 			title={props.title}
 			type='text'
+			validateIconRight={props.validateIconRight}
+			validateIconTop={props.validateIconTop}
 			value={props.value}
 		/>
 	);

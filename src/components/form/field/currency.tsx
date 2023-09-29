@@ -22,6 +22,8 @@ export function SelectCurrency(props: SelectProps<Maybe<Currency>>): React.React
 			))}
 			required={props.required}
 			title={props.title}
+			validateIconRight={props.validateIconRight}
+			validateIconTop={props.validateIconTop}
 			value={props.value}
 		>
 			{OPTIONS}

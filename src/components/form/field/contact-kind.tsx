@@ -19,6 +19,8 @@ export function SelectContactKind(props: SelectProps<ContactKinds>): React.React
 			onChange={props.onChange as (currency: string) => void} // NOTE: safe upcast, the `OPTIONS` are all Kinds
 			required={props.required}
 			title={props.title}
+			validateIconRight={props.validateIconRight}
+			validateIconTop={props.validateIconTop}
 			value={props.value}
 		>
 			{OPTIONS}

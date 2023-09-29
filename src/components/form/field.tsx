@@ -22,10 +22,10 @@ type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.In
 		: never
 	)
 	& Required<Id>
-	& { [key in 'required' | 'value']?: IntrinsicProp<ElementName, key> }
+	& { [key in 'required']?: IntrinsicProp<ElementName, key> }
+	& { [key in 'title' | 'value']: NonNullable<IntrinsicProp<ElementName, key>> }
 	& {
 		label: string,
-		title: IntrinsicProp<ElementName, 'title'>,
 		validateIconRight?: string,
 		validateIconTop?: string,
 	}
@@ -156,7 +156,7 @@ export function Textarea(props:
 
 		<ValidateIcon iconRight={props.validateIconRight} iconTop={props.validateIconTop}>
 			<textarea
-				className={`${FIELD_STYLE} ${props.textareaClassName} peer w-full min-h-[2rem]`}
+				className={`${FIELD_STYLE} ${props.textareaClassName} peer w-full min-h-[2rem] rounded-br-none`}
 				id={props.id}
 				name={props.id}
 				onChange={props.onChange && (e => props.onChange!(e.target.value))}

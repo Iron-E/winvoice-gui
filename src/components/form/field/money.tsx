@@ -24,6 +24,7 @@ export function InputMoney(props: CompositeProps<Money>): React.ReactElement {
 				}}
 				required={true}
 				title='The currency of money'
+				value={CURRENCY ?? ''}
 			/>
 
 			<Input

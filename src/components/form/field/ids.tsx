@@ -1,6 +1,6 @@
 import type { CompositeProps } from './props';
 import type { Id } from '@/schema';
-import { BorderLabelField } from './border-label';
+import { BorderLabeledField } from './border-labeled';
 import { DeleteIcon, NewIcon } from '../../icons';
 import { Fn, Opt, Props } from '@/utils';
 import { FormButton, LABEL_BUTTON_STYLE } from '../../form';
@@ -19,7 +19,7 @@ export function InputIds<T extends { id: Id }>(props:
 	}
 ): React.ReactElement {
 	return (
-		<BorderLabelField className='pt-3 w-full' label={props.label}>
+		<BorderLabeledField className='w-full' label={props.label}>
 			<FormButton
 				className={`${HOVER} px-1 absolute top-[-1.2rem] right-2`}
 				onClick={() => props.onChange([...props.values, null])}
@@ -28,7 +28,7 @@ export function InputIds<T extends { id: Id }>(props:
 			</FormButton>
 
 			{props.values.map((d, i) => (
-				<div>
+				<div className='my-2'>
 					<InputId
 						id={`${props.id}-${i + 1}`}
 						label={`${i + 1}.`}
@@ -49,6 +49,6 @@ export function InputIds<T extends { id: Id }>(props:
 				</div>
 			))}
 
-		</BorderLabelField>
+		</BorderLabeledField>
 	);
 }

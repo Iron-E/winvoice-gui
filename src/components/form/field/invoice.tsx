@@ -3,7 +3,7 @@
 import React from 'react';
 import type { CompositeProps } from './props';
 import type { Invoice, InvoiceDate, Money } from '@/schema';
-import { BorderLabelField } from './border-label';
+import { BorderLabeledField } from './border-labeled';
 import { InputDate } from '../field';
 import { InputMoney } from './money';
 
@@ -19,7 +19,7 @@ export function InputInvoice(props: CompositeProps<Invoice>): React.ReactElement
 	const [PAID, setPaid] = React.useState(props.value?.date?.paid);
 
 	return (
-		<BorderLabelField className='w-full' label={props.label}>
+		<BorderLabeledField className='w-full' label={props.label}>
 			<div className='mb-1'>
 				<InputDate
 					id={`${props.id}--date--issued`}
@@ -64,6 +64,6 @@ export function InputInvoice(props: CompositeProps<Invoice>): React.ReactElement
 				}}
 				value={HOURLY_RATE}
 			/>
-		</BorderLabelField>
+		</BorderLabeledField>
 	);
 }

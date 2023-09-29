@@ -2,7 +2,6 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { DeleteIcon } from '../icons';
 import { Department, isJob, type Job } from '@/schema';
 import {
 	Form,
@@ -11,7 +10,6 @@ import {
 	InputDuration,
 	InputId,
 	InputInvoice,
-	LABEL_BUTTON_STYLE,
 	Textarea,
 	useDepartmentIdEventHandlers,
 	useIdEventHandlers,
@@ -21,6 +19,7 @@ import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
 import { Opt } from '@/utils';
+import { InputIds } from './field/ids';
 
 /** Event handlers for a {@link Job} ID. */
 export function useJobIdEventHandlers(
@@ -52,16 +51,12 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 	});
 
 	return <>
-		<button onClick={() => setDepartments([...DEPARTMENTS, { id: '', name: '' }])}>
-			Create
-		</button>
-
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
 				const RESULT = await API_CLIENT.post(
 					showMessage,
 					Route.Job,
-					{args: [CLIENT, DATE_CLOSE, DATE_OPEN, DEPARTMENTS, INCREMENT, INVOICE, NOTES, OBJECTIVES]},
+					{ args: [CLIENT, DATE_CLOSE, DATE_OPEN, DEPARTMENTS, INCREMENT, INVOICE, NOTES, OBJECTIVES] },
 					isJob,
 				);
 
@@ -113,28 +108,16 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 				value={DATE_CLOSE}
 			/>
 
-			{DEPARTMENTS.map((d, i) => (
-				<InputId
-					id={`${props.id}--department-${i + 1}`}
-					label={`Department${i > 0 ? ` ${i + 1}` : ''}`}
-					onAction={action => {
-						setIndex(i);
-						setDepartmentIdEvent(action);
-					}}
-					required={true}
-					title='A department assigned to this Job'
-					value={d?.id ?? ''}
-				>
-					{DEPARTMENTS.length > 1 && (
-						<FormButton
-							className={LABEL_BUTTON_STYLE}
-							onClick={() => setDepartments(DEPARTMENTS.filter((_, j) => j !== i))}
-						>
-							<DeleteIcon />
-						</FormButton>
-					)}
-				</InputId>
-			))}
+			<InputIds
+				id={`${props.id}--department`}
+				label='Departments'
+				onAction={(i, action) => {
+					setIndex(i);
+					setDepartmentIdEvent(action);
+				}}
+				onChange={departments => setDepartments(departments.length > 0 ? departments : [null])}
+				values={DEPARTMENTS}
+			/>
 
 			<InputDuration
 				id={`${props.id}--increment`}

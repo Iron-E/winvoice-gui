@@ -1,5 +1,7 @@
+import type { ValueOf } from "./value-of";
+
 /** A function which can be used with {@link JSON.parse} to help deserialize values. */
-export type Reviver = NonNullable<Parameters<JSON['parse']>[1]>;
+export type Reviver = NonNullable<Parameters<ValueOf<JSON, 'parse'>>[1]>;
 
 /**
  * @param revivers the {@link Reviver} functions to combine.

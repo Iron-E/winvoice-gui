@@ -11,6 +11,7 @@ export * from './table/column';
 export * from './table/contact';
 export * from './table/department';
 export * from './table/employee';
+export * from './table/job';
 export * from './table/location';
 export * from './table/order';
 export * from './table/organization';

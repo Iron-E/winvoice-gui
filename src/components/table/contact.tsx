@@ -3,6 +3,7 @@
 import React from 'react';
 import type { BaseProps, OrderProps } from './props';
 import type { Contact, Location } from '@/schema'
+import type { ValueOf } from '@/utils';
 import { ContactForm } from '../form';
 import { LocationTable, OrderedData, Table, Td, Tr, type Valuators, useRowEventHandlers } from '../table';
 import { Route } from '@/api';
@@ -15,7 +16,7 @@ const HEADERS = ['Label', 'Email', 'Other', 'Phone', 'Address'] as const;
  * @param c the contact to get the label of.
  * @returns the label of the contact.
  */
-function label(c: Contact): Contact['label'] {
+function label(c: Contact): ValueOf<Contact, 'label'> {
 	return c.label;
 }
 
@@ -23,7 +24,10 @@ function label(c: Contact): Contact['label'] {
  * @param outerOrder the
  * @returns {@link Valuators} for a {@link Location}
  */
-export function contactValuators(addressKey: keyof Location, outerAddressKey: keyof Location): Valuators<Contact> {
+export function contactValuators(
+	addressKey: keyof Location,
+	outerAddressKey: keyof ValueOf<Location, 'outer'>,
+): Valuators<Contact> {
 	return {
 		address: {
 			key: addressKey,

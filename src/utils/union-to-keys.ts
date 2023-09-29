@@ -1,3 +1,5 @@
+import type { FieldName } from "./field-name";
+
 /**
  * Allows projecting `K` and `V` into `{[K]: V}`.
  *
@@ -11,4 +13,4 @@
  * let baz: Example = {c: 'foo'}; -- error!
  * ```
  */
-export type UnionToKeys<K extends string, V> = K extends K ? Record<K, V> : never;
+export type UnionToKeys<K extends FieldName, V> = K extends K ? Record<K, V> : never;

@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Children, Class, Id, On } from '../props-with';
-import type { IntrinsicProp } from '@/utils';
+import type { IntrinsicProp, ValueOf } from '@/utils';
 import { FLEX, FLEX_BETWEEN, SPACE } from '../css';
 import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
 
@@ -34,7 +34,7 @@ type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.In
 /** The style of a form field. */
 const FIELD_STYLE = `${SPACE} bg-form-field-bg h-full` as const;
 
-type InputProps = React.JSX.IntrinsicElements['input'];
+type InputProps = ValueOf<React.JSX.IntrinsicElements, 'input'>;
 
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
 export function Checkbox(props:
@@ -142,7 +142,7 @@ export function Select(props: FieldProps<HTMLSelectElement, 'select'>): React.Re
 	</>;
 }
 
-type TextareaProps = React.JSX.IntrinsicElements['textarea'];
+type TextareaProps = ValueOf<React.JSX.IntrinsicElements, 'textarea'>;
 
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
 export function Textarea(props:

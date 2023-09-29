@@ -1,5 +1,5 @@
 import React from "react";
-import type { FieldName, Fn, ValueOf } from "@/utils";
+import type { FieldName, Fn, NonNullUnit, ReadonlyNonNullUnitArray, Unit, ValueOf, ValueOfUnit } from "@/utils";
 import type { ShowMessage } from "../messages";
 import { Client } from "../api";
 import { UserInputRoute } from "@/api";
@@ -8,7 +8,7 @@ import { UserInputRoute } from "@/api";
  * @param value the value to retrieve the id of
  * @returns the `<Id>` of the `value`.
  */
-type GetId<T, Id> = (value: T) => Id;
+type GetId<T, Id> = (value: NonNullUnit<T>) => Id;
 
 /**
  * How {@link Order} should be valuated when a given {@link Order.column} leads to an ambiguous ordering.
@@ -29,12 +29,18 @@ type GetId<T, Id> = (value: T) => Id;
  * const VALUATORS: Valuators<T> = { a: { key: 'b', valuators: { foo: { key: 'bar' } } } };
  * ```
  */
-export type Valuators<T> = {
-	[key in keyof T]?: { map: (value: NonNullable<T[key]>) => any } | {
-		key: keyof NonNullable<T[key]>,
-		valuators?: Valuators<NonNullable<T[key]>>,
-	};
-};
+export type Valuators<T> =
+	T extends T
+	? {
+		[key in keyof NonNullUnit<T>]?:
+		| { map: (value: NonNullUnit<T>[key]) => any }
+		| {
+			key: keyof NonNullUnit<NonNullUnit<T>[key]>,
+			valuators?: Valuators<NonNullUnit<T>[key]>,
+		};
+	}
+	: never
+	;
 
 /** The order by which rows in a table are sorted. */
 export type Order<T> = Readonly<{
@@ -56,24 +62,24 @@ export function useOrder<T>(defaultColumn: keyof T): UseOrder<T> {
 	return React.useState<Order<keyof T>>({ ascending: false, column: defaultColumn });
 }
 
-export class OrderedData<T> {
+export class OrderedData<T extends {}> {
 	/** mutate the  {@link OrderedData.data} */
-	public readonly setData?: Fn<[data: readonly T[], valuators?: Valuators<NonNullable<T>>]>;
+	public readonly setData?: Fn<[data: ReadonlyNonNullUnitArray<T>, valuators?: Valuators<T>]>;
 
 	/** the information that is being {@link OrderedData.order}ed */
-	public readonly setOrder: Fn<[order: Order<keyof T>, valuators?: Valuators<NonNullable<T>>]>;
+	public readonly setOrder: Fn<[order: Order<keyof NonNullUnit<T>>, valuators?: Valuators<T>]>;
 
 	constructor(
 		/** the order of the {@link OrderedData.data} */
-		public readonly order: Order<keyof T>,
-		setOrder: Fn<[data: Order<keyof T>]>,
+		public readonly order: Order<keyof NonNullUnit<T>>,
+		setOrder: Fn<[data: Order<keyof NonNullUnit<T>>]>,
 
 		/** the information that is being {@link OrderedData.order}ed */
-		public readonly data: readonly T[],
-		setData?: Fn<[data: readonly T[]]>,
+		public readonly data: ReadonlyNonNullUnitArray<T>,
+		setData?: Fn<[data: ReadonlyNonNullUnitArray<T>]>,
 
 		/** The default {@link Valuators} used for {@link OrderedData.setData} & {@link OrderedData.setOrder} */
-		defaultValuators?: Valuators<NonNullable<T>>,
+		defaultValuators?: Valuators<T>,
 	) {
 		if (setData != undefined) {
 			this.setData = (d, x) => setData(OrderedData.reorder(d, order, x ?? defaultValuators));
@@ -92,11 +98,18 @@ export class OrderedData<T> {
 	 * @param valuators what to sort by when the `order` indicates that the {@link Order.column} is an {@link object}.
 	 * @returns the `data` sorted according to the `order`.
 	 */
-	private static reorder<T>(data: readonly T[], order: Order<keyof NonNullable<T>>, valuators?: Valuators<NonNullable<T>>): readonly T[] {
-		const VALUATORS = { key: order.column, valuators };
+	private static reorder<T extends {}>(
+		data: ReadonlyNonNullUnitArray<T>,
+		order: Order<keyof NonNullUnit<T>>,
+		valuators?: Valuators<T>,
+	): ReadonlyNonNullUnitArray<T> {
+		const VALUATORS: ValueOf<Valuators<{ _: Unit<T> }>> = {
+			key: order.column as keyof NonNullUnit<Unit<T>>,
+			valuators: valuators as unknown as Valuators<Unit<T>>,
+		};
 
 		return [...data].sort((d1, d2) => {
-			const [d1Value, d2Value] = OrderedData.valueOf<{ _: T }>(d1, d2, VALUATORS);
+			const [d1Value, d2Value] = OrderedData.valueOf<{ _: Unit<T> }>(d1, d2, VALUATORS);
 
 			if (d1Value < d2Value || d1Value == undefined && d2Value != undefined) {
 				var value = -1;
@@ -112,19 +125,19 @@ export class OrderedData<T> {
 
 	/** @returns the value `obj[key]` based on the {@link Valuators} provided. */
 	private static valueOf<T>(
-		value1: ValueOf<T>,
-		value2: ValueOf<T>,
-		valuator: NonNullable<Valuators<T>[keyof T]>,
+		value1: ValueOfUnit<T>,
+		value2: ValueOfUnit<T>,
+		valuator: ValueOf<Valuators<T>>,
 	): [any, any] {
 		while ((value1 && value2 && valuator) != undefined) {
 			if ('map' in valuator) {
-				value1 = valuator.map(value1 as NonNullable<ValueOf<T>>);
-				value2 = valuator.map(value2 as NonNullable<ValueOf<T>>);
+				value1 = valuator.map(value1 as ValueOfUnit<T>);
+				value2 = valuator.map(value2 as ValueOfUnit<T>);
 				break;
 			}
 
-			value1 = (value1 as NonNullable<ValueOf<T>>)[valuator.key] as any;
-			value2 = (value2 as NonNullable<ValueOf<T>>)[valuator.key] as any;
+			value1 = (value1 as ValueOfUnit<T>)[valuator.key] as any;
+			value2 = (value2 as ValueOfUnit<T>)[valuator.key] as any;
 			valuator = valuator.valuators?.[valuator.key] as any;
 		}
 
@@ -132,7 +145,7 @@ export class OrderedData<T> {
 	}
 
 	/** Append `value` to the {@link OrderedData.data | existing data}. */
-	public append(this: OrderedData<T>, value: T): void {
+	public append(this: OrderedData<T>, value: NonNullUnit<T>): void {
 		this.setData?.([...this.data, value]);
 	}
 
@@ -145,7 +158,7 @@ export class OrderedData<T> {
 		client: Readonly<Client>,
 		showMessage: ShowMessage,
 		route: UserInputRoute,
-		entities: readonly T[],
+		entities: ReadonlyNonNullUnitArray<T>,
 	): Promise<void> {
 		if (await client.delete(showMessage, route, { entities })) {
 			this.remove(entities);
@@ -160,7 +173,7 @@ export class OrderedData<T> {
 		client: Readonly<Client>,
 		showMessage: ShowMessage,
 		route: UserInputRoute,
-		entities: Partial<Record<Id, T>>,
+		entities: Partial<Record<Id, NonNullUnit<T>>>,
 		getId: GetId<T, Id>,
 	): Promise<void> {
 		if (await client.patch(showMessage, route, { entities: Object.values(entities) })) {
@@ -174,22 +187,30 @@ export class OrderedData<T> {
 	 *
 	 * @param mapping the function to call on the existing data.
 	 */
-	public map(this: OrderedData<T>, mapping: (value: T, index: number, array: readonly T[]) => T): void {
+	public map(
+		this: OrderedData<T>,
+		mapping: (value: NonNullUnit<T>, index: number, array: ReadonlyNonNullUnitArray<T>) => NonNullUnit<T>,
+	): void {
 		this.setData?.(this.data.map(mapping));
 	}
 
 	/** Reruns the previous {@link reorder} operation, except with different `valuators`. */
-	public refresh(this: OrderedData<T>, valuators: Valuators<NonNullable<T>>): void {
+	public refresh(this: OrderedData<T>, valuators: Valuators<T>): void {
 		this.setData?.(this.data, valuators);
 	}
 
 	/** Filter out the `value` from the {@link OrderedData.data}. */
-	public remove(this: OrderedData<T>, values: readonly T[]): void {
+	public remove(this: OrderedData<T>, values: ReadonlyNonNullUnitArray<T>): void {
 		this.setData?.(this.data.filter(d => values.some(v => v !== d)));
 	}
 
 	/** Filter out the `value` from the {@link OrderedData.data}. */
-	public swap<Id>(this: OrderedData<T>, getId: GetId<T, Id>, replacedId: Id, replacement: T): void {
+	public swap<Id>(
+		this: OrderedData<T>,
+		getId: GetId<T, Id>,
+		replacedId: Id,
+		replacement: NonNullUnit<T>,
+	): void {
 		this.map(v => getId(v) === replacedId ? replacement : v);
 	}
 }
@@ -199,9 +220,13 @@ export class OrderedData<T> {
  * @param defaultColumn the column which is used to sort the rows by default.
  * @returns two sets of {@link React.useState}'s return: the first for the data, the second for the {@link Order}.
  */
-export function useOrderedData<T>(defaultColumn: keyof T, defaultValuators?: Valuators<NonNullable<T>>): OrderedData<T> {
-	const [DATA, setData] = React.useState<readonly T[]>([]);
-	const [ORDER, setOrder] = useOrder<T>(defaultColumn);
+export function useOrderedData<T extends {}>(
+	defaultColumn: keyof NonNullUnit<T>,
+	defaultValuators?: Valuators<T>,
+): OrderedData<T> {
+	const [DATA, setData] = React.useState<OrderedData<T>['data']>([]);
+	const [ORDER, setOrder] = useOrder<NonNullUnit<T>>(defaultColumn);
+
 
 	return new OrderedData<T>(ORDER, setOrder, DATA, setData, defaultValuators);
 }

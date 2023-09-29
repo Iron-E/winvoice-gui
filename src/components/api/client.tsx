@@ -3,7 +3,7 @@
 import * as hooks from '@/hooks';
 import React from 'react';
 import type { AsyncOn, Class, On } from '../props-with';
-import type { Fn, Maybe, Opt, Reviver } from '@/utils';
+import type { Fn, Maybe, Opt, Reviver, ValueOf } from '@/utils';
 import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, WifiIcon } from '@heroicons/react/20/solid';
 import { Code, newRequest, request, response, Route, type Request, type Status, UserInputRoute } from '@/api';
 import { Form, FormButton, Input, InputString } from '../form';
@@ -145,7 +145,11 @@ export class Client {
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @returns whether the request succeeded.
 	 */
-	public async export(this: Readonly<Client>, showMessage: ShowMessage, body: request.Export): OptBody<response.Export['exported']> {
+	public async export(
+		this: Readonly<Client>,
+		showMessage: ShowMessage,
+		body: request.Export,
+	): OptBody<ValueOf<response.Export, 'exported'>> {
 		const RESULT = await (this as Client).caughtRequest(showMessage, Route.Export, { method: 'GET', body }, response.isExport);
 		return RESULT && RESULT.exported;
 	}
@@ -238,7 +242,7 @@ export class Client {
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @returns whether the request succeeded.
 	 */
-	public async setWhoIAm(this: Client, showMessage: ShowMessage, ): RequestSuccess {
+	public async setWhoIAm(this: Client, showMessage: ShowMessage,): RequestSuccess {
 		const RESULT = await this.request(showMessage, Route.WhoAmI, { method: 'GET' }, response.isWhoAmI);
 		if (RESULT === null) { return false; }
 

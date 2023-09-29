@@ -13,4 +13,5 @@ export type * from './snake-case';
 export type * from './spread';
 export type * from './union-keys';
 export type * from './union-to-keys';
+export type * from './unit';
 export type * from './value-of';

@@ -4,7 +4,7 @@ import * as navigation from 'next/navigation';
 import Link from 'next/link';
 import React from 'react';
 import type { Children, Class } from '../props-with';
-import type { LookupTable, Props } from '@/utils';
+import type { LookupTable, Props, ValueOf } from '@/utils';
 import { CLICKABLE } from './style';
 import { HOVER } from '../css';
 import { NewIcon } from '../icons';
@@ -15,7 +15,7 @@ import { SearchIcon } from '../icons/search';
 type LinkProps = Props<typeof Link>;
 
 /** A link in a {@link NavEntry}. */
-function NavLink(props: Children & { href: LinkProps['href'] }): React.ReactElement {
+function NavLink(props: Children & { href: ValueOf<LinkProps, 'href'> }): React.ReactElement {
 	return (
 		<Link
 			className={`${HOVER} p-1 border-2 xl:border-0 w-[10vmax] xl:w-full \

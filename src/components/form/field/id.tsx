@@ -1,36 +1,10 @@
 import type { Children, On } from '../../props-with';
-import type { Fn, Opt } from '@/utils';
 import type { InputProps } from './props';
 import { FormButton, Input, LABEL_BUTTON_STYLE } from '../../form';
-import { Modal } from '@/components';
-import { useModalVisibility } from '@/hooks';
 import { NewIcon } from '@/components/icons';
 import { SearchIcon } from '@/components/icons/search';
 
-/** @returns a tuple which first contains the handler for the given {@link InputID} action, and second, a setter for the current ID action. */
-export function useIdEventHandlers<T>(
-	onChange: Fn<[value: T]>,
-	NewForm: (props: On<'submit', [value: T]>) => React.ReactElement,
-): [Opt<React.ReactElement>, ReturnType<typeof useModalVisibility<'new' | 'search'>>[1]] {
-	const [MODAL_VISIBLE, setModalVisible] = useModalVisibility();
-	return [
-		MODAL_VISIBLE && (MODAL_VISIBLE === 'new'
-			? <Modal onClose={setModalVisible}>
-				<NewForm
-					onSubmit={l => {
-						onChange(l);
-						setModalVisible(null);
-					}}
-				/>
-			</Modal>
-			: <Modal onClose={setModalVisible}>
-				Unimplemented: allow searching for a location and choosing one
-			</Modal>
-		),
-		setModalVisible,
-	];
-}
-
+export * from './id/hooks';
 
 /**
  * HACK: next.js complains that this component cannot be written to, while `readOnly` is not set.

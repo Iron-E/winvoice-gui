@@ -13,13 +13,13 @@ import {
 	Textarea,
 	useDepartmentIdEventHandlers,
 	useIdEventHandlers,
+	useInputIds,
 	useOrganizationIdEventHandlers,
 } from '../form';
+import { Opt } from '@/utils';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
-import { Opt } from '@/utils';
-import { InputIds } from './field/ids';
 
 /** Event handlers for a {@link Job} ID. */
 export function useJobIdEventHandlers(
@@ -43,11 +43,13 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 	const [OBJECTIVES, setObjectives] = React.useState(props.initialValues?.objectives ?? '');
 
 	const [API_CLIENT, showMessage] = useApiContext();
-	const [INDEX, setIndex] = React.useState(-1);
 	const [CLIENT_HANDLER, setClientIdEvent] = useOrganizationIdEventHandlers(props.id, setClient);
-	const [DEPARTMENTS_HANDLER, setDepartmentIdEvent] = useDepartmentIdEventHandlers(props.id, d => {
-		setDepartments(DEPARTMENTS.map((v, i) => i === INDEX ? d : v));
-		setIndex(-1);
+	const [DEPARTMENT_HANDLER, INPUT_DEPARTMENTS] = useInputIds({
+		id: `${props.id}--department`,
+		label: 'Departments',
+		onChange: departments => setDepartments(departments.length > 0 ? departments : [null]),
+		useIdEventHandlers: useDepartmentIdEventHandlers,
+		values: DEPARTMENTS,
 	});
 
 	return <>
@@ -108,16 +110,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 				value={DATE_CLOSE}
 			/>
 
-			<InputIds
-				id={`${props.id}--department`}
-				label='Departments'
-				onAction={(i, action) => {
-					setIndex(i);
-					setDepartmentIdEvent(action);
-				}}
-				onChange={departments => setDepartments(departments.length > 0 ? departments : [null])}
-				values={DEPARTMENTS}
-			/>
+			{INPUT_DEPARTMENTS}
 
 			<InputDuration
 				id={`${props.id}--increment`}
@@ -156,6 +149,6 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 		</Form>
 
 		{CLIENT_HANDLER}
-		{DEPARTMENTS_HANDLER}
+		{DEPARTMENT_HANDLER}
 	</>;
 }

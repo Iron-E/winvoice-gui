@@ -1,6 +1,6 @@
 import { fieldMaybeIs } from '@/utils';
-import { isInvoiceDate, type InvoiceDate } from './invoice/invoice-date';
-import { isMoney, type Money } from './money';
+import { isInvoiceDate, type InvoiceDate, invoiceDateToString } from './invoice/invoice-date';
+import { isMoney, moneyToString, type Money } from './money';
 
 export { isInvoiceDate, type InvoiceDate };
 
@@ -9,6 +9,15 @@ export type Invoice = {
 	date?: InvoiceDate,
 	hourly_rate: Money,
 };
+
+/**
+ * @param invoice the {@link Invoice} to convert to a string.
+ * @returns the `money` as a `string`.
+ */
+export function invoiceToString(invoice: Invoice): string {
+	return `Invoice with rate ${moneyToString(invoice.hourly_rate)} \
+${invoice.date ? invoiceDateToString(invoice.date) : ''}`.trimEnd();
+}
 
 /**
  * @param json the value to check.

@@ -7,6 +7,14 @@ export type InvoiceDate = {
 };
 
 /**
+ * @param date the {@link InvoiceDate} to convert into a `string`.
+ * @returns the `date` as a `string`.
+ */
+export function invoiceDateToString(date: InvoiceDate): string {
+	return `issued on ${date.issued.toLocaleString()}${date.paid ? `, paid on ${date.paid.toLocaleString()}` : ''}`;
+}
+
+/**
  * @param json the value to check.
  * @returns whether the `json` is an instance of {@link InvoiceDate}.
  */

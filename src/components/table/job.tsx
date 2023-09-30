@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { BaseProps, OrderProps } from './props';
-import type { Department, Invoice, InvoiceDate, Job, Location, Money, Organization } from '@/schema'
+import type { Department, Invoice, InvoiceDate, Job, Location, Organization } from '@/schema'
 import {
 	DepartmentTable,
 	OrderedData,
@@ -15,6 +15,8 @@ import {
 	useOrder,
 	useRowEventHandlers,
 	OrganizationTable,
+	invoiceValuators,
+	InvoiceTable,
 } from '../table';
 import { getId } from '@/utils';
 import { JobForm } from '../form';
@@ -45,7 +47,6 @@ export function jobValuators(
 	departmentKey: keyof Department,
 	invoiceKey: keyof Invoice,
 	invoiceDateKey: keyof InvoiceDate,
-	invoiceHourlyRateKey: keyof Money,
 ): Valuators<Job> {
 	return {
 		client: {
@@ -55,10 +56,7 @@ export function jobValuators(
 		departments: { key: departmentKey },
 		invoice: {
 			key: invoiceKey,
-			valuators: {
-				date: { key: invoiceDateKey },
-				hourly_rate: { key: invoiceHourlyRateKey },
-			},
+			valuators: invoiceValuators(invoiceDateKey),
 		},
 	};
 }
@@ -76,7 +74,6 @@ export function JobTable(props:
 	& OrderProps<'departments', Department>
 	& OrderProps<'invoice', Invoice>
 	& OrderProps<'invoiceDate', InvoiceDate>
-	& OrderProps<'invoiceHourlyRate', Money>
 ): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
 	const [HANDLER, setRowEvent] = useRowEventHandlers(
@@ -122,7 +119,16 @@ export function JobTable(props:
 						/>
 					</Td>
 					<Td>
-						{/* TODO: InvoiceTable */}
+						<InvoiceTable
+							dateOrder={props.invoiceDateOrder}
+							onReorderDate={props.onReorderInvoiceDate}
+							orderedData={new OrderedData(
+								props.invoiceOrder,
+								props.onReorderInvoice,
+								[j.invoice],
+								d => props.orderedData.swap(getId, j.id, { ...j, invoice: d[0]! }),
+							)}
+						/>
 					</Td>
 					<Td>
 						<DepartmentTable

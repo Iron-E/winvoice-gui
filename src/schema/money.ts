@@ -16,3 +16,11 @@ export function isMoney(json: unknown): json is Money {
 		&& 'currency' in json && isCurrency(json.currency)
 	);
 }
+
+/**
+ * @param money the {@link Money} to convert to a string.
+ * @returns the `money` as a `string`.
+ */
+export function moneyToString(money: Money): string {
+	return `${money.amount} ${money.currency}`;
+}

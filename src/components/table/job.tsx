@@ -14,6 +14,7 @@ import {
 	type Valuators,
 	useOrder,
 	useRowEventHandlers,
+	OrganizationTable,
 } from '../table';
 import { JobForm } from '../form';
 import { Route } from '@/api';
@@ -21,7 +22,17 @@ import { useApiContext } from '../api';
 import { ValueOf, getId } from '@/utils';
 
 /** the headers of the {@link JobTable}. */
-const HEADERS = ['ID', 'Active', 'Name', 'Title', 'Department'] as const;
+const HEADERS = [
+	'Id',
+	'Date Open',
+	'Date Close',
+	'Increment',
+	'Notes',
+	'Objectives',
+	'Client',
+	'Invoice',
+	'Departments',
+] as const;
 
 /**
  * @param outerOrder the
@@ -37,7 +48,10 @@ export function jobValuators(
 	invoiceHourlyRateKey: keyof ValueOf<Invoice, 'hourly_rate'>,
 ): Valuators<Job> {
 	return {
-		client: { key: clientKey, valuators: organizationValuators(clientLocationKey, clientOuterLocationKey) },
+		client: {
+			key: clientKey,
+			valuators: organizationValuators(clientLocationKey, clientOuterLocationKey),
+		},
 		departments: { key: departmentKey },
 		invoice: {
 			key: invoiceKey,
@@ -58,7 +72,8 @@ export function useJobOrder(): UseOrder<Job> {
 export function JobTable(props:
 	& BaseProps<Job, 'id'>
 	& OrderProps<'client', Organization>
-	& OrderProps<'department', Department>
+	& OrderProps<'clientLocation' | 'clientOuterLocation', Location>
+	& OrderProps<'departments', Department>
 	& OrderProps<'invoice', Invoice>
 	& OrderProps<'invoiceDate', InvoiceDate>
 	& OrderProps<'invoiceHourlyRate', ValueOf<Invoice, 'hourly_rate'>>
@@ -77,26 +92,46 @@ export function JobTable(props:
 			onReorder={props.orderedData.setOrder}
 			order={props.orderedData.order}
 		>
-			{props.orderedData.data.map(e => (
+			{props.orderedData.data.map(j => (
 				<Tr
-					key={e.id}
-					onClick={props.onRowSelect && (() => props.onRowSelect!(e))}
-					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: e }) : undefined}
-					onEdit={() => setRowEvent({ action: 'edit', data: e })}
-					selected={e.id === props.selectedRow}
+					key={j.id}
+					onClick={props.onRowSelect && (() => props.onRowSelect!(j))}
+					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: j }) : undefined}
+					onEdit={() => setRowEvent({ action: 'edit', data: j })}
+					selected={j.id === props.selectedRow}
 				>
-					<Td>{e.id}</Td>
-					<Td>{e.active ? 'Yes' : 'No'}</Td>
-					<Td>{e.name}</Td>
-					<Td>{e.title}</Td>
+					<Td>{j.id}</Td>
+					<Td>{j.date_open.toLocaleString()}</Td>
+					<Td>{j.date_close?.toLocaleString()}</Td>
+					<Td>{j.increment}</Td>
+					<Td>{j.notes}</Td>
+					<Td>{j.objectives}</Td>
+					<Td>
+						<OrganizationTable
+							deletable={false}
+							locationOrder={props.clientLocationOrder}
+							onReorderLocation={props.onReorderClientLocation}
+							onReorderOuterLocation={props.onReorderClientOuterLocation}
+							orderedData={new OrderedData(
+								props.clientOrder,
+								props.onReorderClient,
+								[j.client],
+								d => props.orderedData.swap(getId, j.id, { ...j, client: d[0]! }),
+							)}
+							outerLocationOrder={props.clientOuterLocationOrder}
+						/>
+					</Td>
+					<Td>
+						{/* TODO: InvoiceTable */}
+					</Td>
 					<Td>
 						<DepartmentTable
 							deletable={false}
 							orderedData={new OrderedData(
-								props.departmentOrder,
-								props.onReorderDepartment,
-								[e.department],
-								d => props.orderedData.swap(getId, e.id, { ...e, department: d[0]! }),
+								props.departmentsOrder,
+								props.onReorderDepartments,
+								j.departments,
+								d => props.orderedData.swap(getId, j.id, { ...j, departments: d as Department[] }),
 							)}
 						/>
 					</Td>

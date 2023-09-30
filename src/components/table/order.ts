@@ -33,7 +33,7 @@ export type Valuators<T> =
 	T extends T
 	? {
 		[key in keyof NonNullUnit<T>]?:
-		| { map: (value: NonNullUnit<T>[key]) => any }
+		| { map: (value: NonNullUnit<NonNullUnit<T>[key]>) => any }
 		| {
 			key: keyof NonNullUnit<NonNullUnit<T>[key]>,
 			valuators?: Valuators<NonNullUnit<T>[key]>,

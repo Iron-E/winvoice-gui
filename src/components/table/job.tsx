@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { BaseProps, OrderProps } from './props';
-import type { Department, Invoice, InvoiceDate, Job, Location, Organization } from '@/schema'
+import type { Department, Invoice, InvoiceDate, Job, Location, Money, Organization } from '@/schema'
 import {
 	DepartmentTable,
 	OrderedData,
@@ -16,10 +16,10 @@ import {
 	useRowEventHandlers,
 	OrganizationTable,
 } from '../table';
+import { getId } from '@/utils';
 import { JobForm } from '../form';
 import { Route } from '@/api';
 import { useApiContext } from '../api';
-import { ValueOf, getId } from '@/utils';
 
 /** the headers of the {@link JobTable}. */
 const HEADERS = [
@@ -41,11 +41,11 @@ const HEADERS = [
 export function jobValuators(
 	clientKey: keyof Organization,
 	clientLocationKey: keyof Location,
-	clientOuterLocationKey: keyof ValueOf<Location, 'outer'>,
+	clientOuterLocationKey: keyof Location,
 	departmentKey: keyof Department,
 	invoiceKey: keyof Invoice,
-	invoiceDateKey: keyof ValueOf<Invoice, 'date'>,
-	invoiceHourlyRateKey: keyof ValueOf<Invoice, 'hourly_rate'>,
+	invoiceDateKey: keyof InvoiceDate,
+	invoiceHourlyRateKey: keyof Money,
 ): Valuators<Job> {
 	return {
 		client: {
@@ -76,7 +76,7 @@ export function JobTable(props:
 	& OrderProps<'departments', Department>
 	& OrderProps<'invoice', Invoice>
 	& OrderProps<'invoiceDate', InvoiceDate>
-	& OrderProps<'invoiceHourlyRate', ValueOf<Invoice, 'hourly_rate'>>
+	& OrderProps<'invoiceHourlyRate', Money>
 ): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
 	const [HANDLER, setRowEvent] = useRowEventHandlers(

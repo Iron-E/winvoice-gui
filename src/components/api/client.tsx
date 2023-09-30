@@ -3,12 +3,12 @@
 import * as hooks from '@/hooks';
 import React from 'react';
 import type { AsyncOn, Class, On } from '../props-with';
-import type { Fn, Maybe, Opt, Reviver, ValueOf } from '@/utils';
+import type { Fn, Maybe, Opt, Props, Reviver, ValueOf } from '@/utils';
 import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, WifiIcon } from '@heroicons/react/20/solid';
 import { Code, newRequest, request, response, Route, type Request, type Status, UserInputRoute } from '@/api';
 import { Form, FormButton, Input, InputString } from '../form';
 import { ICON, SPACE } from '../css';
-import { Modal, type Props as ModalProps } from '../modal';
+import { Modal } from '../modal';
 import { SHOW_MESSAGE_CONTEXT, type ShowMessage } from '../messages';
 import { UnauthenticatedError } from './unauthenticated_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
@@ -253,6 +253,8 @@ export class Client {
 		return true;
 	}
 }
+
+type ModalProps = Props<typeof Modal>;
 
 /** Properties which accept a handler. */
 type SelectorProps = Required<On<'setClient', [client: Client]>> & { client?: Readonly<Client> };

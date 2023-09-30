@@ -4,14 +4,11 @@ import React from 'react';
 import type { Children, Click } from './props-with';
 import { FLEX } from './css';
 
-/** The properties of a {@link Dim}. */
-export type Props = Children & Click;
-
 /** How high up the current {@link Dim} is. */
 const Z_INDEX_CONTEXT: Readonly<React.Context<number>> = React.createContext(1);
 
 /** @returns a floating `div` which dims the screen at `z-0`. */
-export function Dim(props: Props): React.ReactElement {
+export function Dim(props: Children & Click): React.ReactElement {
 	const REF = React.useRef<HTMLDivElement>(null);
 	const Z_INDEX = React.useContext(Z_INDEX_CONTEXT);
 	React.useEffect(() => {

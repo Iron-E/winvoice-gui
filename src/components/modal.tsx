@@ -8,11 +8,8 @@ import { SPACE } from './css';
 
 type OnClose = Required<On<'close', [value: null]>>;
 
-/** properties for a {@link Modal}. */
-export type Props = Children & OnClose;
-
 /** @returns a div which will show above all other content on the page. */
-export function Modal(props: Props): React.ReactElement {
+export function Modal(props: Children & OnClose): React.ReactElement {
 	function onClose(): void {
 		props.onClose(null);
 	}

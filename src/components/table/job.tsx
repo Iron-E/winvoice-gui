@@ -44,7 +44,7 @@ export function jobValuators(
 	clientKey: keyof Organization,
 	clientLocationKey: keyof Location,
 	clientOuterLocationKey: keyof Location,
-	departmentKey: keyof Department,
+	departmentsKey: keyof Department,
 	invoiceKey: keyof Invoice,
 	invoiceDateKey: keyof InvoiceDate,
 ): Valuators<Job> {
@@ -53,7 +53,7 @@ export function jobValuators(
 			key: clientKey,
 			valuators: organizationValuators(clientLocationKey, clientOuterLocationKey),
 		},
-		departments: { key: departmentKey },
+		departments: { key: departmentsKey },
 		invoice: {
 			key: invoiceKey,
 			valuators: invoiceValuators(invoiceDateKey),

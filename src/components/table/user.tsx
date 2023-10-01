@@ -30,10 +30,14 @@ const HEADERS = ['ID', 'Password Set', 'Username', 'Employee', 'Role'] as const;
  * @param outerOrder the
  * @returns {@link Valuators} for a {@link User}
  */
-export function userValuators(employeeKey: keyof Employee, employeeDepartmentKey: keyof Department, roleKey: keyof Role): Valuators<User> {
+export function userValuators(keys: {
+	employee: keyof Employee,
+	employeeDepartment: keyof Department,
+	role: keyof Role,
+}): Valuators<User> {
 	return {
-		employee: { key: employeeKey, valuators: employeeValuators(employeeDepartmentKey) },
-		role: { key: roleKey, valuators: ROLE_VALUATORS },
+		employee: { key: keys.employee, valuators: employeeValuators(keys.employeeDepartment) },
+		role: { key: keys.role, valuators: ROLE_VALUATORS },
 	};
 }
 

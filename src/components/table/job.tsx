@@ -40,23 +40,26 @@ const HEADERS = [
  * @param outerOrder the
  * @returns {@link Valuators} for a {@link Job}
  */
-export function jobValuators(
-	clientKey: keyof Organization,
-	clientLocationKey: keyof Location,
-	clientOuterLocationKey: keyof Location,
-	departmentsKey: keyof Department,
-	invoiceKey: keyof Invoice,
-	invoiceDateKey: keyof InvoiceDate,
-): Valuators<Job> {
+export function jobValuators(keys: {
+	client: keyof Organization,
+	clientLocation: keyof Location,
+	clientOuterLocation: keyof Location,
+	departments: keyof Department,
+	invoice: keyof Invoice,
+	invoiceDate: keyof InvoiceDate,
+}): Valuators<Job> {
 	return {
 		client: {
-			key: clientKey,
-			valuators: organizationValuators(clientLocationKey, clientOuterLocationKey),
+			key: keys.client,
+			valuators: organizationValuators({
+				location: keys.clientLocation,
+				outerLocation: keys.clientOuterLocation,
+			}),
 		},
-		departments: { key: departmentsKey },
+		departments: { key: keys.departments },
 		invoice: {
-			key: invoiceKey,
-			valuators: invoiceValuators(invoiceDateKey),
+			key: keys.invoice,
+			valuators: invoiceValuators(keys.invoiceDate),
 		},
 	};
 }

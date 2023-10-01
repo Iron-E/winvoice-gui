@@ -18,11 +18,14 @@ const HEADERS = ['ID', 'Name', 'Location'] as const;
  * @param outerOrder the
  * @returns {@link Valuators} for a {@link Organization}
  */
-export function organizationValuators(locationKey: keyof Location, outerLocationKey: keyof Location): Valuators<Organization> {
+export function organizationValuators(keys: {
+	location: keyof Location,
+	outerLocation: keyof Location,
+}): Valuators<Organization> {
 	return {
 		location: {
-			key: locationKey,
-			valuators: { outer: { key: outerLocationKey } },
+			key: keys.location,
+			valuators: { outer: { key: keys.outerLocation } },
 		},
 	};
 }

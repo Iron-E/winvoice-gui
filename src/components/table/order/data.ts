@@ -73,6 +73,18 @@ export class OrderedData<T extends {}> {
 		});
 	}
 
+	/**
+	 * @param keys the parameters to the `revaluator`.
+	 * @param a function which should produce a {@link Valuator} compatible with a given {@link OrderedData}.
+	 * @returns a function which can be used to quickly swap one key in `keys` and provide re-valuation.
+	 */
+	public static keySwapper<U, F extends (keys: U) => Valuators<any>>(
+		keys: U,
+		revaluator: F,
+	): <K extends keyof U>(key: K) => ((value: U[K]) => ReturnType<F>) {
+		return key => (value => revaluator({ ...keys, [key]: value }) as ReturnType<F>);
+	}
+
 	/** @returns the value `obj[key]` based on the {@link Valuators} provided. */
 	private static valueOf<T>(
 		value1: ValueOfUnit<T>,
@@ -147,6 +159,21 @@ export class OrderedData<T extends {}> {
 	/** Reruns the previous {@link reorder} operation, except with different `valuators`. */
 	public refresh(this: OrderedData<T>, valuators: Valuators<T>): void {
 		this.setData?.(this.data, valuators);
+	}
+
+	/**
+	 * @param onReorder a function that will be run when reordering occurs.
+	 * @returns a function which will {@link OrderedData.refresh} this {@link OrderedData} when
+	 */
+	public refreshOnReorder<U extends {}>(
+		this: OrderedData<T>,
+		onReorder: OrderedData<U>['setOrder'],
+		revaluator: (key: OrderedData<U>['order']['column']) => Valuators<T>,
+	): OrderedData<U>['setOrder'] {
+		return order => {
+			onReorder(order);
+			this.refresh(revaluator(order.column));
+		};
 	}
 
 	/** Filter out the `value` from the {@link OrderedData.data}. */

@@ -16,11 +16,13 @@ export default function Page(): React.ReactElement {
 	const [DEPARTMENT_ORDER, setDepartmentOrder] = useDepartmentOrder();
 	const [EMPLOYEE_ORDER, setEmployeeOrder] = useEmployeeOrder();
 	const [ROLE_ORDER, setRoleOrder] = useRoleOrder();
-	const ORDERED_DATA = useOrderedData<User>('username', userValuators(
-		EMPLOYEE_ORDER.column,
-		DEPARTMENT_ORDER.column,
-		ROLE_ORDER.column,
-	));
+
+	const KEYS = {
+		employee: EMPLOYEE_ORDER.column,
+		employeeDepartment: DEPARTMENT_ORDER.column,
+		role: ROLE_ORDER.column,
+	} as const;
+	const [ORDERED_DATA, swapKey] = useOrderedData<User, typeof KEYS>('username', userValuators, KEYS);
 
 	return <>
 		<UserForm
@@ -33,18 +35,9 @@ export default function Page(): React.ReactElement {
 			<UserTable
 				employeeDepartmentOrder={DEPARTMENT_ORDER}
 				employeeOrder={EMPLOYEE_ORDER}
-				onReorderEmployee={order => {
-					setEmployeeOrder(order);
-					ORDERED_DATA.refresh(userValuators(order.column, DEPARTMENT_ORDER.column, ROLE_ORDER.column));
-				}}
-				onReorderEmployeeDepartment={order => {
-					setDepartmentOrder(order);
-					ORDERED_DATA.refresh(userValuators(EMPLOYEE_ORDER.column, order.column, ROLE_ORDER.column));
-				}}
-				onReorderRole={order => {
-					setRoleOrder(order);
-					ORDERED_DATA.refresh(userValuators(EMPLOYEE_ORDER.column, DEPARTMENT_ORDER.column, order.column));
-				}}
+				onReorderEmployee={ORDERED_DATA.refreshOnReorder(setEmployeeOrder, swapKey('employee'))}
+				onReorderEmployeeDepartment={ORDERED_DATA.refreshOnReorder(setDepartmentOrder, swapKey('employeeDepartment'))}
+				onReorderRole={ORDERED_DATA.refreshOnReorder(setRoleOrder, swapKey('role'))}
 				orderedData={ORDERED_DATA}
 				roleOrder={ROLE_ORDER}
 			/>

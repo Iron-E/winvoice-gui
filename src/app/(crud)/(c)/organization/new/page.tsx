@@ -7,10 +7,12 @@ import { OrganizationForm, OrganizationTable, organizationValuators, useLocation
 export default function Page(): React.ReactElement {
 	const [LOCATION_ORDER, setLocationOrder] = useLocationOrder();
 	const [OUTER_ORDER, setOuterOrder] = useLocationOrder();
-	const ORDERED_DATA = useOrderedData<Organization>('name', organizationValuators(
-		LOCATION_ORDER.column,
-		OUTER_ORDER.column,
-	));
+
+	const KEYS = {
+		location: LOCATION_ORDER.column,
+		outerLocation: OUTER_ORDER.column,
+	} as const;
+	const [ORDERED_DATA, swapKey] = useOrderedData<Organization, typeof KEYS>('name', organizationValuators, KEYS);
 
 	return <>
 		<OrganizationForm
@@ -22,14 +24,8 @@ export default function Page(): React.ReactElement {
 		{ORDERED_DATA.data.length > 0 && (
 			<OrganizationTable
 				locationOrder={LOCATION_ORDER}
-				onReorderLocation={order => {
-					setLocationOrder(order);
-					ORDERED_DATA.refresh(organizationValuators(order.column, OUTER_ORDER.column));
-				}}
-				onReorderOuterLocation={order => {
-					setOuterOrder(order);
-					ORDERED_DATA.refresh(organizationValuators(LOCATION_ORDER.column, order.column));
-				}}
+				onReorderLocation={ORDERED_DATA.refreshOnReorder(setLocationOrder, swapKey('location'))}
+				onReorderOuterLocation={ORDERED_DATA.refreshOnReorder(setOuterOrder, swapKey('outerLocation'))}
 				orderedData={ORDERED_DATA}
 				outerLocationOrder={LOCATION_ORDER}
 			/>

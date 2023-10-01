@@ -24,16 +24,16 @@ function label(c: Contact): ValueOf<Contact, 'label'> {
  * @param outerOrder the
  * @returns {@link Valuators} for a {@link Location}
  */
-export function contactValuators(
-	addressKey: keyof Location,
-	outerAddressKey: keyof ValueOf<Location, 'outer'>,
-): Valuators<Contact> {
+export function contactValuators(keys: {
+	address: keyof Location,
+	outerAddress: keyof ValueOf<Location, 'outer'>,
+}): Valuators<Contact> {
 	return {
 		address: {
-			key: addressKey,
+			key: keys.address,
 			valuators: {
 				outer: {
-					key: outerAddressKey,
+					key: keys.outerAddress,
 					valuators: { outer: { key: 'name' } },
 				}
 			}

@@ -4,11 +4,13 @@ import parse from 'parse-duration';
 import React from 'react';
 import type { BaseProps } from './props';
 import type { Role } from '@/schema'
-import { Table, Td, Tr, type Valuators, type UseOrder, useOrder, useRowEventHandlers } from '../table';
 import { getId } from '@/utils';
 import { RoleForm } from '../form';
 import { Route } from '@/api';
+import { Table, Td, Tr, type Valuators, useRowEventHandlers } from '../table';
 import { useApiContext } from '../api';
+
+export * from './role/hooks';
 
 /** the headers of the {@link RoleTable}. */
 const HEADERS = ['ID', 'Name', 'Password TTL'] as const;
@@ -18,11 +20,6 @@ const HEADERS = ['ID', 'Name', 'Password TTL'] as const;
  * @returns {@link Valuators} for a {@link Organization}
  */
 export const ROLE_VALUATORS: Readonly<Valuators<Role>> = { password_ttl: { map: parse } };
-
-/** @returns {@link useOrder} specialized for a {@link Role}. */
-export function useRoleOrder(): UseOrder<Role> {
-	return useOrder('name');
-}
 
 /** @returns a table which displays {@link Role}s in a customizable manner. */
 export function RoleTable(props: BaseProps<Role, 'id'>): React.ReactElement {

@@ -5,23 +5,23 @@ import type { BaseProps, OrderProps } from './props';
 import type { Department, Invoice, InvoiceDate, Job, Location, Organization } from '@/schema'
 import {
 	DepartmentTable,
+	InvoiceTable,
+	invoiceValuators,
 	OrderedData,
+	OrganizationTable,
 	organizationValuators,
 	Table,
 	Td,
 	Tr,
-	type UseOrder,
 	type Valuators,
-	useOrder,
 	useRowEventHandlers,
-	OrganizationTable,
-	invoiceValuators,
-	InvoiceTable,
 } from '../table';
 import { getId } from '@/utils';
 import { JobForm } from '../form';
 import { Route } from '@/api';
 import { useApiContext } from '../api';
+
+export * from './job/hooks';
 
 /** the headers of the {@link JobTable}. */
 const HEADERS = [
@@ -59,11 +59,6 @@ export function jobValuators(
 			valuators: invoiceValuators(invoiceDateKey),
 		},
 	};
-}
-
-/** @returns {@link useOrder} specialized for a {@link Job}. */
-export function useJobOrder(): UseOrder<Job> {
-	return useOrder('date_close');
 }
 
 /** @returns a table which displays {@link Job}s in a customizable manner. */

@@ -3,21 +3,13 @@
 import React from 'react';
 import type { BaseProps, OrderProps } from './props';
 import type { Location, Organization } from '@/schema'
-import {
-	LocationTable,
-	OrderedData,
-	Table,
-	Td,
-	Tr,
-	type UseOrder,
-	type Valuators,
-	useOrder,
-	useRowEventHandlers,
-} from '../table';
+import { LocationTable, OrderedData, Table, Td, Tr, type Valuators, useRowEventHandlers } from '../table';
 import { OrganizationForm } from '../form';
 import { Route } from '@/api';
 import { getId } from '@/utils';
 import { useApiContext } from '../api';
+
+export * from './organization/hooks';
 
 /** the headers of the {@link OrganizationTable}. */
 const HEADERS = ['ID', 'Name', 'Location'] as const;
@@ -33,11 +25,6 @@ export function organizationValuators(locationKey: keyof Location, outerLocation
 			valuators: { outer: { key: outerLocationKey } },
 		},
 	};
-}
-
-/** @returns {@link useOrder} specialized for a {@link Organization}. */
-export function useOrganizationOrder(): UseOrder<Organization> {
-	return useOrder('name');
 }
 
 /** @returns a table which displays {@link Organization}s in a customizable manner. */

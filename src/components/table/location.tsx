@@ -4,24 +4,17 @@ import * as hooks from '@/hooks';
 import React from 'react';
 import type { BaseProps, OrderProps } from './props';
 import type { Location } from '@/schema'
-import { getId, type Props } from '@/utils';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/20/solid';
 import { FLEX, ICON } from '../css';
+import { getId, type Props } from '@/utils';
 import { LocationForm } from '../form';
 import { Modal } from '../modal';
-import {
-	OrderedData,
-	Table,
-	TableButton,
-	Td,
-	Tr,
-	type UseOrder,
-	type Valuators,
-	useOrder,
-	useRowEventHandlers,
-} from '../table';
+import { OrderedData, Table, TableButton, Td, Tr, type Valuators, useRowEventHandlers } from '../table';
 import { Route } from '@/api';
 import { useApiContext } from '../api';
+import { useLocationOrder } from './location/hooks';
+
+export { useLocationOrder };
 
 /** the headers of the {@link LocationTable}. */
 const HEADERS = ['ID', 'Currency', 'Name', 'Outer'] as const;
@@ -37,11 +30,6 @@ export function locationValuators(outerKey: keyof Location): Valuators<Location>
 			valuators: { outer: { key: 'name' } },
 		}
 	};
-}
-
-/** @returns {@link useOrder} specialized for a {@link Location}. */
-export function useLocationOrder(): UseOrder<Location> {
-	return useOrder('name');
 }
 
 /** @returns a table which displays {@link Location}s in a customizable manner. */

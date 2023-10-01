@@ -1,23 +1,15 @@
 'use client';
 
 import React from 'react';
-import type { BaseProps, OrderProps} from './props';
+import type { BaseProps, OrderProps } from './props';
 import type { Department, Employee } from '@/schema'
-import {
-	DepartmentTable,
-	OrderedData,
-	Table,
-	Td,
-	Tr,
-	type UseOrder,
-	type Valuators,
-	useOrder,
-	useRowEventHandlers,
-} from '../table';
+import { DepartmentTable, OrderedData, Table, Td, Tr, type Valuators, useRowEventHandlers } from '../table';
 import { EmployeeForm } from '../form';
 import { Route } from '@/api';
 import { useApiContext } from '../api';
 import { getId } from '@/utils';
+
+export * from './employee/hooks';
 
 /** the headers of the {@link EmployeeTable}. */
 const HEADERS = ['ID', 'Active', 'Name', 'Title', 'Department'] as const;
@@ -28,11 +20,6 @@ const HEADERS = ['ID', 'Active', 'Name', 'Title', 'Department'] as const;
  */
 export function employeeValuators(departmentKey: keyof Department): Valuators<Employee> {
 	return { department: { key: departmentKey } };
-}
-
-/** @returns {@link useOrder} specialized for a {@link Employee}. */
-export function useEmployeeOrder(): UseOrder<Employee> {
-	return useOrder('name');
 }
 
 /** @returns a table which displays {@link Employee}s in a customizable manner. */

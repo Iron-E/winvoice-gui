@@ -1,13 +1,15 @@
-'use client';
-
 import React from 'react';
 import type { BaseProps, OrderProps } from './props';
-import { InvoiceDateTable } from './invoice/invoice-date';
-import { invoiceToString, type Invoice, type InvoiceDate, moneyToString } from '@/schema'
-import { Table, Td, Tr, type UseOrder, type Valuators, useOrder, OrderedData } from '../table';
+import { moneyToString, type Invoice, type InvoiceDate } from '@/schema'
+import { OrderedData, Table, Td, Tr, type Valuators } from '../table';
+
+export * from './invoice/hooks';
 
 /** the headers of the {@link InvoiceTable}. */
-const HEADERS = ['Date', 'Hourly Rate'] as const;
+const INVOICE_HEADERS = ['Date', 'Hourly Rate'] as const;
+
+/** the headers of the {@link InvoiceTable}. */
+const INVOICE_DATE_HEADERS = ['Issued', 'Paid'] as const;
 
 /**
  * @param outerOrder the
@@ -20,9 +22,26 @@ export function invoiceValuators(dateKey: keyof InvoiceDate): Valuators<Invoice>
 	};
 }
 
-/** @returns {@link useOrder} specialized for a {@link Invoice}. */
-export function useInvoiceOrder(): UseOrder<Invoice> {
-	return useOrder('date');
+/** @returns a table which displays {@link Invoice}s in a customizable manner. */
+export function InvoiceDateTable(props:
+	& Omit<BaseProps<InvoiceDate, 'issued'>, 'deletable' | 'selectedRow'>
+): React.ReactElement {
+	return (
+		<Table
+			headers={INVOICE_DATE_HEADERS}
+			onReorder={props.orderedData.setOrder}
+			order={props.orderedData.order}
+		>
+			{props.orderedData.data.map((d, i) => {
+				return (
+					<Tr key={i} onClick={props.onRowSelect && (() => props.onRowSelect!(d))}>
+						<Td>{d.issued.toLocaleString()}</Td>
+						<Td>{d.paid?.toLocaleString()}</Td>
+					</Tr>
+				);
+			})}
+		</Table>
+	);
 }
 
 /** @returns a table which displays {@link Invoice}s in a customizable manner. */
@@ -32,17 +51,13 @@ export function InvoiceTable(props:
 ): React.ReactElement {
 	return (
 		<Table
-			headers={HEADERS}
+			headers={INVOICE_HEADERS}
 			onReorder={props.orderedData.setOrder}
 			order={props.orderedData.order}
 		>
-			{props.orderedData.data.map(i => {
-				// NOTE: although two independant invoices might reasonably produce the same output here, it is safe because
-				//       invoices are never stored in an array. They are only displayed alongside a `Job`, which *does* have
-				//       a unique ID.
-				const STR = invoiceToString(i);
+			{props.orderedData.data.map((i, index) => {
 				return (
-					<Tr key={STR} onClick={props.onRowSelect && (() => props.onRowSelect!(i))}>
+					<Tr key={index} onClick={props.onRowSelect && (() => props.onRowSelect!(i))}>
 						<Td>
 							{i.date && (
 								<InvoiceDateTable

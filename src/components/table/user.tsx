@@ -13,15 +13,15 @@ import {
 	Table,
 	Td,
 	Tr,
-	type UseOrder,
 	type Valuators,
-	useOrder,
 	useRowEventHandlers,
 } from '../table';
 import { UserForm } from '../form';
 import { Route } from '@/api';
 import { getId } from '@/utils';
 import { useApiContext } from '../api';
+
+export * from './user/hooks';
 
 /** the headers of the {@link UserTable}. */
 const HEADERS = ['ID', 'Password Set', 'Username', 'Employee', 'Role'] as const;
@@ -35,11 +35,6 @@ export function userValuators(employeeKey: keyof Employee, employeeDepartmentKey
 		employee: { key: employeeKey, valuators: employeeValuators(employeeDepartmentKey) },
 		role: { key: roleKey, valuators: ROLE_VALUATORS },
 	};
-}
-
-/** @returns {@link useOrder} specialized for a {@link User}. */
-export function useUserOrder(): UseOrder<User> {
-	return useOrder('username');
 }
 
 /** @returns a table which displays {@link User}s in a customizable manner. */

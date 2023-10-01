@@ -33,8 +33,6 @@ export function InputId(props:
 			validateIconTop={props.validateIconTop}
 			value={props.value}
 		>
-			{props.children}
-
 			<FormButton className={LABEL_BUTTON_STYLE} onClick={props.onAction && (() => props.onAction!('new'))}>
 				<NewIcon />
 			</FormButton>
@@ -42,6 +40,8 @@ export function InputId(props:
 			<FormButton className={LABEL_BUTTON_STYLE} onClick={props.onAction && (() => props.onAction!('search'))}>
 				<SearchIcon />
 			</FormButton>
+
+			{props.children}
 		</Input>
 	);
 }

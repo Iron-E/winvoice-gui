@@ -13,7 +13,7 @@ import {
 	Textarea,
 	useDepartmentIdEventHandlers,
 	useIdEventHandlers,
-	useInputIds,
+	useIdInputs,
 	useOrganizationIdEventHandlers,
 } from '../form';
 import { Opt } from '@/utils';
@@ -44,7 +44,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 
 	const [API_CLIENT, showMessage] = useApiContext();
 	const [CLIENT_HANDLER, setClientIdEvent] = useOrganizationIdEventHandlers(props.id, setClient);
-	const [DEPARTMENT_HANDLER, INPUT_DEPARTMENTS] = useInputIds({
+	const [DEPARTMENT_HANDLER, INPUT_DEPARTMENTS] = useIdInputs({
 		id: `${props.id}--department`,
 		label: 'Departments',
 		onChange: departments => setDepartments(departments.length > 0 ? departments : [null]),

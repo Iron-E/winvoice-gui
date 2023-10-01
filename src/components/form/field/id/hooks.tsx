@@ -4,11 +4,11 @@ import type { Fn, Opt } from "@/utils";
 import type { Id } from '@/schema';
 import type { On } from "@/components/props-with";
 import { BorderLabeledField } from '../border-labeled';
-import { DeleteIcon, NewIcon } from '../../../icons';
 import { FormButton, LABEL_BUTTON_STYLE } from '../../../form';
 import { HOVER } from '@/components/css';
 import { InputId } from '../../field';
 import { Modal } from "@/components";
+import { NewIcon, RemoveIcon } from '../../../icons';
 import { useModalVisibility } from "@/hooks";
 
 
@@ -40,7 +40,7 @@ type IdEventsHandler<T> = typeof useIdEventHandlers<T>;
 type IdsProps<T> = CompositeProps<Opt<T>[]>;
 
 /** @returns a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
-export function useInputIds<T extends { id: Id }>(props:
+export function useIdInputs<T extends { id: Id }>(props:
 	& Omit<IdsProps<T>, 'value'>
 	& {
 		useIdEventHandlers: (id: string, setValue: Parameters<IdEventsHandler<T>>[0]) => ReturnType<IdEventsHandler<T>>,
@@ -60,7 +60,7 @@ export function useInputIds<T extends { id: Id }>(props:
 				className={`${HOVER} px-1 absolute top-[-1.2rem] right-2`}
 				onClick={() => props.onChange([...props.values, null])}
 			>
-				<NewIcon />
+				<NewIcon>Add</NewIcon>
 			</FormButton>
 
 			{props.values.map((d, i) => (
@@ -82,7 +82,7 @@ export function useInputIds<T extends { id: Id }>(props:
 							className={LABEL_BUTTON_STYLE}
 							onClick={() => props.onChange(props.values.filter((_, j) => j !== i))}
 						>
-							<DeleteIcon />
+							<RemoveIcon />
 						</FormButton>
 					</InputId>
 				</div>

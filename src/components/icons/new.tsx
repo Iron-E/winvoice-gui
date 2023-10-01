@@ -1,9 +1,10 @@
-import { PlusIcon } from "@heroicons/react/20/solid";
+import type { Children } from "../props-with";
 import { ICON } from "../css";
+import { PlusIcon } from "@heroicons/react/20/solid";
 
 /** A {@link TrashIcon | trash icon} with a 'delete' label.*/
-export function NewIcon(): React.ReactElement {
+export function NewIcon(props: Children): React.ReactElement {
 	return <>
-		<PlusIcon className={ICON} /> New
+		<PlusIcon className={ICON} /> {props.children ?? 'New'}
 	</>;
 }

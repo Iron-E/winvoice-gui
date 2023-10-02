@@ -45,7 +45,7 @@ export function EmployeeForm(props: BaseProps<Employee>): React.ReactElement {
 				<Checkbox
 					checked={ACTIVE}
 					id={`${props.id}--active`}
-					onChange={a => { console.log(a ?? 'foobar'); setActive(active => !active); }}
+					onChange={() => setActive(active => !active)}
 					title='Whether the employee is active at the company'
 				>
 					Active

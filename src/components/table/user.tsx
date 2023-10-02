@@ -3,43 +3,17 @@
 import React from 'react';
 import type { BaseProps, OrderProps } from './props';
 import type { Department, Employee, Role, User } from '@/schema'
-import {
-	EmployeeTable,
-	employeeValuators,
-	Order,
-	OrderedData,
-	ROLE_VALUATORS,
-	RoleTable,
-	Table,
-	Td,
-	Tr,
-	type Valuators,
-	useRowEventHandlers,
-} from '../table';
-import { UserForm } from '../form';
-import { Route } from '@/api';
+import { EmployeeTable, Order, OrderedData, RoleTable, Table, Td, Tr, useRowEventHandlers } from '../table';
 import { getId } from '@/utils';
+import { Route } from '@/api';
 import { useApiContext } from '../api';
+import { UserForm } from '../form';
 
 export * from './user/hooks';
+export * from './user/valuators';
 
 /** the headers of the {@link UserTable}. */
 const HEADERS = ['ID', 'Password Set', 'Username', 'Employee', 'Role'] as const;
-
-/**
- * @param outerOrder the
- * @returns {@link Valuators} for a {@link User}
- */
-export function userValuators(keys: {
-	employee: keyof Employee,
-	employeeDepartment: keyof Department,
-	role: keyof Role,
-}): Valuators<User> {
-	return {
-		employee: { key: keys.employee, valuators: employeeValuators(keys.employeeDepartment) },
-		role: { key: keys.role, valuators: ROLE_VALUATORS },
-	};
-}
 
 /** @returns a table which displays {@link User}s in a customizable manner. */
 export function UserTable(props:

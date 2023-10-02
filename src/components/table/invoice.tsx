@@ -1,26 +1,16 @@
 import React from 'react';
 import type { BaseProps, OrderProps } from './props';
 import { moneyToString, type Invoice, type InvoiceDate } from '@/schema'
-import { OrderedData, Table, Td, Tr, type Valuators } from '../table';
+import { OrderedData, Table, Td, Tr } from '../table';
 
 export * from './invoice/hooks';
+export * from './invoice/valuators';
 
 /** the headers of the {@link InvoiceTable}. */
 const INVOICE_HEADERS = ['Date', 'Hourly Rate'] as const;
 
 /** the headers of the {@link InvoiceTable}. */
 const INVOICE_DATE_HEADERS = ['Issued', 'Paid'] as const;
-
-/**
- * @param outerOrder the
- * @returns {@link Valuators} for a {@link Invoice}
- */
-export function invoiceValuators(dateKey: keyof InvoiceDate): Valuators<Invoice> {
-	return {
-		date: { key: dateKey },
-		hourly_rate: { key: 'amount' },
-	};
-}
 
 /** @returns a table which displays {@link Invoice}s in a customizable manner. */
 export function InvoiceDateTable(props:

@@ -6,14 +6,11 @@ import type { Department, Invoice, InvoiceDate, Job, Location, Organization } fr
 import {
 	DepartmentTable,
 	InvoiceTable,
-	invoiceValuators,
 	OrderedData,
 	OrganizationTable,
-	organizationValuators,
 	Table,
 	Td,
 	Tr,
-	type Valuators,
 	useRowEventHandlers,
 } from '../table';
 import { getId } from '@/utils';
@@ -22,6 +19,7 @@ import { Route } from '@/api';
 import { useApiContext } from '../api';
 
 export * from './job/hooks';
+export * from './job/valuators';
 
 /** the headers of the {@link JobTable}. */
 const HEADERS = [
@@ -35,34 +33,6 @@ const HEADERS = [
 	'Invoice',
 	'Departments',
 ] as const;
-
-/**
- * @param outerOrder the
- * @returns {@link Valuators} for a {@link Job}
- */
-export function jobValuators(keys: {
-	client: keyof Organization,
-	clientLocation: keyof Location,
-	clientOuterLocation: keyof Location,
-	departments: keyof Department,
-	invoice: keyof Invoice,
-	invoiceDate: keyof InvoiceDate,
-}): Valuators<Job> {
-	return {
-		client: {
-			key: keys.client,
-			valuators: organizationValuators({
-				location: keys.clientLocation,
-				outerLocation: keys.clientOuterLocation,
-			}),
-		},
-		departments: { key: keys.departments },
-		invoice: {
-			key: keys.invoice,
-			valuators: invoiceValuators(keys.invoiceDate),
-		},
-	};
-}
 
 /** @returns a table which displays {@link Job}s in a customizable manner. */
 export function JobTable(props:

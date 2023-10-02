@@ -3,32 +3,17 @@
 import React from 'react';
 import type { BaseProps, OrderProps } from './props';
 import type { Location, Organization } from '@/schema'
-import { LocationTable, OrderedData, Table, Td, Tr, type Valuators, useRowEventHandlers } from '../table';
+import { LocationTable, OrderedData, Table, Td, Tr, useRowEventHandlers } from '../table';
 import { OrganizationForm } from '../form';
 import { Route } from '@/api';
 import { getId } from '@/utils';
 import { useApiContext } from '../api';
 
 export * from './organization/hooks';
+export * from './organization/valuators';
 
 /** the headers of the {@link OrganizationTable}. */
 const HEADERS = ['ID', 'Name', 'Location'] as const;
-
-/**
- * @param outerOrder the
- * @returns {@link Valuators} for a {@link Organization}
- */
-export function organizationValuators(keys: {
-	location: keyof Location,
-	outerLocation: keyof Location,
-}): Valuators<Organization> {
-	return {
-		location: {
-			key: keys.location,
-			valuators: { outer: { key: keys.outerLocation } },
-		},
-	};
-}
 
 /** @returns a table which displays {@link Organization}s in a customizable manner. */
 export function OrganizationTable(props:

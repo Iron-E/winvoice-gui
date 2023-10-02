@@ -74,15 +74,15 @@ export class OrderedData<T extends {}> {
 	}
 
 	/**
-	 * @param keys the parameters to the `revaluator`.
+	 * @param revaluatorParam the parameters to the `revaluator`.
 	 * @param a function which should produce a {@link Valuator} compatible with a given {@link OrderedData}.
 	 * @returns a function which can be used to quickly swap one key in `keys` and provide re-valuation.
 	 */
-	public static keySwapper<U, F extends (keys: U) => Valuators<any>>(
-		keys: U,
-		revaluator: F,
-	): <K extends keyof U>(key: K) => ((value: U[K]) => ReturnType<F>) {
-		return key => (value => revaluator({ ...keys, [key]: value }) as ReturnType<F>);
+	public static keySwapper<Param, Func extends (keys: Param) => Valuators<any>>(
+		revaluator: Func,
+		revaluatorParam: Param,
+	): <Key extends keyof Param>(key: Key) => ((value: Param[Key]) => ReturnType<Func>) {
+		return key => (value => revaluator({ ...revaluatorParam, [key]: value }) as ReturnType<Func>);
 	}
 
 	/** @returns the value `obj[key]` based on the {@link Valuators} provided. */

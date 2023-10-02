@@ -22,3 +22,11 @@ export function chainRevivers(revivers: Reviver[]): Reviver {
 export function dateReviver<T>(key: keyof T): Reviver {
 	return (k, v) => key === k ? new Date(v) : v;
 }
+
+/**
+ * @param reviver the reviver to make optional (i.e. it only runs if a value is non-`null`).
+ * @returns a {@link Reviver} which will only be called if a given value is not undefined.
+ */
+export function optional(reviver: Reviver): Reviver {
+	return (k, v) => v === null ? v : reviver(k, v);
+}

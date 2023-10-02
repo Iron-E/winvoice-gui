@@ -16,13 +16,16 @@ import {
 	useIdInputs,
 	useOrganizationIdEventHandlers,
 } from '../form';
-import { chainRevivers, dateReviver, type Opt } from '@/utils';
+import { chainRevivers, dateReviver, optional, type Opt } from '@/utils';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
 
 /** A reviver for {@link JSON.parse} on a {@link Job}. */
-const REVIVER = chainRevivers([dateReviver<Job>('date_close'), dateReviver<Job>('date_open')]);
+const REVIVER = chainRevivers([
+	dateReviver<Job>('date_open'),
+	optional(dateReviver<Job>('date_close')),
+]);
 
 /** Event handlers for a {@link Job} ID. */
 export function useJobIdEventHandlers(

@@ -43,6 +43,7 @@ export function OrganizationForm(props: BaseProps<Organization>): React.ReactEle
 				id={`${props.id}--location`}
 				label='Location'
 				onAction={setIdEvent}
+				required={true}
 				title='Where this organization is located'
 				value={LOCATION?.id ?? ''}
 			/>

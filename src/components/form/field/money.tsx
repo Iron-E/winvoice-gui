@@ -35,6 +35,7 @@ export function InputMoney(props: CompositeProps<Money>): React.ReactElement {
 					if (CURRENCY) { props.onChange({ amount, currency: CURRENCY }); }
 				}}
 				pattern='^\d+(\.\d+)?$'
+				placeholder='10.00'
 				required={true}
 				title='The amount of money'
 				value={AMOUNT ?? ''}

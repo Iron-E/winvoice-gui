@@ -16,10 +16,13 @@ import {
 	useIdInputs,
 	useOrganizationIdEventHandlers,
 } from '../form';
-import { Opt } from '@/utils';
+import { chainRevivers, dateReviver, type Opt } from '@/utils';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
+
+/** A reviver for {@link JSON.parse} on a {@link Job}. */
+const REVIVER = chainRevivers([dateReviver<Job>('date_close'), dateReviver<Job>('date_open')]);
 
 /** Event handlers for a {@link Job} ID. */
 export function useJobIdEventHandlers(
@@ -60,6 +63,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 					Route.Job,
 					{ args: [CLIENT, DATE_CLOSE, DATE_OPEN, DEPARTMENTS, INCREMENT, INVOICE, NOTES, OBJECTIVES] },
 					isJob,
+					REVIVER,
 				);
 
 				if (RESULT === null) { return; }

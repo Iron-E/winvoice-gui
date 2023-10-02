@@ -2,21 +2,13 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputString, useIdEventHandlers } from '../form';
+import { Form, FormButton, InputString } from '../form';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { isDepartment, type Department } from '@/schema';
 import { useApiContext } from '../api';
 
-type DepartmentIdEventHandlers = typeof useIdEventHandlers<Department>;
-
-/** Event handlers for a {@link Department} ID. */
-export function useDepartmentIdEventHandlers(
-	id: string,
-	setDepartment: Parameters<DepartmentIdEventHandlers>[0],
-): ReturnType<DepartmentIdEventHandlers> {
-	return useIdEventHandlers(setDepartment, p => <DepartmentForm {...p} id={`${id}--department--form`} />);
-}
+export * from './department/hooks';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Department} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).

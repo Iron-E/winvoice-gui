@@ -2,19 +2,13 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Checkbox, Form, FormButton, InputId, InputString, useDepartmentIdEventHandlers, useIdEventHandlers } from '../form';
+import { Checkbox, Form, FormButton, InputId, InputString, useDepartmentIdEventHandlers } from '../form';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { isEmployee, type Employee } from '@/schema';
 import { useApiContext } from '../api';
 
-/** Event handlers for a {@link Employee} ID. */
-export function useEmployeeIdEventHandlers(
-	id: string,
-	setEmployee: Parameters<typeof useIdEventHandlers<Employee>>[0],
-): ReturnType<typeof useIdEventHandlers<Employee>> {
-	return useIdEventHandlers(setEmployee, p => <EmployeeForm {...p} id={`${id}--employee--form`} />);
-}
+export * from './employee/hooks';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Employee} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).

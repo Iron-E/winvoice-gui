@@ -2,19 +2,13 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputId, InputString, useIdEventHandlers, useLocationIdEventHandlers } from '../form';
+import { Form, FormButton, InputId, InputString, useLocationIdEventHandlers } from '../form';
+import { isOrganization, type Organization } from '@/schema';
 import { Route } from '@/api';
 import { SPACE } from '../css';
-import { isOrganization, type Organization } from '@/schema';
 import { useApiContext } from '../api';
 
-/** Event handlers for a {@link Organization} ID. */
-export function useOrganizationIdEventHandlers(
-	id: string,
-	setOrganization: Parameters<typeof useIdEventHandlers<Organization>>[0],
-): ReturnType<typeof useIdEventHandlers<Organization>> {
-	return useIdEventHandlers(setOrganization, p => <OrganizationForm {...p} id={`${id}--organization--form`} />);
-}
+export * from './organization/hooks';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Organization} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).

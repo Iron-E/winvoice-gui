@@ -12,7 +12,6 @@ import {
 	InputInvoice,
 	Textarea,
 	useDepartmentIdEventHandlers,
-	useIdEventHandlers,
 	useIdInputs,
 	useOrganizationIdEventHandlers,
 } from '../form';
@@ -21,19 +20,13 @@ import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
 
+export * from './job/hooks';
+
 /** A reviver for {@link JSON.parse} on a {@link Job}. */
 const REVIVER = chainRevivers([
 	dateReviver<Job>('date_open'),
 	optional(dateReviver<Job>('date_close')),
 ]);
-
-/** Event handlers for a {@link Job} ID. */
-export function useJobIdEventHandlers(
-	id: string,
-	setJob: Parameters<typeof useIdEventHandlers<Job>>[0],
-): ReturnType<typeof useIdEventHandlers<Job>> {
-	return useIdEventHandlers(setJob, p => <JobForm {...p} id={`${id}--organization--form`} />);
-}
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Job} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).

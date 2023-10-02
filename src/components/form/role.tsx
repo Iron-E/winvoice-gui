@@ -2,21 +2,13 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputDuration, InputString, useIdEventHandlers } from '../form';
+import { Form, FormButton, InputDuration, InputString } from '../form';
 import { isRole, type Role } from '@/schema';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
 
-type RoleIdEventHandlers = typeof useIdEventHandlers<Role>;
-
-/** Event handlers for a {@link Role} ID. */
-export function useRoleIdEventHandlers(
-	id: string,
-	setRole: Parameters<RoleIdEventHandlers>[0],
-): ReturnType<RoleIdEventHandlers> {
-	return useIdEventHandlers(setRole, p => <RoleForm {...p} id={`${id}--role--form`} />);
-}
+export * from './role/hooks';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Role} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).

@@ -2,20 +2,15 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputId, InputString, useIdEventHandlers } from '../form';
-import { Route } from '@/api';
-import { SPACE } from '../css';
-import { SelectCurrency } from '../form';
+import { Form, FormButton, InputId, InputString } from '../form';
 import { isLocation, type Location } from '@/schema';
+import { Route } from '@/api';
+import { SelectCurrency } from '../form';
+import { SPACE } from '../css';
 import { useApiContext } from '../api';
+import { useLocationIdEventHandlers } from './location/hooks';
 
-/** Event handlers for a {@link Location} ID. */
-export function useLocationIdEventHandlers(
-	id: string,
-	setLocation: Parameters<typeof useIdEventHandlers<Location>>[0],
-): ReturnType<typeof useIdEventHandlers<Location>> {
-	return useIdEventHandlers(setLocation, p => <LocationForm {...p} id={`${id}--location--form`} />);
-}
+export { useLocationIdEventHandlers };
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Location} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).

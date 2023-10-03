@@ -100,7 +100,7 @@ export function JobTable(props:
 					</Td>
 					<Td>
 						<DepartmentTable
-							deletable={false}
+							deletable={false /* TODO: is this necessary? */}
 							orderedData={new OrderedData(
 								props.departmentsOrder,
 								props.onReorderDepartments,

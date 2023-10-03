@@ -9,5 +9,5 @@ export function useJobIdEventHandlers(
 	id: string,
 	setJob: Parameters<JobIdEventHandlers>[0],
 ): ReturnType<JobIdEventHandlers> {
-	return useIdEventHandlers(setJob, p => <JobForm { ...p } id = {`${id}--organization--form`} />);
+	return useIdEventHandlers(setJob, p => <JobForm { ...p } id = {`${id}--job--form`} />);
 }

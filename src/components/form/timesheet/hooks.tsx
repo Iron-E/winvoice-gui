@@ -9,5 +9,5 @@ export function useTimesheetIdEventHandlers(
 	id: string,
 	setTimesheet: Parameters<TimesheetIdEventHandlers>[0],
 ): ReturnType<TimesheetIdEventHandlers> {
-	return useIdEventHandlers(setTimesheet, p => <TimesheetForm { ...p } id = {`${id}--organization--form`} />);
+	return useIdEventHandlers(setTimesheet, p => <TimesheetForm { ...p } id = {`${id}--timesheet--form`} />);
 }

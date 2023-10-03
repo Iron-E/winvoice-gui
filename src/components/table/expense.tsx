@@ -21,7 +21,7 @@ export * from './expense/valuators';
 const HEADERS = ['Timesheet ID', 'ID', 'Category', 'Cost', 'Description'] as const;
 
 /** @returns a table which displays {@link Expense}s in a customizable manner. */
-export function ExpenseTable(props: BaseProps<Expense, 'id'>): React.ReactElement {
+export function ExpenseTable(props: Omit<BaseProps<Expense, 'id'>, 'deletable'>): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
 	const [HANDLER, setRowEvent] = useRowEventHandlers(
 		props.orderedData, CLIENT, showMessage, Route.Expense,
@@ -40,7 +40,7 @@ export function ExpenseTable(props: BaseProps<Expense, 'id'>): React.ReactElemen
 				<Tr
 					key={x.id}
 					onClick={props.onRowSelect && (() => props.onRowSelect!(x))}
-					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: x }) : undefined}
+					onDelete={() => setRowEvent({ action: 'delete', data: x })}
 					onEdit={() => setRowEvent({ action: 'edit', data: x })}
 					selected={x.id === props.selectedRow}
 				>

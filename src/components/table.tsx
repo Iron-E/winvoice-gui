@@ -19,6 +19,7 @@ export * from './table/order';
 export * from './table/organization';
 export * from './table/role';
 export * from './table/row';
+export * from './table/timesheet';
 export * from './table/user';
 
 type TableProps<T extends string> = {

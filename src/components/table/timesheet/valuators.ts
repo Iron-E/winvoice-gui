@@ -1,4 +1,14 @@
-import type { Department, Invoice, InvoiceDate, Timesheet, Location, Organization, Job, Employee, Expense } from "@/schema";
+import type {
+	Department,
+	Employee,
+	Expense,
+	Invoice,
+	InvoiceDate,
+	Job,
+	Location,
+	Organization,
+	Timesheet,
+} from "@/schema";
 import type { Valuators } from "../order";
 import { employeeValuators, jobValuators } from "../../table";
 import { expenseValuators } from "../expense/valuators";

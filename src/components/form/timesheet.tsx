@@ -30,7 +30,7 @@ const REVIVER = chainRevivers([
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Timesheet} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
 export function TimesheetForm(props: BaseProps<Timesheet>): React.ReactElement {
-	const [EMPLOYEE, setEmployee] = React.useState(props.initialValues?.employee);
+	const [EMPLOYEE, setEmployee] = React.useState(props.initialValues?.employee /* TODO: `?? CLIENT.employee` */);
 	const [EXPENSES, setExpenses] = React.useState(props.initialValues?.expenses ?? []);
 	const [JOB, setJob] = React.useState(props.initialValues?.job);
 	const [TIME_BEGIN, setTimeBegin] = React.useState(props.initialValues?.time_begin ?? new Date());

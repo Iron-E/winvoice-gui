@@ -55,7 +55,7 @@ export function useIdInputs<T extends { id: Id }>(props:
 
 	return [
 		HANDLER,
-		<BorderLabeledField className='w-full' key={1} label={props.label}>
+		<BorderLabeledField className='min-h-[1.5rem] min-w-[39ch] w-full' key={1} label={props.label}>
 			<FormButton
 				className={`${HOVER} px-1 absolute top-[-1.2rem] right-2`}
 				onClick={() => props.onChange([...props.values, null])}

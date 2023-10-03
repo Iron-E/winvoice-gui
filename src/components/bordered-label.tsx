@@ -7,7 +7,7 @@ import { HOVER } from "./css";
 export function BorderedLabel(props: Children & Class & { label: React.ReactNode }): React.ReactElement {
 	return (
 		<div className={`${HOVER} border-[1px] border-bordered-label-border relative ${props.className}`}>
-			<span className='absolute top-[-0.8rem] left-2 bg-body-bg'>
+			<span className='absolute border-[1px] border-bordered-label-border px-1 top-[-0.8rem] left-2 bg-body-bg rounded-md'>
 				{props.label}
 			</span>
 

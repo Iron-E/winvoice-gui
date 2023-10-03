@@ -4,6 +4,7 @@ export * from './form/button';
 export * from './form/contact';
 export * from './form/department';
 export * from './form/employee';
+export * from './form/expense';
 export * from './form/field';
 export * from './form/job';
 export * from './form/location';

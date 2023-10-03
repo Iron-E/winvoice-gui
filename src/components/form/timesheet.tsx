@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { isTimesheet, type Timesheet } from '@/schema';
+import { Expense, isTimesheet, type Timesheet } from '@/schema';
 import {
 	Form,
 	FormButton,
@@ -10,10 +10,11 @@ import {
 	InputId,
 	Textarea,
 	useEmployeeIdEventHandlers,
+	useExpenseIdEventHandlers,
 	useIdInputs,
 	useJobIdEventHandlers,
 } from '../form';
-import { chainRevivers, dateReviver, optional } from '@/utils';
+import { chainRevivers, dateReviver, Opt, optional } from '@/utils';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
@@ -31,7 +32,7 @@ const REVIVER = chainRevivers([
  */
 export function TimesheetForm(props: BaseProps<Timesheet>): React.ReactElement {
 	const [EMPLOYEE, setEmployee] = React.useState(props.initialValues?.employee /* TODO: `?? CLIENT.employee` */);
-	const [EXPENSES, setExpenses] = React.useState(props.initialValues?.expenses ?? []);
+	const [EXPENSES, setExpenses] = React.useState<Opt<Expense>[]>(props.initialValues?.expenses ?? []);
 	const [JOB, setJob] = React.useState(props.initialValues?.job);
 	const [TIME_BEGIN, setTimeBegin] = React.useState(props.initialValues?.time_begin ?? new Date());
 	const [TIME_END, setTimeEnd] = React.useState(props.initialValues?.time_end);
@@ -57,7 +58,7 @@ export function TimesheetForm(props: BaseProps<Timesheet>): React.ReactElement {
 					{
 						args: [
 							EMPLOYEE,
-							EXPENSES.map(x => [x.category, x.cost, x.description]),
+							EXPENSES.map(x => [x!.category, x!.cost, x!.description]),
 							JOB,
 							TIME_BEGIN,
 							TIME_END,
@@ -74,7 +75,7 @@ export function TimesheetForm(props: BaseProps<Timesheet>): React.ReactElement {
 				var result: Timesheet = {
 					...props.initialValues,
 					employee: EMPLOYEE!,
-					expenses: EXPENSES,
+					expenses: EXPENSES as Expense[],
 					job: JOB!,
 					time_begin: TIME_BEGIN,
 					time_end: TIME_END,

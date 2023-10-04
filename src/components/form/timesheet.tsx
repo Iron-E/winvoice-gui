@@ -2,7 +2,8 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Expense, isTimesheet, type Timesheet } from '@/schema';
+import { BorderLabeledField } from './field/border-labeled';
+import { chainRevivers, dateReviver, optional, type Maybe } from '@/utils';
 import {
 	Form,
 	FormButton,
@@ -10,11 +11,11 @@ import {
 	InputId,
 	Textarea,
 	useEmployeeIdEventHandlers,
-	useExpenseIdEventHandlers,
-	useIdInputs,
 	useJobIdEventHandlers,
 } from '../form';
-import { chainRevivers, dateReviver, Opt, optional } from '@/utils';
+import { InputExpense } from './field/expense';
+import { isTimesheet, type Id, type Money, type Timesheet } from '@/schema';
+import { NewIcon, RemoveIcon } from '../icons';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
@@ -32,7 +33,9 @@ const REVIVER = chainRevivers([
  */
 export function TimesheetForm(props: BaseProps<Timesheet>): React.ReactElement {
 	const [EMPLOYEE, setEmployee] = React.useState(props.initialValues?.employee /* TODO: `?? CLIENT.employee` */);
-	const [EXPENSES, setExpenses] = React.useState<Opt<Expense>[]>(props.initialValues?.expenses ?? []);
+	const [EXPENSES, setExpenses] = React.useState<Maybe<[string, Money, string, Id]>[]>(
+		props.initialValues?.expenses.map(x => [x.category, x.cost, x.description, x.id]) ?? []
+	);
 	const [JOB, setJob] = React.useState(props.initialValues?.job);
 	const [TIME_BEGIN, setTimeBegin] = React.useState(props.initialValues?.time_begin ?? new Date());
 	const [TIME_END, setTimeEnd] = React.useState(props.initialValues?.time_end);
@@ -41,13 +44,6 @@ export function TimesheetForm(props: BaseProps<Timesheet>): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
 	const [EMPLOYEE_HANDLER, setEmployeeIdHandler] = useEmployeeIdEventHandlers(props.id, setEmployee);
 	const [JOB_HANDLER, setJobIdHandler] = useJobIdEventHandlers(props.id, setJob);
-	const [EXPENSES_HANDLER, INPUT_EXPENSES] = useIdInputs({
-		id: `${props.id}--expense`,
-		label: 'Expenses',
-		onChange: setExpenses,
-		useIdEventHandlers: useExpenseIdEventHandlers,
-		values: EXPENSES,
-	});
 
 	return <>
 		<Form onSubmit={async () => {
@@ -55,16 +51,7 @@ export function TimesheetForm(props: BaseProps<Timesheet>): React.ReactElement {
 				const RESULT = await CLIENT.post(
 					showMessage,
 					Route.Timesheet,
-					{
-						args: [
-							EMPLOYEE,
-							EXPENSES.map(x => [x!.category, x!.cost, x!.description]),
-							JOB,
-							TIME_BEGIN,
-							TIME_END,
-							WORK_NOTES,
-						],
-					},
+					{ args: [EMPLOYEE, EXPENSES, JOB, TIME_BEGIN, TIME_END, WORK_NOTES] },
 					isTimesheet,
 					REVIVER,
 				);
@@ -75,7 +62,13 @@ export function TimesheetForm(props: BaseProps<Timesheet>): React.ReactElement {
 				var result: Timesheet = {
 					...props.initialValues,
 					employee: EMPLOYEE!,
-					expenses: EXPENSES as Expense[],
+					expenses: EXPENSES.map(x => ({
+						category: x![0],
+						cost: x![1],
+						description: x![2],
+						id: x![3],
+						timesheet_id: props.initialValues!.id,
+					})),
 					job: JOB!,
 					time_begin: TIME_BEGIN,
 					time_end: TIME_END,
@@ -115,7 +108,27 @@ export function TimesheetForm(props: BaseProps<Timesheet>): React.ReactElement {
 				value={TIME_END}
 			/>
 
-			{INPUT_EXPENSES}
+			<BorderLabeledField
+				button={props.initialValues == undefined
+					? { onClick: () => setExpenses([...EXPENSES, undefined]), text: <NewIcon>Add</NewIcon> }
+					: undefined
+				}
+				label='Expenses'
+			>
+				{EXPENSES.map((x, i) => (
+					<BorderLabeledField
+						button={{ onClick: () => setExpenses(EXPENSES.filter((_, j) => j !== i)), text: <RemoveIcon /> }}
+						key={x?.[3] ?? i}
+						label={i}
+					>
+						<InputExpense
+							id={`${props.id}--expense-${i}`}
+							onChange={xChanged => setExpenses(EXPENSES.map((v, j) => j === i ? v : [...xChanged, x?.[3] ?? '']))}
+							value={x as unknown as [string, Money, string]}
+						/>
+					</BorderLabeledField>
+				))}
+			</BorderLabeledField>
 
 			<InputId
 				id={`${props.id}--job`}
@@ -139,7 +152,6 @@ export function TimesheetForm(props: BaseProps<Timesheet>): React.ReactElement {
 		</Form>
 
 		{EMPLOYEE_HANDLER}
-		{EXPENSES_HANDLER}
 		{JOB_HANDLER}
 	</>;
 }

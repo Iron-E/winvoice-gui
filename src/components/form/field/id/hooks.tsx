@@ -1,11 +1,10 @@
 import React from 'react';
 import type { CompositeProps } from '../props';
-import type { Fn, Opt } from "@/utils";
+import type { Fn, Maybe, Opt } from "@/utils";
 import type { Id } from '@/schema';
 import type { On } from "@/components/props-with";
 import { BorderLabeledField } from '../border-labeled';
 import { FormButton, LABEL_BUTTON_STYLE } from '../../../form';
-import { HOVER } from '@/components/css';
 import { InputId } from '../../field';
 import { Modal } from "@/components";
 import { NewIcon, RemoveIcon } from '../../../icons';
@@ -37,7 +36,7 @@ export function useIdEventHandlers<T>(
 }
 
 type IdEventsHandler<T> = typeof useIdEventHandlers<T>;
-type IdsProps<T> = CompositeProps<Opt<T>[]>;
+type IdsProps<T> = CompositeProps<Maybe<T>[]>;
 
 /** @returns a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
 export function useIdInputs<T extends { id: Id }>(props:
@@ -55,14 +54,12 @@ export function useIdInputs<T extends { id: Id }>(props:
 
 	return [
 		HANDLER,
-		<BorderLabeledField className='min-h-[1.5rem] min-w-[39ch] w-full' key={1} label={props.label}>
-			<FormButton
-				className={`${HOVER} px-1 absolute top-[-1.2rem] right-2`}
-				onClick={() => props.onChange([...props.values, null])}
-			>
-				<NewIcon>Add</NewIcon>
-			</FormButton>
-
+		<BorderLabeledField
+			button={{ onClick: () => props.onChange([...props.values, undefined]), text: <NewIcon>Add</NewIcon> }}
+			className='min-w-[39ch] w-full'
+			key={1}
+			label={props.label}
+		>
 			{props.values.map((d, i) => (
 				<div className='my-2' key={d?.id ?? i}>
 					<InputId

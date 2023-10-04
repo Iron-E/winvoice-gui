@@ -15,7 +15,7 @@ import {
 	useIdInputs,
 	useOrganizationIdEventHandlers,
 } from '../form';
-import { chainRevivers, dateReviver, optional, type Opt } from '@/utils';
+import { chainRevivers, dateReviver, optional, type Maybe } from '@/utils';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
@@ -35,7 +35,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 	const [CLIENT, setClient] = React.useState(props.initialValues?.client);
 	const [DATE_CLOSE, setDateClose] = React.useState(props.initialValues?.date_close);
 	const [DATE_OPEN, setDateOpen] = React.useState(props.initialValues?.date_open ?? new Date());
-	const [DEPARTMENTS, setDepartments] = React.useState<Opt<Department>[]>(props.initialValues?.departments ?? [null]);
+	const [DEPARTMENTS, setDepartments] = React.useState<Maybe<Department>[]>(props.initialValues?.departments ?? [undefined]);
 	const [INCREMENT, setIncrement] = React.useState(props.initialValues?.increment ?? '');
 	const [INVOICE, setInvoice] = React.useState(props.initialValues?.invoice);
 	const [NOTES, setNotes] = React.useState(props.initialValues?.notes ?? '');
@@ -46,7 +46,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 	const [DEPARTMENT_HANDLER, INPUT_DEPARTMENTS] = useIdInputs({
 		id: `${props.id}--department`,
 		label: 'Departments',
-		onChange: departments => setDepartments(departments.length > 0 ? departments : [null]),
+		onChange: departments => setDepartments(departments.length > 0 ? departments : [undefined]),
 		useIdEventHandlers: useDepartmentIdEventHandlers,
 		values: DEPARTMENTS,
 	});

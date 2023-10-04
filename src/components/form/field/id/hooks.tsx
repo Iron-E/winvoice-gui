@@ -63,6 +63,7 @@ export function useIdInputs<T extends { id: Id }>(props:
 			{props.values.map((d, i) => (
 				<InputId
 					id={`${props.id}-${i + 1}`}
+					key={d?.id ?? i}
 					label={`${i + 1}.`}
 					onAction={action => {
 						setIndex(i);

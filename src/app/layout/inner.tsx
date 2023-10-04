@@ -48,10 +48,14 @@ export function InnerRootLayout(props: w.Children): React.ReactElement {
 	return <>
 		<SHOW_MESSAGE_CONTEXT.Provider value={showMessage}>
 			<Header>
-				<ClientSelector buttonClassName={HEADER_CSS.button} client={CLIENT} onSetClient={c => {
-					setClient(c);
-					localStorage.setItem('client', JSON.stringify(c));
-				}} />
+				<ClientSelector
+					buttonClassName={HEADER_CSS.button}
+					client={CLIENT}
+					onSetClient={c => {
+						setClient(c);
+						localStorage.setItem('client', JSON.stringify(c));
+					}}
+				/>
 			</Header>
 
 			<div className={css.PAD}>

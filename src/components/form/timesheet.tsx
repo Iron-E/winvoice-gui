@@ -53,7 +53,7 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 				const RESULT = await CLIENT.post(
 					showMessage,
 					Route.Timesheet,
-					{ args: [EMPLOYEE, EXPENSES, JOB, TIME_BEGIN, TIME_END, WORK_NOTES] },
+					{ args: [EMPLOYEE, EXPENSES.map(x => [x![0], x![1], x![2]]), JOB, TIME_BEGIN, TIME_END, WORK_NOTES] },
 					isTimesheet,
 					REVIVER,
 				);

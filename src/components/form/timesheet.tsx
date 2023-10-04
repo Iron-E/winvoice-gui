@@ -84,7 +84,7 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 		}}>
 			<InputId
 				id={`${props.id}--employee`}
-				label='Client'
+				label='Employee'
 				onAction={setEmployeeIdHandler}
 				required={true}
 				title='The client organization which this timesheet for'
@@ -120,7 +120,6 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 					{EXPENSES.map((x, i) => (
 						<BorderLabeledField
 							button={{ onClick: () => setExpenses(EXPENSES.filter((_, j) => j !== i)), text: <RemoveIcon /> }}
-							className='bg-bordered-label-nested-bg'
 							key={x?.[3] ?? i}
 						>
 							<InputExpense
@@ -135,10 +134,10 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 
 			<InputId
 				id={`${props.id}--job`}
-				label='Client'
+				label='Job'
 				onAction={setJobIdHandler}
 				required={true}
-				title='The client organization which this timesheet for'
+				title='The job this work was done under'
 				value={JOB?.id ?? ''}
 			/>
 

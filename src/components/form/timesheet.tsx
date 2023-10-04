@@ -126,7 +126,7 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 						>
 							<InputExpense
 								id={`${props.id}--expense-${i}`}
-								onChange={xChanged => setExpenses(EXPENSES.map((v, j) => j === i ? v : [...xChanged, x?.[3] ?? '']))}
+								onChange={xChanged => setExpenses(EXPENSES.map((v, j) => j === i ? [...xChanged, x?.[3]] : v))}
 								value={x as unknown as [string, Money, string]}
 							/>
 						</BorderLabeledField>

@@ -31,7 +31,7 @@ const REVIVER = chainRevivers([
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Timesheet} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
-export function TimesheetForm(props: BaseProps<Timesheet>): React.ReactElement {
+export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boolean }): React.ReactElement {
 	const [EMPLOYEE, setEmployee] = React.useState(props.initialValues?.employee /* TODO: `?? CLIENT.employee` */);
 	const [EXPENSES, setExpenses] = React.useState<Maybe<[string, Money, string, Id]>[]>(
 		props.initialValues?.expenses.map(x => [x.category, x.cost, x.description, x.id]) ?? []
@@ -108,27 +108,30 @@ export function TimesheetForm(props: BaseProps<Timesheet>): React.ReactElement {
 				value={TIME_END}
 			/>
 
-			<BorderLabeledField
-				button={props.initialValues == undefined
-					? { onClick: () => setExpenses([...EXPENSES, undefined]), text: <NewIcon>Add</NewIcon> }
-					: undefined
-				}
-				className='min-w-[41ch]'
-				label='Expenses'
-			>
-				{EXPENSES.map((x, i) => (
-					<BorderLabeledField
-						button={{ onClick: () => setExpenses(EXPENSES.filter((_, j) => j !== i)), text: <RemoveIcon /> }}
-						key={x?.[3] ?? i}
-					>
-						<InputExpense
-							id={`${props.id}--expense-${i}`}
-							onChange={xChanged => setExpenses(EXPENSES.map((v, j) => j === i ? v : [...xChanged, x?.[3] ?? '']))}
-							value={x as unknown as [string, Money, string]}
-						/>
-					</BorderLabeledField>
-				))}
-			</BorderLabeledField>
+			{props.showExpenses !== false && (
+				<BorderLabeledField
+					button={props.initialValues == undefined
+						? { onClick: () => setExpenses([...EXPENSES, undefined]), text: <NewIcon>Add</NewIcon> }
+						: undefined
+					}
+					className='min-w-[41ch]'
+					label='Expenses'
+				>
+					{EXPENSES.map((x, i) => (
+						<BorderLabeledField
+							button={{ onClick: () => setExpenses(EXPENSES.filter((_, j) => j !== i)), text: <RemoveIcon /> }}
+							className='bg-bordered-label-nested-bg'
+							key={x?.[3] ?? i}
+						>
+							<InputExpense
+								id={`${props.id}--expense-${i}`}
+								onChange={xChanged => setExpenses(EXPENSES.map((v, j) => j === i ? v : [...xChanged, x?.[3] ?? '']))}
+								value={x as unknown as [string, Money, string]}
+							/>
+						</BorderLabeledField>
+					))}
+				</BorderLabeledField>
+			)}
 
 			<InputId
 				id={`${props.id}--job`}

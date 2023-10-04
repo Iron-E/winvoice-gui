@@ -15,8 +15,6 @@ export function InputDuration(props: Omit<InputProps<string>, 'placeholder'>): R
 			required={props.required}
 			title={props.title}
 			type='text'
-			validateIconRight={props.validateIconRight}
-			validateIconTop={props.validateIconTop}
 			value={props.value}
 		/>
 	);

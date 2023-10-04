@@ -29,8 +29,6 @@ export function InputId(props:
 			required={props.required}
 			title={props.title}
 			type='text'
-			validateIconRight={props.validateIconRight}
-			validateIconTop={props.validateIconTop}
 			value={props.value}
 		>
 			<FormButton className={LABEL_BUTTON_STYLE} onClick={props.onAction && (() => props.onAction!('new'))}>

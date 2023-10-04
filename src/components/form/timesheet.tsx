@@ -113,13 +113,13 @@ export function TimesheetForm(props: BaseProps<Timesheet>): React.ReactElement {
 					? { onClick: () => setExpenses([...EXPENSES, undefined]), text: <NewIcon>Add</NewIcon> }
 					: undefined
 				}
+				className='min-w-[41ch]'
 				label='Expenses'
 			>
 				{EXPENSES.map((x, i) => (
 					<BorderLabeledField
 						button={{ onClick: () => setExpenses(EXPENSES.filter((_, j) => j !== i)), text: <RemoveIcon /> }}
 						key={x?.[3] ?? i}
-						label={i}
 					>
 						<InputExpense
 							id={`${props.id}--expense-${i}`}

@@ -61,28 +61,24 @@ export function useIdInputs<T extends { id: Id }>(props:
 			label={props.label}
 		>
 			{props.values.map((d, i) => (
-				<div className='my-2' key={d?.id ?? i}>
-					<InputId
-						id={`${props.id}-${i + 1}`}
-						label={`${i + 1}.`}
-						onAction={action => {
-							setIndex(i);
-							setIdEvent(action);
-						}}
-						required={true}
-						title='A department assigned to this Job'
-						validateIconRight='right-4'
-						validateIconTop='top-[-0.05rem]'
-						value={d?.id ?? ''}
+				<InputId
+					id={`${props.id}-${i + 1}`}
+					label={`${i + 1}.`}
+					onAction={action => {
+						setIndex(i);
+						setIdEvent(action);
+					}}
+					required={true}
+					title='A department assigned to this Job'
+					value={d?.id ?? ''}
+				>
+					<FormButton
+						className={LABEL_BUTTON_STYLE}
+						onClick={() => props.onChange(props.values.filter((_, j) => j !== i))}
 					>
-						<FormButton
-							className={LABEL_BUTTON_STYLE}
-							onClick={() => props.onChange(props.values.filter((_, j) => j !== i))}
-						>
-							<RemoveIcon />
-						</FormButton>
-					</InputId>
-				</div>
+						<RemoveIcon />
+					</FormButton>
+				</InputId>
 			))}
 		</BorderLabeledField>,
 	];

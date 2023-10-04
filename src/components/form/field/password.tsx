@@ -12,8 +12,6 @@ export function InputPassword(props: InputProps<string>): React.ReactElement {
 			required={props.required}
 			title={props.title}
 			type='password'
-			validateIconRight={props.validateIconRight}
-			validateIconTop={props.validateIconTop}
 			value={props.value}
 		/>
 	);

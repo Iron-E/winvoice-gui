@@ -16,6 +16,8 @@ type OmitProps<T> = Omit<
 	| 'pattern'
 	| 'selectClassName'
 	| 'type'
+	| 'validateIconRight'
+	| 'validateIconTop'
 >
 
 /** The properties used for composite fields. */

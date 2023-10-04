@@ -26,8 +26,7 @@ export function InputDate(props: Omit<InputProps<Date>, 'placeholder' | 'value'>
 			required={props.required}
 			title={props.title}
 			type='datetime-local'
-			validateIconRight={props.validateIconRight ?? 'right-7'}
-			validateIconTop={props.validateIconTop}
+			validateIconRight='right-7'
 			value={localDate ?? ''}
 		/>
 	);

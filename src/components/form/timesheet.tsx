@@ -26,6 +26,7 @@ export * from './timesheet/hooks';
 const REVIVER = chainRevivers([
 	dateReviver<Timesheet>('time_begin'),
 	optional(dateReviver<Timesheet>('time_end')),
+	JOB_REVIVER,
 ]);
 
 /**

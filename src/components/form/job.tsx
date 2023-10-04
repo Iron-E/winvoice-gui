@@ -23,7 +23,7 @@ import { useApiContext } from '../api';
 export * from './job/hooks';
 
 /** A reviver for {@link JSON.parse} on a {@link Job}. */
-const REVIVER = chainRevivers([
+export const JOB_REVIVER = chainRevivers([
 	dateReviver<Job>('date_open'),
 	optional(dateReviver<Job>('date_close')),
 ]);
@@ -59,7 +59,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 					Route.Job,
 					{ args: [CLIENT, DATE_CLOSE, DATE_OPEN, DEPARTMENTS, INCREMENT, INVOICE, NOTES, OBJECTIVES] },
 					isJob,
-					REVIVER,
+					JOB_REVIVER,
 				);
 
 				if (RESULT === null) { return; }

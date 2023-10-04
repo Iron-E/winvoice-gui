@@ -76,14 +76,16 @@ export function TimesheetTable(props:
 						/>
 					</Td>
 					<Td>
-						<ExpenseTable
-							orderedData={new OrderedData(
-								props.expensesOrder,
-								props.onReorderExpenses,
-								t.expenses,
-								d => props.orderedData.swap(getId, t.id, { ...t, expenses: d as Expense[] }),
-							)}
-						/>
+						{t.expenses.length > 0 && (
+							<ExpenseTable
+								orderedData={new OrderedData(
+									props.expensesOrder,
+									props.onReorderExpenses,
+									t.expenses,
+									d => props.orderedData.swap(getId, t.id, { ...t, expenses: d as Expense[] }),
+								)}
+							/>
+						)}
 					</Td>
 					<Td>
 						<JobTable

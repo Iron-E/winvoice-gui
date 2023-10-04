@@ -2,16 +2,10 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
+import { Form, FormButton, InputId, useTimesheetIdEventHandlers } from '../form';
+import { InputExpense } from './field/expense';
 import { isExpense, type Expense } from '@/schema';
-import {
-	Form,
-	FormButton,
-	InputId,
-	InputMoney,
-	InputString,
-	Textarea,
-	useTimesheetIdEventHandlers,
-} from '../form';
+import { Props } from '@/utils';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
@@ -22,10 +16,12 @@ export * from './expense/hooks';
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Expense} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
 export function ExpenseForm(props: BaseProps<Expense>): React.ReactElement {
-	const [CATEGORY, setCategory] = React.useState(props.initialValues?.category ?? '');
-	const [COST, setCost] = React.useState(props.initialValues?.cost);
-	const [DESCRIPTION, setDescription] = React.useState(props.initialValues?.description ?? '');
 	const [TIMESHEET_ID, setTimesheetId] = React.useState(props.initialValues?.timesheet_id);
+	const [VALUES, setValues] = React.useState<Props<typeof InputExpense>['value']>(props.initialValues && [
+		props.initialValues.category,
+		props.initialValues.cost,
+		props.initialValues.description,
+	]);
 
 	const [CLIENT, showMessage] = useApiContext();
 	const [TIMESHEET_HANDLER, setTimesheetIdHandler] = useTimesheetIdEventHandlers(props.id, t => setTimesheetId(t.id));
@@ -37,10 +33,7 @@ export function ExpenseForm(props: BaseProps<Expense>): React.ReactElement {
 					showMessage,
 					Route.Expense,
 					{
-						args: [
-							[[CATEGORY, COST, DESCRIPTION]],
-							TIMESHEET_ID,
-						],
+						args: [[VALUES], TIMESHEET_ID],
 					},
 					isExpense,
 				);
@@ -50,40 +43,17 @@ export function ExpenseForm(props: BaseProps<Expense>): React.ReactElement {
 			} else {
 				var result: Expense = {
 					...props.initialValues,
-					category: CATEGORY,
-					cost: COST!,
-					description: DESCRIPTION,
+					category: VALUES![0],
+					cost: VALUES![1],
+					description: VALUES![2],
 					timesheet_id: TIMESHEET_ID!,
 				};
 			}
 
 			await Promise.resolve(props.onSubmit?.(result));
-			setDescription('');
+			setValues([VALUES![0], VALUES![1], '']);
 		}}>
-			<InputString
-				id={`${props.id}--category`}
-				label='Client'
-				onChange={setCategory}
-				required={true}
-				title='The broad type of expense which this is'
-				value={CATEGORY}
-			/>
-
-			<InputMoney
-				id={`${props.id}--date--close`}
-				label='Cost'
-				onChange={setCost}
-				value={COST}
-			/>
-
-			<Textarea
-				id={`${props.id}--description`}
-				label='Objectives'
-				onChange={setDescription}
-				required={true}
-				title='A description of the expense'
-				value={DESCRIPTION}
-			/>
+			<InputExpense id={props.id} onChange={setValues} value={VALUES} />
 
 			<InputId
 				id={`${props.id}--timesheet-id`}

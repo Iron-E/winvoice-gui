@@ -19,7 +19,12 @@ export function InputExpense(props:
 		<InputString
 			id={`${props.id}--category`}
 			label='Category'
-			onChange={setCategory}
+			onChange={category => {
+				setCategory(category);
+				if (COST != undefined) {
+					props.onChange([category, COST, DESCRIPTION]);
+				}
+			}}
 			required={true}
 			title='The broad type of expense which this is'
 			value={CATEGORY}
@@ -28,14 +33,22 @@ export function InputExpense(props:
 		<InputMoney
 			id={`${props.id}--date--close`}
 			label='Cost'
-			onChange={setCost}
+			onChange={cost => {
+				setCost(cost);
+				props.onChange([CATEGORY, cost, DESCRIPTION]);
+			}}
 			value={COST}
 		/>
 
 		<Textarea
 			id={`${props.id}--description`}
 			label='Description'
-			onChange={setDescription}
+			onChange={description => {
+				setDescription(description);
+				if (COST != undefined) {
+					props.onChange([CATEGORY, COST, description]);
+				}
+			}}
 			required={true}
 			title='A description of the expense'
 			value={DESCRIPTION}

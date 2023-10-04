@@ -1,6 +1,6 @@
 import React from "react";
 import type { CompositeProps } from "./props";
-import type { Expense } from "@/schema";
+import type { Expense, ExpenseValue } from "@/schema";
 import { InputMoney } from "./money";
 import { InputString } from "./string";
 import { Textarea } from "../field";
@@ -9,7 +9,7 @@ import { Textarea } from "../field";
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Expense} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
 export function InputExpense(props:
-	& Omit<CompositeProps<[category: Expense['category'], cost: Expense['cost'], description: Expense['description']]>, 'label'>
+	& Omit<CompositeProps<ExpenseValue>, 'label'>
 ): React.ReactElement {
 	const [CATEGORY, setCategory] = React.useState(props.value?.[0] ?? '');
 	const [COST, setCost] = React.useState(props.value?.[1]);

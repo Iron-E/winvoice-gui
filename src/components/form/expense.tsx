@@ -2,10 +2,10 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
+import type { Maybe } from '@/utils';
 import { Form, FormButton, InputId, useTimesheetIdEventHandlers } from '../form';
 import { InputExpense } from './field/expense';
-import { isExpense, type Expense } from '@/schema';
-import { Props } from '@/utils';
+import { isExpense, type Expense, type ExpenseValue } from '@/schema';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
@@ -17,7 +17,7 @@ export * from './expense/hooks';
  */
 export function ExpenseForm(props: BaseProps<Expense>): React.ReactElement {
 	const [TIMESHEET_ID, setTimesheetId] = React.useState(props.initialValues?.timesheet_id);
-	const [VALUES, setValues] = React.useState<Props<typeof InputExpense>['value']>(props.initialValues && [
+	const [VALUES, setValues] = React.useState<Maybe<ExpenseValue>>(props.initialValues && [
 		props.initialValues.category,
 		props.initialValues.cost,
 		props.initialValues.description,

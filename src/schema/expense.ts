@@ -10,6 +10,13 @@ export type Expense = {
 	timesheet_id: Id,
 };
 
+/** The type accepted by the API when creating expenses. */
+export type ExpenseValue = [
+	Expense['category'],
+	Expense['cost'],
+	Expense['description'],
+];
+
 /**
  * @param json the value to check.
  * @returns whether the `json` is an instance of {@link Expense}.

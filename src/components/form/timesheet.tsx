@@ -9,12 +9,13 @@ import {
 	FormButton,
 	InputDate,
 	InputId,
+	JOB_REVIVER,
 	Textarea,
 	useEmployeeIdEventHandlers,
 	useJobIdEventHandlers,
 } from '../form';
 import { InputExpense } from './field/expense';
-import { isTimesheet, type Id, type Money, type Timesheet } from '@/schema';
+import { isTimesheet, type ExpenseValue, type Id, type Money, type Timesheet } from '@/schema';
 import { NewIcon, RemoveIcon } from '../icons';
 import { Route } from '@/api';
 import { SPACE } from '../css';
@@ -34,7 +35,7 @@ const REVIVER = chainRevivers([
  */
 export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boolean }): React.ReactElement {
 	const [EMPLOYEE, setEmployee] = React.useState(props.initialValues?.employee /* TODO: `?? CLIENT.employee` */);
-	const [EXPENSES, setExpenses] = React.useState<Maybe<[string, Money, string, Id]>[]>(
+	const [EXPENSES, setExpenses] = React.useState<Maybe<[...ExpenseValue, Maybe<Id>]>[]>(
 		props.initialValues?.expenses.map(x => [x.category, x.cost, x.description, x.id]) ?? []
 	);
 	const [JOB, setJob] = React.useState(props.initialValues?.job);
@@ -67,7 +68,7 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 						category: x![0],
 						cost: x![1],
 						description: x![2],
-						id: x![3],
+						id: x![3]!,
 						timesheet_id: props.initialValues!.id,
 					})),
 					job: JOB!,

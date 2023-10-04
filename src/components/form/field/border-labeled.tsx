@@ -15,7 +15,15 @@ export function BorderLabeledField(props:
 	}
 ): React.ReactElement {
 	return (
-		<BorderedLabel className={`flex flex-col justify-between min-h-[1.5rem] left-1 mt-4 mb-2 pt-4 pl-1 pr-3 ${props.className}`} label={props.label}>
+		<BorderedLabel
+			className={`flex flex-col justify-between \
+min-h-[1.5rem] left-1 mt-4 mb-2 pt-4 pl-1 pr-3 \
+bg-bordered-label-bg
+[&>&]:bg-bordered-label-nested-bg
+[&>&>&]:bg-bordered-label-bg
+${props.className}`}
+			label={props.label}
+		>
 			{props.button && (
 				<FormButton
 					className={`${HOVER} px-1 absolute top-[-1.2rem] right-2`}

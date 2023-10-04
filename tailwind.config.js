@@ -24,6 +24,10 @@ module.exports = {
 
 				'bordered-label': {
 					border: COLORS.gray[500],
+					bg: COLORS.stone[200],
+					nested: {
+						bg: COLORS.slate[300],
+					}
 				},
 
 				/** `<Dim>` component */

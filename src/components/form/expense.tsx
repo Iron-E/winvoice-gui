@@ -2,15 +2,25 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import type { Maybe } from '@/utils';
+import { chainRevivers, dateReviver, optional, type Maybe } from '@/utils';
 import { Form, FormButton, InputId, useTimesheetIdEventHandlers } from '../form';
 import { InputExpense } from './field/expense';
-import { isExpense, type Expense, type ExpenseValue } from '@/schema';
-import { Route } from '@/api';
+import { isExpense, type Expense, type ExpenseValue, Timesheet, Job } from '@/schema';
+import { Route, response } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
 
 export * from './expense/hooks';
+
+const REVIVER = chainRevivers([
+	(k, v: response.Post<Expense[]>) => k === '' && v.entity instanceof Array ? { ...v, entity: v.entity[0] } : v,
+	// FIXME: vercel/next.js#56394 – webpack build error when uncommenting, so the lines below are a workaround
+	// TIMESHEET_REVIVER,
+	dateReviver<Job>('date_open'),
+	dateReviver<Timesheet>('time_begin'),
+	optional(dateReviver<Job>('date_close')),
+	optional(dateReviver<Timesheet>('time_end')),
+]);
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Expense} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
@@ -18,9 +28,9 @@ export * from './expense/hooks';
 export function ExpenseForm(props: BaseProps<Expense>): React.ReactElement {
 	const [TIMESHEET_ID, setTimesheetId] = React.useState(props.initialValues?.timesheet_id);
 	const [VALUES, setValues] = React.useState<Maybe<ExpenseValue>>(props.initialValues && [
-		props.initialValues.category,
-		props.initialValues.cost,
-		props.initialValues.description,
+		props.initialValues?.category,
+		props.initialValues?.cost,
+		props.initialValues?.description,
 	]);
 
 	const [CLIENT, showMessage] = useApiContext();
@@ -32,10 +42,9 @@ export function ExpenseForm(props: BaseProps<Expense>): React.ReactElement {
 				const RESULT = await CLIENT.post(
 					showMessage,
 					Route.Expense,
-					{
-						args: [[VALUES], TIMESHEET_ID],
-					},
+					{ args: [[VALUES], TIMESHEET_ID] },
 					isExpense,
+					REVIVER,
 				);
 
 				if (RESULT === null) { return; }

@@ -24,7 +24,7 @@ import { useApiContext } from '../api';
 export * from './timesheet/hooks';
 
 /** A reviver for {@link JSON.parse} on a {@link Timesheet}. */
-const REVIVER = chainRevivers([
+export const TIMESHEET_REVIVER = chainRevivers([
 	dateReviver<Timesheet>('time_begin'),
 	optional(dateReviver<Timesheet>('time_end')),
 	JOB_REVIVER,
@@ -55,7 +55,7 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 					Route.Timesheet,
 					{ args: [EMPLOYEE, EXPENSES.map(x => [x![0], x![1], x![2]]), JOB, TIME_BEGIN, TIME_END, WORK_NOTES] },
 					isTimesheet,
-					REVIVER,
+					TIMESHEET_REVIVER,
 				);
 
 				if (RESULT === null) { return; }

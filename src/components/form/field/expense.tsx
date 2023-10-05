@@ -31,7 +31,7 @@ export function InputExpense(props:
 		/>
 
 		<InputMoney
-			id={`${props.id}--date--close`}
+			id={`${props.id}--cost`}
 			label='Cost'
 			onChange={cost => {
 				setCost(cost);

@@ -89,24 +89,24 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 				label='Employee'
 				onAction={setEmployeeIdHandler}
 				required={true}
-				title='The client organization which this timesheet for'
+				title='The employee who did the work on this timesheet'
 				value={EMPLOYEE?.id ?? ''}
 			/>
 
 			<InputDate
-				id={`${props.id}--date--open`}
+				id={`${props.id}--time-begin`}
 				label='Time Begin'
 				onChange={setTimeBegin}
 				required={true}
-				title='The date that this timesheet was opened'
+				title='The time that work began'
 				value={TIME_BEGIN}
 			/>
 
 			<InputDate
-				id={`${props.id}--date--close`}
+				id={`${props.id}--time-end`}
 				label='Time End'
 				onChange={setTimeEnd}
-				title='The date that this timesheet was opened'
+				title='The time that work ended'
 				value={TIME_END}
 			/>
 
@@ -145,10 +145,10 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 
 			<Textarea
 				id={`${props.id}--work-notes`}
-				label='Objectives'
+				label='Work Notes'
 				onChange={setWorkNotes}
 				required={true}
-				title='What things must be accomplished before the timesheet can be considered "complete"'
+				title='What work on the job was done during this period of time'
 				value={WORK_NOTES}
 			/>
 

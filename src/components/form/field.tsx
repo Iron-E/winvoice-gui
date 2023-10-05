@@ -10,6 +10,7 @@ export * from './field/date';
 export * from './field/duration';
 export * from './field/id';
 export * from './field/invoice';
+export * from './field/match';
 export * from './field/money';
 export * from './field/string';
 

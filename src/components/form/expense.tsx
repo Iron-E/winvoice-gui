@@ -60,7 +60,7 @@ export function ExpenseForm(props: BaseProps<Expense>): React.ReactElement {
 			}
 
 			await Promise.resolve(props.onSubmit?.(result));
-			setValues([VALUES![0], VALUES![1], '']);
+			setValues([result.category, result.cost, '']);
 		}}>
 			<InputExpense id={props.id} onChange={setValues} value={VALUES} />
 

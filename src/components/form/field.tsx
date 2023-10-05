@@ -62,7 +62,11 @@ export function Checkbox(props:
 /** A `<label>` for winvoice `<form>` fields. */
 function Label(props: Children & Class & { required?: boolean, htmlFor: string }): React.ReactElement {
 	return (
-		<label className={`ml-1 ${props.className}`} htmlFor={props.htmlFor} title={`This field is ${props.required ? 'required' : 'optional'}`}>
+		<label
+			className={`ml-1 ${props.className}`}
+			htmlFor={props.htmlFor}
+			title={`This field is ${props.required ? 'required' : 'optional'}`}
+		>
 			{props.children}
 			{props.required && <span className='text-form-label-fg-required'> *</span>}
 		</label>
@@ -76,7 +80,7 @@ function ValidateIcon(props: Children & { iconRight?: string, iconTop?: string }
 			{props.children}
 
 			<ExclamationCircleIcon
-				className={`absolute ${props.iconRight ?? 'right-1'} ${props.iconTop ?? 'top-[18%]'} w-[1.25em] \
+				className={`absolute ${props.iconRight ?? 'right-1'} ${props.iconTop ?? 'top-[0.4rem]'} w-[1.25em] \
 rounded-2xl bg-form-field-bg text-form-label-fg-invalid invisible peer-invalid:visible`}
 				title='This value is invalid'
 			/>
@@ -162,7 +166,7 @@ export function Textarea(props:
 				onChange={props.onChange && (e => props.onChange!(e.target.value))}
 				placeholder={props.placeholder}
 				required={props.required}
-				title={props.title}
+				title={`${props.title}. Markdown syntax works!`}
 				value={props.value}
 			/>
 		</ValidateIcon>

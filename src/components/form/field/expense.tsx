@@ -25,6 +25,7 @@ export function InputExpense(props:
 					props.onChange([category, COST, DESCRIPTION]);
 				}
 			}}
+			placeholder='Travel'
 			required={true}
 			title='The broad type of expense which this is'
 			value={CATEGORY}
@@ -49,6 +50,7 @@ export function InputExpense(props:
 					props.onChange([CATEGORY, COST, description]);
 				}
 			}}
+			placeholder='Drove to client'
 			required={true}
 			title='A description of the expense'
 			value={DESCRIPTION}

@@ -132,6 +132,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 				id={`${props.id}--objectives`}
 				label='Objectives'
 				onChange={setObjectives}
+				placeholder='* Change a lightbulb'
 				required={true}
 				title='What things must be accomplished before the job can be considered "complete"'
 				value={OBJECTIVES}
@@ -141,6 +142,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 				id={`${props.id}--notes`}
 				label='Notes'
 				onChange={setNotes}
+				placeholder='* There was a fixture around the bulb, access it w/ XYZ'
 				title='Miscellaneous, non-objective text'
 				value={NOTES}
 			/>

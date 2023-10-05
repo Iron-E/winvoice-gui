@@ -147,6 +147,7 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 				id={`${props.id}--work-notes`}
 				label='Work Notes'
 				onChange={setWorkNotes}
+				placeholder={'* Took lightbulb from inventory\n* Changed client lightbulb'}
 				required={true}
 				title='What work on the job was done during this period of time'
 				value={WORK_NOTES}

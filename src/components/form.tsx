@@ -8,6 +8,7 @@ export * from './form/expense';
 export * from './form/field';
 export * from './form/job';
 export * from './form/location';
+export * from './form/match';
 export * from './form/organization';
 export * from './form/role';
 export * from './form/timesheet';

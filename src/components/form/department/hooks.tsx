@@ -1,13 +1,8 @@
-import type { Department } from "@/schema";
-import { DepartmentForm } from "../department";
-import { useIdEventHandlers } from "../field";
+import type { Department } from "@/schema"
+import { DepartmentForm } from '../department';
+import { type IdEventsHandler, type IdEventsHandlerForm, useIdEventHandlers } from "../field"
 
-type DepartmentIdEventHandlers = typeof useIdEventHandlers<Department>;
+export const Form: IdEventsHandlerForm<Department> = (props) => <DepartmentForm {...props} id={`${props.id}--department--form`} />;
 
 /** Event handlers for a {@link Department} ID. */
-export function useDepartmentIdEventHandlers(
-	id: string,
-	setDepartment: Parameters<DepartmentIdEventHandlers>[0],
-): ReturnType<DepartmentIdEventHandlers> {
-	return useIdEventHandlers(setDepartment, p => <DepartmentForm {...p} id={`${id}--department--form`} />);
-}
+export const useDepartmentIdEventHandlers: IdEventsHandler<Department> = (id, setDepartment) => useIdEventHandlers(id, setDepartment, Form);

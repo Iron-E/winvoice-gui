@@ -1,13 +1,8 @@
-import type { Organization } from "@/schema";
-import { OrganizationForm } from "../organization";
-import { useIdEventHandlers } from "../field";
+import type { Organization } from "@/schema"
+import { OrganizationForm } from '../organization';
+import { type IdEventsHandler, type IdEventsHandlerForm, useIdEventHandlers } from "../field"
 
-type OrganizationIdeventHandlers = typeof useIdEventHandlers<Organization>;
+export const Form: IdEventsHandlerForm<Organization> = (props) => <OrganizationForm {...props} id={`${props.id}--organization--form`} />;
 
 /** Event handlers for a {@link Organization} ID. */
-export function useOrganizationIdEventHandlers(
-	id: string,
-	setOrganization: Parameters<OrganizationIdeventHandlers>[0],
-): ReturnType<OrganizationIdeventHandlers> {
-	return useIdEventHandlers(setOrganization, p => <OrganizationForm {...p} id={`${id}--organization--form`} />);
-}
+export const useOrganizationIdEventHandlers: IdEventsHandler<Organization> = (id, setOrganization) => useIdEventHandlers(id, setOrganization, Form);

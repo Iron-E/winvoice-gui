@@ -1,13 +1,8 @@
 import type { Expense } from "@/schema"
 import { ExpenseForm } from '../expense';
-import { useIdEventHandlers } from "../field"
+import { type IdEventsHandler, type IdEventsHandlerForm, useIdEventHandlers } from "../field"
 
-type ExpenseIdEventHandlers = typeof useIdEventHandlers<Expense>;
+export const Form: IdEventsHandlerForm<Expense> = (props) => <ExpenseForm {...props} id={`${props.id}--expense--form`} />;
 
 /** Event handlers for a {@link Expense} ID. */
-export function useExpenseIdEventHandlers(
-	id: string,
-	setExpense: Parameters<ExpenseIdEventHandlers>[0],
-): ReturnType<ExpenseIdEventHandlers> {
-	return useIdEventHandlers(setExpense, p => <ExpenseForm { ...p } id = {`${id}--expense--form`} />);
-}
+export const useExpenseIdEventHandlers: IdEventsHandler<Expense> = (id, setExpense) => useIdEventHandlers(id, setExpense, Form);

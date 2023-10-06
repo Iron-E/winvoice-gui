@@ -1,13 +1,8 @@
-import type { Employee } from "@/schema";
-import { EmployeeForm } from "../employee";
-import { useIdEventHandlers } from "../field";
+import type { Employee } from "@/schema"
+import { EmployeeForm } from '../employee';
+import { type IdEventsHandler, type IdEventsHandlerForm, useIdEventHandlers } from "../field"
 
-type EmployeeIdEventHandlers = typeof useIdEventHandlers<Employee>;
+export const Form: IdEventsHandlerForm<Employee> = (props) => <EmployeeForm {...props} id={`${props.id}--employee--form`} />;
 
 /** Event handlers for a {@link Employee} ID. */
-export function useEmployeeIdEventHandlers(
-	id: string,
-	setEmployee: Parameters<EmployeeIdEventHandlers>[0],
-): ReturnType<EmployeeIdEventHandlers> {
-	return useIdEventHandlers(setEmployee, p => <EmployeeForm {...p} id={`${id}--employee--form`} />);
-}
+export const useEmployeeIdEventHandlers: IdEventsHandler<Employee> = (id, setEmployee) => useIdEventHandlers(id, setEmployee, Form);

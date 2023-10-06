@@ -1,8 +1,8 @@
 import React from 'react';
 import type { CompositeProps } from '../props';
-import type { Fn, Maybe, Opt } from "@/utils";
+import type { Fn, Maybe, Opt, ValueOf } from "@/utils";
+import type { Id as IdProp, On } from "@/components/props-with";
 import type { Id } from '@/schema';
-import type { On } from "@/components/props-with";
 import { BorderLabeledField } from '../border-labeled';
 import { FormButton, LABEL_BUTTON_STYLE } from '../../../form';
 import { InputId } from '../../field';
@@ -10,17 +10,27 @@ import { Modal } from "@/components";
 import { NewIcon, RemoveIcon } from '../../../icons';
 import { useModalVisibility } from "@/hooks";
 
+/** A function which can handle ID events. */
+export type IdEventsHandler<T> = (id: ValueOf<IdProp, 'id'>, onChange: Fn<[value: T]>) => [
+	Opt<React.ReactElement>,
+	ReturnType<typeof useModalVisibility<'new' | 'search'>>[1],
+];
+
+/** A form which is used to {@link IdEventsHandler | handle ID events} */
+export type IdEventsHandlerForm<T> = (props: On<'submit', [value: T]> & IdProp) => React.ReactElement;
 
 /** @returns a tuple which first contains the handler for the given {@link InputID} action, and second, a setter for the current ID action. */
 export function useIdEventHandlers<T>(
-	onChange: Fn<[value: T]>,
-	NewForm: (props: On<'submit', [value: T]>) => React.ReactElement,
-): [Opt<React.ReactElement>, ReturnType<typeof useModalVisibility<'new' | 'search'>>[1]] {
+	id: Parameters<IdEventsHandler<T>>[0],
+	onChange: Parameters<IdEventsHandler<T>>[1],
+	NewForm: IdEventsHandlerForm<T>,
+): ReturnType<IdEventsHandler<T>> {
 	const [MODAL_VISIBLE, setModalVisible] = useModalVisibility();
 	return [
 		MODAL_VISIBLE && (MODAL_VISIBLE === 'new'
 			? <Modal onClose={setModalVisible}>
 				<NewForm
+					id={id}
 					onSubmit={l => {
 						onChange(l);
 						setModalVisible(null);
@@ -35,14 +45,13 @@ export function useIdEventHandlers<T>(
 	];
 }
 
-type IdEventsHandler<T> = typeof useIdEventHandlers<T>;
 type IdsProps<T> = CompositeProps<Maybe<T>[]>;
 
 /** @returns a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
 export function useIdInputs<T extends { id: Id }>(props:
 	& Omit<IdsProps<T>, 'value'>
 	& {
-		useIdEventHandlers: (id: string, setValue: Parameters<IdEventsHandler<T>>[0]) => ReturnType<IdEventsHandler<T>>,
+		useIdEventHandlers: (id: string, setValue: Parameters<IdEventsHandler<T>>[1]) => ReturnType<IdEventsHandler<T>>,
 		values: NonNullable<IdsProps<T>['value']>,
 	}
 ): [Opt<React.ReactElement>, React.ReactElement] {

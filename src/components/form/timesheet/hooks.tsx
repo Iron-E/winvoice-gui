@@ -1,16 +1,8 @@
 import type { Timesheet } from "@/schema"
 import { TimesheetForm } from '../timesheet';
-import { useIdEventHandlers } from "../field"
+import { type IdEventsHandler, type IdEventsHandlerForm, useIdEventHandlers } from "../field"
 
-type TimesheetIdEventHandlers = typeof useIdEventHandlers<Timesheet>;
+export const Form: IdEventsHandlerForm<Timesheet> = (props) => <TimesheetForm {...props} id={`${props.id}--timesheet--form`} />;
 
 /** Event handlers for a {@link Timesheet} ID. */
-export function useTimesheetIdEventHandlers(
-	id: string,
-	setTimesheet: Parameters<TimesheetIdEventHandlers>[0],
-): ReturnType<TimesheetIdEventHandlers> {
-	return useIdEventHandlers(
-		setTimesheet,
-		p => <TimesheetForm {...p} id={`${id}--timesheet--form`} showExpenses={false} />,
-	);
-}
+export const useTimesheetIdEventHandlers: IdEventsHandler<Timesheet> = (id, setTimesheet) => useIdEventHandlers(id, setTimesheet, Form);

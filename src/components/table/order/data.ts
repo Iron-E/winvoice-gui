@@ -93,13 +93,13 @@ export class OrderedData<T extends {}> {
 	): [any, any] {
 		while ((value1 && value2 && valuator) != undefined) {
 			if ('map' in valuator) {
-				value1 = valuator.map(value1 as ValueOfUnit<T>);
-				value2 = valuator.map(value2 as ValueOfUnit<T>);
+				value1 = valuator.map(value1 as NonNullUnit<ValueOfUnit<T>>);
+				value2 = valuator.map(value2 as NonNullUnit<ValueOfUnit<T>>);
 				break;
 			}
 
-			value1 = (value1 as ValueOfUnit<T>)[valuator.key] as any;
-			value2 = (value2 as ValueOfUnit<T>)[valuator.key] as any;
+			value1 = (value1 as NonNullUnit<ValueOfUnit<T>>)[valuator.key] as any;
+			value2 = (value2 as NonNullUnit<ValueOfUnit<T>>)[valuator.key] as any;
 			valuator = valuator.valuators?.[valuator.key] as any;
 		}
 

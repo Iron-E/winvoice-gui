@@ -100,7 +100,7 @@ function InputField<T>(props:
 
 /** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link Match} condition. */
 export function InputMatch<T>(props:
-	& CompositeProps<MayMatch<T>>
+	& Omit<CompositeProps<MayMatch<T>>, 'label'>
 	& { inputField: InputComponent<T> }
 ): React.ReactElement {
 	if (props.value === 'any') {
@@ -170,7 +170,22 @@ export function InputMatch<T>(props:
 		}
 
 		if ('not' in props.value) {
-			// TODO: unimplemented
+			return <>
+				<SelectMatchOperator
+					id={props.id}
+					onChange={handleOperatorChange(props.onChange, props.value, 'not')}
+					value='not'
+				/>
+
+				<BorderLabeledField label='Operand'>
+					<InputMatch
+						id={`${props.id}--not`}
+						inputField={props.inputField}
+						onChange={value => props.onChange({ not: value } as MayMatch<T>)}
+						value={props.value.not}
+					/>
+				</BorderLabeledField>
+			</>;
 		}
 	}
 

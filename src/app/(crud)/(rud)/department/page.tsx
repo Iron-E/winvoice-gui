@@ -17,7 +17,6 @@ function F(): React.ReactElement {
 		<Form onSubmit={async () => { }}>
 			<InputMatch<string>
 				id='input-match'
-				label='asldkj'
 				onChange={m => {
 					console.log(m);
 					setMatch(m);

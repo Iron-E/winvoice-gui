@@ -11,6 +11,7 @@ type InputComponent<T> = (p: Omit<InputProps<T>, 'value'> & { value?: T }) => Re
 const ANY = Symbol('any');
 const EQUAL_TO = Symbol('equal_to');
 
+/** The operators of a match condition. */
 type MatchOperators =
 	| 'and'
 	| typeof ANY
@@ -20,6 +21,9 @@ type MatchOperators =
 	| 'in_range'
 	| 'not'
 	;
+
+/** {@link Match}es {@link Maybe<T>}. */
+type MayMatch<T> = Match<Maybe<T>>;
 
 /** The `<options>` for {@link SelectMatchOperator}. */
 const OPTIONS: readonly React.ReactElement[] = [
@@ -41,28 +45,36 @@ const OPTIONS_VALUE_MAP: Partial<Record<string, MatchOperators>> = {
 
 function doNothing(): void { }
 
+/** Maps a condition's {@link MatchOperator | operator} to an instruction which will extract the operand. */
+const CONDITION_TO_OPERAND: Readonly<Partial<Record<MatchOperators, <T>(condition: MayMatch<T>) => Maybe<T>>>> = {
+	[EQUAL_TO]: <T,>(c: MayMatch<T>) => c as Maybe<T>,
+	greater_than: c => (c as Record<'greater_than', any>).greater_than,
+	in_range: c => (c as Record<'in_range', any>).in_range[0],
+	less_than: c => (c as Record<'less_than', any>).less_than,
+};
+
 /** A lookup table for handlers used in {@link handleOperatorChange}. */
-const HANDLE_OPERATOR_CHANGE: Record<
+const HANDLE_OPERATOR_CHANGE: Readonly<Record<
 	MatchOperators,
-	<T>(handler: Fn<[value: Match<Maybe<T>>]>, condition: Match<Maybe<T>>, operator: MatchOperators) => void
-> = {
+	<T>(handler: Fn<[value: MayMatch<T>]>, condition: MayMatch<T>, operator: MatchOperators) => void
+>> = {
 	and: (h, c) => h({ and: [c] }),
 	[ANY]: h => h('any'),
-	[EQUAL_TO]: _ => { throw new Error('Unimplemented'); },
-	greater_than: _ => { throw new Error('Unimplemented'); },
-	in_range: _ => { throw new Error('Unimplemented'); },
-	less_than: _ => { throw new Error('Unimplemented'); },
+	[EQUAL_TO]: (h, c, o) => h(CONDITION_TO_OPERAND[o]?.(c)),
+	greater_than: (h, c, o) => h({ greater_than: CONDITION_TO_OPERAND[o]?.(c) }),
+	in_range: (h, c, o) => h({ in_range: [CONDITION_TO_OPERAND[o]?.(c), undefined] }),
+	less_than: (h, c, o) => h({ less_than: CONDITION_TO_OPERAND[o]?.(c) }),
 	not: (h, c) => h({ not: c }),
 	or: (h, c) => h({ or: [c] }),
 };
 
 /** @returns handler for {@link SelectMatchOperator} `onChange` events. */
 function handleOperatorChange<T>(
-	handleChange: Fn<[value: Match<Maybe<T>>]>,
-	condition: Match<Maybe<T>>,
-	currentOperator: MatchOperators
+	handleChange: Fn<[value: MayMatch<T>]>,
+	condition: MayMatch<T>,
+	previousOperator: MatchOperators
 ): (newOperator: MatchOperators) => void {
-	return newOperator => HANDLE_OPERATOR_CHANGE[newOperator](handleChange, condition, currentOperator);
+	return newOperator => HANDLE_OPERATOR_CHANGE[newOperator](handleChange, condition, previousOperator);
 }
 
 /** @returns the `Field` with some defaults used for {@link InputMatch}. */
@@ -86,7 +98,7 @@ function InputField<T>(props:
 
 /** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link Match} condition. */
 export function InputMatch<T>(props:
-	& CompositeProps<Match<Maybe<T>>>
+	& CompositeProps<MayMatch<T>>
 	& { inputField: InputComponent<T> }
 ): React.ReactElement {
 	if (props.value === 'any') {

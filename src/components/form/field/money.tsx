@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { Money } from '@/schema';
-import { BorderLabeledField } from './border-labeled';
+import { BorderLabeledField, GRID } from './border-labeled';
 import { CompositeProps } from './props';
 import { Input, SelectCurrency } from '../field';
 
@@ -14,7 +14,7 @@ export function InputMoney(props: CompositeProps<Money>): React.ReactElement {
 	const [CURRENCY, setCurrency] = React.useState(props.value?.currency);
 
 	return (
-		<BorderLabeledField className='grid grid-rows-[1.5rem_1fr] grid-flow-col gap-x-2 pt-5' label={props.label}>
+		<BorderLabeledField className={`${GRID} pt-5`} label={props.label}>
 			<SelectCurrency
 				id={`${props.id}--currency`}
 				label='Currency'

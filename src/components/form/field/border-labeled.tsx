@@ -3,6 +3,9 @@ import type { Props, ValueOf } from "@/utils";
 import { BorderedLabel, FormButton } from "@/components";
 import { HOVER } from "@/components/css";
 
+/** Style to allow the border-labeled field to show as a 2×2 grid. */
+export const GRID = 'grid grid-rows-[1.5rem_1fr] grid-flow-col gap-x-2' as const;
+
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link InvoiceDate} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */

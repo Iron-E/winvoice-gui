@@ -166,7 +166,28 @@ export function InputMatch<T>(props:
 
 		const AND = 'and' in props.value;
 		if (AND || 'or' in props.value) {
-			// TODO: unimplemented
+			const OPERATOR = AND ? 'and' : 'or';
+			const OPERANDS = (props.value as Record<typeof OPERATOR, MayMatch<T>[]>)[OPERATOR];
+			return <>
+				<SelectMatchOperator
+					id={props.id}
+					onChange={handleOperatorChange(props.onChange, props.value, OPERATOR)}
+					value={OPERATOR}
+				/>
+
+				<BorderLabeledField label='Conditions'>
+					{OPERANDS.map((condition, i) =>
+						<BorderLabeledField key={i} label={`${i + 1}`}>
+							<InputMatch
+								id={`${props.id}--and-${i}`}
+								inputField={props.inputField}
+								onChange={value => props.onChange({ [OPERATOR]: OPERANDS.with(i, value) } as MayMatch<T>)}
+								value={condition}
+							/>
+						</BorderLabeledField>
+					)}
+				</BorderLabeledField>
+			</>;
 		}
 
 		if ('not' in props.value) {

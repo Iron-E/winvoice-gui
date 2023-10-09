@@ -10,7 +10,7 @@ import type { FieldName } from "./field-name";
  * type Example = UnionToKeys<'a' | 'b', string>;
  * let foo: Example = {a: 'foo'};
  * let bar: Example = {b: 'foo'};
- * let baz: Example = {c: 'foo'}; -- error!
+ * let baz: Example = {c: 'foo'}; // error!
  * ```
  */
 export type UnionToKeys<K extends FieldName, V> = K extends K ? Record<K, V> : never;

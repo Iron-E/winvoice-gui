@@ -30,6 +30,34 @@ const OPTIONS: readonly React.ReactElement[] = [
 
 function doNothing(): void { }
 
+/** @returns handler for {@link SelectMatchOperator} `onChange` events. */
+function handleOperatorChange<T>(
+	handleChange: Fn<[value: Match<Maybe<T>>]>,
+	condition: Match<Maybe<T>>,
+	currentOperator: KeyofMatch
+): (newOperator: KeyofMatch) => void {
+	return newOperator => {
+		switch (newOperator) {
+			case null:
+				throw new Error('Unimplemented');
+			case 'and':
+				handleChange({ and: [condition] });
+			case 'any':
+				handleChange('any');
+			case 'greater_than':
+				throw new Error('Unimplemented');
+			case 'in_range':
+				throw new Error('Unimplemented');
+			case 'less_than':
+				throw new Error('Unimplemented');
+			case 'not':
+				handleChange({ not: condition });
+			case 'or':
+				handleChange({ or: [condition] });
+		};
+	};
+}
+
 /** @returns the `Field` with some defaults used for {@link InputMatch}. */
 function InputField<T>(props:
 	& { Field: InputComponent<T> }
@@ -58,18 +86,39 @@ export function InputMatch<T>(props:
 		return <>
 			<SelectMatchOperator
 				id={props.id}
-				onChange={key => props.onChange(key === null ? undefined : { [key]: undefined } as Match<Maybe<T>>)}
+				onChange={handleOperatorChange(props.onChange, props.value, 'any')}
 				value='any'
 			/>
 
 			<InputField Field={props.inputField} id={props.id} onChange={doNothing} />
 		</>;
+	} else if (props.value instanceof Object) {
+		const GREATER_THAN = 'greater_than' in props.value;
+		if (GREATER_THAN || 'less_than' in props.value) {
+			if (GREATER_THAN) {
+				var onChange = handleOperatorChange(props.onChange, props.value, 'greater_than')
+				var value = 'greater_than'
+			} else {
+				var onChange = handleOperatorChange(props.onChange, props.value, 'less_than')
+				var value = 'less_than'
+			}
+
+			return <>
+				<SelectMatchOperator id={props.id} onChange={onChange} value={value} />
+				<InputField
+					Field={props.inputField}
+					id={props.id}
+					onChange={props.onChange as Fn<[T]>}
+					value={props.value as Maybe<T>}
+				/>
+			</>;
+		}
 	}
 
 	return <>
 		<SelectMatchOperator
 			id={props.id}
-			onChange={key => props.onChange(key === null ? undefined : { [key]: undefined } as Match<Maybe<T>>)}
+			onChange={handleOperatorChange(props.onChange, props.value as Maybe<T>, null)}
 			value=''
 		/>
 

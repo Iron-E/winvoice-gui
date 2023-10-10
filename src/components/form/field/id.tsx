@@ -3,16 +3,9 @@ import type { InputProps } from './props';
 import { FormButton, Input, LABEL_BUTTON_STYLE } from '../../form';
 import { NewIcon } from '@/components/icons';
 import { SearchIcon } from '@/components/icons/search';
+import { doNothing } from '@/utils';
 
 export * from './id/hooks';
-
-/**
- * HACK: next.js complains that this component cannot be written to, while `readOnly` is not set.
- *       however, setting `readOnly` disables the posibility of adding `required`. and linking with
- *       foreign keys is *often* `required`. Thus, this design is intentional, and this empty function
- *       shuts next.js up
- */
-function doNothing(): void { }
 
 /** @returns a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
 export function InputId(props:

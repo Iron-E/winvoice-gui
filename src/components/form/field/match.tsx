@@ -1,50 +1,18 @@
 'use client';
 
 import React from 'react';
-import type { CompositeProps, InputProps, SelectProps } from './props';
-import type { Fn, Maybe } from "@/utils";
+import type { CompositeProps, InputProps } from './props';
 import type { Match } from "@/match";
-import { Input, Select } from "../field";
+import { ANY, EQUAL_TO, type MatchOperators, SelectMatchOperator } from './match/operator';
 import { BorderLabeledField, GRID } from './border-labeled';
+import { doNothing, type Fn, type Maybe } from "@/utils";
+import { Input, Select } from "../field";
 
+/** A react component which can be used to input an operand value for a {@link Match} condition.  */
 type InputComponent<T> = (p: Omit<InputProps<T>, 'value'> & { value?: T }) => React.ReactElement;
-
-const ANY = Symbol('any');
-const EQUAL_TO = Symbol('equal_to');
-
-/** The operators of a match condition. */
-type MatchOperators =
-	| 'and'
-	| typeof ANY
-	| typeof EQUAL_TO
-	| 'or'
-	| `${'greater' | 'less'}_than`
-	| 'in_range'
-	| 'not'
-	;
 
 /** {@link Match}es {@link Maybe<T>}. */
 type MayMatch<T> = Match<Maybe<T>>;
-
-/** The `<options>` for {@link SelectMatchOperator}. */
-const OPTIONS: readonly React.ReactElement[] = [
-	<option key={0} value='and'>And</option>,
-	<option key={1} value={ANY.description}>Any</option>,
-	<option key={2} value={EQUAL_TO.description}>Equal to</option>,
-	<option key={3} value='greater_than'>Greater than</option>,
-	<option key={4} value='in_range'>In Range</option>,
-	<option key={5} value='less_than'>Less than</option>,
-	<option key={6} value='not'>Not</option>,
-	<option key={7} value='or'>Or</option>,
-];
-
-/** A map of values from the valid strings which are accepted by `<option>.value` to valid {@link MatchOperators}. */
-const OPTIONS_VALUE_MAP: Partial<Record<string, MatchOperators>> = {
-	[ANY.description!]: ANY,
-	[EQUAL_TO.description!]: EQUAL_TO,
-}
-
-function doNothing(): void { }
 
 /** Maps a condition's {@link MatchOperator | operator} to an instruction which will extract the operand. */
 const CONDITION_TO_OPERAND: Readonly<Partial<Record<MatchOperators, <T>(condition: MayMatch<T>) => Maybe<T>>>> = {
@@ -73,9 +41,8 @@ const HANDLE_OPERATOR_CHANGE: Readonly<Record<
 function handleOperatorChange<T>(
 	handleChange: Fn<[value: MayMatch<T>]>,
 	condition: MayMatch<T>,
-	previousOperator: MatchOperators
-): (newOperator: MatchOperators) => void {
-	return newOperator => HANDLE_OPERATOR_CHANGE[newOperator](handleChange, condition, previousOperator);
+): (previousOperator: MatchOperators, newOperator: MatchOperators) => void {
+	return (p, n) => HANDLE_OPERATOR_CHANGE[n](handleChange, condition, p);
 }
 
 /** @returns the `Field` with some defaults used for {@link InputMatch}. */
@@ -107,8 +74,8 @@ export function InputMatch<T>(props:
 		return <>
 			<SelectMatchOperator
 				id={props.id}
-				onChange={handleOperatorChange(props.onChange, props.value, ANY)}
-				value={ANY.description!}
+				onChange={handleOperatorChange(props.onChange, props.value)}
+				value={ANY}
 			/>
 
 			<InputField Field={props.inputField} id={props.id} onChange={doNothing} />
@@ -122,7 +89,7 @@ export function InputMatch<T>(props:
 			return <>
 				<SelectMatchOperator
 					id={props.id}
-					onChange={handleOperatorChange(props.onChange, props.value, OPERATOR)}
+					onChange={handleOperatorChange(props.onChange, props.value)}
 					value={OPERATOR}
 				/>
 
@@ -140,7 +107,7 @@ export function InputMatch<T>(props:
 			return <>
 				<SelectMatchOperator
 					id={props.id}
-					onChange={handleOperatorChange(props.onChange, props.value, 'in_range')}
+					onChange={handleOperatorChange(props.onChange, props.value)}
 					value='in_range'
 				/>
 
@@ -148,7 +115,7 @@ export function InputMatch<T>(props:
 					<InputField
 						Field={props.inputField}
 						id={`${props.id}--lower`}
-						label='Lower'
+						label='Greater than or equal to'
 						onChange={value => props.onChange({ in_range: [value as Maybe<T>, UPPER] })}
 						value={LOWER}
 					/>
@@ -156,7 +123,7 @@ export function InputMatch<T>(props:
 					<InputField
 						Field={props.inputField}
 						id={`${props.id}--upper`}
-						label='Upper'
+						label='Less than'
 						onChange={value => props.onChange({ in_range: [LOWER, value as Maybe<T>] })}
 						value={UPPER}
 					/>
@@ -171,7 +138,7 @@ export function InputMatch<T>(props:
 			return <>
 				<SelectMatchOperator
 					id={props.id}
-					onChange={handleOperatorChange(props.onChange, props.value, OPERATOR)}
+					onChange={handleOperatorChange(props.onChange, props.value)}
 					value={OPERATOR}
 				/>
 
@@ -194,7 +161,7 @@ export function InputMatch<T>(props:
 			return <>
 				<SelectMatchOperator
 					id={props.id}
-					onChange={handleOperatorChange(props.onChange, props.value, 'not')}
+					onChange={handleOperatorChange(props.onChange, props.value)}
 					value='not'
 				/>
 
@@ -213,8 +180,8 @@ export function InputMatch<T>(props:
 	return <>
 		<SelectMatchOperator
 			id={props.id}
-			onChange={handleOperatorChange(props.onChange, props.value as Maybe<T>, EQUAL_TO)}
-			value={EQUAL_TO.description!}
+			onChange={handleOperatorChange(props.onChange, props.value as Maybe<T>)}
+			value={EQUAL_TO}
 		/>
 
 		<InputField
@@ -224,19 +191,4 @@ export function InputMatch<T>(props:
 			value={props.value as Maybe<T>}
 		/>
 	</>;
-}
-
-/** A selector for the current 'variant' (e.g. 'and', 'any') of the {@link Match} condition. */
-function SelectMatchOperator(props: Omit<SelectProps<MatchOperators>, 'title'>): React.ReactElement {
-	return (
-		<Select
-			id={`${props.id}--operator`}
-			label='Operator'
-			onChange={value => props.onChange?.(OPTIONS_VALUE_MAP[value] ?? value as MatchOperators)}
-			title='The type of condition which is applied to the Operand'
-			value={props.value}
-		>
-			{OPTIONS}
-		</Select>
-	);
 }

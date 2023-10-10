@@ -17,7 +17,7 @@ import {
 import { BorderLabeledField, GRID } from './border-labeled';
 import { doNothing, type Fn, type Maybe } from "@/utils";
 import { Input, InputString, Select } from "../field";
-import { AddIcon } from '@/components';
+import { AddIcon, RemoveIcon } from '@/components';
 
 /** A react component which can be used to input an operand value for a {@link Match} condition.  */
 type InputComponent<T> = (p: Omit<InputProps<T>, 'value'> & { value?: T }) => React.ReactElement;
@@ -106,7 +106,14 @@ export function InputMatch<T>(props:
 					label='Conditions'
 				>
 					{OPERANDS.map((condition, i) =>
-						<BorderLabeledField key={i} label={`${i + 1}`}>
+						<BorderLabeledField
+							button={OPERANDS.length < 2 ? undefined : {
+								onClick: () => props.onChange({ [OPERATOR]: OPERANDS.toSpliced(i, 1) } as MayMatch<T>),
+								text: <RemoveIcon />,
+							}}
+							key={i}
+							label={`${i + 1}`}
+						>
 							<InputMatch
 								id={`${props.id}--and-${i}`}
 								inputField={props.inputField}
@@ -180,7 +187,14 @@ export function InputMatchStr(props: Omit<Required<CompositeProps<MatchStr>>, 'l
 					label='Conditions'
 				>
 					{OPERANDS.map((condition, i) =>
-						<BorderLabeledField key={i} label={`${i + 1}`}>
+						<BorderLabeledField
+							button={OPERANDS.length < 2 ? undefined : {
+								onClick: () => props.onChange({ [OPERATOR]: OPERANDS.toSpliced(i, 1) } as MatchStr),
+								text: <RemoveIcon />,
+							}}
+							key={i}
+							label={`${i + 1}`}
+						>
 							<InputMatchStr
 								id={`${props.id}--and-${i}`}
 								onChange={value => props.onChange({ [OPERATOR]: OPERANDS.with(i, value) } as MatchStr)}

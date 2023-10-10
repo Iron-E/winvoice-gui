@@ -53,7 +53,8 @@ export function InputMatch<T>(props:
 		</>;
 	}
 
-	if (props.value instanceof Object) {
+	// `<T>` might not support `in`, or be `undefined`.
+	if (typeof props.value === 'object') {
 		const GREATER_THAN = 'greater_than' in props.value;
 		if (GREATER_THAN || 'less_than' in props.value) {
 			const OPERATOR: MatchOperator = GREATER_THAN ? 'greater_than' : 'less_than';
@@ -161,72 +162,70 @@ export function InputMatchStr(props: Omit<Required<CompositeProps<MatchStr>>, 'l
 		</>;
 	}
 
-	if (props.value instanceof Object) {
-		const GREATER_THAN = 'contains' in props.value;
-		if (GREATER_THAN || 'regex' in props.value) {
-			const OPERATOR: MatchStrOperator = GREATER_THAN ? 'contains' : 'regex';
-			return <>
-				<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
-				<InputString
-					id={props.id}
-					onChange={value => props.onChange({ [OPERATOR]: value } as MatchStr)}
-					title=''
-					value={STR_OPERATOR_TO_OPERAND[OPERATOR]!(props.value)}
-				/>
-			</>;
-		}
+	if (typeof props.value === 'string') {
+		return <>
+			<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={EQUAL_TO} />
+			<InputString
+				id={props.id}
+				onChange={props.onChange as Fn<[string]>}
+				title=''
+				value={props.value as string}
+			/>
+		</>;
+	}
 
-		const AND = 'and' in props.value;
-		if (AND || 'or' in props.value) {
-			const OPERATOR = AND ? 'and' : 'or';
-			const OPERANDS = (props.value as Record<typeof OPERATOR, MatchStr[]>)[OPERATOR];
-			return <>
-				<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
-				<BorderLabeledField
-					button={{ onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, ''] } as MatchStr), text: <AddIcon />, }}
-					label='Conditions'
-				>
-					{OPERANDS.map((condition, i) =>
-						<BorderLabeledField
-							button={OPERANDS.length < 2 ? undefined : {
-								onClick: () => props.onChange({ [OPERATOR]: OPERANDS.toSpliced(i, 1) } as MatchStr),
-								text: <RemoveIcon />,
-							}}
-							key={i}
-							label={`${i + 1}`}
-						>
-							<InputMatchStr
-								id={`${props.id}--and-${i}`}
-								onChange={value => props.onChange({ [OPERATOR]: OPERANDS.with(i, value) } as MatchStr)}
-								value={condition}
-							/>
-						</BorderLabeledField>
-					)}
-				</BorderLabeledField>
-			</>;
-		}
+	const GREATER_THAN = 'contains' in props.value;
+	if (GREATER_THAN || 'regex' in props.value) {
+		const OPERATOR: MatchStrOperator = GREATER_THAN ? 'contains' : 'regex';
+		return <>
+			<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
+			<InputString
+				id={props.id}
+				onChange={value => props.onChange({ [OPERATOR]: value } as MatchStr)}
+				title=''
+				value={STR_OPERATOR_TO_OPERAND[OPERATOR]!(props.value)}
+			/>
+		</>;
+	}
 
-		if ('not' in props.value) {
-			return <>
-				<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value='not' />
-				<BorderLabeledField label='Operand'>
-					<InputMatchStr
-						id={`${props.id}--not`}
-						onChange={value => props.onChange({ not: value } as MatchStr)}
-						value={props.value.not}
-					/>
-				</BorderLabeledField>
-			</>;
-		}
+	const AND = 'and' in props.value;
+	if (AND || 'or' in props.value) {
+		const OPERATOR = AND ? 'and' : 'or';
+		const OPERANDS = (props.value as Record<typeof OPERATOR, MatchStr[]>)[OPERATOR];
+		return <>
+			<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
+			<BorderLabeledField
+				button={{ onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, ''] } as MatchStr), text: <AddIcon />, }}
+				label='Conditions'
+			>
+				{OPERANDS.map((condition, i) =>
+					<BorderLabeledField
+						button={OPERANDS.length < 2 ? undefined : {
+							onClick: () => props.onChange({ [OPERATOR]: OPERANDS.toSpliced(i, 1) } as MatchStr),
+							text: <RemoveIcon />,
+						}}
+						key={i}
+						label={`${i + 1}`}
+					>
+						<InputMatchStr
+							id={`${props.id}--and-${i}`}
+							onChange={value => props.onChange({ [OPERATOR]: OPERANDS.with(i, value) } as MatchStr)}
+							value={condition}
+						/>
+					</BorderLabeledField>
+				)}
+			</BorderLabeledField>
+		</>;
 	}
 
 	return <>
-		<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={EQUAL_TO} />
-		<InputString
-			id={props.id}
-			onChange={props.onChange as Fn<[string]>}
-			title=''
-			value={props.value as string}
-		/>
+		<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value='not' />
+		<BorderLabeledField label='Operand'>
+			<InputMatchStr
+				id={`${props.id}--not`}
+				onChange={value => props.onChange({ not: value })}
+				value={(props.value as Record<'not', MatchStr>).not}
+			/>
+		</BorderLabeledField>
 	</>;
 }

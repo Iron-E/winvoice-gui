@@ -22,6 +22,9 @@ import { AddIcon, RemoveIcon } from '@/components';
 /** A react component which can be used to input an operand value for a {@link Match} condition.  */
 type InputComponent<T> = (p: Omit<InputProps<T>, 'value'> & { value?: T }) => React.ReactElement;
 
+/** The 'operands' {@link BorderLabeledField} minimum width style. */
+const OPERANDS_BORDER_STYLE = 'min-w-[16.6rem]';
+
 /** @returns the `Field` with some defaults used for {@link InputMatch}. */
 function InputField<T>(props:
 	& { Field: InputComponent<T> }
@@ -47,10 +50,7 @@ export function InputMatch<T>(props:
 	& { inputField: InputComponent<T> }
 ): React.ReactElement {
 	if (props.value === 'any') {
-		return <>
-			<SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value={ANY} />
-			<InputField Field={props.inputField} id={props.id} onChange={doNothing} />
-		</>;
+		return <SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value={ANY} />;
 	}
 
 	// `<T>` might not support `in`, or be `undefined`.
@@ -104,6 +104,7 @@ export function InputMatch<T>(props:
 						onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, undefined] } as MayMatch<T>),
 						text: <AddIcon />,
 					}}
+					className={OPERANDS_BORDER_STYLE}
 					label='Conditions'
 				>
 					{OPERANDS.map((condition, i) =>
@@ -195,7 +196,8 @@ export function InputMatchStr(props: Omit<Required<CompositeProps<MatchStr>>, 'l
 		return <>
 			<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
 			<BorderLabeledField
-				button={{ onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, ''] } as MatchStr), text: <AddIcon />, }}
+				button={{ onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, ''] } as MatchStr), text: <AddIcon /> }}
+				className={OPERANDS_BORDER_STYLE}
 				label='Conditions'
 			>
 				{OPERANDS.map((condition, i) =>

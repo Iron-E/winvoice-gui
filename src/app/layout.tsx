@@ -16,7 +16,7 @@ export const metadata: Readonly<Metadata> = {
 export default function RootLayout(props: w.Children): React.ReactElement {
 	return (
 		<html lang='en'>
-			<body className={`${INTER.className} bg-body-bg text-body-fg mb-11`}>
+			<body className={`${INTER.className} mb-11 bg-body-bg text-body-fg`}>
 				<InnerRootLayout>
 					{props.children}
 				</InnerRootLayout>

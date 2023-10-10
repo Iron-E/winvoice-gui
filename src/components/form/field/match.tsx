@@ -17,6 +17,7 @@ import {
 import { BorderLabeledField, GRID } from './border-labeled';
 import { doNothing, type Fn, type Maybe } from "@/utils";
 import { Input, InputString, Select } from "../field";
+import { AddIcon } from '@/components';
 
 /** A react component which can be used to input an operand value for a {@link Match} condition.  */
 type InputComponent<T> = (p: Omit<InputProps<T>, 'value'> & { value?: T }) => React.ReactElement;
@@ -97,7 +98,13 @@ export function InputMatch<T>(props:
 			const OPERANDS = (props.value as Record<typeof OPERATOR, MayMatch<T>[]>)[OPERATOR];
 			return <>
 				<SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
-				<BorderLabeledField label='Conditions'>
+				<BorderLabeledField
+					button={{
+						onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, undefined] } as MayMatch<T>),
+						text: <AddIcon />,
+					}}
+					label='Conditions'
+				>
 					{OPERANDS.map((condition, i) =>
 						<BorderLabeledField key={i} label={`${i + 1}`}>
 							<InputMatch
@@ -168,7 +175,10 @@ export function InputMatchStr(props: Omit<Required<CompositeProps<MatchStr>>, 'l
 			const OPERANDS = (props.value as Record<typeof OPERATOR, MatchStr[]>)[OPERATOR];
 			return <>
 				<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
-				<BorderLabeledField label='Conditions'>
+				<BorderLabeledField
+					button={{ onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, ''] } as MatchStr), text: <AddIcon />, }}
+					label='Conditions'
+				>
 					{OPERANDS.map((condition, i) =>
 						<BorderLabeledField key={i} label={`${i + 1}`}>
 							<InputMatchStr

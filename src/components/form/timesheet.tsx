@@ -16,7 +16,7 @@ import {
 } from '../form';
 import { InputExpense } from './field/expense';
 import { isTimesheet, type ExpenseValue, type Id, type Money, type Timesheet } from '@/schema';
-import { NewIcon, RemoveIcon } from '../icons';
+import { AddIcon, RemoveIcon } from '../icons';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
@@ -113,7 +113,7 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 			{props.showExpenses !== false && (
 				<BorderLabeledField
 					button={props.initialValues == undefined
-						? { onClick: () => setExpenses([...EXPENSES, undefined]), text: <NewIcon>Add</NewIcon> }
+						? { onClick: () => setExpenses([...EXPENSES, undefined]), text: <AddIcon /> }
 						: undefined
 					}
 					className='min-w-[41ch]'

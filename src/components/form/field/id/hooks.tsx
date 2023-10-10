@@ -7,7 +7,7 @@ import { BorderLabeledField } from '../border-labeled';
 import { FormButton, LABEL_BUTTON_STYLE } from '../../../form';
 import { InputId } from '../../field';
 import { Modal } from "@/components";
-import { NewIcon, RemoveIcon } from '../../../icons';
+import { AddIcon, RemoveIcon } from '../../../icons';
 import { useModalVisibility } from "@/hooks";
 
 /** A function which can handle ID events. */
@@ -64,7 +64,7 @@ export function useIdInputs<T extends { id: Id }>(props:
 	return [
 		HANDLER,
 		<BorderLabeledField
-			button={{ onClick: () => props.onChange([...props.values, undefined]), text: <NewIcon>Add</NewIcon> }}
+			button={{ onClick: () => props.onChange([...props.values, undefined]), text: <AddIcon /> }}
 			className='min-w-[39ch] w-full'
 			key={1}
 			label={props.label}

@@ -57,7 +57,7 @@ export function useIdInputs<T extends { id: Id }>(props:
 ): [Opt<React.ReactElement>, React.ReactElement] {
 	const [INDEX, setIndex] = React.useState(-1);
 	const [HANDLER, setIdEvent] = props.useIdEventHandlers(props.id, d => {
-		props.onChange(props.values.map((v, i) => i === INDEX ? d : v));
+		props.onChange(props.values.with(INDEX, d));
 		setIndex(-1);
 	});
 
@@ -82,10 +82,7 @@ export function useIdInputs<T extends { id: Id }>(props:
 					title='A department assigned to this Job'
 					value={d?.id ?? ''}
 				>
-					<FormButton
-						className={LABEL_BUTTON_STYLE}
-						onClick={() => props.onChange(props.values.filter((_, j) => j !== i))}
-					>
+					<FormButton className={LABEL_BUTTON_STYLE} onClick={() => props.onChange(props.values.toSpliced(i, 1))}>
 						<RemoveIcon />
 					</FormButton>
 				</InputId>

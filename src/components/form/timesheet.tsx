@@ -35,7 +35,7 @@ export const TIMESHEET_REVIVER = chainRevivers([
  */
 export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boolean }): React.ReactElement {
 	const [EMPLOYEE, setEmployee] = React.useState(props.initialValues?.employee /* TODO: `?? CLIENT.employee` */);
-	const [EXPENSES, setExpenses] = React.useState<Maybe<[...ExpenseValue, Maybe<Id>]>[]>(
+	const [EXPENSES, setExpenses] = React.useState<Maybe<[...ExpenseValue, Id]>[]>(
 		props.initialValues?.expenses.map(x => [x.category, x.cost, x.description, x.id]) ?? []
 	);
 	const [JOB, setJob] = React.useState(props.initialValues?.job);
@@ -121,12 +121,12 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 				>
 					{EXPENSES.map((x, i) => (
 						<BorderLabeledField
-							button={{ onClick: () => setExpenses(EXPENSES.filter((_, j) => j !== i)), text: <RemoveIcon /> }}
+							button={{ onClick: () => setExpenses(EXPENSES.toSpliced(i, 1)), text: <RemoveIcon /> }}
 							key={x?.[3] ?? i}
 						>
 							<InputExpense
 								id={`${props.id}--expense-${i}`}
-								onChange={xChanged => setExpenses(EXPENSES.map((v, j) => j === i ? [...xChanged, x?.[3]] : v))}
+								onChange={xChanged => setExpenses(EXPENSES.with(i, [...xChanged, x?.[3] ?? crypto.randomUUID()]))}
 								value={x as unknown as [string, Money, string]}
 							/>
 						</BorderLabeledField>

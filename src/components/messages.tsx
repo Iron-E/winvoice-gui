@@ -4,6 +4,7 @@ import React from 'react';
 import type { Class, On } from './props-with';
 import { ExclamationTriangleIcon, InformationCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { FLEX_BETWEEN, SPACE } from './css';
+import { doNothing } from '@/utils';
 
 /** The icon style which is shared by all icons. */
 const BASE_ICON_STYLE = 'flex-shrink-0 w-5' as const;
@@ -57,7 +58,7 @@ export type Message = {
 export type ShowMessage = (level: Level, text: string) => void;
 
 /** The context used to provide a message creator. */
-export const SHOW_MESSAGE_CONTEXT: Readonly<React.Context<ShowMessage>> = React.createContext<ShowMessage>(() => { });
+export const SHOW_MESSAGE_CONTEXT: Readonly<React.Context<ShowMessage>> = React.createContext<ShowMessage>(doNothing);
 
 /** @returns a {@link Message} as a */
 function Message_(props: Omit<Readonly<Message>, 'key'> & Required<On<'hide'>>): React.ReactElement {

@@ -78,7 +78,7 @@ export function InnerRootLayout(props: w.Children): React.ReactElement {
 		<Messages
 			className={`fixed ${css.FLEX} justify-left bottom-0 w-screen h-12 overflow-x-scroll`}
 			messages={MESSAGES}
-			onHideMessage={key => setMessages(MESSAGES.filter((m) => m.key !== key))}
+			onHideMessage={key => setMessages(MESSAGES.filter(m => m.key !== key))}
 		/>
 	</>;
 }

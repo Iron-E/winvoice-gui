@@ -3,7 +3,7 @@
 import * as hooks from '@/hooks';
 import React from 'react';
 import type { AsyncOn, Class, On } from '../props-with';
-import type { Fn, Maybe, Opt, Props, Reviver, ValueOf } from '@/utils';
+import { doNothing, type Fn, type Maybe, type Opt, type Props, type Reviver, type ValueOf } from '@/utils';
 import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, WifiIcon } from '@heroicons/react/20/solid';
 import { Code, newRequest, request, response, Route, type Request, type Status, UserInputRoute } from '@/api';
 import { Form, FormButton, Input, InputString } from '../form';
@@ -37,7 +37,7 @@ export class Client {
 	);
 
 	/** Marks the current client's session as expired. */
-	public static readonly SET_EXPIRED_CONTEXT: Readonly<React.Context<Fn>> = React.createContext<Fn>(() => { });
+	public static readonly SET_EXPIRED_CONTEXT: Readonly<React.Context<Fn>> = React.createContext<Fn>(doNothing);
 
 	/**
 	 * @param <RequestBodyInner> see {@link newRequest}.

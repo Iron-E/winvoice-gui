@@ -8,13 +8,15 @@ import {
 	EQUAL_TO,
 	OPERATOR_TO_OPERAND,
 	SelectMatchOperator,
+	SelectMatchStrOperator,
+	STR_OPERATOR_TO_OPERAND,
 	type MatchOperator,
+	type MatchStrOperator,
 	type MayMatch,
 } from './match/operator';
 import { BorderLabeledField, GRID } from './border-labeled';
 import { doNothing, type Fn, type Maybe } from "@/utils";
 import { Input, InputString, Select } from "../field";
-import { SelectMatchStrOperator, STR_OPERATOR_TO_OPERAND, type MatchStrOperator } from './match/str-operator';
 
 /** A react component which can be used to input an operand value for a {@link Match} condition.  */
 type InputComponent<T> = (p: Omit<InputProps<T>, 'value'> & { value?: T }) => React.ReactElement;

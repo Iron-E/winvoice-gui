@@ -2,9 +2,9 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
+import type { Dict, Maybe } from '@/utils';
 import { Form, FormButton, Input, InputId, InputString, SelectContactKind, useLocationIdEventHandlers } from '../form';
 import { isContact, type Contact, type Location, ContactKinds } from '@/schema';
-import { Maybe } from '@/utils';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
@@ -23,7 +23,7 @@ const KIND_INPUT_TITLES: Record<ContactKinds, string> = {
 	phone: 'The phone number; digits (0–9) and dashes ("-") only',
 };
 
-const KIND_INPUT_TYPES: Partial<Record<ContactKinds, React.HTMLInputTypeAttribute>> = {
+const KIND_INPUT_TYPES: Dict<ContactKinds, React.HTMLInputTypeAttribute> = {
 	email: 'email',
 	phone: 'tel',
 };

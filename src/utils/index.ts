@@ -3,6 +3,7 @@ export * from './equals-ignore-case';
 export * from './get-id';
 export * from './maybe';
 export * from './reviver';
+export type * from './dict';
 export type * from './field-name';
 export type * from './fn';
 export type * from './intrinsic';

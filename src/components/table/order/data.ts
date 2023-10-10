@@ -1,4 +1,4 @@
-import type { FieldName, Fn, NonNullUnit, ReadonlyNonNullUnitArray, Unit, ValueOf, ValueOfUnit } from '@/utils';
+import type { Dict, FieldName, Fn, NonNullUnit, ReadonlyNonNullUnitArray, Unit, ValueOf, ValueOfUnit } from '@/utils';
 import type { Order } from '../order';
 import type { Valuators } from './valuators';
 import { Client, ShowMessage } from '@/components';
@@ -135,7 +135,7 @@ export class OrderedData<T extends {}> {
 		client: Readonly<Client>,
 		showMessage: ShowMessage,
 		route: UserInputRoute,
-		entities: Partial<Record<Id, NonNullUnit<T>>>,
+		entities: Dict<Id, NonNullUnit<T>>,
 		getId: GetId<T, Id>,
 	): Promise<void> {
 		if (await client.patch(showMessage, route, { entities: Object.values(entities) })) {

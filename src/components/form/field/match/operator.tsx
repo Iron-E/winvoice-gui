@@ -1,6 +1,6 @@
-import type { Fn, Maybe } from "@/utils";
-import type { Match } from "@/match";
-import type { On } from "@/components/props-with";
+import type { Dict, FieldName, Fn, Maybe } from "@/utils";
+import type { Match, MatchStr } from "@/match";
+import type { Children, On } from "@/components/props-with";
 import type { SelectProps } from "../props";
 import { Select } from "../../field";
 
@@ -15,8 +15,25 @@ export type MatchOperator =
 	| 'not'
 	;
 
+/** The operators of a {@link Match} condition. */
+export type MatchStrOperator =
+	| 'and'
+	| typeof ANY
+	| 'contains'
+	| typeof EQUAL_TO
+	| 'not'
+	| 'or'
+	| 'regex'
+	;
+
 /** {@link Match}es {@link Maybe<T>}. */
 export type MayMatch<T> = Match<Maybe<T>>;
+
+/** A map of operator names to their change handlers. */
+type OperatorChangeHandlers<M, O extends FieldName> = Readonly<Record<
+	O,
+	(handler: Fn<[value: M]>, condition: M, operator: O) => void
+>>;
 
 /**
  * The `any` operator.
@@ -30,11 +47,11 @@ export const ANY = Symbol('any');
  */
 export const EQUAL_TO = Symbol('equal_to');
 
-/** A lookup table for handlers used in {@link handleOperatorChange}. */
-const HANDLE_OPERATOR_CHANGE: Readonly<Record<
-	MatchOperator,
-	<T>(handler: Fn<[value: MayMatch<T>]>, condition: MayMatch<T>, operator: MatchOperator) => void
->> = {
+/**
+ * A lookup table for handlers used in {@link handleOperatorChange}.
+ * HACK: `any` used here because you can't do `<T> OperatorChangeHandlers<MayMatch<T>, MatchOperator>`
+ */
+const OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MayMatch<any>, MatchOperator> = {
 	and: (h, c) => h({ and: [c] }),
 	[ANY]: h => h('any'),
 	[EQUAL_TO]: (h, c, o) => h(OPERATOR_TO_OPERAND[o]?.(c)),
@@ -45,14 +62,33 @@ const HANDLE_OPERATOR_CHANGE: Readonly<Record<
 	or: (h, c) => h({ or: [c] }),
 };
 
+/** A lookup table for handlers used in {@link handleOperatorChange}. */
 /** Maps a condition's {@link MatchOperator | operator} to an instruction which will extract the operand. */
-export const OPERATOR_TO_OPERAND: Readonly<Partial<Record<MatchOperator, <T>(condition: MayMatch<T>) => Maybe<T>>>> = {
+export const OPERATOR_TO_OPERAND: Dict<MatchOperator, <T>(condition: MayMatch<T>) => Maybe<T>> = {
 	[EQUAL_TO]: <T,>(c: MayMatch<T>) => c as Maybe<T>,
 	greater_than: c => (c as Record<'greater_than', any>).greater_than,
 	in_range: c => (c as Record<'in_range', any>).in_range[0],
 	less_than: c => (c as Record<'less_than', any>).less_than,
 };
 
+const STR_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchStr, MatchStrOperator> = {
+	and: (h, c) => h({ and: [c] }),
+	[ANY]: h => h('any'),
+	contains: (h, c, o) => h({ contains: STR_OPERATOR_TO_OPERAND[o]?.(c) ?? '' }),
+	[EQUAL_TO]: (h, c, o) => h(STR_OPERATOR_TO_OPERAND[o]?.(c) ?? ''),
+	not: (h, c) => h({ not: c }),
+	or: (h, c) => h({ or: [c] }),
+	regex: (h, c, o) => h({ regex: STR_OPERATOR_TO_OPERAND[o]?.(c) ?? '' }),
+};
+
+/** Maps a condition's {@link MatchOperator | operator} to an instruction which will extract the operand. */
+export const STR_OPERATOR_TO_OPERAND: Dict<MatchStrOperator, (condition: MatchStr) => string> = {
+	contains: c => (c as Record<'contains', string>).contains,
+	[EQUAL_TO]: c => c as string,
+	regex: c => (c as Record<'regex', string>).regex,
+};
+
+/** A map of values from the valid strings which are accepted by `<option>.value` to valid {@link MatchOperator}. */
 /** The `<options>` for {@link SelectMatchOperator}. */
 const OPTIONS: readonly React.ReactElement[] = [
 	<option key={0} value='and'>And</option>,
@@ -65,26 +101,42 @@ const OPTIONS: readonly React.ReactElement[] = [
 	<option key={7} value='or'>Or</option>,
 ];
 
-/** A map of values from the valid strings which are accepted by `<option>.value` to valid {@link MatchOperator}. */
-const OPTIONS_VALUE_MAP: Partial<Record<string, MatchOperator>> = {
+/** The `<options>` for {@link SelectMatchOperator}. */
+const STR_OPTIONS: readonly React.ReactElement[] = [
+	<option key={0} value='and'>And</option>,
+	<option key={1} value={ANY.description}>Any</option>,
+	<option key={2} value={EQUAL_TO.description}>Equal to</option>,
+	<option key={3} value='greater_than'>Greater than</option>,
+	<option key={4} value='in_range'>In Range</option>,
+	<option key={5} value='less_than'>Less than</option>,
+	<option key={6} value='not'>Not</option>,
+	<option key={7} value='or'>Or</option>,
+];
+
+/**
+ * In an `<option>.value`, a {@link Symbol} may be represented by its `description`. This mapping returns said
+ * description back to its original form.
+ */
+const SYMBOL_DESC_MAP: Dict<string, typeof ANY | typeof EQUAL_TO> = {
 	[ANY.description!]: ANY,
 	[EQUAL_TO.description!]: EQUAL_TO,
 }
 
-/** Props for the {@link SelectMatchOperator} component. */
-type Props = SelectProps<MatchOperator>;
-
 /** A selector for the current 'variant' (e.g. 'and', 'any') of the {@link Match} condition. */
-export function SelectMatchOperator<T>(props:
-	& Omit<Props, 'onChange' | 'title' | 'value'>
-	& Required<On<'change', [MayMatch<T>]>>
-	& { condition: MayMatch<T>, value: MatchOperator }
+function SelectOperator<M, O extends string | symbol>(props:
+	& Omit<SelectProps<O>, 'onChange' | 'title' | 'value'>
+	& Required<Children & On<'change', [M]>>
+	& {
+		condition: M,
+		operatorChangeHandlers: OperatorChangeHandlers<M, O>,
+		value: O,
+	}
 ): React.ReactElement {
 	return (
 		<Select
 			id={`${props.id}--operator`}
 			label='Operator'
-			onChange={value => HANDLE_OPERATOR_CHANGE[OPTIONS_VALUE_MAP[value] ?? value as MatchOperator](
+			onChange={value => props.operatorChangeHandlers[(SYMBOL_DESC_MAP[value] ?? value) as O](
 				props.onChange,
 				props.condition,
 				props.value,
@@ -92,7 +144,32 @@ export function SelectMatchOperator<T>(props:
 			title='The type of condition which is applied to the Operand'
 			value={typeof props.value === 'symbol' ? props.value.description! : props.value}
 		>
-			{OPTIONS}
+			{props.children}
 		</Select>
+	);
+}
+
+/** Properties of aggregates of {@link SelectOperator}. */
+type Props<M, O> =
+	& Omit<SelectProps<O>, 'onChange' | 'title' | 'value'>
+	& Required<On<'change', [M]>>
+	& { condition: M, value: O }
+	;
+
+/** A selector for the current 'variant' (e.g. 'and', 'any') of the {@link Match} condition. */
+export function SelectMatchOperator<T>(props: Props<MayMatch<T>, MatchOperator>): React.ReactElement {
+	return (
+		<SelectOperator {...props} operatorChangeHandlers={OPERATOR_CHANGE_HANDLERS}>
+			{OPTIONS}
+		</SelectOperator>
+	);
+}
+
+/** A selector for the current 'operator' (e.g. 'and', 'any') of the {@link MatchStr} condition. */
+export function SelectMatchStrOperator(props: Props<MatchStr, MatchStrOperator>): React.ReactElement {
+	return (
+		<SelectOperator {...props} operatorChangeHandlers={STR_OPERATOR_CHANGE_HANDLERS}>
+			{STR_OPTIONS}
+		</SelectOperator>
 	);
 }

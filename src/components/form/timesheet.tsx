@@ -15,7 +15,7 @@ import {
 	useJobIdEventHandlers,
 } from '../form';
 import { InputExpense } from './field/expense';
-import { isTimesheet, type ExpenseValue, type Id, type Money, type Timesheet } from '@/schema';
+import { expenseToValue, isTimesheet, type Expense, type Money, type Timesheet } from '@/schema';
 import { AddIcon, RemoveIcon } from '../icons';
 import { Route } from '@/api';
 import { SPACE } from '../css';
@@ -35,9 +35,7 @@ export const TIMESHEET_REVIVER = chainRevivers([
  */
 export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boolean }): React.ReactElement {
 	const [EMPLOYEE, setEmployee] = React.useState(props.initialValues?.employee /* TODO: `?? CLIENT.employee` */);
-	const [EXPENSES, setExpenses] = React.useState<Maybe<[...ExpenseValue, Id]>[]>(
-		props.initialValues?.expenses.map(x => [x.category, x.cost, x.description, x.id]) ?? []
-	);
+	const [EXPENSES, setExpenses] = React.useState<Maybe<Expense>[]>(props.initialValues?.expenses ?? []);
 	const [JOB, setJob] = React.useState(props.initialValues?.job);
 	const [TIME_BEGIN, setTimeBegin] = React.useState(props.initialValues?.time_begin ?? new Date());
 	const [TIME_END, setTimeEnd] = React.useState(props.initialValues?.time_end);
@@ -53,7 +51,7 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 				const RESULT = await CLIENT.post(
 					showMessage,
 					Route.Timesheet,
-					{ args: [EMPLOYEE, EXPENSES.map(x => [x![0], x![1], x![2]]), JOB, TIME_BEGIN, TIME_END, WORK_NOTES] },
+					{ args: [EMPLOYEE, (EXPENSES as Expense[]).map(expenseToValue), JOB, TIME_BEGIN, TIME_END, WORK_NOTES] },
 					isTimesheet,
 					TIMESHEET_REVIVER,
 				);
@@ -64,13 +62,7 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 				var result: Timesheet = {
 					...props.initialValues,
 					employee: EMPLOYEE!,
-					expenses: EXPENSES.map(x => ({
-						category: x![0],
-						cost: x![1],
-						description: x![2],
-						id: x![3]!,
-						timesheet_id: props.initialValues!.id,
-					})),
+					expenses: EXPENSES as Expense[],
 					job: JOB!,
 					time_begin: TIME_BEGIN,
 					time_end: TIME_END,
@@ -122,11 +114,17 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 					{EXPENSES.map((x, i) => (
 						<BorderLabeledField
 							button={{ onClick: () => setExpenses(EXPENSES.toSpliced(i, 1)), text: <RemoveIcon /> }}
-							key={x?.[3] ?? i}
+							key={x?.id ?? i}
 						>
 							<InputExpense
 								id={`${props.id}--expense-${i}`}
-								onChange={xChanged => setExpenses(EXPENSES.with(i, [...xChanged, x?.[3] ?? crypto.randomUUID()]))}
+								onChange={value => setExpenses(EXPENSES.with(i, {
+									category: value[0],
+									cost: value[1],
+									description: value[2],
+									id: x?.id ?? crypto.randomUUID(),
+									timesheet_id: props.initialValues?.id ?? '',
+								}))}
 								value={x as unknown as [string, Money, string]}
 							/>
 						</BorderLabeledField>

@@ -30,3 +30,11 @@ export function isExpense(json: unknown): json is Expense {
 		&& 'timesheet_id' in json && isId(json.timesheet_id)
 	);
 }
+
+/**
+ * @param x the expense to convert
+ * @returns `x` as {@link ExpenseValue}s.
+ */
+export function expenseToValue(x: Expense): ExpenseValue {
+	return [x.category, x.cost, x.description];
+}

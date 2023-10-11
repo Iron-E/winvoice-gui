@@ -3,6 +3,8 @@
 import React from 'react';
 import type { CompositeProps, InputProps } from './props';
 import type { Match, MatchStr } from "@/match";
+import type { Props, Fn, Maybe, ValueOf } from "@/utils";
+import { AddIcon, RemoveIcon } from '@/components';
 import {
 	ANY,
 	EQUAL_TO,
@@ -14,16 +16,21 @@ import {
 	type MatchStrOperator,
 	type MayMatch,
 } from './match/operator';
+import { ArrowsRightLeftIcon } from '@heroicons/react/20/solid';
 import { BorderLabeledField, GRID } from './border-labeled';
-import type { Props, Fn, Maybe, ValueOf } from "@/utils";
+import { FormButton, LABEL_BUTTON_STYLE } from "../button";
+import { ICON } from '@/components/css';
 import { Input, InputString, Select } from "../field";
-import { AddIcon, RemoveIcon } from '@/components';
 
 /** A react component which can be used to input an operand value for a {@link Match} condition.  */
 type InputComponent<T> = (p: Omit<InputProps<T>, 'value'> & { value?: T }) => React.ReactElement;
 
 /** The 'operands' {@link BorderLabeledField} minimum width style. */
 const OPERANDS_BORDER_STYLE = 'min-w-[16.6rem]';
+
+function and_or(and: boolean): ['and' | 'or', 'or' | 'and'] {
+	return and ? ['and', 'or'] : ['or', 'and'];
+}
 
 /** @returns the `Field` with some defaults used for {@link InputMatch}. */
 function InputField<T>(props:
@@ -96,14 +103,29 @@ export function InputMatch<T>(props:
 				</BorderLabeledField>
 			</>;
 		} else if (AND || 'or' in props.value) {
-			const OPERATOR = AND ? 'and' : 'or';
+			const [OPERATOR, OTHER_OPERATOR] = and_or(AND);
 			const OPERANDS = (props.value as Record<typeof OPERATOR, MayMatch<T>[]>)[OPERATOR];
 			children = <>
-				<SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
+				<SelectMatchOperator
+					condition={props.value}
+					labelChildren={<>
+						<FormButton
+							className={LABEL_BUTTON_STYLE}
+							onClick={() => props.onChange({ [OTHER_OPERATOR]: OPERANDS } as MayMatch<T>)}
+						>
+							<ArrowsRightLeftIcon className={ICON} /> Swap
+						</FormButton>
+					</>}
+					id={props.id}
+					onChange={props.onChange}
+					value={OPERATOR}
+				/>
+
 				<BorderLabeledField
 					button={{
 						onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, undefined] } as MayMatch<T>),
 						text: <AddIcon />,
+						// TODO: add 'pull out' button, requires refactoring `borderlabeledfield`
 					}}
 					className={OPERANDS_BORDER_STYLE}
 					label='Conditions'
@@ -182,10 +204,17 @@ export function InputMatchStr(props: InputMatchProps<MatchStr, true>): React.Rea
 				/>
 			</>;
 		} else if (AND || 'or' in props.value) {
-			const OPERATOR = AND ? 'and' : 'or';
+			const [OPERATOR, OTHER_OPERATOR] = and_or(AND);
 			const OPERANDS = (props.value as Record<typeof OPERATOR, MatchStr[]>)[OPERATOR];
 			children = <>
-				<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
+				<SelectMatchStrOperator
+					condition={props.value}
+					labelChildren={undefined /* TODO: extract <FormButton>s above to independent component */}
+					id={props.id}
+					onChange={props.onChange}
+					value={OPERATOR}
+				/>
+
 				<BorderLabeledField
 					button={{ onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, ''] } as MatchStr), text: <AddIcon /> }}
 					className={OPERANDS_BORDER_STYLE}

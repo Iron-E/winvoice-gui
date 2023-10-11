@@ -9,10 +9,10 @@ export type Class<Field extends string = ''> = Readonly<{
 	[F in Uncapitalize<Field> as F extends '' ? 'className' : `${F}ClassName`]?: string;
 }>;
 
-/** Properties of an {@link React.ReactElement | element} that include children. */
-export type Children = Readonly<{
+/** Properties of an {@link React.ReactElement | element} that include class names. */
+export type Children<Field extends string = ''> = Readonly<{
 	/** The elements inside this one. */
-	children?: React.ReactNode,
+	[F in Uncapitalize<Field> as F extends '' ? 'children' : `${F}Children`]?: React.ReactNode;
 }>;
 
 /** Properties of an {@link React.ReactElement | element} that include click handlers. */

@@ -1,8 +1,11 @@
+import type { Children, On } from "@/components/props-with";
 import type { Dict, FieldName, Fn, Maybe } from "@/utils";
 import type { Match, MatchStr } from "@/match";
-import type { Children, On } from "@/components/props-with";
 import type { SelectProps } from "../props";
+import { FormButton, LABEL_BUTTON_STYLE } from "../../button";
 import { Select } from "../../field";
+import { NoSymbolIcon } from "@heroicons/react/20/solid";
+import { ICON } from "@/components/css";
 
 export type BaseOperator =
 	| 'and'
@@ -43,7 +46,10 @@ export const EQUAL_TO = Symbol('equal_to');
  * The base for {@link MATCH_OPERATOR_CHANGE_HANDLERS} and {@link MATCH_STR_OPERATOR_CHANGE_HANDLERS}.
  * HACK: `any` used here because you can't do `<M, T> OperatorChangeHandlers<_, BaseMatch<M, T>>`
  */
-const BASE_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<Exclude<BaseOperator, typeof EQUAL_TO>, any> = {
+const BASE_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<
+	Exclude<BaseOperator, typeof EQUAL_TO>,
+	any
+> = {
 	and: (h, c) => h({ and: [c] }),
 	[ANY]: h => h('any'),
 	not: (h, c) => h({ not: c }),
@@ -98,7 +104,6 @@ const BASE_OPTIONS: readonly React.ReactElement[] = [
 	<option key={EQUAL_TO.description} value={EQUAL_TO.description}>Equal to</option>,
 	<option key='not' value='not'>Not</option>,
 	<option key='or' value='or'>Or</option>,
-	<option key='swap_and_or' value='swap_and_or'>Swap And/Or</option>,
 ];
 
 /** Compare elements by their keys. */
@@ -141,15 +146,31 @@ function SelectOperator<O extends string | symbol, M>(props:
 		value: O,
 	}
 ): React.ReactElement {
+	function handleChange(value: string): void {
+		props.operatorChangeHandlers[(SYMBOL_DESC_MAP[value] ?? value) as O](
+			props.onChange,
+			props.condition,
+			props.value
+		);
+	}
+
 	return (
 		<Select
 			id={`${props.id}--operator`}
 			label='Operator'
-			onChange={value => props.operatorChangeHandlers[(SYMBOL_DESC_MAP[value] ?? value) as O](
-				props.onChange,
-				props.condition,
-				props.value,
-			)}
+			labelChildren={<>
+				{props.value === 'not'
+					? <FormButton
+						className={LABEL_BUTTON_STYLE}
+						onClick={() => props.onChange((props.condition as Record<'not', any>).not)}
+					>
+						<NoSymbolIcon className={ICON} /> Negate
+					</FormButton>
+					: undefined
+				}
+				{props.labelChildren}
+			</>}
+			onChange={handleChange}
 			title='The type of condition which is applied to the Operand'
 			value={typeof props.value === 'symbol' ? props.value.description! : props.value}
 		>

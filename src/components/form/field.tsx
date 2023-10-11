@@ -124,12 +124,16 @@ export function Input(props:
 }
 
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
-export function Select(props: FieldProps<HTMLSelectElement, 'select'>): React.ReactElement {
+export function Select(props: FieldProps<HTMLSelectElement, 'select'> & Children<'label'>): React.ReactElement {
 	return <>
-		<span className='flex'>
+		<span className={`${FLEX_BETWEEN} gap-5`}>
 			<Label className='self-end' htmlFor={props.id} required={props.required} >
 				{props.label}
 			</Label>
+
+			<span className={`${FLEX} justify-right mr-[-0.25rem] gap-1`}>
+				{props.labelChildren}
+			</span>
 		</span>
 
 		<ValidateIcon iconRight={props.validateIconRight ?? 'right-3'} iconTop={props.validateIconTop}>

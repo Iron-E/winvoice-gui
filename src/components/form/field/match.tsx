@@ -6,10 +6,10 @@ import type { Match, MatchStr } from "@/match";
 import {
 	ANY,
 	EQUAL_TO,
-	OPERATOR_TO_OPERAND,
+	MATCH_OPERATOR_TO_OPERAND,
+	MATCH_STR_OPERATOR_TO_OPERAND,
 	SelectMatchOperator,
 	SelectMatchStrOperator,
-	STR_OPERATOR_TO_OPERAND,
 	type MatchOperator,
 	type MatchStrOperator,
 	type MayMatch,
@@ -70,7 +70,7 @@ export function InputMatch<T>(props:
 					Field={props.inputField}
 					id={props.id}
 					onChange={value => props.onChange({ [OPERATOR]: value } as MayMatch<T>)}
-					value={OPERATOR_TO_OPERAND[OPERATOR]!(props.value)}
+					value={MATCH_OPERATOR_TO_OPERAND[OPERATOR]!(props.value)}
 				/>
 			</>;
 		} else if ('in_range' in props.value) {
@@ -178,7 +178,7 @@ export function InputMatchStr(props: InputMatchProps<MatchStr, true>): React.Rea
 					id={props.id}
 					onChange={value => props.onChange({ [OPERATOR]: value } as MatchStr)}
 					title=''
-					value={STR_OPERATOR_TO_OPERAND[OPERATOR]!(props.value)}
+					value={MATCH_STR_OPERATOR_TO_OPERAND[OPERATOR]!(props.value)}
 				/>
 			</>;
 		} else if (AND || 'or' in props.value) {

@@ -38,7 +38,7 @@ export function UserTable(props:
 					if (
 						user.password !== ''
 						&& user.password !== props.orderedData.data.find(v => v.id === user.id)?.password
-					) { // NOTE: the server separately stores its own value, but this is purely for cosmetics' sake
+					) { // NOTE: the server separately stores its own value— this is purely for cosmetics' sake
 						user = { ...user, password_set: new Date() };
 					}
 

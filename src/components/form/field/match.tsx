@@ -15,7 +15,7 @@ import {
 	type MayMatch,
 } from './match/operator';
 import { BorderLabeledField, GRID } from './border-labeled';
-import { doNothing, type Fn, type Maybe } from "@/utils";
+import type { Props, Fn, Maybe, ValueOf } from "@/utils";
 import { Input, InputString, Select } from "../field";
 import { AddIcon, RemoveIcon } from '@/components';
 
@@ -44,21 +44,27 @@ function InputField<T>(props:
 	);
 }
 
+/** Properties of components used for inputting {@link Match} / {@link MatchStr} conditions. */
+type InputMatchProps<T, CompositePropsRequired extends boolean = false> =
+	& (CompositePropsRequired extends true ? Required<CompositeProps<T>> : CompositeProps<T>)
+	& { button?: ValueOf<Props<typeof BorderLabeledField>, 'button'> };
+
 /** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link Match} condition. */
 export function InputMatch<T>(props:
-	& Omit<CompositeProps<MayMatch<T>>, 'label'>
+	& InputMatchProps<MayMatch<T>>
 	& { inputField: InputComponent<T> }
 ): React.ReactElement {
-	if (props.value === 'any') {
-		return <SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value={ANY} />;
-	}
+	let children: Maybe<React.ReactElement>;
 
-	// `<T>` might not support `in`, or be `undefined`.
-	if (typeof props.value === 'object') {
+	if (props.value === 'any') {
+		children = <SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value={ANY} />;
+	} else if (typeof props.value === 'object') {
+		const AND = 'and' in props.value;
 		const GREATER_THAN = 'greater_than' in props.value;
+
 		if (GREATER_THAN || 'less_than' in props.value) {
 			const OPERATOR: MatchOperator = GREATER_THAN ? 'greater_than' : 'less_than';
-			return <>
+			children = <>
 				<SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
 				<InputField
 					Field={props.inputField}
@@ -67,11 +73,9 @@ export function InputMatch<T>(props:
 					value={OPERATOR_TO_OPERAND[OPERATOR]!(props.value)}
 				/>
 			</>;
-		}
-
-		if ('in_range' in props.value) {
+		} else if ('in_range' in props.value) {
 			const [LOWER, UPPER] = props.value.in_range;
-			return <>
+			children = <>
 				<SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value='in_range' />
 				<BorderLabeledField className={GRID} label='Operand'>
 					<InputField
@@ -91,13 +95,10 @@ export function InputMatch<T>(props:
 					/>
 				</BorderLabeledField>
 			</>;
-		}
-
-		const AND = 'and' in props.value;
-		if (AND || 'or' in props.value) {
+		} else if (AND || 'or' in props.value) {
 			const OPERATOR = AND ? 'and' : 'or';
 			const OPERANDS = (props.value as Record<typeof OPERATOR, MayMatch<T>[]>)[OPERATOR];
-			return <>
+			children = <>
 				<SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
 				<BorderLabeledField
 					button={{
@@ -108,63 +109,56 @@ export function InputMatch<T>(props:
 					label='Conditions'
 				>
 					{OPERANDS.map((condition, i) =>
-						<BorderLabeledField
+						<InputMatch
 							button={OPERANDS.length < 2 ? undefined : {
 								onClick: () => props.onChange({ [OPERATOR]: OPERANDS.toSpliced(i, 1) } as MayMatch<T>),
 								text: <RemoveIcon />,
 							}}
+							id={`${props.id}--and-${i}`}
+							inputField={props.inputField}
 							key={i}
 							label={`${i + 1}`}
-						>
-							<InputMatch
-								id={`${props.id}--and-${i}`}
-								inputField={props.inputField}
-								onChange={value => props.onChange({ [OPERATOR]: OPERANDS.with(i, value) } as MayMatch<T>)}
-								value={condition}
-							/>
-						</BorderLabeledField>
+							onChange={value => props.onChange({ [OPERATOR]: OPERANDS.with(i, value) } as MayMatch<T>)}
+							value={condition}
+						/>
 					)}
 				</BorderLabeledField>
 			</>;
-		}
-
-		if ('not' in props.value) {
-			return <>
+		} else if ('not' in props.value) {
+			children = <>
 				<SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value='not' />
-				<BorderLabeledField label='Operand'>
-					<InputMatch
-						id={`${props.id}--not`}
-						inputField={props.inputField}
-						onChange={value => props.onChange({ not: value } as MayMatch<T>)}
-						value={props.value.not}
-					/>
-				</BorderLabeledField>
+				<InputMatch
+					id={`${props.id}--not`}
+					inputField={props.inputField}
+					label='Operand'
+					onChange={value => props.onChange({ not: value })}
+					value={props.value.not}
+				/>
 			</>;
 		}
 	}
 
-	return <>
-		<SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value={EQUAL_TO} />
-		<InputField
-			Field={props.inputField}
-			id={props.id}
-			onChange={props.onChange as Fn<[T]>}
-			value={props.value as Maybe<T>}
-		/>
-	</>;
+	return <BorderLabeledField button={props.button} label={props.label}>
+		{children ?? <>
+			<SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value={EQUAL_TO} />
+			<InputField
+				Field={props.inputField}
+				id={props.id}
+				onChange={props.onChange as Fn<[T]>}
+				value={props.value as Maybe<T>}
+			/>
+		</>}
+	</BorderLabeledField>;
 }
 
 /** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link Match} condition. */
-export function InputMatchStr(props: Omit<Required<CompositeProps<MatchStr>>, 'label'>): React.ReactElement {
-	if (props.value === 'any') {
-		return <>
-			<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={ANY} />
-			<InputString id={props.id} onChange={doNothing} title='' value='' />
-		</>;
-	}
+export function InputMatchStr(props: InputMatchProps<MatchStr, true>): React.ReactElement {
+	let children: Maybe<React.ReactElement>;
 
-	if (typeof props.value === 'string') {
-		return <>
+	if (props.value === 'any') {
+		children = <SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={ANY} />;
+	} else if (typeof props.value === 'string') {
+		children = <>
 			<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={EQUAL_TO} />
 			<InputString
 				id={props.id}
@@ -173,61 +167,59 @@ export function InputMatchStr(props: Omit<Required<CompositeProps<MatchStr>>, 'l
 				value={props.value as string}
 			/>
 		</>;
-	}
-
-	const GREATER_THAN = 'contains' in props.value;
-	if (GREATER_THAN || 'regex' in props.value) {
-		const OPERATOR: MatchStrOperator = GREATER_THAN ? 'contains' : 'regex';
-		return <>
-			<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
-			<InputString
-				id={props.id}
-				onChange={value => props.onChange({ [OPERATOR]: value } as MatchStr)}
-				title=''
-				value={STR_OPERATOR_TO_OPERAND[OPERATOR]!(props.value)}
-			/>
-		</>;
-	}
-
-	const AND = 'and' in props.value;
-	if (AND || 'or' in props.value) {
-		const OPERATOR = AND ? 'and' : 'or';
-		const OPERANDS = (props.value as Record<typeof OPERATOR, MatchStr[]>)[OPERATOR];
-		return <>
-			<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
-			<BorderLabeledField
-				button={{ onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, ''] } as MatchStr), text: <AddIcon /> }}
-				className={OPERANDS_BORDER_STYLE}
-				label='Conditions'
-			>
-				{OPERANDS.map((condition, i) =>
-					<BorderLabeledField
-						button={OPERANDS.length < 2 ? undefined : {
-							onClick: () => props.onChange({ [OPERATOR]: OPERANDS.toSpliced(i, 1) } as MatchStr),
-							text: <RemoveIcon />,
-						}}
-						key={i}
-						label={`${i + 1}`}
-					>
+	} else {
+		const AND = 'and' in props.value;
+		const GREATER_THAN = 'contains' in props.value;
+		if (GREATER_THAN || 'regex' in props.value) {
+			const OPERATOR: MatchStrOperator = GREATER_THAN ? 'contains' : 'regex';
+			children = <>
+				<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
+				<InputString
+					id={props.id}
+					onChange={value => props.onChange({ [OPERATOR]: value } as MatchStr)}
+					title=''
+					value={STR_OPERATOR_TO_OPERAND[OPERATOR]!(props.value)}
+				/>
+			</>;
+		} else if (AND || 'or' in props.value) {
+			const OPERATOR = AND ? 'and' : 'or';
+			const OPERANDS = (props.value as Record<typeof OPERATOR, MatchStr[]>)[OPERATOR];
+			children = <>
+				<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
+				<BorderLabeledField
+					button={{ onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, ''] } as MatchStr), text: <AddIcon /> }}
+					className={OPERANDS_BORDER_STYLE}
+					label='Conditions'
+				>
+					{OPERANDS.map((condition, i) =>
 						<InputMatchStr
+							button={OPERANDS.length < 2 ? undefined : {
+								onClick: () => props.onChange({ [OPERATOR]: OPERANDS.toSpliced(i, 1) } as MatchStr),
+								text: <RemoveIcon />,
+							}}
 							id={`${props.id}--and-${i}`}
+							key={i}
+							label={`${i + 1}`}
 							onChange={value => props.onChange({ [OPERATOR]: OPERANDS.with(i, value) } as MatchStr)}
 							value={condition}
 						/>
-					</BorderLabeledField>
-				)}
-			</BorderLabeledField>
-		</>;
+					)}
+				</BorderLabeledField>
+			</>;
+		} else {
+			children = <>
+				<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value='not' />
+				<InputMatchStr
+					id={`${props.id}--not`}
+					label='Operand'
+					onChange={value => props.onChange({ not: value })}
+					value={(props.value as Record<'not', MatchStr>).not}
+				/>
+			</>;
+		}
 	}
 
-	return <>
-		<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value='not' />
-		<BorderLabeledField label='Operand'>
-			<InputMatchStr
-				id={`${props.id}--not`}
-				onChange={value => props.onChange({ not: value })}
-				value={(props.value as Record<'not', MatchStr>).not}
-			/>
-		</BorderLabeledField>
-	</>;
+	return <BorderLabeledField button={props.button} label={props.label}>
+		{children}
+	</BorderLabeledField>;
 }

@@ -6,7 +6,7 @@ import { type Metadata } from 'next';
 
 const INTER = Inter({ subsets: ['latin'] });
 
-/** NOTE: cannot be renamed to project style guidelines for constants. */
+/** WARN: *must* be `metadata`, cannot be `METADATA` as per project style guidelines */
 export const metadata: Readonly<Metadata> = {
 	title: 'Winvoice',
 	description: 'A graphical manager for invoices',

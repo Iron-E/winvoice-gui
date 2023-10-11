@@ -3,11 +3,15 @@
 import React from 'react';
 import type { BaseProps, OrderProps } from './props';
 import type { Department, Employee } from '@/schema'
-import { DepartmentTable, OrderedData, Table, Td, Tr, useRowEventHandlers } from '../table';
+import { DepartmentTable } from './department';
 import { EmployeeForm } from '../form';
-import { Route } from '@/api';
-import { useApiContext } from '../api';
 import { getId } from '@/utils';
+import { OrderedData } from './order';
+import { Route } from '@/api';
+import { Table } from '../table';
+import { Td } from './column';
+import { Tr, useRowEventHandlers } from './row';
+import { useApiContext } from '../api';
 
 export * from './employee/hooks';
 export * from './employee/valuators';

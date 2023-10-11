@@ -2,11 +2,14 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Checkbox, Form, FormButton, InputId, InputString, useDepartmentIdEventHandlers } from '../form';
+import { Checkbox } from './field';
+import { Form, InputId, InputString } from '../form';
+import { FormButton } from './button';
+import { isEmployee, type Employee } from '@/schema';
 import { Route } from '@/api';
 import { SPACE } from '../css';
-import { isEmployee, type Employee } from '@/schema';
 import { useApiContext } from '../api';
+import { useDepartmentIdEventHandlers } from './department';
 
 export * from './employee/hooks';
 

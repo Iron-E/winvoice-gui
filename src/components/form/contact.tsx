@@ -3,11 +3,14 @@
 import React from 'react';
 import type { BaseProps } from './props';
 import type { Dict, Maybe } from '@/utils';
-import { Form, FormButton, Input, InputId, InputString, SelectContactKind, useLocationIdEventHandlers } from '../form';
+import { Form } from '../form';
+import { FormButton } from './button';
+import { Input, InputId, InputString, SelectContactKind } from './field';
 import { isContact, type Contact, type Location, ContactKinds } from '@/schema';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
+import { useLocationIdEventHandlers } from './location';
 
 const KIND_INPUT_LABELS: Record<ContactKinds, string> = {
 	address: 'Location',
@@ -33,7 +36,7 @@ const KIND_INPUT_TYPES: Dict<ContactKinds, React.HTMLInputTypeAttribute> = {
  */
 export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 	type InitialKind = Maybe<[ContactKinds, Location | string]>;
-	const INITIAL_KIND  = props.initialValues && Object.entries(props.initialValues).reduce<InitialKind>(
+	const INITIAL_KIND = props.initialValues && Object.entries(props.initialValues).reduce<InitialKind>(
 		(previous_entry, entry) => (entry[0] === 'label' ? previous_entry : entry) as InitialKind,
 		undefined,
 	);

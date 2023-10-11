@@ -3,11 +3,11 @@ import type { CompositeProps } from '../props';
 import type { Fn, Maybe, Opt, ValueOf } from "@/utils";
 import type { Id as IdProp, On } from "@/components/props-with";
 import type { Id } from '@/schema';
-import { BorderLabeledField } from '../border-labeled';
-import { FormButton, LABEL_BUTTON_STYLE } from '../../../form';
-import { InputId } from '../../field';
-import { Modal } from "@/components";
 import { AddIcon, RemoveIcon } from '../../../icons';
+import { BorderLabeledField } from '../border-labeled';
+import { FormButton, LABEL_BUTTON_STYLE } from '../../../form/button';
+import { InputId } from '../id';
+import { Modal } from "@/components";
 import { useModalVisibility } from "@/hooks";
 
 /** A function which can handle ID events. */

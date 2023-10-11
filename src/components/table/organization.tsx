@@ -3,10 +3,14 @@
 import React from 'react';
 import type { BaseProps, OrderProps } from './props';
 import type { Location, Organization } from '@/schema'
-import { LocationTable, OrderedData, Table, Td, Tr, useRowEventHandlers } from '../table';
+import { getId } from '@/utils';
+import { LocationTable } from './location';
+import { OrderedData } from './order/data';
 import { OrganizationForm } from '../form';
 import { Route } from '@/api';
-import { getId } from '@/utils';
+import { Table } from '../table';
+import { Td } from './column';
+import { Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
 export * from './organization/hooks';

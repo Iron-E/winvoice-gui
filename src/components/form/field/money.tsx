@@ -4,7 +4,8 @@ import React from 'react';
 import type { Money } from '@/schema';
 import { BorderLabeledField, GRID } from './border-labeled';
 import { CompositeProps } from './props';
-import { Input, SelectCurrency } from '../field';
+import { Input } from '../field';
+import { SelectCurrency } from './currency';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Money} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).

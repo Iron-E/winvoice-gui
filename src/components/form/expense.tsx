@@ -2,24 +2,22 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { chainRevivers, dateReviver, optional, type Maybe } from '@/utils';
-import { Form, FormButton, InputId, useTimesheetIdEventHandlers } from '../form';
+import { chainRevivers, type Maybe } from '@/utils';
+import { Form } from '../form';
+import { FormButton } from './button';
 import { InputExpense } from './field/expense';
-import { isExpense, type Expense, type ExpenseValue, Timesheet, Job } from '@/schema';
+import { InputId } from './field';
+import { isExpense, type Expense, type ExpenseValue } from '@/schema';
 import { Route, response } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
+import { TIMESHEET_REVIVER, useTimesheetIdEventHandlers } from './timesheet';
 
 export * from './expense/hooks';
 
 const REVIVER = chainRevivers([
 	(k, v: response.Post<Expense[]>) => k === '' && v.entity instanceof Array ? { ...v, entity: v.entity[0] } : v,
-	// FIXME: vercel/next.js#56394 – webpack build error when uncommenting, so the lines below are a workaround
-	// TIMESHEET_REVIVER,
-	dateReviver<Job>('date_open'),
-	dateReviver<Timesheet>('time_begin'),
-	optional(dateReviver<Job>('date_close')),
-	optional(dateReviver<Timesheet>('time_end')),
+	TIMESHEET_REVIVER,
 ]);
 
 /**

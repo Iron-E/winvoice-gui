@@ -4,10 +4,13 @@ import parse from 'parse-duration';
 import React from 'react';
 import type { BaseProps } from './props';
 import type { Role } from '@/schema'
+import type { Valuators } from './order';
 import { getId } from '@/utils';
 import { RoleForm } from '../form';
 import { Route } from '@/api';
-import { Table, Td, Tr, type Valuators, useRowEventHandlers } from '../table';
+import { Table } from '../table';
+import { Td } from './column';
+import { Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
 export * from './role/hooks';

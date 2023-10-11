@@ -2,10 +2,11 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputId, InputString } from '../form';
+import { Form } from '../form';
+import { FormButton } from './button';
+import { InputId, InputString, SelectCurrency } from './field';
 import { isLocation, type Location } from '@/schema';
 import { Route } from '@/api';
-import { SelectCurrency } from '../form';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
 import { useLocationIdEventHandlers } from './location/hooks';

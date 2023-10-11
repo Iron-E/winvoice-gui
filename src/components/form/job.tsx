@@ -2,23 +2,15 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Department, isJob, type Job } from '@/schema';
-import {
-	Form,
-	FormButton,
-	InputDate,
-	InputDuration,
-	InputId,
-	InputInvoice,
-	Textarea,
-	useDepartmentIdEventHandlers,
-	useIdInputs,
-	useOrganizationIdEventHandlers,
-} from '../form';
 import { chainRevivers, dateReviver, optional, type Maybe } from '@/utils';
+import { Department, isJob, type Job } from '@/schema';
+import { Form, FormButton } from '../form';
+import { InputDate, InputDuration, InputId, InputInvoice, Textarea, useIdInputs } from './field';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
+import { useDepartmentIdEventHandlers } from './department';
+import { useOrganizationIdEventHandlers } from './organization';
 
 export * from './job/hooks';
 

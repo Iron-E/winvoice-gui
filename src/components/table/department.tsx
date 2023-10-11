@@ -4,9 +4,11 @@ import React from 'react';
 import type { BaseProps } from './props';
 import type { Department } from '@/schema'
 import { DepartmentForm } from '../form';
-import { Route } from '@/api';
-import { Table, Td, Tr, useRowEventHandlers } from '../table';
 import { getId } from '@/utils';
+import { Route } from '@/api';
+import { Table } from '../table';
+import { Td } from './column';
+import { Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
 export * from './department/hooks';

@@ -12,6 +12,7 @@ export * from './field/id';
 export * from './field/invoice';
 export * from './field/match';
 export * from './field/money';
+export * from './field/password';
 export * from './field/string';
 
 /** Properties shared by all labeled elements. */

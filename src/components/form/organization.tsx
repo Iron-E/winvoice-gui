@@ -2,11 +2,14 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputId, InputString, useLocationIdEventHandlers } from '../form';
+import { Form } from '../form';
+import { FormButton } from './button';
+import { InputId, InputString } from './field';
 import { isOrganization, type Organization } from '@/schema';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
+import { useLocationIdEventHandlers } from './location';
 
 export * from './organization/hooks';
 

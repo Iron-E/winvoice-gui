@@ -3,9 +3,14 @@
 import React from 'react';
 import type { BaseProps, OrderProps } from './props';
 import type { Department, Employee, Role, User } from '@/schema'
-import { EmployeeTable, Order, OrderedData, RoleTable, Table, Td, Tr, useRowEventHandlers } from '../table';
+import { EmployeeTable } from './employee';
 import { getId } from '@/utils';
+import { Order, OrderedData } from './order';
+import { RoleTable } from './role';
 import { Route } from '@/api';
+import { Table } from '../table';
+import { Td } from './column';
+import { Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 import { UserForm } from '../form';
 

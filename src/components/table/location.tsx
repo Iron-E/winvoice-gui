@@ -9,8 +9,12 @@ import { FLEX, ICON } from '../css';
 import { getId, type Props } from '@/utils';
 import { LocationForm } from '../form';
 import { Modal } from '../modal';
-import { OrderedData, Table, TableButton, Td, Tr, useRowEventHandlers } from '../table';
+import { OrderedData } from './order';
 import { Route } from '@/api';
+import { Table } from '../table';
+import { TableButton } from './button';
+import { Td } from './column';
+import { Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 import { useLocationOrder } from './location/hooks';
 

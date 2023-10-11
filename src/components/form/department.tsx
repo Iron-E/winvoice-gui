@@ -2,10 +2,12 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputString } from '../form';
+import { Form } from '../form';
+import { FormButton } from './button';
+import { InputString } from './field';
+import { isDepartment, type Department } from '@/schema';
 import { Route } from '@/api';
 import { SPACE } from '../css';
-import { isDepartment, type Department } from '@/schema';
 import { useApiContext } from '../api';
 
 export * from './department/hooks';
@@ -41,5 +43,5 @@ export function DepartmentForm(props: BaseProps<Department>): React.ReactElement
 
 			<FormButton className={SPACE} />
 		</Form>
-	 );
+	);
 }

@@ -6,13 +6,12 @@ import type { AsyncOn, Class, On } from '../props-with';
 import { doNothing, type Fn, type Maybe, type Opt, type Props, type Reviver, type ValueOf } from '@/utils';
 import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, WifiIcon } from '@heroicons/react/20/solid';
 import { Code, newRequest, request, response, Route, type Request, type Status, UserInputRoute } from '@/api';
-import { Form, FormButton, Input, InputString } from '../form';
+import { Form, FormButton, Input, InputPassword, InputString } from '../form';
 import { ICON, SPACE } from '../css';
 import { Modal } from '../modal';
 import { SHOW_MESSAGE_CONTEXT, type ShowMessage } from '../messages';
 import { UnauthenticatedError } from './unauthenticated_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
-import { InputPassword } from '../form/field/password';
 
 /** A response body (`<T>`) or {@link null} if an error was handled. */
 type OptBody<T = unknown> = Promise<Opt<T>>;

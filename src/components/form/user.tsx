@@ -2,13 +2,17 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputId, InputString, useEmployeeIdEventHandlers, useRoleIdEventHandlers } from '../form';
+import { dateReviver } from '@/utils';
+import { Form } from '../form';
+import { FormButton } from './button';
+import { InputId, InputString } from './field';
 import { InputPassword } from './field/password';
 import { isUser, type User } from '@/schema';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
-import { dateReviver } from '@/utils';
+import { useEmployeeIdEventHandlers } from './employee';
+import { useRoleIdEventHandlers } from './role';
 
 /** The {@link Reviver} for {@link User}s. */
 const REVIVER = dateReviver<User>('password_set');

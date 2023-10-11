@@ -2,7 +2,9 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { Form, FormButton, InputDuration, InputString } from '../form';
+import { Form } from '../form';
+import { FormButton } from './button';
+import { InputDuration, InputString } from './field';
 import { isRole, type Role } from '@/schema';
 import { Route } from '@/api';
 import { SPACE } from '../css';
@@ -51,5 +53,5 @@ export function RoleForm(props: BaseProps<Role>): React.ReactElement {
 
 			<FormButton className={SPACE} />
 		</Form>
-	 );
+	);
 }

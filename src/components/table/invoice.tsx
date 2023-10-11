@@ -1,7 +1,10 @@
 import React from 'react';
 import type { BaseProps, OrderProps } from './props';
 import { moneyToString, type Invoice, type InvoiceDate } from '@/schema'
-import { OrderedData, Table, Td, Tr } from '../table';
+import { OrderedData } from './order/data';
+import { Table } from '../table';
+import { Td } from './column';
+import { Tr } from './row';
 
 export * from './invoice/hooks';
 export * from './invoice/valuators';

@@ -5,8 +5,12 @@ import type { BaseProps, OrderProps } from './props';
 import type { Contact, Location } from '@/schema'
 import type { ValueOf } from '@/utils';
 import { ContactForm } from '../form';
-import { LocationTable, OrderedData, Table, Td, Tr, type Valuators, useRowEventHandlers } from '../table';
+import { LocationTable } from './location';
+import { OrderedData, type Valuators } from './order';
 import { Route } from '@/api';
+import { Table } from '../table';
+import { Td } from './column';
+import { Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
 /** the headers of the {@link ContactTable}. */

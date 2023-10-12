@@ -81,7 +81,7 @@ export function InputMatch<T>(props:
 
 	if (props.value === 'any') {
 		children = <SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value={ANY} />;
-	} else if (typeof props.value === 'object') {
+	} else if (props.value instanceof Object) {
 		const AND = 'and' in props.value;
 		const GREATER_THAN = 'greater_than' in props.value;
 

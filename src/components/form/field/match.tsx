@@ -22,8 +22,10 @@ import { FormButton, LABEL_BUTTON_STYLE } from "../button";
 import { ICON } from '@/components/css';
 import { Input, InputString, Select } from "../field";
 
+export * from './match/department';
+
 /** A react component which can be used to input an operand value for a {@link Match} condition.  */
-type InputComponent<T> = (p: Omit<InputProps<T>, 'value'> & { value?: T }) => React.ReactElement;
+export type InputMatchField<T> = (p: Omit<InputProps<T>, 'value'> & { value?: T }) => React.ReactElement;
 
 /** The 'operands' {@link BorderLabeledField} minimum width style. */
 const OPERANDS_BORDER_STYLE = 'min-w-[16.6rem]';
@@ -34,12 +36,27 @@ function and_or(and: boolean): ['and' | 'or', 'or' | 'and'] {
 
 /** @returns the `Field` with some defaults used for {@link InputMatch}. */
 function InputField<T>(props:
-	& { Field: InputComponent<T> }
-	& { [key in 'id' | 'onChange']: Parameters<InputComponent<T>>[0][key] }
-	& { [key in 'label' | 'value']?: Parameters<InputComponent<T>>[0][key] }
+	& { Field: InputMatchField<T> }
+	& { [key in 'id' | 'onChange']: Parameters<InputMatchField<T>>[0][key] }
+	& { [key in 'label' | 'value']?: Parameters<InputMatchField<T>>[0][key] }
 ): React.ReactElement {
 	return (
 		<props.Field
+			id={`${props.id}--operand`}
+			label={props.label ?? 'Operand'}
+			onChange={props.onChange}
+			placeholder=''
+			required={true}
+			title='The value which is used in combination with the Operator field to form a condition'
+			value={props.value}
+		/>
+	);
+}
+
+/** @returns a customized {@link InputStrField} used for {@link InputMatchStr}. */
+function InputStrField(props: Props<typeof InputString>): React.ReactElement {
+	return (
+		<InputString
 			id={`${props.id}--operand`}
 			label={props.label ?? 'Operand'}
 			onChange={props.onChange}
@@ -59,7 +76,7 @@ type InputMatchProps<T, CompositePropsRequired extends boolean = false> =
 /** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link Match} condition. */
 export function InputMatch<T>(props:
 	& InputMatchProps<MayMatch<T>>
-	& { inputField: InputComponent<T> }
+	& { inputField: InputMatchField<T> }
 ): React.ReactElement {
 	let children: Maybe<React.ReactElement>;
 
@@ -89,7 +106,7 @@ export function InputMatch<T>(props:
 						Field={props.inputField}
 						id={`${props.id}--gt-eq`}
 						label='Greater than or equal to'
-						onChange={value => props.onChange({ in_range: [value as Maybe<T>, UPPER] })}
+						onChange={value => props.onChange({ in_range: [value, UPPER] })}
 						value={LOWER}
 					/>
 
@@ -97,7 +114,7 @@ export function InputMatch<T>(props:
 						Field={props.inputField}
 						id={`${props.id}--lt`}
 						label='Less than'
-						onChange={value => props.onChange({ in_range: [LOWER, value as Maybe<T>] })}
+						onChange={value => props.onChange({ in_range: [LOWER, value] })}
 						value={UPPER}
 					/>
 				</BorderLabeledField>
@@ -153,8 +170,8 @@ export function InputMatch<T>(props:
 					id={`${props.id}--not`}
 					inputField={props.inputField}
 					label='Operand'
-					onChange={value => props.onChange({ not: value })}
-					value={props.value.not}
+					onChange={value => props.onChange({ not: value } as MayMatch<T>)}
+					value={props.value.not as MayMatch<T>}
 				/>
 			</>;
 		}
@@ -182,7 +199,7 @@ export function InputMatchStr(props: InputMatchProps<MatchStr, true>): React.Rea
 	} else if (typeof props.value === 'string') {
 		children = <>
 			<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={EQUAL_TO} />
-			<InputString
+			<InputStrField
 				id={props.id}
 				onChange={props.onChange as Fn<[string]>}
 				title=''
@@ -196,7 +213,7 @@ export function InputMatchStr(props: InputMatchProps<MatchStr, true>): React.Rea
 			const OPERATOR: MatchStrOperator = GREATER_THAN ? 'contains' : 'regex';
 			children = <>
 				<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
-				<InputString
+				<InputStrField
 					id={props.id}
 					onChange={value => props.onChange({ [OPERATOR]: value } as MatchStr)}
 					title=''

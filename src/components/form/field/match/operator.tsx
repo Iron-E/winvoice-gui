@@ -22,7 +22,7 @@ export type MatchOperator = BaseOperator | `${'greater' | 'less'}_than` | 'in_ra
 export type MatchStrOperator = BaseOperator | 'contains' | 'regex';
 
 /** {@link Match}es {@link Maybe<T>}. */
-export type MayMatch<T> = Match<Maybe<T>>;
+export type MayMatch<T> = Maybe<Match<T>>;
 
 /** A map of operator names to their change handlers. */
 type OperatorChangeHandlers<O extends FieldName, M> = Readonly<Record<

@@ -70,6 +70,7 @@ const MATCH_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchOperator, MayM
 
 const MATCH_STR_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchStrOperator, MatchStr> = {
 	...BASE_OPERATOR_CHANGE_HANDLERS as OperatorChangeHandlers<MatchStrOperator, MatchStr>,
+	[EQUAL_TO]: (h, c, o) => h(MATCH_STR_OPERATOR_TO_OPERAND[o]?.(c) ?? ''),
 	contains: (h, c, o) => h({ contains: MATCH_STR_OPERATOR_TO_OPERAND[o]?.(c) ?? '' }),
 	regex: (h, c, o) => h({ regex: MATCH_STR_OPERATOR_TO_OPERAND[o]?.(c) ?? '' }),
 };

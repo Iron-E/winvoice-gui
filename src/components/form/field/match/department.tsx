@@ -15,7 +15,7 @@ export function InputMatchDepartment(props: Required<CompositeProps<MatchDepartm
 			id={`${props.id}--id`}
 			label='Id'
 			onChange={value => props.onChange({ ...props.value, id: value })}
-			value={props.value.id}
+			value={props.value.id ?? 'any'}
 		/>
 
 		<InputMatchStr

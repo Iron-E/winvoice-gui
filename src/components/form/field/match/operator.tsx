@@ -1,5 +1,5 @@
 import type { Children, On } from "@/components/props-with";
-import type { Dict, FieldName, Fn, Maybe } from "@/utils";
+import type { Dict, FieldName, Fn } from "@/utils";
 import type { Match, MatchStr } from "@/match";
 import type { SelectProps } from "../props";
 import { FormButton, LABEL_BUTTON_STYLE } from "../../button";
@@ -20,9 +20,6 @@ export type MatchOperator = BaseOperator | `${'greater' | 'less'}_than` | 'in_ra
 
 /** The operators of a {@link Match} condition. */
 export type MatchStrOperator = BaseOperator | 'contains' | 'regex';
-
-/** {@link Match}es {@link Maybe<T>}. */
-export type MayMatch<T> = Maybe<Match<T>>;
 
 /** A map of operator names to their change handlers. */
 type OperatorChangeHandlers<O extends FieldName, M> = Readonly<Record<
@@ -58,10 +55,10 @@ const BASE_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<
 
 /**
  * A lookup table for handlers used in {@link handleOperatorChange}.
- * HACK: `any` used here because you can't do `<T> OperatorChangeHandlers<_, MayMatch<T>>`
+ * HACK: `any` used here because you can't do `<T> OperatorChangeHandlers<_, Match<T>>`
  */
-const MATCH_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchOperator, MayMatch<any>> = {
-	...BASE_OPERATOR_CHANGE_HANDLERS as OperatorChangeHandlers<MatchOperator, MayMatch<any>>,
+const MATCH_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchOperator, Match<any>> = {
+	...BASE_OPERATOR_CHANGE_HANDLERS as OperatorChangeHandlers<MatchOperator, Match<any>>,
 	[EQUAL_TO]: (h, c, o) => h(MATCH_OPERATOR_TO_OPERAND[o]?.(c)),
 	greater_than: (h, c, o) => h({ greater_than: MATCH_OPERATOR_TO_OPERAND[o]?.(c) }),
 	in_range: (h, c, o) => h({ in_range: [MATCH_OPERATOR_TO_OPERAND[o]?.(c), undefined] }),
@@ -77,14 +74,15 @@ const MATCH_STR_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchStrOperato
 
 /*
  * The base for {@link MATCH_OPERATOR_TO_OPERAND} and {@link MATCH_STR_OPERATOR_TO_OPERAND}.
+ * HACK: `any` used here because you can't do `<T, U> Dict<_, (_: T) => U>`
  */
-const BASE_OPERATOR_TO_OPERAND: Dict<BaseOperator, <T, U extends T>(condition: T) => U> = {
-	[EQUAL_TO]: <T, U>(c: T) => c! as U,
+const BASE_OPERATOR_TO_OPERAND: Dict<BaseOperator, (condition: any) => any> = {
+	[EQUAL_TO]: c => c,
 };
 
 /** A lookup table for handlers used in {@link handleOperatorChange}. */
 /** Maps a condition's {@link MatchOperator | operator} to an instruction which will extract the operand. */
-export const MATCH_OPERATOR_TO_OPERAND: Dict<MatchOperator, <T>(condition: MayMatch<T>) => Maybe<T>> = {
+export const MATCH_OPERATOR_TO_OPERAND: Dict<MatchOperator, <T>(condition: Match<T>) => T> = {
 	...BASE_OPERATOR_TO_OPERAND,
 	greater_than: c => (c as Record<'greater_than', any>).greater_than,
 	in_range: c => (c as Record<'in_range', any>).in_range[0],
@@ -188,7 +186,7 @@ type Props<O, M> =
 	;
 
 /** A selector for the current 'variant' (e.g. 'and', 'any') of the {@link Match} condition. */
-export function SelectMatchOperator<T>(props: Props<MatchOperator, MayMatch<T>>): React.ReactElement {
+export function SelectMatchOperator<T>(props: Props<MatchOperator, Match<T>>): React.ReactElement {
 	return (
 		<SelectOperator {...props} operatorChangeHandlers={MATCH_OPERATOR_CHANGE_HANDLERS}>
 			{MATCH_OPTIONS}

@@ -14,7 +14,6 @@ import {
 	SelectMatchStrOperator,
 	type MatchOperator,
 	type MatchStrOperator,
-	type MayMatch,
 } from './match/operator';
 import { ArrowsRightLeftIcon } from '@heroicons/react/20/solid';
 import { BorderLabeledField, GRID } from './border-labeled';
@@ -25,7 +24,7 @@ import { Input, InputString, Select } from "../field";
 export * from './match/department';
 
 /** A react component which can be used to input an operand value for a {@link Match} condition.  */
-export type InputMatchField<T> = (p: Omit<InputProps<T>, 'value'> & { value?: T }) => React.ReactElement;
+export type InputMatchField<T> = (p: Omit<InputProps<T>, 'value'> & { value: T }) => React.ReactElement;
 
 /** The 'operands' {@link BorderLabeledField} minimum width style. */
 const OPERANDS_BORDER_STYLE = 'min-w-[16.6rem]';
@@ -37,8 +36,8 @@ function and_or(and: boolean): ['and' | 'or', 'or' | 'and'] {
 /** @returns the `Field` with some defaults used for {@link InputMatch}. */
 function InputField<T>(props:
 	& { Field: InputMatchField<T> }
-	& { [key in 'id' | 'onChange']: Parameters<InputMatchField<T>>[0][key] }
-	& { [key in 'label' | 'value']?: Parameters<InputMatchField<T>>[0][key] }
+	& { [key in 'id' | 'onChange' | 'value']: Parameters<InputMatchField<T>>[0][key] }
+	& { [key in 'label']?: Parameters<InputMatchField<T>>[0][key] }
 ): React.ReactElement {
 	return (
 		<props.Field
@@ -69,13 +68,13 @@ function InputStrField(props: Props<typeof InputString>): React.ReactElement {
 }
 
 /** Properties of components used for inputting {@link Match} / {@link MatchStr} conditions. */
-type InputMatchProps<T, CompositePropsRequired extends boolean = false> =
-	& (CompositePropsRequired extends true ? Required<CompositeProps<T>> : CompositeProps<T>)
+type InputMatchProps<T> =
+	& Required<CompositeProps<T>>
 	& { button?: ValueOf<Props<typeof BorderLabeledField>, 'button'> };
 
 /** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link Match} condition. */
 export function InputMatch<T>(props:
-	& InputMatchProps<MayMatch<T>>
+	& InputMatchProps<Match<T>>
 	& { inputField: InputMatchField<T> }
 ): React.ReactElement {
 	let children: Maybe<React.ReactElement>;
@@ -93,7 +92,7 @@ export function InputMatch<T>(props:
 				<InputField
 					Field={props.inputField}
 					id={props.id}
-					onChange={value => props.onChange({ [OPERATOR]: value } as MayMatch<T>)}
+					onChange={value => props.onChange({ [OPERATOR]: value } as Match<T>)}
 					value={MATCH_OPERATOR_TO_OPERAND[OPERATOR]!(props.value)}
 				/>
 			</>;
@@ -121,14 +120,14 @@ export function InputMatch<T>(props:
 			</>;
 		} else if (AND || 'or' in props.value) {
 			const [OPERATOR, OTHER_OPERATOR] = and_or(AND);
-			const OPERANDS = (props.value as Record<typeof OPERATOR, MayMatch<T>[]>)[OPERATOR];
+			const OPERANDS = (props.value as Record<typeof OPERATOR, Match<T>[]>)[OPERATOR];
 			children = <>
 				<SelectMatchOperator
 					condition={props.value}
 					labelChildren={<>
 						<FormButton
 							className={LABEL_BUTTON_STYLE}
-							onClick={() => props.onChange({ [OTHER_OPERATOR]: OPERANDS } as MayMatch<T>)}
+							onClick={() => props.onChange({ [OTHER_OPERATOR]: OPERANDS } as Match<T>)}
 						>
 							<ArrowsRightLeftIcon className={ICON} /> Swap
 						</FormButton>
@@ -140,7 +139,7 @@ export function InputMatch<T>(props:
 
 				<BorderLabeledField
 					button={{
-						onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, undefined] } as MayMatch<T>),
+						onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, undefined] } as Match<T>),
 						text: <AddIcon />,
 						// TODO: add 'pull out' button, requires refactoring `borderlabeledfield`
 					}}
@@ -150,14 +149,14 @@ export function InputMatch<T>(props:
 					{OPERANDS.map((condition, i) =>
 						<InputMatch
 							button={OPERANDS.length < 2 ? undefined : {
-								onClick: () => props.onChange({ [OPERATOR]: OPERANDS.toSpliced(i, 1) } as MayMatch<T>),
+								onClick: () => props.onChange({ [OPERATOR]: OPERANDS.toSpliced(i, 1) } as Match<T>),
 								text: <RemoveIcon />,
 							}}
 							id={`${props.id}--and-${i}`}
 							inputField={props.inputField}
 							key={i}
 							label={`${i + 1}`}
-							onChange={value => props.onChange({ [OPERATOR]: OPERANDS.with(i, value) } as MayMatch<T>)}
+							onChange={value => props.onChange({ [OPERATOR]: OPERANDS.with(i, value) } as Match<T>)}
 							value={condition}
 						/>
 					)}
@@ -170,8 +169,8 @@ export function InputMatch<T>(props:
 					id={`${props.id}--not`}
 					inputField={props.inputField}
 					label='Operand'
-					onChange={value => props.onChange({ not: value } as MayMatch<T>)}
-					value={props.value.not as MayMatch<T>}
+					onChange={value => props.onChange({ not: value } as Match<T>)}
+					value={props.value.not as Match<T>}
 				/>
 			</>;
 		}
@@ -184,14 +183,14 @@ export function InputMatch<T>(props:
 				Field={props.inputField}
 				id={props.id}
 				onChange={props.onChange as Fn<[T]>}
-				value={props.value as Maybe<T>}
+				value={props.value as T}
 			/>
 		</>}
 	</BorderLabeledField>;
 }
 
 /** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link Match} condition. */
-export function InputMatchStr(props: InputMatchProps<MatchStr, true>): React.ReactElement {
+export function InputMatchStr(props: InputMatchProps<MatchStr>): React.ReactElement {
 	let children: Maybe<React.ReactElement>;
 
 	if (props.value === 'any') {

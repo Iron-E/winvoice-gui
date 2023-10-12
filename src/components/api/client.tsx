@@ -126,6 +126,26 @@ export class Client {
 	/**
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @param route the {@link Route} to send the request to.
+	 * @param body the post request.
+	 * @returns whether the request succeeded.
+	 */
+	public async create<RequestBodyInner, ResponseBody extends {}>(
+		this: Readonly<Client>,
+		showMessage: ShowMessage,
+		route: UserInputRoute,
+		body: request.Put<RequestBodyInner>,
+		checkSchema: (json: unknown) => json is ResponseBody,
+		reviver?: Reviver,
+	): OptBody<Required<response.Put<ResponseBody>>['entity']> {
+		const RESULT = await (this as Client).caughtRequest(showMessage, route, { method: 'PUT', body }, response.isPut, reviver);
+		return (RESULT !== null && checkSchema(RESULT.entity))
+			? RESULT.entity
+			: null;
+	}
+
+	/**
+	 * @param showMessage a function that will be used to notify a user of errors.
+	 * @param route the {@link Route} to send the request to.
 	 * @param body the delete request.
 	 * @returns whether the request succeeded.
 	 */
@@ -149,32 +169,8 @@ export class Client {
 		showMessage: ShowMessage,
 		body: request.Export,
 	): OptBody<ValueOf<response.Export, 'exported'>> {
-		const RESULT = await (this as Client).caughtRequest(showMessage, Route.Export, { method: 'GET', body }, response.isExport);
+		const RESULT = await (this as Client).caughtRequest(showMessage, Route.Export, { method: 'POST', body }, response.isExport);
 		return RESULT && RESULT.exported;
-	}
-
-	/**
-	 * @param showMessage a function that will be used to notify a user of errors.
-	 * @param route the {@link Route} to send the request to.
-	 * @param body the get request.
-	 * @returns whether the request succeeded.
-	 */
-	public async get<RequestBodyInner, ResponseBody>(
-		this: Readonly<Client>,
-		showMessage: ShowMessage,
-		route: UserInputRoute,
-		body: request.Get<RequestBodyInner>,
-		checkSchema: (json: unknown) => json is ResponseBody,
-	): OptBody<response.Get<ResponseBody>['entities']> {
-		const RESULT = await (this as Client).caughtRequest(showMessage, route, { method: 'GET', body }, response.isGet);
-		if (RESULT !== null) {
-			const IS_EMPTY = RESULT.entities.length < 1;
-			if (IS_EMPTY || (!IS_EMPTY && checkSchema(RESULT.entities[0]))) {
-				return RESULT.entities as ResponseBody[];
-			}
-		}
-
-		return null;
 	}
 
 	/**
@@ -187,7 +183,7 @@ export class Client {
 		return await (this as Client).caughtRequest(
 			showMessage,
 			Route.Login,
-			{ method: 'GET', headers: { authorization: `Basic ${btoa(`${this.username}:${password}`)}` } },
+			{ method: 'POST', headers: { authorization: `Basic ${btoa(`${this.username}:${password}`)}` } },
 			response.isDelete,
 		) !== null;
 	}
@@ -198,42 +194,31 @@ export class Client {
 	 * @returns the response or an error.
 	 */
 	public async logout(this: Readonly<Client>, showMessage: ShowMessage): RequestSuccess {
-		return await (this as Client).caughtRequest(showMessage, Route.Logout, { method: 'GET' }, response.isDelete) !== null;
+		return await (this as Client).caughtRequest(showMessage, Route.Logout, { method: 'POST' }, response.isDelete) !== null;
 	}
 
 	/**
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @param route the {@link Route} to send the request to.
-	 * @param body the patch request.
+	 * @param body the get request.
 	 * @returns whether the request succeeded.
 	 */
-	public async patch<RequestBodyInner>(
-		this: Readonly<Client>,
-		showMessage: ShowMessage,
-		route: UserInputRoute,
-		body: request.Patch<RequestBodyInner>,
-	): RequestSuccess {
-		return await (this as Client).caughtRequest(showMessage, route, { method: 'PATCH', body }, response.isPatch) !== null;
-	}
-
-	/**
-	 * @param showMessage a function that will be used to notify a user of errors.
-	 * @param route the {@link Route} to send the request to.
-	 * @param body the post request.
-	 * @returns whether the request succeeded.
-	 */
-	public async post<RequestBodyInner, ResponseBody extends {}>(
+	public async retrieve<RequestBodyInner, ResponseBody>(
 		this: Readonly<Client>,
 		showMessage: ShowMessage,
 		route: UserInputRoute,
 		body: request.Post<RequestBodyInner>,
 		checkSchema: (json: unknown) => json is ResponseBody,
-		reviver?: Reviver,
-	): OptBody<Required<response.Post<ResponseBody>>['entity']> {
-		const RESULT = await (this as Client).caughtRequest(showMessage, route, { method: 'POST', body }, response.isPost, reviver);
-		return (RESULT !== null && checkSchema(RESULT.entity))
-			? RESULT.entity
-			: null;
+	): OptBody<response.Post<ResponseBody>['entities']> {
+		const RESULT = await (this as Client).caughtRequest(showMessage, route, { method: 'POST', body }, response.isPost);
+		if (RESULT !== null) {
+			const IS_EMPTY = RESULT.entities.length < 1;
+			if (IS_EMPTY || (!IS_EMPTY && checkSchema(RESULT.entities[0]))) {
+				return RESULT.entities as ResponseBody[];
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -242,7 +227,7 @@ export class Client {
 	 * @returns whether the request succeeded.
 	 */
 	public async setWhoIAm(this: Client, showMessage: ShowMessage,): RequestSuccess {
-		const RESULT = await this.request(showMessage, Route.WhoAmI, { method: 'GET' }, response.isWhoAmI);
+		const RESULT = await this.request(showMessage, Route.WhoAmI, { method: 'POST' }, response.isWhoAmI);
 		if (RESULT === null) { return false; }
 
 		if (!(RESULT instanceof UnauthenticatedError)) { // the user isn't logged in, which is fine.
@@ -251,6 +236,22 @@ export class Client {
 
 		return true;
 	}
+
+	/**
+	 * @param showMessage a function that will be used to notify a user of errors.
+	 * @param route the {@link Route} to send the request to.
+	 * @param body the patch request.
+	 * @returns whether the request succeeded.
+	 */
+	public async update<RequestBodyInner>(
+		this: Readonly<Client>,
+		showMessage: ShowMessage,
+		route: UserInputRoute,
+		body: request.Patch<RequestBodyInner>,
+	): RequestSuccess {
+		return await (this as Client).caughtRequest(showMessage, route, { method: 'PATCH', body }, response.isPatch) !== null;
+	}
+
 }
 
 type ModalProps = Props<typeof Modal>;

@@ -138,7 +138,7 @@ export class OrderedData<T extends {}> {
 		entities: Dict<Id, NonNullUnit<T>>,
 		getId: GetId<T, Id>,
 	): Promise<void> {
-		if (await client.patch(showMessage, route, { entities: Object.values(entities) })) {
+		if (await client.update(showMessage, route, { entities: Object.values(entities) })) {
 			this.map(value => entities[getId(value)] ?? value);
 		}
 	}

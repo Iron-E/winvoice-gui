@@ -46,7 +46,7 @@ export function JobForm(props: BaseProps<Job>): React.ReactElement {
 	return <>
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
-				const RESULT = await API_CLIENT.post(
+				const RESULT = await API_CLIENT.create(
 					showMessage,
 					Route.Job,
 					{ args: [CLIENT, DATE_CLOSE, DATE_OPEN, DEPARTMENTS, INCREMENT, INVOICE, NOTES, OBJECTIVES] },

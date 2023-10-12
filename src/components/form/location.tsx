@@ -27,7 +27,7 @@ export function LocationForm(props: BaseProps<Location>): React.ReactElement {
 	return <>
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
-				const RESULT = await CLIENT.post(showMessage, Route.Location, { args: [CURRENCY, NAME, OUTER] }, isLocation);
+				const RESULT = await CLIENT.create(showMessage, Route.Location, { args: [CURRENCY, NAME, OUTER] }, isLocation);
 				if (RESULT === null) { return; }
 				var result = RESULT;
 			} else {

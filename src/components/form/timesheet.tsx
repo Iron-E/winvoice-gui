@@ -43,7 +43,7 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 	return <>
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
-				const RESULT = await CLIENT.post(
+				const RESULT = await CLIENT.create(
 					showMessage,
 					Route.Timesheet,
 					{ args: [EMPLOYEE, (EXPENSES as Expense[]).map(expenseToValue), JOB, TIME_BEGIN, TIME_END, WORK_NOTES] },

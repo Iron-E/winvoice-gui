@@ -7,12 +7,12 @@ export { request };
 
 /** What information is used to spawn a new API request.  */
 export type Request<T = never> = Omit<RequestInit, 'body' | 'credentials'> & {
-	body?: request.Delete | request.Export | request.Get<T> | request.Patch<T> | request.Post<T>,
-	method: 'DELETE' | 'GET' | 'PATCH' | 'POST',
+	body?: request.Delete | request.Export | request.Post<T> | request.Patch<T> | request.Put<T>,
+	method: 'DELETE' | 'POST' | 'PATCH' | 'PUT',
 };
 
 /**
- * @param <BodyInner> the content of e.g. {@link request.Get}, should it be the body.
+ * @param <BodyInner> the content of e.g. {@link request.Post}, should it be the body.
  * @returns an {@link RequestInit | APi request} which can be passed to {@link fetch}.
  */
 export function newRequest<BodyInner>(r: Request<BodyInner>): RequestInit {
@@ -31,7 +31,7 @@ export function newRequest<BodyInner>(r: Request<BodyInner>): RequestInit {
 
 	r.headers = {
 		...r.headers,
-		'api-version': '^0.1',
+		'api-version': '^0.2',
 		'content-type': 'application/json',
 	};
 

@@ -1,8 +1,8 @@
 import { isStatus, type Status } from '../status';
 
-/** Same as {@link https://github.com/Iron-E/winvoice-server | `api::response::Post`}. */
+/** Same as {@link https://github.com/Iron-E/winvoice-server | `api::response::Get`}. */
 export type Post<T = unknown> = {
-	entity?: T,
+	entities: T[],
 	status: Status,
 };
 
@@ -12,6 +12,7 @@ export type Post<T = unknown> = {
  */
 export function isPost(json: unknown): json is Post {
 	return json instanceof Object && (
-		'status' in json && isStatus(json.status)
+		'entities' in json && json.entities instanceof Array
+		&& 'status' in json && isStatus(json.status)
 	);
 }

@@ -51,7 +51,7 @@ export function ContactForm(props: BaseProps<Contact>): React.ReactElement {
 	return <>
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
-				const RESULT = await CLIENT.post(showMessage, Route.Contact, { args: [{ [KIND]: VALUE }, LABEL] }, isContact);
+				const RESULT = await CLIENT.create(showMessage, Route.Contact, { args: [{ [KIND]: VALUE }, LABEL] }, isContact);
 				if (RESULT === null) { return; }
 				var result = RESULT;
 			} else {

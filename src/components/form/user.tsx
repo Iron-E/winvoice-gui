@@ -36,7 +36,7 @@ export function UserForm(props: BaseProps<User>): React.ReactElement {
 	return <>
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
-				const RESULT = await CLIENT.post(showMessage, Route.User, { args: [EMPLOYEE, PASSWORD, ROLE, USERNAME] }, isUser, REVIVER);
+				const RESULT = await CLIENT.create(showMessage, Route.User, { args: [EMPLOYEE, PASSWORD, ROLE, USERNAME] }, isUser, REVIVER);
 				if (RESULT === null) { return; }
 				var result = RESULT;
 			} else {

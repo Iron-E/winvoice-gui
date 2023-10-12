@@ -8,6 +8,6 @@ export type Logout = Delete;
 export type Patch = Delete;
 export { type Delete, isDelete };
 export { type Export, isExport } from './export';
-export { type Get, isGet } from './get';
 export { type Post, isPost } from './post';
+export { type Put, isPut } from './put';
 export { type WhoAmI, isWhoAmI } from './who_am_i';

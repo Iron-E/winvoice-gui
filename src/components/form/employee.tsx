@@ -28,7 +28,7 @@ export function EmployeeForm(props: BaseProps<Employee>): React.ReactElement {
 	return <>
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
-				const RESULT = await CLIENT.post(showMessage, Route.Employee, { args: [DEPARTMENT, NAME, TITLE] }, isEmployee);
+				const RESULT = await CLIENT.create(showMessage, Route.Employee, { args: [DEPARTMENT, NAME, TITLE] }, isEmployee);
 				if (RESULT === null) { return; }
 				var result = RESULT;
 			} else {

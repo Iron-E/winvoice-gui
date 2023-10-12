@@ -26,7 +26,7 @@ export function OrganizationForm(props: BaseProps<Organization>): React.ReactEle
 	return <>
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
-				const RESULT = await CLIENT.post(showMessage, Route.Organization, { args: [LOCATION, NAME] }, isOrganization);
+				const RESULT = await CLIENT.create(showMessage, Route.Organization, { args: [LOCATION, NAME] }, isOrganization);
 				if (RESULT === null) { return; }
 				var result = RESULT;
 			} else {

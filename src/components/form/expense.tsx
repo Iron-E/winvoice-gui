@@ -37,7 +37,7 @@ export function ExpenseForm(props: BaseProps<Expense>): React.ReactElement {
 	return <>
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
-				const RESULT = await CLIENT.post(
+				const RESULT = await CLIENT.create(
 					showMessage,
 					Route.Expense,
 					{ args: [[VALUES], TIMESHEET_ID] },

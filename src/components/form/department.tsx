@@ -22,7 +22,7 @@ export function DepartmentForm(props: BaseProps<Department>): React.ReactElement
 	return (
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
-				const RESULT = await CLIENT.post(showMessage, Route.Department, { args: NAME }, isDepartment);
+				const RESULT = await CLIENT.create(showMessage, Route.Department, { args: NAME }, isDepartment);
 				if (RESULT === null) { return; }
 				var result = RESULT;
 			} else {

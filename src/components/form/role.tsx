@@ -24,7 +24,7 @@ export function RoleForm(props: BaseProps<Role>): React.ReactElement {
 	return (
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
-				const RESULT = await CLIENT.post(showMessage, Route.Role, { args: [NAME, PASSWORD_TTL] }, isRole);
+				const RESULT = await CLIENT.create(showMessage, Route.Role, { args: [NAME, PASSWORD_TTL] }, isRole);
 				if (RESULT === null) { return; }
 				var result = RESULT;
 			} else {

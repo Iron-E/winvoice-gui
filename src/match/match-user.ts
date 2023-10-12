@@ -9,7 +9,7 @@ import { type MatchStr } from './match-str';
 export type MatchUser = {
 	employee: MatchOption<MatchEmployee>,
 	id: Match<Id>,
-	password: MatchStr<string>,
+	password: MatchStr,
 	password_set: MatchOption<Match<Date>>,
 	role: MatchRole,
 	username: string,

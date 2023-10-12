@@ -18,6 +18,6 @@ export type MatchJob = {
 	/** {@link https://docs.rs/humantime/latest/humantime | Human-readable} durations */
 	increment?: Match<string>,
 	invoice?: MatchInvoice,
-	notes?: MatchStr<string>,
-	objectives?: MatchStr<string>,
+	notes?: MatchStr,
+	objectives?: MatchStr,
 };

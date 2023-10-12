@@ -5,7 +5,7 @@ import { type MatchStr } from '../match-str';
 export type MatchContactKind =
 	| { address: MatchLocation }
 	| 'any'
-	| { email: MatchStr<string> }
-	| { other: MatchStr<string> }
-	| { phone: MatchStr<string> }
+	| { email: MatchStr }
+	| { other: MatchStr }
+	| { phone: MatchStr }
 	;

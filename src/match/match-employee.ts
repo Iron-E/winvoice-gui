@@ -8,6 +8,6 @@ export type MatchEmployee = {
 	active?: Match<boolean>,
 	department?: MatchDepartment,
 	id?: Match<Id>,
-	name?: MatchStr<string>,
-	title?: MatchStr<string>,
+	name?: MatchStr,
+	title?: MatchStr,
 };

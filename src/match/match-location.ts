@@ -7,6 +7,6 @@ import { type MatchStr } from './match-str';
 export type MatchLocation = {
 	currency?: MatchOption<Match<Currency>>,
 	id?: Match<Id>,
-	name?: MatchStr<string>,
+	name?: MatchStr,
 	outer?: MatchOption<MatchLocation>,
 };

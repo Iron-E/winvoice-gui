@@ -14,5 +14,5 @@ export type MatchTimesheet = {
 	job?: MatchJob,
 	time_begin?: Match<string>,
 	time_end?: Match<string>,
-	work_notes?: MatchStr<string>,
+	work_notes?: MatchStr,
 };

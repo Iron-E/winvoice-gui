@@ -7,5 +7,5 @@ import { type MatchStr } from './match-str';
 export type MatchOrganization = {
 	id?: Match<Id>,
 	location?: MatchLocation,
-	name?: MatchStr<string>,
+	name?: MatchStr,
 };

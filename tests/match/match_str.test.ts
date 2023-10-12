@@ -1,6 +1,6 @@
 import { type MatchStr } from '@/match';
 
-type M = MatchStr<string>
+type M = MatchStr
 describe('MatchStr', () => {
 	test('JSON decoding', () => {
 		expect(JSON.parse(`{

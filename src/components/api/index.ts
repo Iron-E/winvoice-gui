@@ -1,8 +1,8 @@
 import React from 'react';
-import { Client, ClientSelector } from './client';
+import { Client } from './client';
 import { SHOW_MESSAGE_CONTEXT, type ShowMessage } from '../messages';
 
-export { Client, ClientSelector };
+export { Client };
 export { UnauthenticatedError } from './unauthenticated_error';
 export { UnexpectedResponseError } from './unexpected_response_error';
 

@@ -1,8 +1,9 @@
 'use client';
 
+import React from 'react';
+import type { JsonFields } from '@/utils';
 import {
 	Client,
-	ClientSelector,
 	css,
 	Header,
 	HEADER_CSS,
@@ -12,8 +13,7 @@ import {
 	type Message,
 	type ShowMessage,
 } from '@/components';
-import React from 'react';
-import type { JsonFields } from '@/utils';
+import { ClientSelector } from '@/components/api/client/selector';
 
 /** @returns a guidance message to help users get started using winvoice. */
 function Guidance(props: w.Children): React.ReactElement {

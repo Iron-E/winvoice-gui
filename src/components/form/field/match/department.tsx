@@ -1,15 +1,15 @@
 'use client';
 
 import React from 'react';
-import type { CompositeProps } from '../props';
+import type { InputMatchObjectProps } from './props';
 import type { MatchDepartment } from '@/match';
-import { InputMatchStr } from '../match';
 import { InputMatchId } from './id';
+import { InputMatchStr } from '../match';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link MatchDepartment} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
-export function InputMatchDepartment(props: Required<CompositeProps<MatchDepartment>>): React.ReactElement {
+export function InputMatchDepartment(props: InputMatchObjectProps<MatchDepartment>): React.ReactElement {
 	return <>
 		<InputMatchId
 			id={`${props.id}--id`}

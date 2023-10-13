@@ -33,8 +33,6 @@ type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.In
 	}
 	;
 
-/** The style of a form field. */
-const FIELD_STYLE = `${SPACE} bg-form-field-bg h-full` as const;
 
 type InputProps = ValueOf<React.JSX.IntrinsicElements, 'input'>;
 
@@ -48,7 +46,7 @@ export function Checkbox(props:
 		<label>
 			<input
 				checked={props.checked}
-				className={`${FIELD_STYLE} ${props.inputClassName}`}
+				className={`${`${SPACE} bg-form-field-bg h-full` as const} ${props.inputClassName}`}
 				name={props.id}
 				onChange={() => props.onChange(props.checked ?? false)}
 				title={props.title}
@@ -108,7 +106,7 @@ export function Input(props:
 
 		<ValidateIcon iconRight={props.validateIconRight} iconTop={props.validateIconTop}>
 			<input
-				className={`${FIELD_STYLE} ${props.inputClassName} peer w-full`}
+				className={`${`${SPACE} bg-form-field-bg h-full` as const} ${props.inputClassName} peer w-full`}
 				id={props.id}
 				name={props.id}
 				onChange={e => props.onChange(e.target.value)}
@@ -138,7 +136,7 @@ export function Select(props: FieldProps<HTMLSelectElement, 'select'> & Children
 
 		<ValidateIcon iconRight={props.validateIconRight ?? 'right-3'} iconTop={props.validateIconTop}>
 			<select
-				className={`${FIELD_STYLE} ${props.selectClassName} peer w-full`}
+				className={`${`${SPACE} bg-form-field-bg h-full` as const} ${props.selectClassName} peer w-full`}
 				id={props.id}
 				name={props.id}
 				onChange={e => props.onChange(e.target.value)}
@@ -166,7 +164,7 @@ export function Textarea(props:
 
 		<ValidateIcon iconRight={props.validateIconRight} iconTop={props.validateIconTop}>
 			<textarea
-				className={`${FIELD_STYLE} ${props.textareaClassName} peer w-full min-h-[2rem] rounded-br-none`}
+				className={`${`${SPACE} bg-form-field-bg h-full` as const} ${props.textareaClassName} peer w-full min-h-[2rem] rounded-br-none`}
 				id={props.id}
 				name={props.id}
 				onChange={e => props.onChange(e.target.value)}

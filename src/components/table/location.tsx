@@ -20,6 +20,7 @@ import { useLocationOrder } from './location/hooks';
 
 export * from './location/valuators';
 export { useLocationOrder };
+export { useLocationTable } from './location/hooks';
 
 /** the headers of the {@link LocationTable}. */
 const HEADERS = ['ID', 'Currency', 'Name', 'Outer'] as const;

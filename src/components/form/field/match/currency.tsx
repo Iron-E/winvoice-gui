@@ -20,7 +20,7 @@ export function SelectMatchCurrency(props: InputMatchProps<Match<Currency>>): Re
 	return <InputMatch
 		{...props}
 		inputField={InputCurrency}
-		onChange={value => props.onChange(value ?? Currency.Eur)}
+		onChange={value => props.onChange(value ?? '' as Currency)}
 	/>;
 }
 

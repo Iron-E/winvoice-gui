@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { CompositeProps } from '../props';
+import type { InputMatchObjectProps } from './props';
 import type { MatchLocation } from '@/match';
 import { InputMatchId } from './id';
 import { InputMatchOption, InputMatchStr } from '../match';
@@ -10,7 +10,7 @@ import { SelectMatchOptionCurrency } from './currency';
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link MatchLocation} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
-export function InputMatchLocation(props: Omit<Required<CompositeProps<MatchLocation>>, 'label'>): React.ReactElement {
+export function InputMatchLocation(props: InputMatchObjectProps<MatchLocation>): React.ReactElement {
 	return <>
 		<SelectMatchOptionCurrency
 			id={`${props.id}--currency`}

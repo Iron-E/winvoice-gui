@@ -33,7 +33,6 @@ export function MatchDepartmentForm(props: SearchProps<Department>): React.React
 		>
 			<InputMatchDepartment
 				id={`${props.id}--department`}
-				label=''
 				onChange={setMatch}
 				value={MATCH}
 			/>

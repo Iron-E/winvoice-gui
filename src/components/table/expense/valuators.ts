@@ -5,8 +5,6 @@ import { moneyToString, type Expense, type Job } from "@/schema";
  * @param outerOrder the
  * @returns {@link Valuators} for a {@link Job}
  */
-export function expenseValuators(): Valuators<Expense> {
-	return {
-		cost: { map: moneyToString },
-	};
-}
+export const EXPENSE_VALUATORS: Valuators<Expense> = {
+	cost: { map: moneyToString },
+};

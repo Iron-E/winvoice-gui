@@ -11,7 +11,7 @@ import type {
 } from "@/schema";
 import type { Valuators } from "../order";
 import { employeeValuators, jobValuators } from "../../table";
-import { expenseValuators } from "../expense/valuators";
+import { EXPENSE_VALUATORS } from "../expense/valuators";
 
 /**
  * @param outerOrder the
@@ -31,7 +31,7 @@ export function timesheetValuators(keys: {
 }): Valuators<Timesheet> {
 	return {
 		employee: { key: keys.employee, valuators: employeeValuators(keys.employeeDepartment) },
-		expenses: { key: keys.expenses, valuators: expenseValuators() },
+		expenses: { key: keys.expenses, valuators: EXPENSE_VALUATORS },
 		job: {
 			key: keys.job,
 			valuators: jobValuators({

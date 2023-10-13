@@ -10,6 +10,9 @@ type UseOrderedData<T extends {}, Param> = [
 	ReturnType<typeof OrderedData.keySwapper<Param, (obj: Param) => Valuators<T>>>,
 ];
 
+/** The return type of {@link useOrder}. */
+export type UseTable<T extends {}> = [OrderedData<T>, Maybe<React.ReactElement>];
+
 /**
  * A hook that stores some data and its order in {@link React.useState | state}.
  * @param defaultColumn the column which is used to sort the rows by default.

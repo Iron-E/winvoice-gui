@@ -18,7 +18,6 @@ export function MatchLocationForm(props: SearchProps<Location>): React.ReactElem
 	const [CLIENT, showMessage] = useApiContext();
 	const [MATCH, setMatch] = React.useState<MatchLocation>({});
 	const [ORDERED_DATA, TABLE] = useLocationTable();
-
 	return <>
 		<Form
 			onSubmit={async () => {
@@ -38,7 +37,6 @@ export function MatchLocationForm(props: SearchProps<Location>): React.ReactElem
 
 			<FormButton className={SPACE} />
 		</Form>
-
 		{TABLE}
 	</>;
 }

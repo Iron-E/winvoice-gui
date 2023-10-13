@@ -6,8 +6,6 @@ import type { Match, MatchStr } from "@/match";
 import type { Props, Fn, Maybe, ValueOf } from "@/utils";
 import { AddIcon, RemoveIcon } from '@/components';
 import {
-	ANY,
-	EQUAL_TO,
 	MATCH_OPERATOR_TO_OPERAND,
 	MATCH_STR_OPERATOR_TO_OPERAND,
 	SelectMatchOperator,
@@ -80,7 +78,7 @@ export function InputMatch<T>(props:
 	let children: Maybe<React.ReactElement>;
 
 	if (props.value === 'any') {
-		children = <SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value={ANY} />;
+		children = <SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value='any' />;
 	} else if (props.value instanceof Object) {
 		const AND = 'and' in props.value;
 		const GREATER_THAN = 'greater_than' in props.value;
@@ -178,7 +176,13 @@ export function InputMatch<T>(props:
 
 	return <BorderLabeledField button={props.button} label={props.label}>
 		{children ?? <>
-			<SelectMatchOperator condition={props.value} id={props.id} onChange={props.onChange} value={EQUAL_TO} />
+			<SelectMatchOperator
+				condition={props.value}
+				id={props.id}
+				onChange={props.onChange}
+				value='equal_to'
+			/>
+
 			<InputField
 				Field={props.inputField}
 				id={props.id}
@@ -194,10 +198,10 @@ export function InputMatchStr(props: InputMatchProps<MatchStr>): React.ReactElem
 	let children: Maybe<React.ReactElement>;
 
 	if (props.value === 'any') {
-		children = <SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={ANY} />;
+		children = <SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value='any' />;
 	} else if (typeof props.value === 'string') {
 		children = <>
-			<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value={EQUAL_TO} />
+			<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value='equal_to' />
 			<InputStrField
 				id={props.id}
 				onChange={props.onChange as Fn<[string]>}

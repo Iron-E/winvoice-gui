@@ -9,8 +9,8 @@ import { ICON } from "@/components/css";
 
 export type BaseOperator =
 	| 'and'
-	| typeof ANY
-	| typeof EQUAL_TO
+	| 'any'
+	| 'equal_to'
 	| 'or'
 	| 'not'
 	;
@@ -19,7 +19,10 @@ export type BaseOperator =
 export type MatchOperator = BaseOperator | `${'greater' | 'less'}_than` | 'in_range';
 
 /** The operators of a {@link Match} condition. */
-export type MatchStrOperator = BaseOperator | 'contains' | 'regex';
+export type MatchSetOperator = BaseOperator | 'contains';
+
+/** The operators of a {@link Match} condition. */
+export type MatchStrOperator = MatchSetOperator | 'regex';
 
 /** A map of operator names to their change handlers. */
 type OperatorChangeHandlers<O extends FieldName, M> = Readonly<Record<
@@ -28,27 +31,15 @@ type OperatorChangeHandlers<O extends FieldName, M> = Readonly<Record<
 >>;
 
 /**
- * The `any` operator.
- * Is a {@link Symbol} rather than a string because it has different storage than other operators of a {@link Match}.
- */
-export const ANY = Symbol('any');
-
-/**
- * The `equal_to` operator.
- * Is a {@link Symbol} rather than a string because it has different storage than other operators of a {@link Match}.
- */
-export const EQUAL_TO = Symbol('equal_to');
-
-/**
  * The base for {@link MATCH_OPERATOR_CHANGE_HANDLERS} and {@link MATCH_STR_OPERATOR_CHANGE_HANDLERS}.
  * HACK: `any` used here because you can't do `<M, T> OperatorChangeHandlers<_, BaseMatch<M, T>>`
  */
 const BASE_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<
-	Exclude<BaseOperator, typeof EQUAL_TO>,
+	Exclude<BaseOperator, 'equal_to'>,
 	any
 > = {
 	and: (h, c) => h({ and: [c] }),
-	[ANY]: h => h('any'),
+	any: h => h('any'),
 	not: (h, c) => h({ not: c }),
 	or: (h, c) => h({ or: [c] }),
 };
@@ -59,7 +50,7 @@ const BASE_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<
  */
 const MATCH_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchOperator, Match<any>> = {
 	...BASE_OPERATOR_CHANGE_HANDLERS as OperatorChangeHandlers<MatchOperator, Match<any>>,
-	[EQUAL_TO]: (h, c, o) => h(MATCH_OPERATOR_TO_OPERAND[o]?.(c)),
+	equal_to: (h, c, o) => h(MATCH_OPERATOR_TO_OPERAND[o]?.(c)),
 	greater_than: (h, c, o) => h({ greater_than: MATCH_OPERATOR_TO_OPERAND[o]?.(c) }),
 	in_range: (h, c, o) => h({ in_range: [MATCH_OPERATOR_TO_OPERAND[o]?.(c), undefined] }),
 	less_than: (h, c, o) => h({ less_than: MATCH_OPERATOR_TO_OPERAND[o]?.(c) }),
@@ -67,7 +58,7 @@ const MATCH_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchOperator, Matc
 
 const MATCH_STR_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchStrOperator, MatchStr> = {
 	...BASE_OPERATOR_CHANGE_HANDLERS as OperatorChangeHandlers<MatchStrOperator, MatchStr>,
-	[EQUAL_TO]: (h, c, o) => h(MATCH_STR_OPERATOR_TO_OPERAND[o]?.(c) ?? ''),
+	equal_to: (h, c, o) => h(MATCH_STR_OPERATOR_TO_OPERAND[o]?.(c) ?? ''),
 	contains: (h, c, o) => h({ contains: MATCH_STR_OPERATOR_TO_OPERAND[o]?.(c) ?? '' }),
 	regex: (h, c, o) => h({ regex: MATCH_STR_OPERATOR_TO_OPERAND[o]?.(c) ?? '' }),
 };
@@ -77,7 +68,7 @@ const MATCH_STR_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchStrOperato
  * HACK: `any` used here because you can't do `<T, U> Dict<_, (_: T) => U>`
  */
 const BASE_OPERATOR_TO_OPERAND: Dict<BaseOperator, (condition: any) => any> = {
-	[EQUAL_TO]: c => c,
+	equal_to: c => c,
 };
 
 /** A lookup table for handlers used in {@link handleOperatorChange}. */
@@ -99,8 +90,8 @@ export const MATCH_STR_OPERATOR_TO_OPERAND: Dict<MatchStrOperator, (condition: M
 /** The options used for both {@link MATCH_OPTIONS} and {@link MATCH_STR_OPTIONS}.*/
 const BASE_OPTIONS: readonly React.ReactElement[] = [
 	<option key='and' value='and'>And</option>,
-	<option key={ANY.description} value={ANY.description}>Any</option>,
-	<option key={EQUAL_TO.description} value={EQUAL_TO.description}>Equal to</option>,
+	<option key='any' value='any'>Any</option>,
+	<option key='equal_to' value='equal_to'>Equal to</option>,
 	<option key='not' value='not'>Not</option>,
 	<option key='or' value='or'>Or</option>,
 ];
@@ -126,15 +117,6 @@ const MATCH_STR_OPTIONS: readonly React.ReactElement[] = [
 	<option key='regex' value='regex'>Regex</option>,
 ].sort(compareElementKeys);
 
-/**
- * In an `<option>.value`, a {@link Symbol} may be represented by its `description`. This mapping returns said
- * description back to its original form.
- */
-const SYMBOL_DESC_MAP: Dict<string, typeof ANY | typeof EQUAL_TO> = {
-	[ANY.description!]: ANY,
-	[EQUAL_TO.description!]: EQUAL_TO,
-}
-
 /** A selector for the current 'variant' (e.g. 'and', 'any') of the {@link Match} condition. */
 function SelectOperator<O extends string | symbol, M>(props:
 	& Omit<SelectProps<O>, 'onChange' | 'title' | 'value'>
@@ -146,7 +128,7 @@ function SelectOperator<O extends string | symbol, M>(props:
 	}
 ): React.ReactElement {
 	function handleChange(value: string): void {
-		props.operatorChangeHandlers[(SYMBOL_DESC_MAP[value] ?? value) as O](
+		props.operatorChangeHandlers[value as O](
 			props.onChange,
 			props.condition,
 			props.value

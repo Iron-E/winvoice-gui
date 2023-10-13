@@ -18,11 +18,15 @@ import { BorderLabeledField, GRID } from './border-labeled';
 import { FormButton, LABEL_BUTTON_STYLE } from "../button";
 import { ICON } from '@/components/css';
 import { Input, InputString, Select } from "../field";
+import { On } from '@/components/props-with';
 
 export * from './match/department';
 
 /** A react component which can be used to input an operand value for a {@link Match} condition.  */
 export type InputMatchField<T> = (p: Omit<InputProps<T>, 'value'> & { value: T }) => React.ReactElement;
+
+/** {@link Maybe} {@link Match<T>}. */
+type MayMatch<T> = Maybe<Match<T>>;
 
 /** The 'operands' {@link BorderLabeledField} minimum width style. */
 const OPERANDS_BORDER_STYLE = 'min-w-[16.6rem]';
@@ -66,13 +70,17 @@ function InputStrField(props: Props<typeof InputString>): React.ReactElement {
 }
 
 /** Properties of components used for inputting {@link Match} / {@link MatchStr} conditions. */
-type InputMatchProps<T> =
-	& Required<CompositeProps<T>>
+export type InputMatchProps<T, HandleUndefined extends boolean = false> =
+	& Required<
+		HandleUndefined extends true
+		? (Omit<CompositeProps<T>, 'onChange'> & Required<On<'change', [condition: Maybe<T>]>>)
+		: CompositeProps<T>
+	>
 	& { button?: ValueOf<Props<typeof BorderLabeledField>, 'button'> };
 
 /** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link Match} condition. */
 export function InputMatch<T>(props:
-	& InputMatchProps<Match<T>>
+	& InputMatchProps<Match<T>, true>
 	& { inputField: InputMatchField<T> }
 ): React.ReactElement {
 	let children: Maybe<React.ReactElement>;
@@ -90,7 +98,7 @@ export function InputMatch<T>(props:
 				<InputField
 					Field={props.inputField}
 					id={props.id}
-					onChange={value => props.onChange({ [OPERATOR]: value } as Match<T>)}
+					onChange={value => props.onChange({ [OPERATOR]: value } as MayMatch<T>)}
 					value={MATCH_OPERATOR_TO_OPERAND[OPERATOR]!(props.value)}
 				/>
 			</>;
@@ -125,7 +133,7 @@ export function InputMatch<T>(props:
 					labelChildren={<>
 						<FormButton
 							className={LABEL_BUTTON_STYLE}
-							onClick={() => props.onChange({ [OTHER_OPERATOR]: OPERANDS } as Match<T>)}
+							onClick={() => props.onChange({ [OTHER_OPERATOR]: OPERANDS } as MayMatch<T>)}
 						>
 							<ArrowsRightLeftIcon className={ICON} /> Swap
 						</FormButton>
@@ -137,7 +145,7 @@ export function InputMatch<T>(props:
 
 				<BorderLabeledField
 					button={{
-						onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, undefined] } as Match<T>),
+						onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, 'any'] } as MayMatch<T>),
 						text: <AddIcon />,
 						// TODO: add 'pull out' button, requires refactoring `borderlabeledfield`
 					}}
@@ -147,14 +155,14 @@ export function InputMatch<T>(props:
 					{OPERANDS.map((condition, i) =>
 						<InputMatch
 							button={OPERANDS.length < 2 ? undefined : {
-								onClick: () => props.onChange({ [OPERATOR]: OPERANDS.toSpliced(i, 1) } as Match<T>),
+								onClick: () => props.onChange({ [OPERATOR]: OPERANDS.toSpliced(i, 1) } as MayMatch<T>),
 								text: <RemoveIcon />,
 							}}
 							id={`${props.id}--and-${i}`}
 							inputField={props.inputField}
 							key={i}
 							label={`${i + 1}`}
-							onChange={value => props.onChange({ [OPERATOR]: OPERANDS.with(i, value) } as Match<T>)}
+							onChange={value => props.onChange({ [OPERATOR]: OPERANDS.with(i, value ?? 'any') } as MayMatch<T>)}
 							value={condition}
 						/>
 					)}
@@ -167,7 +175,7 @@ export function InputMatch<T>(props:
 					id={`${props.id}--not`}
 					inputField={props.inputField}
 					label='Operand'
-					onChange={value => props.onChange({ not: value } as Match<T>)}
+					onChange={value => props.onChange({ not: value ?? 'any' } as MayMatch<T>)}
 					value={props.value.not as Match<T>}
 				/>
 			</>;
@@ -186,7 +194,7 @@ export function InputMatch<T>(props:
 			<InputField
 				Field={props.inputField}
 				id={props.id}
-				onChange={props.onChange as Fn<[T]>}
+				onChange={props.onChange as Fn<[value: T]>}
 				value={props.value as T}
 			/>
 		</>}
@@ -204,7 +212,7 @@ export function InputMatchStr(props: InputMatchProps<MatchStr>): React.ReactElem
 			<SelectMatchStrOperator condition={props.value} id={props.id} onChange={props.onChange} value='equal_to' />
 			<InputStrField
 				id={props.id}
-				onChange={props.onChange as Fn<[string]>}
+				onChange={props.onChange as Fn<[value: string]>}
 				title=''
 				value={props.value as string}
 			/>
@@ -236,7 +244,7 @@ export function InputMatchStr(props: InputMatchProps<MatchStr>): React.ReactElem
 				/>
 
 				<BorderLabeledField
-					button={{ onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, ''] } as MatchStr), text: <AddIcon /> }}
+					button={{ onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, 'any'] } as MatchStr), text: <AddIcon /> }}
 					className={OPERANDS_BORDER_STYLE}
 					label='Conditions'
 				>

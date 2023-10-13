@@ -1,5 +1,5 @@
 import type { Children, On } from "@/components/props-with";
-import type { Dict, FieldName, Fn } from "@/utils";
+import type { Dict, FieldName, Fn, Maybe } from "@/utils";
 import type { Match, MatchOption, MatchSet, MatchStr } from "@/match";
 import type { SelectProps } from "../props";
 import { FormButton, LABEL_BUTTON_STYLE } from "../../button";
@@ -203,7 +203,7 @@ function SelectOperator<O extends string | symbol, M>(props:
 /** Properties of aggregates of {@link SelectOperator}. */
 type Props<O, M> =
 	& Omit<SelectProps<O>, 'onChange' | 'title' | 'value'>
-	& Required<On<'change', [M]>>
+	& Required<On<'change', [condition: Maybe<M>]>>
 	& { condition: M, value: O }
 	;
 
@@ -235,7 +235,10 @@ export function SelectMatchSetOperator<T>(props: Props<MatchSetOperator, MatchSe
 }
 
 /** A selector for the current 'operator' (e.g. 'and', 'any') of the {@link MatchStr} condition. */
-export function SelectMatchStrOperator(props: Props<MatchStrOperator, MatchStr>): React.ReactElement {
+export function SelectMatchStrOperator(props:
+	& Omit<Props<MatchStrOperator, MatchStr>, 'onChange'>
+	& Required<On<'change', [condition: MatchStr]>>
+): React.ReactElement {
 	return (
 		<SelectOperator {...props} operatorChangeHandlers={MATCH_STR_OPERATOR_CHANGE_HANDLERS}>
 			{MATCH_STR_OPTIONS}

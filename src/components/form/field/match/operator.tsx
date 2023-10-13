@@ -1,6 +1,6 @@
 import type { Children, On } from "@/components/props-with";
 import type { Dict, FieldName, Fn } from "@/utils";
-import type { Match, MatchStr } from "@/match";
+import type { Match, MatchSet, MatchStr } from "@/match";
 import type { SelectProps } from "../props";
 import { FormButton, LABEL_BUTTON_STYLE } from "../../button";
 import { Select } from "../../field";
@@ -18,7 +18,7 @@ export type BaseOperator =
 /** The operators of a {@link Match} condition. */
 export type MatchOperator = BaseOperator | `${'greater' | 'less'}_than` | 'in_range';
 
-/** The operators of a {@link Match} condition. */
+/** The operators of a {@link MatchSet} condition. */
 export type MatchSetOperator = BaseOperator | 'contains';
 
 /** The operators of a {@link Match} condition. */
@@ -56,6 +56,11 @@ const MATCH_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchOperator, Matc
 	less_than: (h, c, o) => h({ less_than: MATCH_OPERATOR_TO_OPERAND[o]?.(c) }),
 };
 
+const MATCH_SET_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchSetOperator, MatchSet<any>> = {
+	...BASE_OPERATOR_CHANGE_HANDLERS as OperatorChangeHandlers<MatchSetOperator, MatchSet<any>>,
+	contains: (h, c, o) => h({ contains: MATCH_SET_OPERATOR_TO_OPERAND[o]?.(c) ?? 'any' }),
+};
+
 const MATCH_STR_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchStrOperator, MatchStr> = {
 	...BASE_OPERATOR_CHANGE_HANDLERS as OperatorChangeHandlers<MatchStrOperator, MatchStr>,
 	equal_to: (h, c, o) => h(MATCH_STR_OPERATOR_TO_OPERAND[o]?.(c) ?? ''),
@@ -81,9 +86,14 @@ export const MATCH_OPERATOR_TO_OPERAND: Dict<MatchOperator, <T>(condition: Match
 };
 
 /** Maps a condition's {@link MatchOperator | operator} to an instruction which will extract the operand. */
-export const MATCH_STR_OPERATOR_TO_OPERAND: Dict<MatchStrOperator, (condition: MatchStr) => string> = {
+export const MATCH_SET_OPERATOR_TO_OPERAND: Dict<MatchStrOperator, <T>(condition: MatchSet) => T> = {
 	...BASE_OPERATOR_TO_OPERAND,
-	contains: c => (c as Record<'contains', string>).contains,
+	contains: c => (c as Record<'contains', any>).contains,
+};
+
+/** Maps a condition's {@link MatchOperator | operator} to an instruction which will extract the operand. */
+export const MATCH_STR_OPERATOR_TO_OPERAND: Dict<MatchStrOperator, (condition: MatchStr) => string> = {
+	...MATCH_SET_OPERATOR_TO_OPERAND as Dict<MatchStrOperator, (condition: MatchStr) => string>,
 	regex: c => (c as Record<'regex', string>).regex,
 };
 
@@ -111,11 +121,16 @@ const MATCH_OPTIONS: readonly React.ReactElement[] = [
 ].sort(compareElementKeys);
 
 /** The `<options>` for {@link SelectMatchOperator}. */
-const MATCH_STR_OPTIONS: readonly React.ReactElement[] = [
+const MATCH_SET_OPTIONS: readonly React.ReactElement[] = [
 	...BASE_OPTIONS,
 	<option key='contains' value='contains'>Contains</option>,
-	<option key='regex' value='regex'>Regex</option>,
 ].sort(compareElementKeys);
+
+/** The `<options>` for {@link SelectMatchOperator}. */
+const MATCH_STR_OPTIONS: readonly React.ReactElement[] = [
+	...MATCH_SET_OPTIONS,
+	<option key='regex' value='regex'>Regex</option>,
+];
 
 /** A selector for the current 'variant' (e.g. 'and', 'any') of the {@link Match} condition. */
 function SelectOperator<O extends string | symbol, M>(props:
@@ -172,6 +187,15 @@ export function SelectMatchOperator<T>(props: Props<MatchOperator, Match<T>>): R
 	return (
 		<SelectOperator {...props} operatorChangeHandlers={MATCH_OPERATOR_CHANGE_HANDLERS}>
 			{MATCH_OPTIONS}
+		</SelectOperator>
+	);
+}
+
+/** A selector for the current 'operator' (e.g. 'and', 'any') of the {@link MatchStr} condition. */
+export function SelectMatchSetOperator<T>(props: Props<MatchSetOperator, MatchSet<T>>): React.ReactElement {
+	return (
+		<SelectOperator {...props} operatorChangeHandlers={MATCH_SET_OPERATOR_CHANGE_HANDLERS}>
+			{MATCH_SET_OPTIONS}
 		</SelectOperator>
 	);
 }

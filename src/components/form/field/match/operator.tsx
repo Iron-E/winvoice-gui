@@ -201,14 +201,14 @@ function SelectOperator<O extends string | symbol, M>(props:
 }
 
 /** Properties of aggregates of {@link SelectOperator}. */
-type Props<O, M> =
+type Props<O, M, HandleUndefined extends boolean = false> =
 	& Omit<SelectProps<O>, 'onChange' | 'title' | 'value'>
-	& Required<On<'change', [condition: Maybe<M>]>>
+	& Required<On<'change', [condition: HandleUndefined extends true ? Maybe<M> : M]>>
 	& { condition: M, value: O }
 	;
 
 /** A selector for the current 'variant' (e.g. 'and', 'any') of the {@link Match} condition. */
-export function SelectMatchOperator<T>(props: Props<MatchOperator, Match<T>>): React.ReactElement {
+export function SelectMatchOperator<T>(props: Props<MatchOperator, Match<T>, true>): React.ReactElement {
 	return (
 		<SelectOperator {...props} operatorChangeHandlers={MATCH_OPERATOR_CHANGE_HANDLERS}>
 			{MATCH_OPTIONS}
@@ -235,10 +235,7 @@ export function SelectMatchSetOperator<T>(props: Props<MatchSetOperator, MatchSe
 }
 
 /** A selector for the current 'operator' (e.g. 'and', 'any') of the {@link MatchStr} condition. */
-export function SelectMatchStrOperator(props:
-	& Omit<Props<MatchStrOperator, MatchStr>, 'onChange'>
-	& Required<On<'change', [condition: MatchStr]>>
-): React.ReactElement {
+export function SelectMatchStrOperator(props: Props<MatchStrOperator, MatchStr>): React.ReactElement {
 	return (
 		<SelectOperator {...props} operatorChangeHandlers={MATCH_STR_OPERATOR_CHANGE_HANDLERS}>
 			{MATCH_STR_OPTIONS}

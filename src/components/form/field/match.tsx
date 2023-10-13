@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { CompositeProps, InputProps } from './props';
-import type { Match, MatchStr } from "@/match";
+import type { Match, MatchOption, MatchStr } from "@/match";
 import type { Props, Fn, Maybe, ValueOf } from "@/utils";
 import { AddIcon, RemoveIcon } from '@/components';
 import {
@@ -12,6 +12,8 @@ import {
 	SelectMatchStrOperator,
 	type MatchOperator,
 	type MatchStrOperator,
+    SelectMatchOptionOperator,
+    MATCH_OPTION_OPERATOR_TO_OPERAND,
 } from './match/operator';
 import { ArrowsRightLeftIcon } from '@heroicons/react/20/solid';
 import { BorderLabeledField, GRID } from './border-labeled';
@@ -198,6 +200,39 @@ export function InputMatch<T>(props:
 				value={props.value as T}
 			/>
 		</>}
+	</BorderLabeledField>;
+}
+
+/** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link Match} condition. */
+export function InputMatchOption<T>(props:
+	& InputMatchProps<MatchOption<T>>
+	& { inputField: InputMatchField<T> }
+): React.ReactElement {
+	let children: React.ReactElement;
+
+	const ANY = props.value === 'any';
+	if (ANY || props.value === 'none') {
+		children = <SelectMatchOptionOperator
+			condition={props.value}
+			id={props.id}
+			onChange={props.onChange}
+			value={ANY ? 'any' : 'none'}
+		/>;
+	} else {
+		const OPERATOR = 'none_or' in (props.value as Exclude<MatchOption<T>, 'any' | 'none'>) ? 'none_or' : 'some';
+		children = <>
+			<SelectMatchOptionOperator condition={props.value} id={props.id} onChange={props.onChange} value={OPERATOR} />
+			<InputField
+				Field={props.inputField}
+				id={props.id}
+				onChange={value => props.onChange({ [OPERATOR]: value } as MatchOption<T>)}
+				value={MATCH_OPTION_OPERATOR_TO_OPERAND[OPERATOR]!(props.value)}
+			/>
+		</>;
+	}
+
+	return <BorderLabeledField button={props.button} label={props.label}>
+		{children}
 	</BorderLabeledField>;
 }
 

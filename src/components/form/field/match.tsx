@@ -2,18 +2,19 @@
 
 import React from 'react';
 import type { CompositeProps, InputProps } from './props';
-import type { Match, MatchOption, MatchStr } from "@/match";
+import type { Match, MatchOption, MatchSet, MatchStr } from "@/match";
 import type { Props, Fn, Maybe, ValueOf } from "@/utils";
 import { AddIcon, RemoveIcon } from '@/components';
 import {
 	MATCH_OPERATOR_TO_OPERAND,
+	MATCH_OPTION_OPERATOR_TO_OPERAND,
 	MATCH_STR_OPERATOR_TO_OPERAND,
 	SelectMatchOperator,
+	SelectMatchOptionOperator,
+	SelectMatchSetOperator,
 	SelectMatchStrOperator,
 	type MatchOperator,
 	type MatchStrOperator,
-    SelectMatchOptionOperator,
-    MATCH_OPTION_OPERATOR_TO_OPERAND,
 } from './match/operator';
 import { ArrowsRightLeftIcon } from '@heroicons/react/20/solid';
 import { BorderLabeledField, GRID } from './border-labeled';
@@ -177,7 +178,7 @@ export function InputMatch<T>(props:
 					id={`${props.id}--not`}
 					inputField={props.inputField}
 					label='Operand'
-					onChange={value => props.onChange({ not: value ?? 'any' } as MayMatch<T>)}
+					onChange={value => props.onChange({ not: value ?? 'any' })}
 					value={props.value.not as Match<T>}
 				/>
 			</>;
@@ -203,7 +204,7 @@ export function InputMatch<T>(props:
 	</BorderLabeledField>;
 }
 
-/** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link Match} condition. */
+/** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link MatchOption} condition. */
 export function InputMatchOption<T>(props:
 	& InputMatchProps<MatchOption<T>>
 	& { inputField: InputMatchField<T> }
@@ -236,7 +237,91 @@ export function InputMatchOption<T>(props:
 	</BorderLabeledField>;
 }
 
-/** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link Match} condition. */
+/** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link MatchSet} condition. */
+export function InputMatchSet<T>(props:
+	& InputMatchProps<MatchSet<T>>
+	& { inputField: InputMatchField<T> }
+): React.ReactElement {
+	let children: React.ReactElement;
+
+	if (props.value === 'any') {
+		children = <SelectMatchSetOperator condition={props.value} id={props.id} onChange={props.onChange} value='any' />;
+	} else {
+		const AND = 'and' in props.value;
+		if ('contains' in props.value) {
+			children = <>
+				<SelectMatchSetOperator condition={props.value} id={props.id} onChange={props.onChange} value='contains' />
+				<InputField
+					Field={props.inputField}
+					id={props.id}
+					onChange={value => props.onChange({ contains: value })}
+					value={props.value.contains}
+				/>
+			</>;
+		} else if (AND || 'or' in props.value) {
+			const [OPERATOR, OTHER_OPERATOR] = and_or(AND);
+			const OPERANDS = (props.value as Record<typeof OPERATOR, MatchSet<T>[]>)[OPERATOR];
+			children = <>
+				<SelectMatchSetOperator
+					condition={props.value}
+					labelChildren={<>
+						<FormButton
+							className={LABEL_BUTTON_STYLE}
+							onClick={() => props.onChange({ [OTHER_OPERATOR]: OPERANDS } as MatchSet<T>)}
+						>
+							<ArrowsRightLeftIcon className={ICON} /> Swap
+						</FormButton>
+					</>}
+					id={props.id}
+					onChange={props.onChange}
+					value={OPERATOR}
+				/>
+
+				<BorderLabeledField
+					button={{
+						onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, 'any'] } as MatchSet<T>),
+						text: <AddIcon />,
+						// TODO: add 'pull out' button, requires refactoring `borderlabeledfield`
+					}}
+					className={OPERANDS_BORDER_STYLE}
+					label='Conditions'
+				>
+					{OPERANDS.map((condition, i) =>
+						<InputMatchSet
+							button={OPERANDS.length < 2 ? undefined : {
+								onClick: () => props.onChange({ [OPERATOR]: OPERANDS.toSpliced(i, 1) } as MatchSet<T>),
+								text: <RemoveIcon />,
+							}}
+							id={`${props.id}--and-${i}`}
+							inputField={props.inputField}
+							key={i}
+							label={`${i + 1}`}
+							onChange={value => props.onChange({ [OPERATOR]: OPERANDS.with(i, value) } as MatchSet<T>)}
+							value={condition}
+						/>
+					)}
+				</BorderLabeledField>
+			</>;
+		} else {
+			children = <>
+				<SelectMatchSetOperator condition={props.value} id={props.id} onChange={props.onChange} value='not' />
+				<InputMatchSet
+					id={`${props.id}--not`}
+					inputField={props.inputField}
+					label='Operand'
+					onChange={value => props.onChange({ not: value })}
+					value={(props.value as Record<'not', MatchSet<T>>).not}
+				/>
+			</>;
+		}
+	}
+
+	return <BorderLabeledField button={props.button} label={props.label}>
+		{children}
+	</BorderLabeledField>;
+}
+
+/** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link MatchStr} condition. */
 export function InputMatchStr(props: InputMatchProps<MatchStr>): React.ReactElement {
 	let children: Maybe<React.ReactElement>;
 

@@ -102,7 +102,7 @@ export const MATCH_OPTION_OPERATOR_TO_OPERAND: Dict<MatchOptionOperator, <T>(con
 };
 
 /** Maps a condition's {@link MatchOperator | operator} to an instruction which will extract the operand. */
-export const MATCH_SET_OPERATOR_TO_OPERAND: Dict<MatchStrOperator, <T>(condition: MatchSet<T>) => T> = {
+const MATCH_SET_OPERATOR_TO_OPERAND: Dict<MatchStrOperator, <T>(condition: MatchSet<T>) => T> = {
 	...BASE_OPERATOR_TO_OPERAND,
 	contains: c => (c as Record<'contains', any>).contains,
 };

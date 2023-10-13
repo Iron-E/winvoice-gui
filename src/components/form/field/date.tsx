@@ -22,7 +22,7 @@ export function InputDate(props: Omit<InputProps<Date>, 'placeholder' | 'value'>
 		<Input
 			id={props.id}
 			label={props.label ?? 'Date'}
-			onChange={props.onChange && (date => props.onChange!(new Date(date)))}
+			onChange={date => props.onChange(new Date(date))}
 			required={props.required}
 			title={props.title}
 			type='datetime-local'

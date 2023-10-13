@@ -4,7 +4,8 @@ import { Input, Select } from '../../form';
 
 type SpreadProps<Properties extends { label: any }, OnChangeValue = string> = Spread<
 	Properties,
-	Pick<Partial<Properties>, 'label'> & On<'change', [value: OnChangeValue]>
+	& Pick<Partial<Properties>, 'label'>
+	& Required<On<'change', [value: OnChangeValue]>>
 >;
 
 type OmitProps<T> = Omit<

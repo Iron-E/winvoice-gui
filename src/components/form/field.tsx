@@ -20,7 +20,7 @@ type FieldProps<TElement extends Element, ElementName extends keyof React.JSX.In
 	Children
 	& Class<ElementName>
 	& (React.ChangeEvent<TElement> extends { target: { value: infer Value } }
-		? On<'change', [value: Value]>
+		? Required<On<'change', [value: Value]>>
 		: never
 	)
 	& Required<Id>
@@ -41,7 +41,7 @@ type InputProps = ValueOf<React.JSX.IntrinsicElements, 'input'>;
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
 export function Checkbox(props:
 	& Omit<FieldProps<HTMLInputElement, 'input'>, 'label' | 'onChange' | 'required' | 'value'>
-	& On<'change', [value: boolean]>
+	& Required<On<'change', [value: boolean]>>
 	& { [key in 'checked']?: InputProps[key] }
 ): React.ReactElement {
 	return (
@@ -50,7 +50,7 @@ export function Checkbox(props:
 				checked={props.checked}
 				className={`${FIELD_STYLE} ${props.inputClassName}`}
 				name={props.id}
-				onChange={props.onChange && (() => props.onChange!(props.checked ?? false))}
+				onChange={() => props.onChange(props.checked ?? false)}
 				title={props.title}
 				type='checkbox'
 				value={props.checked ? 'true' : 'false'}
@@ -111,7 +111,7 @@ export function Input(props:
 				className={`${FIELD_STYLE} ${props.inputClassName} peer w-full`}
 				id={props.id}
 				name={props.id}
-				onChange={props.onChange && (e => props.onChange!(e.target.value))}
+				onChange={e => props.onChange(e.target.value)}
 				pattern={props.pattern}
 				placeholder={props.placeholder}
 				required={props.required}
@@ -141,7 +141,7 @@ export function Select(props: FieldProps<HTMLSelectElement, 'select'> & Children
 				className={`${FIELD_STYLE} ${props.selectClassName} peer w-full`}
 				id={props.id}
 				name={props.id}
-				onChange={props.onChange && (e => props.onChange!(e.target.value))}
+				onChange={e => props.onChange(e.target.value)}
 				required={props.required}
 				title={props.title}
 				value={props.value}
@@ -169,7 +169,7 @@ export function Textarea(props:
 				className={`${FIELD_STYLE} ${props.textareaClassName} peer w-full min-h-[2rem] rounded-br-none`}
 				id={props.id}
 				name={props.id}
-				onChange={props.onChange && (e => props.onChange!(e.target.value))}
+				onChange={e => props.onChange(e.target.value)}
 				placeholder={props.placeholder}
 				required={props.required}
 				title={`${props.title}. Markdown syntax works!`}

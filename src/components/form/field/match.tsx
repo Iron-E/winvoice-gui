@@ -24,6 +24,7 @@ import { Input, InputString, Select } from "../field";
 import { On } from '@/components/props-with';
 
 export * from './match/department';
+export * from './match/location';
 
 /** A react component which can be used to input an operand value for a {@link Match} condition.  */
 export type InputMatchField<T> = (p: Omit<InputProps<T>, 'value'> & { value: T }) => React.ReactElement;
@@ -74,12 +75,15 @@ function InputStrField(props: Props<typeof InputString>): React.ReactElement {
 
 /** Properties of components used for inputting {@link Match} / {@link MatchStr} conditions. */
 export type InputMatchProps<T, HandleUndefined extends boolean = false> =
-	& Required<
+	& Omit<Required<
 		HandleUndefined extends true
 		? (Omit<CompositeProps<T>, 'onChange'> & Required<On<'change', [condition: Maybe<T>]>>)
 		: CompositeProps<T>
-	>
-	& { button?: ValueOf<Props<typeof BorderLabeledField>, 'button'> };
+	>, 'label'>
+	& {
+		button?: ValueOf<Props<typeof BorderLabeledField>, 'button'>,
+		label?: ValueOf<CompositeProps<T>, 'label'>,
+	};
 
 /** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link Match} condition. */
 export function InputMatch<T>(props:

@@ -17,9 +17,9 @@ export function SelectCurrency(props: SelectProps<Maybe<Currency>>): React.React
 		<Select
 			id={props.id}
 			label={props.label ?? 'Currency'}
-			onChange={props.onChange && (currency => props.onChange!(
+			onChange={currency => props.onChange!(
 				currency === '' ? undefined : currency as Currency,
-			))}
+			)}
 			required={props.required}
 			title={props.title}
 			value={props.value}

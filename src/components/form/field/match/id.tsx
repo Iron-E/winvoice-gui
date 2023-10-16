@@ -18,5 +18,5 @@ const InputId: InputMatchField<Id> = props => (
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link MatchId} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
 export function InputMatchId(props: InputMatchProps<Match<Id>>): React.ReactElement {
-	return <InputMatch {...props} inputField={InputId} onChange={value => props.onChange(value ?? '')} />;
+	return <InputMatch {...props} defaultValue='' inputField={InputId} />;
 }

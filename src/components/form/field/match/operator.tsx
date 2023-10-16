@@ -1,11 +1,11 @@
 import type { Children, On } from "@/components/props-with";
-import type { Dict, FieldName, Fn, Maybe } from "@/utils";
+import type { Dict, FieldName, Fn } from "@/utils";
 import type { Match, MatchOption, MatchSet, MatchStr } from "@/match";
 import type { SelectProps } from "../props";
 import { FormButton, LABEL_BUTTON_STYLE } from "../../button";
-import { Select } from "../../field";
-import { NoSymbolIcon } from "@heroicons/react/20/solid";
 import { ICON } from "@/components/css";
+import { NoSymbolIcon } from "@heroicons/react/20/solid";
+import { Select } from "../../field";
 
 export type BaseOperator =
 	| 'and'
@@ -30,17 +30,14 @@ export type MatchStrOperator = MatchSetOperator | 'regex';
 /** A map of operator names to their change handlers. */
 type OperatorChangeHandlers<O extends FieldName, M> = Readonly<Record<
 	O,
-	(handler: Fn<[value: M]>, condition: M, operator: O) => void
+	<T extends M>(handler: Fn<[value: M]>, condition: M, value: O, defaultValue?: T) => void
 >>;
 
 /**
  * The base for {@link MATCH_OPERATOR_CHANGE_HANDLERS} and {@link MATCH_STR_OPERATOR_CHANGE_HANDLERS}.
  * HACK: `any` used here because you can't do `<M, T> OperatorChangeHandlers<_, BaseMatch<M, T>>`
  */
-const BASE_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<
-	Exclude<BaseOperator, 'equal_to'>,
-	any
-> = {
+const BASE_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<Exclude<BaseOperator, 'equal_to'>, any> = {
 	and: (h, c) => h({ and: [c] }),
 	any: h => h('any'),
 	not: (h, c) => h({ not: c }),
@@ -53,29 +50,29 @@ const BASE_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<
  */
 const MATCH_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchOperator, Match<any>> = {
 	...BASE_OPERATOR_CHANGE_HANDLERS as OperatorChangeHandlers<MatchOperator, Match<any>>,
-	equal_to: (h, c, o) => h(MATCH_OPERATOR_TO_OPERAND[o]?.(c)),
-	greater_than: (h, c, o) => h({ greater_than: MATCH_OPERATOR_TO_OPERAND[o]?.(c) }),
-	in_range: (h, c, o) => h({ in_range: [MATCH_OPERATOR_TO_OPERAND[o]?.(c), undefined] }),
-	less_than: (h, c, o) => h({ less_than: MATCH_OPERATOR_TO_OPERAND[o]?.(c) }),
+	equal_to: (h, c, v, d) => h(MATCH_OPERATOR_TO_OPERAND[v]?.(c) ?? d),
+	greater_than: (h, c, v, d) => h({ greater_than: MATCH_OPERATOR_TO_OPERAND[v]?.(c) ?? d }),
+	in_range: (h, c, v, d) => h({ in_range: [MATCH_OPERATOR_TO_OPERAND[v]?.(c) ?? d, d] }),
+	less_than: (h, c, v, d) => h({ less_than: MATCH_OPERATOR_TO_OPERAND[v]?.(c) ?? d }),
 };
 
 const MATCH_OPTION_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchOptionOperator, MatchOption<any>> = {
 	any: BASE_OPERATOR_CHANGE_HANDLERS.any as OperatorChangeHandlers<MatchOptionOperator, MatchOption<any>>['any'],
 	none: h => h('none'),
-	none_or: (h, c, o) => h({ none_or: MATCH_OPTION_OPERATOR_TO_OPERAND[o]?.(c) ?? 'any' }),
-	some: (h, c, o) => h({ some: MATCH_OPTION_OPERATOR_TO_OPERAND[o]?.(c) ?? 'any' }),
+	none_or: (h, c, v) => h({ none_or: MATCH_OPTION_OPERATOR_TO_OPERAND[v]?.(c) ?? 'any' }),
+	some: (h, c, v) => h({ some: MATCH_OPTION_OPERATOR_TO_OPERAND[v]?.(c) ?? 'any' }),
 };
 
 const MATCH_SET_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchSetOperator, MatchSet<any>> = {
 	...BASE_OPERATOR_CHANGE_HANDLERS as OperatorChangeHandlers<MatchSetOperator, MatchSet<any>>,
-	contains: (h, c, o) => h({ contains: MATCH_SET_OPERATOR_TO_OPERAND[o]?.(c) ?? 'any' }),
+	contains: (h, c, v) => h({ contains: MATCH_SET_OPERATOR_TO_OPERAND[v]?.(c) ?? 'any' }),
 };
 
 const MATCH_STR_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchStrOperator, MatchStr> = {
 	...BASE_OPERATOR_CHANGE_HANDLERS as OperatorChangeHandlers<MatchStrOperator, MatchStr>,
-	equal_to: (h, c, o) => h(MATCH_STR_OPERATOR_TO_OPERAND[o]?.(c) ?? ''),
-	contains: (h, c, o) => h({ contains: MATCH_STR_OPERATOR_TO_OPERAND[o]?.(c) ?? '' }),
-	regex: (h, c, o) => h({ regex: MATCH_STR_OPERATOR_TO_OPERAND[o]?.(c) ?? '' }),
+	equal_to: (h, c, v) => h(MATCH_STR_OPERATOR_TO_OPERAND[v]?.(c) ?? ''),
+	contains: (h, c, v) => h({ contains: MATCH_STR_OPERATOR_TO_OPERAND[v]?.(c) ?? '' }),
+	regex: (h, c, v) => h({ regex: MATCH_STR_OPERATOR_TO_OPERAND[v]?.(c) ?? '' }),
 };
 
 /*
@@ -157,21 +154,25 @@ const MATCH_STR_OPTIONS: readonly React.ReactElement[] = [
 	<option key='regex' value='regex'>Regex</option>,
 ];
 
-/** A selector for the current 'variant' (e.g. 'and', 'any') of the {@link Match} condition. */
-function SelectOperator<O extends string | symbol, M>(props:
+/** Properties of aggregates of {@link SelectOperator}. */
+type Props<O, M> =
 	& Omit<SelectProps<O>, 'onChange' | 'title' | 'value'>
-	& Required<Children & On<'change', [M]>>
-	& {
-		condition: M,
-		operatorChangeHandlers: OperatorChangeHandlers<O, M>,
-		value: O,
-	}
+	& Required<On<'change', [condition: M]>>
+	& { condition: M, value: O }
+	;
+
+/** A selector for the current 'variant' (e.g. 'and', 'any') of the {@link Match} condition. */
+function SelectOperator<O extends string | symbol, M, T extends M>(props:
+	& Props<O, M>
+	& Required<Children>
+	& { defaultValue?: T, operatorChangeHandlers: OperatorChangeHandlers<O, M> }
 ): React.ReactElement {
 	function handleChange(value: string): void {
 		props.operatorChangeHandlers[value as O](
 			props.onChange,
 			props.condition,
-			props.value
+			props.value,
+			props.defaultValue,
 		);
 	}
 
@@ -200,15 +201,8 @@ function SelectOperator<O extends string | symbol, M>(props:
 	);
 }
 
-/** Properties of aggregates of {@link SelectOperator}. */
-type Props<O, M, HandleUndefined extends boolean = false> =
-	& Omit<SelectProps<O>, 'onChange' | 'title' | 'value'>
-	& Required<On<'change', [condition: HandleUndefined extends true ? Maybe<M> : M]>>
-	& { condition: M, value: O }
-	;
-
 /** A selector for the current 'variant' (e.g. 'and', 'any') of the {@link Match} condition. */
-export function SelectMatchOperator<T>(props: Props<MatchOperator, Match<T>, true>): React.ReactElement {
+export function SelectMatchOperator<T>(props: Props<MatchOperator, Match<T>> & { defaultValue: T }): React.ReactElement {
 	return (
 		<SelectOperator {...props} operatorChangeHandlers={MATCH_OPERATOR_CHANGE_HANDLERS}>
 			{MATCH_OPTIONS}

@@ -17,20 +17,12 @@ const InputCurrency: InputMatchField<Currency> = props => (
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link MatchId} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
 export function SelectMatchCurrency(props: InputMatchProps<Match<Currency>>): React.ReactElement {
-	return <InputMatch
-		{...props}
-		inputField={InputCurrency}
-		onChange={value => props.onChange(value ?? '' as Currency)}
-	/>;
+	return <InputMatch {...props} defaultValue={'' as Currency} inputField={InputCurrency} />;
 }
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link MatchId} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
 export function SelectMatchOptionCurrency(props: InputMatchProps<MatchOption<Match<Currency>>>): React.ReactElement {
-	return <InputMatchOption
-		{...props}
-		inputField={SelectMatchCurrency}
-		onChange={value => props.onChange(value ?? 'any')}
-	/>;
+	return <InputMatchOption {...props} inputField={SelectMatchCurrency} onChange={props.onChange} />;
 }

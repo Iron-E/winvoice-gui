@@ -25,7 +25,6 @@ import { TimesheetForm } from '../form';
 import { Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
-export * from './timesheet/hooks';
 export * from './timesheet/valuators';
 
 /** the headers of the {@link TimesheetTable}. */

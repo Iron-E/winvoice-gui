@@ -10,17 +10,26 @@ export * from './table/button';
 export * from './table/column';
 export * from './table/contact';
 export * from './table/department';
+export * from './table/department/hooks';
 export * from './table/employee';
+export * from './table/employee/hooks';
 export * from './table/expense';
+export * from './table/expense/hooks';
 export * from './table/invoice';
 export * from './table/job';
+export * from './table/job/hooks';
 export * from './table/location';
+export * from './table/location/hooks';
 export * from './table/order';
 export * from './table/organization';
+export * from './table/organization/hooks';
 export * from './table/role';
+export * from './table/role/hooks';
 export * from './table/row';
 export * from './table/timesheet';
+export * from './table/timesheet/hooks';
 export * from './table/user';
+export * from './table/user/hooks';
 
 type TableProps<T extends string> = {
 	headers: readonly T[],

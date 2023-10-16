@@ -15,7 +15,6 @@ import { Td } from './column';
 import { Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
-export * from './job/hooks';
 export * from './job/valuators';
 
 /** the headers of the {@link JobTable}. */

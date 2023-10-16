@@ -11,7 +11,6 @@ import { Td } from './column';
 import { Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
-export * from './role/hooks';
 export * from './role/valuators';
 
 /** the headers of the {@link RoleTable}. */

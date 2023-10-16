@@ -11,8 +11,6 @@ import { Td } from './column';
 import { Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
-export * from './department/hooks';
-
 /** the headers of the {@link DepartmentTable}. */
 const HEADERS = ['ID', 'Name'] as const;
 

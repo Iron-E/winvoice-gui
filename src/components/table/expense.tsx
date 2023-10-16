@@ -11,7 +11,6 @@ import { Td } from './column';
 import { Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
-export * from './expense/hooks';
 export * from './expense/valuators';
 
 /** the headers of the {@link ExpenseTable}. */

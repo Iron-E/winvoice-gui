@@ -14,7 +14,6 @@ import { Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 import { UserForm } from '../form';
 
-export * from './user/hooks';
 export * from './user/valuators';
 
 /** the headers of the {@link UserTable}. */

@@ -16,11 +16,9 @@ import { TableButton } from './button';
 import { Td } from './column';
 import { Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
-import { useLocationOrder } from './location/hooks';
+import { useLocationOrder } from './location/hooks/order';
 
 export * from './location/valuators';
-export { useLocationOrder };
-export { useLocationTable } from './location/hooks';
 
 /** the headers of the {@link LocationTable}. */
 const HEADERS = ['ID', 'Currency', 'Name', 'Outer'] as const;

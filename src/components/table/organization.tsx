@@ -13,7 +13,6 @@ import { Td } from './column';
 import { Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
-export * from './organization/hooks';
 export * from './organization/valuators';
 
 /** the headers of the {@link OrganizationTable}. */

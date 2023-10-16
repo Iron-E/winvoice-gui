@@ -9,7 +9,7 @@ import { Route } from '@/api';
 import { SPACE } from '@/components/css';
 import { type Department, isDepartment } from '@/schema';
 import { useApiContext } from '../../api';
-import { useDepartmentTable } from '@/components/table/department';
+import { useDepartmentTable } from '@/components/table';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link MatchDepartment} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).

@@ -36,6 +36,31 @@ function and_or(and: boolean): ['and' | 'or', 'or' | 'and'] {
 	return and ? ['and', 'or'] : ['or', 'and'];
 }
 
+/** @returns a {@link BorderLabeledField | button} for adding an additional value to a `{['and | 'or']: […]}` condition. */
+function addButton<M>(
+	handleClick: Fn<[condition: M]>,
+	operator: 'and' | 'or',
+	operands: 'any' extends M ? M[] : never,
+): ValueOf<Props<typeof BorderLabeledField>, 'button'> {
+	return {
+		onClick: () => handleClick({ [operator]: [...operands, 'any'] } as M),
+		text: <AddIcon />
+	};
+}
+
+/** @returns a {@link BorderLabeledField | button} for removing the selected value from a `{['and | 'or']: […]}` condition. */
+function removeButton<M>(
+	handleClick: Fn<[condition: M]>,
+	operator: 'and' | 'or',
+	operands: 'any' extends M ? M[] : never,
+	index: number,
+): Props<typeof BorderLabeledField>['button'] {
+	return operands.length < 2 ? undefined : {
+		onClick: () => handleClick({ [operator]: operands.toSpliced(index, 1) } as M),
+		text: <RemoveIcon />,
+	};
+}
+
 /** @returns the `Field` with some defaults used for {@link InputMatch}. */
 function InputField<T>(props:
 	& { Field: InputMatchField<T> }
@@ -165,20 +190,13 @@ export function InputMatch<T>(props:
 				/>
 
 				<BorderLabeledField
-					button={{
-						onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, 'any'] } as Match<T>),
-						text: <AddIcon />,
-						// TODO: add 'pull out' button, requires refactoring `borderlabeledfield`
-					}}
+					button={addButton(props.onChange, OPERATOR, OPERANDS)}
 					className={OPERANDS_BORDER_STYLE}
 					label='Conditions'
 				>
 					{OPERANDS.map((condition, i) =>
 						<InputMatch
-							button={OPERANDS.length < 2 ? undefined : {
-								onClick: () => props.onChange({ [OPERATOR]: OPERANDS.toSpliced(i, 1) } as Match<T>),
-								text: <RemoveIcon />,
-							}}
+							button={removeButton(props.onChange, OPERATOR, OPERANDS, i)}
 							defaultValue={props.defaultValue}
 							id={`${props.id}--and-${i}`}
 							inputField={props.inputField}
@@ -306,20 +324,13 @@ export function InputMatchSet<T>(props:
 				/>
 
 				<BorderLabeledField
-					button={{
-						onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, 'any'] } as MatchSet<T>),
-						text: <AddIcon />,
-						// TODO: add 'pull out' button, requires refactoring `borderlabeledfield`
-					}}
+					button={addButton(props.onChange, OPERATOR, OPERANDS)}
 					className={OPERANDS_BORDER_STYLE}
 					label='Conditions'
 				>
 					{OPERANDS.map((condition, i) =>
 						<InputMatchSet
-							button={OPERANDS.length < 2 ? undefined : {
-								onClick: () => props.onChange({ [OPERATOR]: OPERANDS.toSpliced(i, 1) } as MatchSet<T>),
-								text: <RemoveIcon />,
-							}}
+							button={removeButton(props.onChange, OPERATOR, OPERANDS, i)}
 							id={`${props.id}--and-${i}`}
 							inputField={props.inputField}
 							key={i}
@@ -392,16 +403,17 @@ export function InputMatchStr(props: InputMatchProps<MatchStr>): React.ReactElem
 				/>
 
 				<BorderLabeledField
-					button={{ onClick: () => props.onChange({ [OPERATOR]: [...OPERANDS, 'any'] } as MatchStr), text: <AddIcon /> }}
+					button={addButton(
+						props.onChange,
+						OPERATOR,
+						OPERANDS,
+					)}
 					className={OPERANDS_BORDER_STYLE}
 					label='Conditions'
 				>
 					{OPERANDS.map((condition, i) =>
 						<InputMatchStr
-							button={OPERANDS.length < 2 ? undefined : {
-								onClick: () => props.onChange({ [OPERATOR]: OPERANDS.toSpliced(i, 1) } as MatchStr),
-								text: <RemoveIcon />,
-							}}
+							button={removeButton(props.onChange, OPERATOR, OPERANDS, i)}
 							id={`${props.id}--and-${i}`}
 							key={i}
 							label={`${i + 1}`}

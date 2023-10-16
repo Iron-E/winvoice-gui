@@ -1,6 +1,5 @@
+import { MatchOrganizationForm } from "@/components";
+
 export default function Page(): React.ReactElement {
-	return (
-		<>
-		</>
-	);
+	return <MatchOrganizationForm id='search-organization-form' />;
 }

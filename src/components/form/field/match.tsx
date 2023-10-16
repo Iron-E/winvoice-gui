@@ -113,7 +113,7 @@ export function InputMatch<T>(props:
 	if (props.value === 'any') {
 		children = <SelectMatchOperator
 			condition={props.value}
-			defaultValue={props.defaultValue}
+			defaultCondition={props.defaultValue}
 			id={props.id}
 			onChange={props.onChange}
 			value='any'
@@ -127,7 +127,7 @@ export function InputMatch<T>(props:
 			children = <>
 				<SelectMatchOperator
 					condition={props.value}
-					defaultValue={props.defaultValue}
+					defaultCondition={props.defaultValue}
 					id={props.id}
 					onChange={props.onChange}
 					value={OPERATOR}
@@ -145,7 +145,7 @@ export function InputMatch<T>(props:
 			children = <>
 				<SelectMatchOperator
 					condition={props.value}
-					defaultValue={props.defaultValue}
+					defaultCondition={props.defaultValue}
 					id={props.id}
 					onChange={props.onChange}
 					value='in_range'
@@ -175,7 +175,7 @@ export function InputMatch<T>(props:
 			children = <>
 				<SelectMatchOperator
 					condition={props.value}
-					defaultValue={props.defaultValue}
+					defaultCondition={props.defaultValue}
 					labelChildren={<>
 						<FormButton
 							className={LABEL_BUTTON_STYLE}
@@ -212,7 +212,7 @@ export function InputMatch<T>(props:
 			children = <>
 				<SelectMatchOperator
 					condition={props.value}
-					defaultValue={props.defaultValue}
+					defaultCondition={props.defaultValue}
 					id={props.id}
 					onChange={props.onChange}
 					value='not'
@@ -234,7 +234,7 @@ export function InputMatch<T>(props:
 		{children ?? <>
 			<SelectMatchOperator
 				condition={props.value}
-				defaultValue={props.defaultValue}
+				defaultCondition={props.defaultValue}
 				id={props.id}
 				onChange={props.onChange}
 				value='equal_to'

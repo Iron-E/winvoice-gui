@@ -30,7 +30,7 @@ export type MatchStrOperator = MatchSetOperator | 'regex';
 /** A map of operator names to their change handlers. */
 type OperatorChangeHandlers<O extends FieldName, M> = Readonly<Record<
 	O,
-	<T extends M>(handler: Fn<[value: M]>, condition: M, value: O, defaultValue?: T) => void
+	<T extends M>(handler: Fn<[value: M]>, condition: M, defaultValue: T, operator: O) => void
 >>;
 
 /**
@@ -50,29 +50,29 @@ const BASE_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<Exclude<BaseOperator
  */
 const MATCH_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchOperator, Match<any>> = {
 	...BASE_OPERATOR_CHANGE_HANDLERS as OperatorChangeHandlers<MatchOperator, Match<any>>,
-	equal_to: (h, c, v, d) => h(MATCH_OPERATOR_TO_OPERAND[v]?.(c) ?? d),
-	greater_than: (h, c, v, d) => h({ greater_than: MATCH_OPERATOR_TO_OPERAND[v]?.(c) ?? d }),
-	in_range: (h, c, v, d) => h({ in_range: [MATCH_OPERATOR_TO_OPERAND[v]?.(c) ?? d, d] }),
-	less_than: (h, c, v, d) => h({ less_than: MATCH_OPERATOR_TO_OPERAND[v]?.(c) ?? d }),
+	equal_to: (h, c, d, o) => h(MATCH_OPERATOR_TO_OPERAND[o]?.(c) ?? d),
+	greater_than: (h, c, d, o) => h({ greater_than: MATCH_OPERATOR_TO_OPERAND[o]?.(c) ?? d }),
+	in_range: (h, c, d, o) => h({ in_range: [MATCH_OPERATOR_TO_OPERAND[o]?.(c) ?? d, d] }),
+	less_than: (h, c, d, o) => h({ less_than: MATCH_OPERATOR_TO_OPERAND[o]?.(c) ?? d }),
 };
 
 const MATCH_OPTION_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchOptionOperator, MatchOption<any>> = {
 	any: BASE_OPERATOR_CHANGE_HANDLERS.any as OperatorChangeHandlers<MatchOptionOperator, MatchOption<any>>['any'],
 	none: h => h('none'),
-	none_or: (h, c, v) => h({ none_or: MATCH_OPTION_OPERATOR_TO_OPERAND[v]?.(c) ?? 'any' }),
-	some: (h, c, v) => h({ some: MATCH_OPTION_OPERATOR_TO_OPERAND[v]?.(c) ?? 'any' }),
+	none_or: (h, c, d, o) => h({ none_or: MATCH_OPTION_OPERATOR_TO_OPERAND[o]?.(c) ?? d }),
+	some: (h, c, d, o) => h({ some: MATCH_OPTION_OPERATOR_TO_OPERAND[o]?.(c) ?? d }),
 };
 
 const MATCH_SET_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchSetOperator, MatchSet<any>> = {
 	...BASE_OPERATOR_CHANGE_HANDLERS as OperatorChangeHandlers<MatchSetOperator, MatchSet<any>>,
-	contains: (h, c, v) => h({ contains: MATCH_SET_OPERATOR_TO_OPERAND[v]?.(c) ?? 'any' }),
+	contains: (h, c, d, o) => h({ contains: MATCH_SET_OPERATOR_TO_OPERAND[o]?.(c) ?? d }),
 };
 
 const MATCH_STR_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchStrOperator, MatchStr> = {
 	...BASE_OPERATOR_CHANGE_HANDLERS as OperatorChangeHandlers<MatchStrOperator, MatchStr>,
-	equal_to: (h, c, v) => h(MATCH_STR_OPERATOR_TO_OPERAND[v]?.(c) ?? ''),
-	contains: (h, c, v) => h({ contains: MATCH_STR_OPERATOR_TO_OPERAND[v]?.(c) ?? '' }),
-	regex: (h, c, v) => h({ regex: MATCH_STR_OPERATOR_TO_OPERAND[v]?.(c) ?? '' }),
+	equal_to: (h, c, d, o) => h(MATCH_STR_OPERATOR_TO_OPERAND[o]?.(c) ?? d),
+	contains: (h, c, d, o) => h({ contains: MATCH_STR_OPERATOR_TO_OPERAND[o]?.(c) ?? d as string }),
+	regex: (h, c, d, o) => h({ regex: MATCH_STR_OPERATOR_TO_OPERAND[o]?.(c) ?? d as string }),
 };
 
 /*
@@ -165,14 +165,17 @@ type Props<O, M> =
 function SelectOperator<O extends string | symbol, M, T extends M>(props:
 	& Props<O, M>
 	& Required<Children>
-	& { defaultValue?: T, operatorChangeHandlers: OperatorChangeHandlers<O, M> }
+	& {
+		defaultCondition: T,
+		operatorChangeHandlers: OperatorChangeHandlers<O, M>,
+	}
 ): React.ReactElement {
 	function handleChange(value: string): void {
 		props.operatorChangeHandlers[value as O](
 			props.onChange,
 			props.condition,
+			props.defaultCondition,
 			props.value,
-			props.defaultValue,
 		);
 	}
 
@@ -202,7 +205,10 @@ function SelectOperator<O extends string | symbol, M, T extends M>(props:
 }
 
 /** A selector for the current 'variant' (e.g. 'and', 'any') of the {@link Match} condition. */
-export function SelectMatchOperator<T>(props: Props<MatchOperator, Match<T>> & { defaultValue: T }): React.ReactElement {
+export function SelectMatchOperator<T>(props:
+	& Props<MatchOperator, Match<T>>
+	& { defaultCondition: T }
+): React.ReactElement {
 	return (
 		<SelectOperator {...props} operatorChangeHandlers={MATCH_OPERATOR_CHANGE_HANDLERS}>
 			{MATCH_OPTIONS}
@@ -213,7 +219,7 @@ export function SelectMatchOperator<T>(props: Props<MatchOperator, Match<T>> & {
 /** A selector for the current 'variant' (e.g. 'and', 'any') of the {@link Match} condition. */
 export function SelectMatchOptionOperator<T>(props: Props<MatchOptionOperator, MatchOption<T>>): React.ReactElement {
 	return (
-		<SelectOperator {...props} operatorChangeHandlers={MATCH_OPTION_OPERATOR_CHANGE_HANDLERS}>
+		<SelectOperator {...props} defaultCondition='any' operatorChangeHandlers={MATCH_OPTION_OPERATOR_CHANGE_HANDLERS}>
 			{MATCH_OPTION_OPTIONS}
 		</SelectOperator>
 	);
@@ -222,7 +228,7 @@ export function SelectMatchOptionOperator<T>(props: Props<MatchOptionOperator, M
 /** A selector for the current 'operator' (e.g. 'and', 'any') of the {@link MatchStr} condition. */
 export function SelectMatchSetOperator<T>(props: Props<MatchSetOperator, MatchSet<T>>): React.ReactElement {
 	return (
-		<SelectOperator {...props} operatorChangeHandlers={MATCH_SET_OPERATOR_CHANGE_HANDLERS}>
+		<SelectOperator {...props} defaultCondition='any' operatorChangeHandlers={MATCH_SET_OPERATOR_CHANGE_HANDLERS}>
 			{MATCH_SET_OPTIONS}
 		</SelectOperator>
 	);
@@ -231,7 +237,7 @@ export function SelectMatchSetOperator<T>(props: Props<MatchSetOperator, MatchSe
 /** A selector for the current 'operator' (e.g. 'and', 'any') of the {@link MatchStr} condition. */
 export function SelectMatchStrOperator(props: Props<MatchStrOperator, MatchStr>): React.ReactElement {
 	return (
-		<SelectOperator {...props} operatorChangeHandlers={MATCH_STR_OPERATOR_CHANGE_HANDLERS}>
+		<SelectOperator {...props} defaultCondition='' operatorChangeHandlers={MATCH_STR_OPERATOR_CHANGE_HANDLERS}>
 			{MATCH_STR_OPTIONS}
 		</SelectOperator>
 	);

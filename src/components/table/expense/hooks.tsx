@@ -10,8 +10,9 @@ export function useExpenseOrder(): UseOrder<Expense> {
 	return useOrder(COLUMN);
 }
 
-/** @returns {@link useOrder} specialized for a {@link Expense}. */
-export function useExpenseTable(): UseTable<Expense> {
+export const useExpenseTable: UseTable<Expense> = handler => {
 	const ORDERED_DATA = useOrderedData<Expense>(COLUMN, EXPENSE_VALUATORS);
-	return [ORDERED_DATA, ORDERED_DATA.data.length < 1 ? undefined : <ExpenseTable orderedData={ORDERED_DATA} />];
+	return [ORDERED_DATA, ORDERED_DATA.data.length < 1 ? undefined : (
+		<ExpenseTable onRowSelect={handler} orderedData={ORDERED_DATA} />
+	)];
 }

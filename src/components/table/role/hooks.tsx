@@ -10,7 +10,9 @@ export function useRoleOrder(): UseOrder<Role> {
 	return useOrder(COLUMN);
 }
 
-export function useRoleTable(): UseTable<Role> {
+export const useRoleTable: UseTable<Role> = handler => {
 	const ORDERED_DATA = useOrderedData<Role>(COLUMN, ROLE_VALUATORS);
-	return [ORDERED_DATA, ORDERED_DATA.data.length < 1 ? undefined : <RoleTable orderedData={ORDERED_DATA} />];
+	return [ORDERED_DATA, ORDERED_DATA.data.length < 1 ? undefined : (
+		<RoleTable onRowSelect={handler} orderedData={ORDERED_DATA} />
+	)];
 }

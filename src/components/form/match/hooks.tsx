@@ -4,7 +4,7 @@ import React from 'react';
 import type { InputMatchObjectProps } from '../field/match/props';
 import type { ReadonlyNonNullUnitArray, ValueOf } from '@/utils';
 import type { UserInputRoute } from '@/api';
-import type { UseTable } from '@/components/table';
+import type { OrderedData, UseTable } from '@/components/table';
 import { Form, FormButton } from '../../form';
 import { SPACE } from '@/components/css';
 import { useApiContext } from '../../api';
@@ -21,13 +21,13 @@ import { useApiContext } from '../../api';
 export function useMatchForm<T extends {}, M extends {}>(
 	id: ValueOf<InputMatchObjectProps<M>, 'id'>,
 	Input: (props: InputMatchObjectProps<M>) => React.ReactElement,
-	useTable: () => UseTable<T>,
+	orderedData: OrderedData<T>,
+	table: React.ReactNode,
 	route: UserInputRoute,
 	checkSchema: (json: unknown) => json is T,
 ): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
 	const [MATCH, setMatch] = React.useState({} as M);
-	const [ORDERED_DATA, TABLE] = useTable();
 	return <>
 		<Form
 			onSubmit={async () => {
@@ -36,12 +36,12 @@ export function useMatchForm<T extends {}, M extends {}>(
 					showMessage('info', 'Search returned no results');
 				}
 
-				ORDERED_DATA.setData?.(RESULT as unknown as ReadonlyNonNullUnitArray<T>);
+				orderedData.setData?.(RESULT as unknown as ReadonlyNonNullUnitArray<T>);
 			}}
 		>
-			<Input id={`${id}--employee`} onChange={setMatch} value={MATCH} />
+			<Input id={`${id}--${route}`} onChange={setMatch} value={MATCH} />
 			<FormButton className={SPACE} />
 		</Form>
-		{TABLE}
+		{table}
 	</>;
 }

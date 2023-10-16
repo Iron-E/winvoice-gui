@@ -13,7 +13,7 @@ export function useUserOrder(): UseOrder<User> {
 	return useOrder(COLUMN);
 }
 
-export function useUserTable(): UseTable<User> {
+export const useUserTable: UseTable<User> = handler => {
 	const [DEPARTMENT_ORDER, setDepartmentOrder] = useDepartmentOrder();
 	const [EMPLOYEE_ORDER, setEmployeeOrder] = useEmployeeOrder();
 	const [ROLE_ORDER, setRoleOrder] = useRoleOrder();
@@ -32,6 +32,7 @@ export function useUserTable(): UseTable<User> {
 			onReorderEmployee={ORDERED_DATA.refreshOnReorder(setEmployeeOrder, swapKey('employee'))}
 			onReorderEmployeeDepartment={ORDERED_DATA.refreshOnReorder(setDepartmentOrder, swapKey('employeeDepartment'))}
 			onReorderRole={ORDERED_DATA.refreshOnReorder(setRoleOrder, swapKey('role'))}
+			onRowSelect={handler}
 			orderedData={ORDERED_DATA}
 			roleOrder={ROLE_ORDER}
 		/>

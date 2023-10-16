@@ -11,8 +11,7 @@ export function useOrganizationOrder(): UseOrder<Organization> {
 	return useOrder(COLUMN);
 }
 
-/** @returns {@link useOrder} specialized for a {@link Organization}. */
-export function useOrganizationTable(): UseTable<Organization> {
+export const useOrganizationTable: UseTable<Organization> = handler => {
 	const [LOCATION_ORDER, setLocationOrder] = useLocationOrder();
 	const [OUTER_ORDER, setOuterOrder] = useLocationOrder();
 
@@ -27,6 +26,7 @@ export function useOrganizationTable(): UseTable<Organization> {
 			locationOrder={LOCATION_ORDER}
 			onReorderLocation={ORDERED_DATA.refreshOnReorder(setLocationOrder, swapKey('location'))}
 			onReorderOuterLocation={ORDERED_DATA.refreshOnReorder(setOuterOrder, swapKey('outerLocation'))}
+			onRowSelect={handler}
 			orderedData={ORDERED_DATA}
 			outerLocationOrder={LOCATION_ORDER}
 		/>

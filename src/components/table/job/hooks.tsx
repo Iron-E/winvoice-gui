@@ -14,7 +14,7 @@ export function useJobOrder(): UseOrder<Job> {
 	return useOrder(COLUMN);
 }
 
-export function useJobTable(): UseTable<Job> {
+export const useJobTable: UseTable<Job> = handler => {
 	const [CLIENT_ORDER, setClientOrder] = useOrganizationOrder();
 	const [CLIENT_LOCATION_ORDER, setClientLocationOrder] = useLocationOrder();
 	const [CLIENT_OUTER_LOCATION_ORDER, setClientOuterLocationOrder] = useLocationOrder();
@@ -46,6 +46,7 @@ export function useJobTable(): UseTable<Job> {
 			onReorderDepartments={ORDERED_DATA.refreshOnReorder(setDepartmentsOrder, swapKey('departments'))}
 			onReorderInvoice={ORDERED_DATA.refreshOnReorder(setInvoiceOrder, swapKey('invoice'))}
 			onReorderInvoiceDate={ORDERED_DATA.refreshOnReorder(setInvoiceDateOrder, swapKey('invoiceDate'))}
+			onRowSelect={handler}
 			orderedData={ORDERED_DATA}
 		/>
 	)];

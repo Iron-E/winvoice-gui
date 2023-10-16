@@ -17,8 +17,7 @@ export function useTimesheetOrder(): UseOrder<Timesheet> {
 	return useOrder(COLUMN);
 }
 
-/** @returns {@link useOrder} specialized for a {@link Timesheet}. */
-export function useTimesheetTable(): UseTable<Timesheet> {
+export const useTimesheetTable: UseTable<Timesheet> = handler => {
 	const [EMPLOYEE_ORDER, setEmployeeOrder] = useEmployeeOrder();
 	const [EMPLOYEE_DEPARTMENT_ORDER, setEmployeeDepartmentOrder] = useDepartmentOrder();
 	const [EXPENSES_ORDER, setExpensesOrder] = useExpenseOrder();
@@ -72,6 +71,7 @@ export function useTimesheetTable(): UseTable<Timesheet> {
 			onReorderJobDepartments={ORDERED_DATA.refreshOnReorder(setJobDepartmentsOrder, swapKey('jobDepartments'))}
 			onReorderJobInvoice={ORDERED_DATA.refreshOnReorder(setJobInvoiceOrder, swapKey('jobInvoice'))}
 			onReorderJobInvoiceDate={ORDERED_DATA.refreshOnReorder(setJobInvoiceDateOrder, swapKey('jobInvoiceDate'))}
+			onRowSelect={handler}
 			orderedData={ORDERED_DATA}
 		/>
 	)];

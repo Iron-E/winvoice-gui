@@ -11,8 +11,7 @@ export function useEmployeeOrder(): UseOrder<Employee> {
 	return useOrder(COLUMN);
 }
 
-/** @returns {@link useOrder} specialized for a {@link Employee}. */
-export function useEmployeeTable(): UseTable<Employee> {
+export const useEmployeeTable: UseTable<Employee> = handler => {
 	const [DEPARTMENT_ORDER, setDepartmentOrder] = useDepartmentOrder();
 	const ORDERED_DATA = useOrderedData<Employee>(COLUMN, employeeValuators(DEPARTMENT_ORDER.column));
 	return [ORDERED_DATA, ORDERED_DATA.data.length < 1 ? undefined : (
@@ -22,6 +21,7 @@ export function useEmployeeTable(): UseTable<Employee> {
 				setDepartmentOrder(order);
 				ORDERED_DATA.refresh(employeeValuators(order.column));
 			}}
+			onRowSelect={handler}
 			orderedData={ORDERED_DATA}
 		/>
 	)];

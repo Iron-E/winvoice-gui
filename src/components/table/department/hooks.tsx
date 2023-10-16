@@ -9,8 +9,9 @@ export function useDepartmentOrder(): UseOrder<Department> {
 	return useOrder(COLUMN);
 }
 
-/** @returns {@link useOrder} specialized for a {@link Department}. */
-export function useDepartmentTable(): UseTable<Department> {
+export const useDepartmentTable: UseTable<Department> = handler => {
 	const ORDERED_DATA = useOrderedData<Department>(COLUMN);
-	return [ORDERED_DATA, ORDERED_DATA.data.length < 1 ? undefined : <DepartmentTable orderedData={ORDERED_DATA} />];
+	return [ORDERED_DATA, ORDERED_DATA.data.length < 1 ? undefined : (
+		<DepartmentTable onRowSelect={handler} orderedData={ORDERED_DATA} />
+	)];
 }

@@ -1,5 +1,6 @@
 import React from "react";
-import type { Maybe, NonNullUnit } from "@/utils";
+import type { BaseProps } from '../../props';
+import type { Maybe, NonNullUnit, ValueOf } from "@/utils";
 import type { Valuators } from "../valuators";
 import { OrderedData } from "../data";
 import { useOrder } from "../hooks";
@@ -11,7 +12,9 @@ type UseOrderedData<T extends {}, Param> = [
 ];
 
 /** The return type of {@link useOrder}. */
-export type UseTable<T extends {}> = [OrderedData<T>, Maybe<React.ReactElement>];
+export type UseTable<T extends {}> = (
+	rowSelectHandler?: ValueOf<BaseProps<T, never>, 'onRowSelect'>,
+) => [OrderedData<T>, Maybe<React.ReactElement>];
 
 /**
  * A hook that stores some data and its order in {@link React.useState | state}.

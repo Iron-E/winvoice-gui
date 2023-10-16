@@ -16,7 +16,7 @@ export function MatchEmployeeForm(props: SearchProps<Employee>): React.ReactElem
 	return useMatchForm(
 		props.id,
 		InputMatchEmployee,
-		...useEmployeeTable(props.onRowSelect),
+		useEmployeeTable(props.onRowSelect),
 		Route.Employee,
 		isEmployee,
 	);

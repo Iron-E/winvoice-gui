@@ -4,7 +4,7 @@ import React from 'react';
 import type { InputMatchObjectProps } from '../field/match/props';
 import type { ReadonlyNonNullUnitArray, ValueOf } from '@/utils';
 import type { UserInputRoute } from '@/api';
-import type { OrderedData, UseTable } from '@/components/table';
+import type { UseTable } from '@/components/table';
 import { Form, FormButton } from '../../form';
 import { SPACE } from '@/components/css';
 import { useApiContext } from '../../api';
@@ -21,8 +21,7 @@ import { useApiContext } from '../../api';
 export function useMatchForm<T extends {}, M extends {}>(
 	id: ValueOf<InputMatchObjectProps<M>, 'id'>,
 	Input: (props: InputMatchObjectProps<M>) => React.ReactElement,
-	orderedData: OrderedData<T>,
-	table: React.ReactNode,
+	[orderedData, table]: ReturnType<UseTable<T>>,
 	route: UserInputRoute,
 	checkSchema: (json: unknown) => json is T,
 ): React.ReactElement {

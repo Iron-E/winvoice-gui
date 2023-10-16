@@ -16,7 +16,7 @@ export function MatchDepartmentForm(props: SearchProps<Department>): React.React
 	return useMatchForm(
 		props.id,
 		InputMatchDepartment,
-		...useDepartmentTable(props.onRowSelect),
+		useDepartmentTable(props.onRowSelect),
 		Route.Department,
 		isDepartment,
 	);

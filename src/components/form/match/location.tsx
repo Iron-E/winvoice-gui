@@ -16,7 +16,7 @@ export function MatchLocationForm(props: SearchProps<Location>): React.ReactElem
 	return useMatchForm(
 		props.id,
 		InputMatchLocation,
-		...useLocationTable(props.onRowSelect),
+		useLocationTable(props.onRowSelect),
 		Route.Location,
 		isLocation,
 	);

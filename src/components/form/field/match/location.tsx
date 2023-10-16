@@ -15,21 +15,21 @@ export function InputMatchLocation(props: InputMatchObjectProps<MatchLocation>):
 		<SelectMatchOptionCurrency
 			id={`${props.id}--currency`}
 			label='Currency'
-			onChange={value => props.onChange({ ...props.value, currency: value })}
+			onChange={currency => props.onChange({ ...props.value, currency })}
 			value={props.value.currency ?? 'any'}
 		/>
 
 		<InputMatchId
 			id={`${props.id}--id`}
 			label='Id'
-			onChange={value => props.onChange({ ...props.value, id: value })}
+			onChange={id => props.onChange({ ...props.value, id })}
 			value={props.value.id ?? 'any'}
 		/>
 
 		<InputMatchStr
 			id={`${props.id}--name`}
 			label='Name'
-			onChange={value => props.onChange({ ...props.value, name: value })}
+			onChange={name => props.onChange({ ...props.value, name })}
 			value={props.value.name ?? 'any'}
 		/>
 
@@ -37,7 +37,7 @@ export function InputMatchLocation(props: InputMatchObjectProps<MatchLocation>):
 			id={`${props.id}--outer`}
 			inputField={InputMatchLocation}
 			label='Outer Location'
-			onChange={value => props.onChange({ ...props.value, outer: value })}
+			onChange={outer => props.onChange({ ...props.value, outer })}
 			value={props.value.outer ?? 'any'}
 		/>
 	</>;

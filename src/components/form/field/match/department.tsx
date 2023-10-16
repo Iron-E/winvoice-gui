@@ -14,14 +14,14 @@ export function InputMatchDepartment(props: InputMatchObjectProps<MatchDepartmen
 		<InputMatchId
 			id={`${props.id}--id`}
 			label='Id'
-			onChange={value => props.onChange({ ...props.value, id: value })}
+			onChange={id => props.onChange({ ...props.value, id })}
 			value={props.value.id ?? 'any'}
 		/>
 
 		<InputMatchStr
 			id={`${props.id}--name`}
 			label='Name'
-			onChange={value => props.onChange({ ...props.value, name: value })}
+			onChange={name => props.onChange({ ...props.value, name })}
 			value={props.value.name ?? 'any'}
 		/>
 	</>;

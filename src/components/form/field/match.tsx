@@ -24,6 +24,7 @@ import { Input, InputString, Select } from "../field";
 import { On } from '@/components/props-with';
 
 export * from './match/department';
+export * from './match/employee';
 export * from './match/location';
 
 /** A react component which can be used to input an operand value for a {@link Match} condition.  */

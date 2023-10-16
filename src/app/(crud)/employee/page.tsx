@@ -1,6 +1,5 @@
+import { MatchEmployeeForm } from "@/components";
+
 export default function Page(): React.ReactElement {
-	return (
-		<>
-		</>
-	);
+	return <MatchEmployeeForm id='search-employee-form' />;
 }

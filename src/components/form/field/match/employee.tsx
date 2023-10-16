@@ -3,10 +3,10 @@
 import React from 'react';
 import type { InputMatchObjectProps } from './props';
 import type { MatchEmployee } from '@/match';
-import { InputMatchId } from './id';
-import { InputMatchDepartment, InputMatchStr } from '../match';
-import { InputMatchBool } from './bool';
 import { BorderLabeledField } from '../border-labeled';
+import { InputMatchBool } from './bool';
+import { InputMatchDepartment } from './department';
+import { InputMatchIdAndName } from './id-name';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link MatchEmployee} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
@@ -28,18 +28,6 @@ export function InputMatchEmployee(props: InputMatchObjectProps<MatchEmployee>):
 			/>
 		</BorderLabeledField>
 
-		<InputMatchId
-			id={`${props.id}--id`}
-			label='Id'
-			onChange={id => props.onChange({ ...props.value, id })}
-			value={props.value.id ?? 'any'}
-		/>
-
-		<InputMatchStr
-			id={`${props.id}--name`}
-			label='Name'
-			onChange={name => props.onChange({ ...props.value, name })}
-			value={props.value.name ?? 'any'}
-		/>
+		<InputMatchIdAndName id={props.id} onChange={props.onChange} value={props.value} />
 	</>;
 }

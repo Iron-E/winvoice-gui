@@ -3,8 +3,8 @@
 import React from 'react';
 import type { InputMatchObjectProps } from './props';
 import type { MatchLocation } from '@/match';
-import { InputMatchId } from './id';
-import { InputMatchOption, InputMatchStr } from '../match';
+import { InputMatchIdAndName } from './id-name';
+import { InputMatchOption } from '../match';
 import { SelectMatchOptionCurrency } from './currency';
 
 /**
@@ -19,19 +19,7 @@ export function InputMatchLocation(props: InputMatchObjectProps<MatchLocation>):
 			value={props.value.currency ?? 'any'}
 		/>
 
-		<InputMatchId
-			id={`${props.id}--id`}
-			label='Id'
-			onChange={id => props.onChange({ ...props.value, id })}
-			value={props.value.id ?? 'any'}
-		/>
-
-		<InputMatchStr
-			id={`${props.id}--name`}
-			label='Name'
-			onChange={name => props.onChange({ ...props.value, name })}
-			value={props.value.name ?? 'any'}
-		/>
+		<InputMatchIdAndName id={props.id} onChange={props.onChange} value={props.value} />
 
 		<InputMatchOption
 			id={`${props.id}--outer`}

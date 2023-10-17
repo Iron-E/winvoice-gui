@@ -1,5 +1,3 @@
-'use client';
-
 import type { Match } from '@/match';
 import { Checkbox } from '../../field';
 import { InputMatch, InputMatchProps, type InputMatchField } from '../match';

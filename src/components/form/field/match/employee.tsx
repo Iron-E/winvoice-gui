@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import type { InputMatchObjectProps } from './props';
 import type { MatchEmployee } from '@/match';

@@ -16,7 +16,7 @@ import { TIMESHEET_REVIVER, useTimesheetIdEventHandlers } from './timesheet';
 export * from './expense/hooks';
 
 const REVIVER = chainRevivers([
-	(k, v: response.Post<Expense[]>) => k === '' && v.entity instanceof Array ? { ...v, entity: v.entity[0] } : v,
+	(k, v: response.Put<Expense[]>) => k === '' && v.entity instanceof Array ? { ...v, entity: v.entity[0] } : v,
 	TIMESHEET_REVIVER,
 ]);
 

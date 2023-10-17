@@ -1,4 +1,4 @@
-'use client';
+'use client'; // TODO: ← is this necessary?
 
 import React from 'react';
 import { doNothing, type Fn, type Opt, type Reviver, type ValueOf } from '@/utils';
@@ -245,5 +245,4 @@ export class Client {
 	): RequestSuccess {
 		return await (this as Client).caughtRequest(showMessage, route, { method: 'PATCH', body }, response.isPatch) !== null;
 	}
-
 }

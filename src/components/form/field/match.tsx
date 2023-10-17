@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import type { CompositeProps, InputProps } from './props';
 import type { Match, MatchOption, MatchSet, MatchStr } from "@/match";

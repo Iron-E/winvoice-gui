@@ -13,7 +13,6 @@ export default function Page(): React.ReactElement {
 		outerAddress: OUTER_ADDRESS_ORDER.column,
 	} as const;
 	const [ORDERED_DATA, swapKey] = useOrderedData<Contact, typeof KEYS>('label', contactValuators, KEYS);
-
 	return <>
 		<ContactForm
 			id='new-location-form'

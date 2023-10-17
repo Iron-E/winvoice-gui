@@ -1,12 +1,9 @@
-'use client';
-
 import React from 'react';
+import type { Id } from '@/schema';
 import type { InputMatchObjectProps } from './props';
 import type { Match, MatchOrganization, MatchStr } from '@/match';
 import { InputMatchId } from './id';
 import { InputMatchStr } from '../match';
-import { Dict } from '@/utils';
-import { Id } from '@/schema';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link MatchOrganization} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).

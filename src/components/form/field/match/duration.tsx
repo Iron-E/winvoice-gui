@@ -1,5 +1,3 @@
-'use client';
-
 import type { Match } from '@/match';
 import { InputDuration } from '../../field';
 import { InputMatch, InputMatchProps } from '../match';

@@ -1,5 +1,3 @@
-'use client';
-
 import type { Id } from '@/schema';
 import type { Match } from '@/match';
 import { Input } from '../../field';

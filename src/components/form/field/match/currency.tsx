@@ -1,5 +1,3 @@
-'use client';
-
 import { Currency } from '@/schema';
 import type { Match, MatchOption } from '@/match';
 import { InputMatch, InputMatchProps, type InputMatchField, InputMatchOption } from '../match';

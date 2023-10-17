@@ -1,5 +1,3 @@
-'use client';
-
 import type { Currency, Money } from '@/schema';
 import type { Match } from '@/match';
 import { InputMoney } from '../../field/money';

@@ -12,7 +12,7 @@ export type MatchTimesheet = {
 	expenses?: MatchSet<MatchExpense>,
 	id?: Match<Id>,
 	job?: MatchJob,
-	time_begin?: Match<string>,
-	time_end?: Match<string>,
+	time_begin?: Match<Date>,
+	time_end?: Match<Date>,
 	work_notes?: MatchStr,
 };

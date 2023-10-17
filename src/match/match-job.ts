@@ -10,9 +10,9 @@ import { type MatchStr } from './match-str';
 export type MatchJob = {
 	client?: MatchOrganization,
 	/** If present, should be valid input to {@link Date.parse} */
-	date_close?: Match<string>,
+	date_close?: Match<Date>,
 	/** If present, should be valid input to {@link Date.parse} */
-	date_open?: Match<string>,
+	date_open?: Match<Date>,
 	departments?: MatchSet<MatchDepartment>,
 	id?: Match<Id>,
 	/** {@link https://docs.rs/humantime/latest/humantime | Human-readable} durations */

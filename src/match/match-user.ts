@@ -10,7 +10,7 @@ export type MatchUser = {
 	employee: MatchOption<MatchEmployee>,
 	id: Match<Id>,
 	password: MatchStr,
-	password_set: MatchOption<Match<Date>>,
+	password_set: Match<Date>,
 	role: MatchRole,
 	username: string,
 };

@@ -1,4 +1,4 @@
-import { type Match } from '@/match';
+import type { Match } from '@/match';
 
 type M = Match<number>
 describe('Match', () => {

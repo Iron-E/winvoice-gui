@@ -1,6 +1,6 @@
 import { fieldMaybeIs } from '@/utils';
 import { isEmployee, type Employee } from './employee';
-import { type Expense } from './expense';
+import type { Expense } from './expense';
 import { isId, type Id } from './id';
 import { isJob, type Job } from './job';
 

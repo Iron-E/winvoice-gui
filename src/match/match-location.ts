@@ -1,7 +1,7 @@
 import { Currency, type Id } from '@/schema';
-import { type Match } from './match';
-import { type MatchOption } from './match-option';
-import { type MatchStr } from './match-str';
+import type { Match } from './match';
+import type { MatchOption } from './match-option';
+import type { MatchStr } from './match-str';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-match | `MatchLocation`}. */
 export type MatchLocation = {

@@ -1,9 +1,9 @@
-import { type Id } from '@/schema';
-import { type Match } from './match';
-import { type MatchEmployee } from './match-employee';
-import { type MatchOption } from './match-option';
-import { type MatchRole } from './match-role';
-import { type MatchStr } from './match-str';
+import type { Id } from '@/schema';
+import type { Match } from './match';
+import type { MatchEmployee } from './match-employee';
+import type { MatchOption } from './match-option';
+import type { MatchRole } from './match-role';
+import type { MatchStr } from './match-str';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-server | `MatchUser`} type. */
 export type MatchUser = {

@@ -2,7 +2,7 @@
 
 import React from "react";
 import type { Children, Class, Click } from "../../props-with";
-import type { Props, ValueOf } from "@/utils";
+import type { ArrayOrUnit, Maybe, Props, ValueOf } from "@/utils";
 import { BorderedLabel, FormButton } from "@/components";
 import { HOVER } from "@/components/css";
 
@@ -19,11 +19,21 @@ export function BorderLabeledField(props:
 	& Children
 	& Class
 	& {
-		button?: Click & { text: React.ReactNode },
+		button?: ArrayOrUnit<Click & { text: React.ReactNode }>,
 		label?: ValueOf<Props<typeof BorderedLabel>, 'label'>,
 	}
 ): React.ReactElement {
 	const NESTING = React.useContext(NESTING_CONTEXT);
+	let buttons: Maybe<React.ReactElement[]>;
+	if (props.button != undefined) {
+		const BUTTONS = props.button instanceof Array ? props.button : [props.button];
+		buttons = BUTTONS.map((b, i) => (
+			<FormButton className={`${HOVER} px-1`} key={i} onClick={b.onClick}>
+				{b.text}
+			</FormButton>
+		));
+	}
+
 	return (
 		<BorderedLabel
 			// GIGA-HACK: there is no way to do even/odd nesting in css!
@@ -33,14 +43,9 @@ ${NESTING ? 'bg-bordered-label-nested-bg' : 'bg-bordered-label-bg' /* */}
 ${props.className}`}
 			label={props.label}
 		>
-			{props.button && (
-				<FormButton
-					className={`${HOVER} px-1 absolute top-[-1.2rem] right-2`}
-					onClick={props.button.onClick}
-				>
-					{props.button.text}
-				</FormButton>
-			)}
+			<span className='flex absolute gap-1 top-[-1.2rem] right-2'>
+				{buttons}
+			</span>
 
 			<NESTING_CONTEXT.Provider value={!NESTING}>
 				{props.children}

@@ -10,6 +10,9 @@ export type ReadonlyNonNullUnitArray<T> = ReadonlyArray<NonNullUnit<T>>;
 /** A {@link ReadonlyArray} of {@link Unit<T>}. */
 export type ReadonlyUnitArray<T> = ReadonlyArray<Unit<T>>;
 
+/** Expresses that the type is either {@link Unit<T>} or an {@link Array} of said type. */
+export type ArrayOrUnit<T> = Unit<T> | Array<Unit<T>>;
+
 /**
  * Get the underlying type which is being used in an {@link Array}, no matter how nested.
  * NOTE: `Unit` is always safe to compare to nested equivalents; `Unit<T>` = `Unit<Unit<T>>` = `Unit<Unit<…>>`, etc.

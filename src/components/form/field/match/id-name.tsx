@@ -11,19 +11,20 @@ import { InputMatchStr } from '../match';
 export function InputMatchIdAndName<M extends { id?: Match<Id>, name?: MatchStr }>(
 	props: InputMatchObjectProps<M>,
 ): React.ReactElement {
+	const VALUE = props.value ?? {} as M;
 	return <>
 		<InputMatchId
 			id={`${props.id}--id`}
 			label='Id'
-			onChange={id => props.onChange({ ...props.value, id })}
-			value={props.value.id ?? 'any'}
+			onChange={id => props.onChange({ ...VALUE, id })}
+			value={VALUE.id ?? 'any'}
 		/>
 
 		<InputMatchStr
 			id={`${props.id}--name`}
 			label='Name'
-			onChange={name => props.onChange({ ...props.value, name })}
-			value={props.value.name ?? 'any'}
+			onChange={name => props.onChange({ ...VALUE, name })}
+			value={VALUE.name ?? 'any'}
 		/>
 	</>;
 }

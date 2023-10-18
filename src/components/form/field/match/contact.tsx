@@ -48,7 +48,7 @@ function SelectMatchContactKind(props:
 	return (
 		<Select
 			{...props}
-			label='Kind'
+			label='Operator'
 			onChange={value => KIND_CHANGE_HANDLERS[value as MatchContactKinds](
 				props.onChange,
 				props.condition,
@@ -72,11 +72,13 @@ function InputMatchContactKind(props: InputMatchObjectProps<MatchContactKind>): 
 	} else if ('address' in VALUE) {
 		kind = 'address';
 		children = (
-			<InputMatchLocation
-				id={`${props.id}--address`}
-				onChange={address => props.onChange({ address })}
-				value={VALUE.address}
-			/>
+			<BorderLabeledField label='Operand'>
+				<InputMatchLocation
+					id={`${props.id}--address`}
+					onChange={address => props.onChange({ address })}
+					value={VALUE.address}
+				/>
+			</BorderLabeledField>
 		);
 	} else {
 		if ('email' in VALUE) {
@@ -90,6 +92,7 @@ function InputMatchContactKind(props: InputMatchObjectProps<MatchContactKind>): 
 		children = (
 			<InputMatchStr
 				id={`${props.id}--${kind}`}
+				label='Operand'
 				onChange={value => props.onChange({ [kind]: value } as MatchContactKind)}
 				value={(VALUE as Record<typeof kind, MatchStr>)[kind]}
 			/>
@@ -124,6 +127,7 @@ export function InputMatchContact(props: InputMatchObjectProps<MatchContact>): R
 
 		<InputMatchStr
 			id={`${props.id}--label`}
+			label='Label'
 			onChange={label => props.onChange({ ...VALUE, label })}
 			value={VALUE.label ?? 'any'}
 		/>

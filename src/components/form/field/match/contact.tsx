@@ -26,9 +26,11 @@ const OPTIONS: readonly React.ReactElement[] = [
 ];
 
 /** @returns a {@link Handler} for {@link MatchContactKinds} which relate to a {@link MatchStr}. */
-function strHandler(key: Omit<MatchContactKinds, 'address' | 'any'>): Handler {
+function strHandler(key: MatchContactKinds): Handler {
 	return (h, c, o) => {
-		h({ [key as MatchContactKinds]: o === 'any' || o === 'address' ? 'any' : c } as MatchContactKind);
+		h({
+			[key]: o === 'any' || o === 'address' ? 'any' : (c as Record<typeof o, MatchStr>)[o],
+		} as MatchContactKind);
 	};
 }
 

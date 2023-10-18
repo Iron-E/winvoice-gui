@@ -26,6 +26,7 @@ export * from './match/expense';
 export * from './match/job';
 export * from './match/location';
 export * from './match/organization';
+export * from './match/role';
 export * from './match/timesheet';
 
 /** A react component which can be used to input an operand value for a {@link Match} condition.  */

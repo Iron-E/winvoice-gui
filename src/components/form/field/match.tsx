@@ -22,6 +22,7 @@ import {
 
 export * from './match/department';
 export * from './match/employee';
+export * from './match/job';
 export * from './match/location';
 export * from './match/organization';
 

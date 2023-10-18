@@ -13,11 +13,5 @@ import { useMatchForm } from './hooks';
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link MatchLocation} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
 export function MatchLocationForm(props: SearchProps<Location>): React.ReactElement {
-	return useMatchForm(
-		props.id,
-		InputMatchLocation,
-		useLocationTable(props.onRowSelect),
-		Route.Location,
-		isLocation,
-	);
+	return useMatchForm(props.id, InputMatchLocation, useLocationTable(props.onRowSelect), Route.Location, isLocation);
 }

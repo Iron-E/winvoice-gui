@@ -28,7 +28,7 @@ export function BorderLabeledField(props:
 	if (props.button != undefined) {
 		const BUTTONS = props.button instanceof Array ? props.button : [props.button];
 		buttons = BUTTONS.map((b, i) => (
-			<FormButton className={`${HOVER} px-1`} key={i} onClick={b.onClick}>
+			<FormButton className={`${HOVER} px-1 py-0.5`} key={i} onClick={b.onClick}>
 				{b.text}
 			</FormButton>
 		));
@@ -43,7 +43,7 @@ ${NESTING ? 'bg-bordered-label-nested-bg' : 'bg-bordered-label-bg' /* */}
 ${props.className}`}
 			label={props.label}
 		>
-			<span className='flex absolute gap-1 top-[-1.2rem] right-2'>
+			<span className='flex absolute gap-1 top-[-1.1rem] right-2 text-xs'>
 				{buttons}
 			</span>
 

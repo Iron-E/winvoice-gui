@@ -22,9 +22,11 @@ import {
 
 export * from './match/department';
 export * from './match/employee';
+export * from './match/expense';
 export * from './match/job';
 export * from './match/location';
 export * from './match/organization';
+export * from './match/timesheet';
 
 /** A react component which can be used to input an operand value for a {@link Match} condition.  */
 export type InputMatchField<T> = (p: Omit<InputProps<T>, 'value'> & { value: T }) => React.ReactElement;

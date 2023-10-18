@@ -1,6 +1,5 @@
+import { MatchRoleForm } from "@/components";
+
 export default function Page(): React.ReactElement {
-	return (
-		<>
-		</>
-	);
+	return <MatchRoleForm id='search-role-form' />;
 }

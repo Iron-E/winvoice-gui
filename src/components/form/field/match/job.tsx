@@ -26,50 +26,57 @@ export function InputMatchJob(props: InputMatchObjectProps<MatchJob>): React.Rea
 
 		<InputMatchDate
 			id={`${props.id}--date--open`}
+			label='Date Open'
 			onChange={date_open => props.onChange({ ...VALUE, date_open })}
 			value={VALUE.date_open ?? 'any'}
 		/>
 
 		<InputMatchDate
 			id={`${props.id}--date--close`}
+			label='Date Close'
 			onChange={date_close => props.onChange({ ...VALUE, date_close })}
 			value={VALUE.date_close ?? 'any'}
 		/>
 
-		<BorderLabeledField label='Departments'>
-			<InputMatchSetDepartment
-				id={`${props.id}--departments`}
-				onChange={departments => props.onChange({ ...VALUE, departments })}
-				value={VALUE.departments ?? 'any'}
-			/>
-		</BorderLabeledField>
+		<InputMatchSetDepartment
+			id={`${props.id}--departments`}
+			label='Departments'
+			onChange={departments => props.onChange({ ...VALUE, departments })}
+			value={VALUE.departments ?? 'any'}
+		/>
 
 		<InputMatchId
 			id={`${props.id}--id`}
+			label='Id'
 			onChange={id => props.onChange({ ...VALUE, id })}
 			value={VALUE.id ?? 'any'}
 		/>
 
 		<InputMatchDuration
 			id={`${props.id}--increment`}
+			label='Increment'
 			onChange={increment => props.onChange({ ...VALUE, increment })}
 			value={VALUE.increment ?? 'any'}
 		/>
 
-		<InputMatchInvoice
-			id={`${props.id}--invoice`}
-			onChange={invoice => props.onChange({ ...VALUE, invoice })}
-			value={VALUE.invoice}
-		/>
+		<BorderLabeledField label='Invoice'>
+			<InputMatchInvoice
+				id={`${props.id}--invoice`}
+				onChange={invoice => props.onChange({ ...VALUE, invoice })}
+				value={VALUE.invoice}
+			/>
+		</BorderLabeledField>
 
 		<InputMatchStr
 			id={`${props.id}--notes`}
+			label='Notes'
 			onChange={notes => props.onChange({ ...VALUE, notes })}
 			value={VALUE.notes ?? 'any'}
 		/>
 
 		<InputMatchStr
 			id={`${props.id}--objectives`}
+			label='Objectives'
 			onChange={objectives => props.onChange({ ...VALUE, objectives })}
 			value={VALUE.objectives ?? 'any'}
 		/>

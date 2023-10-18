@@ -12,18 +12,21 @@ export function InputMatchInvoice(props: InputMatchObjectProps<MatchInvoice>): R
 	return <>
 		<InputMatchOptionDate
 			id={`${props.id}--date--issued`}
+			label='Date Issued'
 			onChange={date_issued => props.onChange({ ...VALUE, date_issued })}
 			value={VALUE.date_issued ?? 'any'}
 		/>
 
 		<InputMatchOptionDate
 			id={`${props.id}--date--paid`}
+			label='Date Paid'
 			onChange={date_paid => props.onChange({ ...VALUE, date_paid })}
 			value={VALUE.date_paid ?? 'any'}
 		/>
 
 		<InputMatchMoney
 			id={`${props.id}--hourly-rate`}
+			label='Hourly Rate'
 			onChange={hourly_rate => props.onChange({ ...VALUE, hourly_rate })}
 			value={VALUE.hourly_rate ?? 'any'}
 		/>

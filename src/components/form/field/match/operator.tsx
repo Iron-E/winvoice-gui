@@ -10,13 +10,12 @@ import { Select } from "../../field";
 export type BaseOperator =
 	| 'and'
 	| 'any'
-	| 'equal_to'
 	| 'or'
 	| 'not'
 	;
 
 /** The operators of a {@link Match} condition. */
-export type MatchOperator = BaseOperator | `${'greater' | 'less'}_than` | 'in_range';
+export type MatchOperator = BaseOperator | 'equal_to' | `${'greater' | 'less'}_than` | 'in_range';
 
 /** The operators of a {@link MatchOption}. */
 export type MatchOptionOperator = 'any' | `none${'' | '_or'}` | 'some';
@@ -25,7 +24,7 @@ export type MatchOptionOperator = 'any' | `none${'' | '_or'}` | 'some';
 export type MatchSetOperator = BaseOperator | 'contains';
 
 /** The operators of a {@link Match} condition. */
-export type MatchStrOperator = MatchSetOperator | 'regex';
+export type MatchStrOperator = MatchSetOperator | 'equal_to' | 'regex';
 
 /** A map of operator names to their change handlers. */
 type OperatorChangeHandlers<O extends FieldName, M> = Readonly<Record<
@@ -75,18 +74,15 @@ const MATCH_STR_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchStrOperato
 	regex: (h, c, d, o) => h({ regex: MATCH_STR_OPERATOR_TO_OPERAND[o]?.(c) ?? d as string }),
 };
 
-/*
- * The base for {@link MATCH_OPERATOR_TO_OPERAND} and {@link MATCH_STR_OPERATOR_TO_OPERAND}.
- * HACK: `any` used here because you can't do `<T, U> Dict<_, (_: T) => U>`
- */
-const BASE_OPERATOR_TO_OPERAND: Dict<BaseOperator, (condition: any) => any> = {
-	equal_to: c => c,
-};
+/** A common implementation of the `equal_to` operator to its operand. */
+function equal_to<T, U>(condition: T): U {
+	return condition! as U;
+}
 
 /** A lookup table for handlers used in {@link handleOperatorChange}. */
 /** Maps a condition's {@link MatchOperator | operator} to an instruction which will extract the operand. */
 export const MATCH_OPERATOR_TO_OPERAND: Dict<MatchOperator, <T>(condition: Match<T>) => T> = {
-	...BASE_OPERATOR_TO_OPERAND,
+	equal_to,
 	greater_than: c => (c as Record<'greater_than', any>).greater_than,
 	in_range: c => (c as Record<'in_range', any>).in_range[0],
 	less_than: c => (c as Record<'less_than', any>).less_than,
@@ -100,13 +96,13 @@ export const MATCH_OPTION_OPERATOR_TO_OPERAND: Dict<MatchOptionOperator, <T>(con
 
 /** Maps a condition's {@link MatchOperator | operator} to an instruction which will extract the operand. */
 const MATCH_SET_OPERATOR_TO_OPERAND: Dict<MatchStrOperator, <T>(condition: MatchSet<T>) => T> = {
-	...BASE_OPERATOR_TO_OPERAND,
 	contains: c => (c as Record<'contains', any>).contains,
 };
 
 /** Maps a condition's {@link MatchOperator | operator} to an instruction which will extract the operand. */
 export const MATCH_STR_OPERATOR_TO_OPERAND: Dict<MatchStrOperator, (condition: MatchStr) => string> = {
 	...MATCH_SET_OPERATOR_TO_OPERAND as Dict<MatchStrOperator, (condition: MatchStr) => string>,
+	equal_to,
 	regex: c => (c as Record<'regex', string>).regex,
 };
 
@@ -114,7 +110,6 @@ export const MATCH_STR_OPERATOR_TO_OPERAND: Dict<MatchStrOperator, (condition: M
 const BASE_OPTIONS: readonly React.ReactElement[] = [
 	<option key='and' value='and'>And</option>,
 	<option key='any' value='any'>Any</option>,
-	<option key='equal_to' value='equal_to'>Equal to</option>,
 	<option key='not' value='not'>Not</option>,
 	<option key='or' value='or'>Or</option>,
 ];
@@ -128,6 +123,7 @@ function compareElementKeys(a: React.ReactElement, b: React.ReactElement) {
 /** The `<options>` for {@link SelectMatchOperator}. */
 const MATCH_OPTIONS: readonly React.ReactElement[] = [
 	...BASE_OPTIONS,
+	<option key='equal_to' value='equal_to'>Equal to</option>,
 	<option key='greater_than' value='greater_than'>Greater than</option>,
 	<option key='in_range' value='in_range'>In Range</option>,
 	<option key='less_than' value='less_than'>Less than</option>,
@@ -151,8 +147,9 @@ const MATCH_SET_OPTIONS: readonly React.ReactElement[] = [
 /** The `<options>` for {@link SelectMatchOperator}. */
 const MATCH_STR_OPTIONS: readonly React.ReactElement[] = [
 	...MATCH_SET_OPTIONS,
+	<option key='equal_to' value='equal_to'>Equal to</option>,
 	<option key='regex' value='regex'>Regex</option>,
-];
+].sort(compareElementKeys);
 
 /** Properties of aggregates of {@link SelectOperator}. */
 type Props<O, M> =

@@ -163,15 +163,6 @@ function SelectOperator<O extends string | symbol, M, T extends M>(props: Props<
 	defaultCondition: T,
 	operatorChangeHandlers: OperatorChangeHandlers<O, M>,
 }): React.ReactElement {
-	function handleChange(value: string): void {
-		props.operatorChangeHandlers[value as O](
-			props.onChange,
-			props.condition,
-			props.defaultCondition,
-			props.value,
-		);
-	}
-
 	return (
 		<Select
 			id={`${props.id}--operator`}
@@ -188,7 +179,12 @@ function SelectOperator<O extends string | symbol, M, T extends M>(props: Props<
 				}
 				{props.labelChildren}
 			</>}
-			onChange={handleChange}
+			onChange={value => props.operatorChangeHandlers[value as O](
+				props.onChange,
+				props.condition,
+				props.defaultCondition,
+				props.value,
+			)}
 			title='The type of condition which is applied to the Operand'
 			value={typeof props.value === 'symbol' ? props.value.description! : props.value}
 		>

@@ -20,6 +20,7 @@ import {
 	type MatchStrOperator,
 } from './match/operator';
 
+export * from './match/contact';
 export * from './match/department';
 export * from './match/employee';
 export * from './match/expense';

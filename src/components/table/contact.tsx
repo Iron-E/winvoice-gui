@@ -6,12 +6,14 @@ import type { Contact, Location } from '@/schema'
 import type { ValueOf } from '@/utils';
 import { ContactForm } from '../form';
 import { LocationTable } from './location';
-import { OrderedData, type Valuators } from './order';
+import { OrderedData } from './order';
 import { Route } from '@/api';
 import { Table } from '../table';
 import { Td } from './column';
 import { Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
+
+export * from './contact/valuators';
 
 /** the headers of the {@link ContactTable}. */
 const HEADERS = ['Label', 'Email', 'Other', 'Phone', 'Address'] as const;
@@ -22,27 +24,6 @@ const HEADERS = ['Label', 'Email', 'Other', 'Phone', 'Address'] as const;
  */
 function label(c: Contact): ValueOf<Contact, 'label'> {
 	return c.label;
-}
-
-/**
- * @param outerOrder the
- * @returns {@link Valuators} for a {@link Location}
- */
-export function contactValuators(keys: {
-	address: keyof Location,
-	outerAddress: keyof ValueOf<Location, 'outer'>,
-}): Valuators<Contact> {
-	return {
-		address: {
-			key: keys.address,
-			valuators: {
-				outer: {
-					key: keys.outerAddress,
-					valuators: { outer: { key: 'name' } },
-				}
-			}
-		}
-	};
 }
 
 /** @returns a {@link Table} that displays a {@link Location} and its outer location. */

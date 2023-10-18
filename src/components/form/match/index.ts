@@ -1,3 +1,4 @@
+export * from './contact';
 export * from './department';
 export * from './employee';
 export * from './expense';

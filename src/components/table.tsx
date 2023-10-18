@@ -9,6 +9,7 @@ import { Snakecase, equalsIgnoreCase } from '@/utils';
 export * from './table/button';
 export * from './table/column';
 export * from './table/contact';
+export * from './table/contact/hooks';
 export * from './table/department';
 export * from './table/department/hooks';
 export * from './table/employee';

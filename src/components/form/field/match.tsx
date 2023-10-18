@@ -60,6 +60,18 @@ function removeButton<M>(
 	};
 }
 
+function swapButton<M>(
+	handleClick: Fn<[condition: M]>,
+	operator: 'and' | 'or',
+	operands: 'any' extends M ? M[] : never,
+): React.ReactElement {
+	return (
+		<FormButton className={LABEL_BUTTON_STYLE} onClick={() => handleClick({ [operator]: operands } as M)}>
+			<ArrowsRightLeftIcon className={ICON} /> Swap
+		</FormButton>
+	);
+}
+
 /** @returns the `Field` with some defaults used for {@link InputMatch}. */
 function InputField<T>(props:
 	& { Field: InputMatchField<T> }
@@ -175,14 +187,7 @@ export function InputMatch<T>(props:
 				<SelectMatchOperator
 					condition={props.value}
 					defaultCondition={props.defaultValue}
-					labelChildren={<>
-						<FormButton
-							className={LABEL_BUTTON_STYLE}
-							onClick={() => props.onChange({ [OTHER_OPERATOR]: OPERANDS } as Match<T>)}
-						>
-							<ArrowsRightLeftIcon className={ICON} /> Swap
-						</FormButton>
-					</>}
+					labelChildren={swapButton(props.onChange, OTHER_OPERATOR, OPERANDS)}
 					id={props.id}
 					onChange={props.onChange}
 					value={OPERATOR}
@@ -309,14 +314,7 @@ export function InputMatchSet<T>(props:
 			children = <>
 				<SelectMatchSetOperator
 					condition={props.value}
-					labelChildren={<>
-						<FormButton
-							className={LABEL_BUTTON_STYLE}
-							onClick={() => props.onChange({ [OTHER_OPERATOR]: OPERANDS } as MatchSet<T>)}
-						>
-							<ArrowsRightLeftIcon className={ICON} /> Swap
-						</FormButton>
-					</>}
+					labelChildren={swapButton(props.onChange, OTHER_OPERATOR, OPERANDS)}
 					id={props.id}
 					onChange={props.onChange}
 					value={OPERATOR}
@@ -395,7 +393,7 @@ export function InputMatchStr(props: InputMatchProps<MatchStr>): React.ReactElem
 			children = <>
 				<SelectMatchStrOperator
 					condition={props.value}
-					labelChildren={undefined /* TODO: extract <FormButton>s above to independent component */}
+					labelChildren={swapButton(props.onChange, OTHER_OPERATOR, OPERANDS)}
 					id={props.id}
 					onChange={props.onChange}
 					value={OPERATOR}

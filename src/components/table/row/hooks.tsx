@@ -20,10 +20,9 @@ export function useRowEventHandlers<T extends {}, Id extends FieldName>(
 	route: UserInputRoute,
 	confirmDeleteMessage: (value: NonNullUnit<T>) => string,
 	getId: (value: NonNullUnit<T>) => Id,
-	EditForm: (props:
-		& AsyncOn<'submit', [value: NonNullUnit<T>]>
-		& { initialValues: NonNullUnit<T> }
-	) => React.ReactElement,
+	EditForm: (props: AsyncOn<'submit', [value: NonNullUnit<T>]> & {
+		initialValues: NonNullUnit<T>,
+	}) => React.ReactElement,
 ): [Opt<React.ReactElement>, ReturnType<typeof useModalVisibility<RowEvent<T>>>[1]] {
 	const [MODAL_VISIBLE, setModalVisible] = useModalVisibility<RowEvent<T>>();
 	return [

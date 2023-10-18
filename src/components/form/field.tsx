@@ -89,10 +89,9 @@ rounded-2xl bg-form-field-bg text-form-label-fg-invalid invisible peer-invalid:v
 }
 
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
-export function Input(props:
-	& FieldProps<HTMLInputElement, 'input'>
-	& { [key in 'pattern' | 'placeholder' | 'type']?: InputProps[key] }
-): React.ReactElement {
+export function Input(props: FieldProps<HTMLInputElement, 'input'> & {
+	[key in 'pattern' | 'placeholder' | 'type']?: InputProps[key];
+}): React.ReactElement {
 	return <>
 		<span className={`${FLEX_BETWEEN} gap-5`}>
 			<Label className='self-end' htmlFor={props.id} required={props.required} >
@@ -153,10 +152,9 @@ export function Select(props: FieldProps<HTMLSelectElement, 'select'> & Children
 type TextareaProps = ValueOf<React.JSX.IntrinsicElements, 'textarea'>;
 
 /** @returns an {@link JSX.IntrinsicElements.input | input} which has a corresponding label. */
-export function Textarea(props:
-	& FieldProps<HTMLTextAreaElement, 'textarea'>
-	& { [key in 'placeholder']?: TextareaProps[key] }
-): React.ReactElement {
+export function Textarea(props: FieldProps<HTMLTextAreaElement, 'textarea'> & {
+	[key in 'placeholder']?: TextareaProps[key];
+}): React.ReactElement {
 	return <>
 		<Label className='justify-end' htmlFor={props.id} required={props.required}>
 			{props.label}

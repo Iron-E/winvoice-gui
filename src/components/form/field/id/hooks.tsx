@@ -48,13 +48,10 @@ export function useIdEventHandlers<T>(
 type IdsProps<T> = CompositeProps<Maybe<T>[]>;
 
 /** @returns a {@link React.JSX.IntrinsicElements.input | input} to gather a `string`. */
-export function useIdInputs<T extends { id: Id }>(props:
-	& Omit<IdsProps<T>, 'value'>
-	& {
-		useIdEventHandlers: (id: string, setValue: Parameters<IdEventsHandler<T>>[1]) => ReturnType<IdEventsHandler<T>>,
-		values: NonNullable<IdsProps<T>['value']>,
-	}
-): [Opt<React.ReactElement>, React.ReactElement] {
+export function useIdInputs<T extends { id: Id }>(props: Omit<IdsProps<T>, 'value'> & {
+	useIdEventHandlers: (id: string, setValue: Parameters<IdEventsHandler<T>>[1]) => ReturnType<IdEventsHandler<T>>,
+	values: NonNullable<IdsProps<T>['value']>,
+}): [Opt<React.ReactElement>, React.ReactElement] {
 	const [INDEX, setIndex] = React.useState(-1);
 	const [HANDLER, setIdEvent] = props.useIdEventHandlers(props.id, d => {
 		props.onChange(props.values.with(INDEX, d));

@@ -29,11 +29,9 @@ export function Modal(props: Children & OnClose): React.ReactElement {
 }
 
 /** @returns a modal to confirm some `message`. */
-export function ConfirmModal(props:
-	& OnClose
-	& Required<On<'confirm'>>
-	& {message: React.ReactElement},
-): React.ReactElement {
+export function ConfirmModal(props: OnClose & Required<On<'confirm'>> & {
+	message: React.ReactElement,
+}): React.ReactElement {
 	return (
 		<Modal onClose={props.onClose}>
 			<p>Please confirm that {props.message}.</p>

@@ -162,14 +162,10 @@ type Props<O, M> =
 	;
 
 /** A selector for the current 'variant' (e.g. 'and', 'any') of the {@link Match} condition. */
-function SelectOperator<O extends string | symbol, M, T extends M>(props:
-	& Props<O, M>
-	& Required<Children>
-	& {
-		defaultCondition: T,
-		operatorChangeHandlers: OperatorChangeHandlers<O, M>,
-	}
-): React.ReactElement {
+function SelectOperator<O extends string | symbol, M, T extends M>(props: Props<O, M> & Required<Children> & {
+	defaultCondition: T,
+	operatorChangeHandlers: OperatorChangeHandlers<O, M>,
+}): React.ReactElement {
 	function handleChange(value: string): void {
 		props.operatorChangeHandlers[value as O](
 			props.onChange,
@@ -205,10 +201,9 @@ function SelectOperator<O extends string | symbol, M, T extends M>(props:
 }
 
 /** A selector for the current 'variant' (e.g. 'and', 'any') of the {@link Match} condition. */
-export function SelectMatchOperator<T>(props:
-	& Props<MatchOperator, Match<T>>
-	& { defaultCondition: T }
-): React.ReactElement {
+export function SelectMatchOperator<T>(props: Props<MatchOperator, Match<T>> & {
+	defaultCondition: T,
+}): React.ReactElement {
 	return (
 		<SelectOperator {...props} operatorChangeHandlers={MATCH_OPERATOR_CHANGE_HANDLERS}>
 			{MATCH_OPTIONS}

@@ -24,10 +24,9 @@ export * from './location/valuators';
 const HEADERS = ['ID', 'Currency', 'Name', 'Outer'] as const;
 
 /** @returns a table which displays {@link Location}s in a customizable manner. */
-function BaseLocationTable(props:
-	& BaseProps<Location, 'id'>
-	& { mapOuter: (l: Location) => React.ReactElement }
-): React.ReactElement {
+function BaseLocationTable(props: BaseProps<Location, 'id'> & {
+	mapOuter: (l: Location) => React.ReactElement,
+}): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
 	const [HANDLER, setRowEvent] = useRowEventHandlers(
 		props.orderedData, CLIENT, showMessage, Route.Location,

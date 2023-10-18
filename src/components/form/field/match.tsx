@@ -3,7 +3,7 @@ import type { CompositeProps, InputProps } from './props';
 import type { Match, MatchOption, MatchSet, MatchStr } from "@/match";
 import type { Props, Fn, Maybe, ValueOf } from "@/utils";
 import { AddIcon, RemoveIcon } from '@/components';
-import { ArrowsRightLeftIcon } from '@heroicons/react/20/solid';
+import { ArrowUpIcon, ArrowsRightLeftIcon } from '@heroicons/react/20/solid';
 import { BorderLabeledField, GRID } from './border-labeled';
 import { FormButton, LABEL_BUTTON_STYLE } from "../button";
 import { ICON } from '@/components/css';
@@ -48,16 +48,21 @@ function addButton<M>(
 }
 
 /** @returns a {@link BorderLabeledField | button} for removing the selected value from a `{['and | 'or']: […]}` condition. */
-function removeButton<M>(
+function operandsButtons<M>(
 	handleClick: Fn<[condition: M]>,
 	operator: 'and' | 'or',
 	operands: 'any' extends M ? M[] : never,
 	index: number,
 ): Props<typeof BorderLabeledField>['button'] {
-	return operands.length < 2 ? undefined : {
+	const PULL_UP = {
+		onClick: () => handleClick(operands[index] as M),
+		text: <><ArrowUpIcon className={ICON} /> Pull Up</>,
+	};
+
+	return operands.length < 2 ? PULL_UP : [PULL_UP, {
 		onClick: () => handleClick({ [operator]: operands.toSpliced(index, 1) } as M),
 		text: <RemoveIcon />,
-	};
+	}];
 }
 
 function swapButton<M>(
@@ -115,10 +120,10 @@ export type InputMatchProps<T> =
 	};
 
 /** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link Match} condition. */
-export function InputMatch<T>(props:
-	& InputMatchProps<Match<T>>
-	& { defaultValue: T, inputField: InputMatchField<T> }
-): React.ReactElement {
+export function InputMatch<T>(props: InputMatchProps<Match<T>> & {
+	defaultValue: T,
+	inputField: InputMatchField<T>,
+}): React.ReactElement {
 	let children: Maybe<React.ReactElement>;
 
 	if (props.value === 'any') {
@@ -200,7 +205,7 @@ export function InputMatch<T>(props:
 				>
 					{OPERANDS.map((condition, i) =>
 						<InputMatch
-							button={removeButton(props.onChange, OPERATOR, OPERANDS, i)}
+							button={operandsButtons(props.onChange, OPERATOR, OPERANDS, i)}
 							defaultValue={props.defaultValue}
 							id={`${props.id}--and-${i}`}
 							inputField={props.inputField}
@@ -255,10 +260,9 @@ export function InputMatch<T>(props:
 }
 
 /** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link MatchOption} condition. */
-export function InputMatchOption<T>(props:
-	& InputMatchProps<MatchOption<T>>
-	& { inputField: InputMatchField<T> }
-): React.ReactElement {
+export function InputMatchOption<T>(props: InputMatchProps<MatchOption<T>> & {
+	inputField: InputMatchField<T>,
+}): React.ReactElement {
 	let children: React.ReactElement;
 
 	const ANY = props.value === 'any';
@@ -288,10 +292,9 @@ export function InputMatchOption<T>(props:
 }
 
 /** @returns a form field to {@link Select} the match operator and {@link Input} the operand to form a {@link MatchSet} condition. */
-export function InputMatchSet<T>(props:
-	& InputMatchProps<MatchSet<T>>
-	& { inputField: InputMatchField<T> }
-): React.ReactElement {
+export function InputMatchSet<T>(props: InputMatchProps<MatchSet<T>> & {
+	inputField: InputMatchField<T>,
+}): React.ReactElement {
 	let children: React.ReactElement;
 
 	if (props.value === 'any') {
@@ -327,7 +330,7 @@ export function InputMatchSet<T>(props:
 				>
 					{OPERANDS.map((condition, i) =>
 						<InputMatchSet
-							button={removeButton(props.onChange, OPERATOR, OPERANDS, i)}
+							button={operandsButtons(props.onChange, OPERATOR, OPERANDS, i)}
 							id={`${props.id}--and-${i}`}
 							inputField={props.inputField}
 							key={i}
@@ -410,7 +413,7 @@ export function InputMatchStr(props: InputMatchProps<MatchStr>): React.ReactElem
 				>
 					{OPERANDS.map((condition, i) =>
 						<InputMatchStr
-							button={removeButton(props.onChange, OPERATOR, OPERANDS, i)}
+							button={operandsButtons(props.onChange, OPERATOR, OPERANDS, i)}
 							id={`${props.id}--and-${i}`}
 							key={i}
 							label={`${i + 1}`}

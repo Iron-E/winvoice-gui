@@ -7,10 +7,9 @@ import type { MatchStr } from './match-str';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-server | `MatchUser`} type. */
 export type MatchUser = {
-	employee: MatchOption<MatchEmployee>,
-	id: Match<Id>,
-	password: MatchStr,
-	password_set: Match<Date>,
-	role: MatchRole,
-	username: string,
+	employee?: MatchOption<MatchEmployee>,
+	id?: Match<Id>,
+	password_set?: Match<Date>,
+	role?: MatchRole,
+	username?: MatchStr,
 };

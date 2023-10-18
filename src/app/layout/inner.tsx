@@ -59,18 +59,12 @@ export function InnerRootLayout(props: w.Children): React.ReactElement {
 			</Header>
 
 			<div className={css.PAD}>
-				{CLIENT == undefined
-					? <Guidance>connect</Guidance>
-					: CLIENT.username == undefined
-						? <Guidance>sign in</Guidance>
-						: <Client.CONTEXT.Provider value={CLIENT}>
-							<Client.SET_EXPIRED_CONTEXT.Provider value={() => {
-								setClient(new Client(CLIENT.address));
-								showMessage('info', 'Your session has expired. Please login again.');
-							}}>
-								{props.children}
-							</Client.SET_EXPIRED_CONTEXT.Provider>
+				{CLIENT == undefined ? <Guidance>connect</Guidance> : CLIENT.username == undefined
+					? <Guidance>sign in</Guidance> : (
+						<Client.CONTEXT.Provider value={CLIENT}>
+							{props.children}
 						</Client.CONTEXT.Provider>
+					)
 				}
 			</div>
 		</SHOW_MESSAGE_CONTEXT.Provider>

@@ -1,9 +1,9 @@
-'use client'; // TODO: ← is this necessary?
+'use client';
 
 import React from 'react';
-import { doNothing, type Fn, type Opt, type Reviver, type ValueOf } from '@/utils';
-import { Code, newRequest, request, response, Route, type Request, type Status, UserInputRoute } from '@/api';
+import type { Opt, Reviver, ValueOf } from '@/utils';
 import type { ShowMessage } from '../messages';
+import { Code, newRequest, request, response, Route, type Request, type Status, type UserInputRoute } from '@/api';
 import { UnauthenticatedError } from './unauthenticated_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
 
@@ -29,9 +29,6 @@ export class Client {
 		new Client('DEFAULT CLIENT, SHOULD NEVER BE READ'),
 	);
 
-	/** Marks the current client's session as expired. */
-	public static readonly SET_EXPIRED_CONTEXT: Readonly<React.Context<Fn>> = React.createContext<Fn>(doNothing);
-
 	/**
 	 * @param <RequestBodyInner> see {@link newRequest}.
 	 * @param <ApiResponse> the response which is expected by the server on a success ({@link Response.ok}).
@@ -51,11 +48,11 @@ export class Client {
 	): OptBody<ResponseBody> {
 		const RESULT = await (this as Client).request(showMessage, route, requestParams, checkSchema, reviver);
 		if (RESULT instanceof UnauthenticatedError) {
-			showMessage('error', RESULT.message);
+			showMessage('warn', RESULT.message);
 		} else if (RESULT !== null) {
 			switch (RESULT.status.code) {
-				case Code.SuccessForPermissions: // WARN: fallthrough
-					showMessage('warn', RESULT.status.message);
+				case Code.SuccessForPermissions: // NOTE: fallthrough
+					showMessage('info', RESULT.status.message);
 				case Code.Success:
 					return RESULT;
 				default:
@@ -94,6 +91,14 @@ export class Client {
 				const OBJECT = JSON.parse(JSON_, reviver);
 				if (checkSchema(OBJECT)) {
 					return OBJECT;
+				} else if (response.isVersion(OBJECT)) {
+					if (OBJECT.status.code === Code.ApiVersionMismatch) {
+						showMessage('warn', 'The API version of the server differs from the version(s) supported by this app instance')
+					} else {
+						showMessage('error', 'There was a problem during version resolution. This is a bug. See the console for details.')
+					}
+
+					return null;
 				}
 			} catch {
 				// NOTE: `!checkSchema` and `SyntaxError` logic are the same

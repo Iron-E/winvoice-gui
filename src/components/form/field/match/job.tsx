@@ -47,7 +47,6 @@ export function InputMatchJob(props: InputMatchObjectProps<MatchJob>): React.Rea
 
 		<InputMatchId
 			id={`${props.id}--id`}
-			label='Id'
 			onChange={id => props.onChange({ ...VALUE, id })}
 			value={VALUE.id ?? 'any'}
 		/>

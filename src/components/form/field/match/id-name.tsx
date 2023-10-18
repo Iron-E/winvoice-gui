@@ -15,7 +15,6 @@ export function InputMatchIdAndName<M extends { id?: Match<Id>, name?: MatchStr 
 	return <>
 		<InputMatchId
 			id={`${props.id}--id`}
-			label='Id'
 			onChange={id => props.onChange({ ...VALUE, id })}
 			value={VALUE.id ?? 'any'}
 		/>

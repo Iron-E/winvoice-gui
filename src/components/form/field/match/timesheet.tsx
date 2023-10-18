@@ -25,6 +25,7 @@ export function InputMatchTimesheet(props: InputMatchObjectProps<MatchTimesheet>
 
 		<InputMatchSetExpense
 			id={`${props.id}--expenses`}
+			label='Expenses'
 			onChange={expenses => props.onChange({ ...VALUE, expenses })}
 			value={VALUE.expenses ?? 'any'}
 		/>
@@ -45,18 +46,21 @@ export function InputMatchTimesheet(props: InputMatchObjectProps<MatchTimesheet>
 
 		<InputMatchDate
 			id={`${props.id}--time-begin`}
+			label='Time Begin'
 			onChange={time_begin => props.onChange({ ...VALUE, time_begin })}
 			value={VALUE.time_begin ?? 'any'}
 		/>
 
 		<InputMatchDate
 			id={`${props.id}--time-end`}
+			label='Time End'
 			onChange={time_end => props.onChange({ ...VALUE, time_end })}
 			value={VALUE.time_end ?? 'any'}
 		/>
 
 		<InputMatchStr
 			id={`${props.id}--work-notes`}
+			label='Work Notes'
 			onChange={work_notes => props.onChange({ ...VALUE, work_notes })}
 			value={VALUE.work_notes ?? 'any'}
 		/>

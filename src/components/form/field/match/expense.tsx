@@ -13,18 +13,21 @@ export function InputMatchExpense(props: InputMatchObjectProps<MatchExpense>): R
 	return <>
 		<InputMatchStr
 			id={`${props.id}--category`}
+			label='Category'
 			onChange={category => props.onChange({ ...VALUE, category })}
 			value={VALUE.category ?? 'any'}
 		/>
 
 		<InputMatchMoney
 			id={`${props.id}--cost`}
+			label='Cost'
 			onChange={cost => props.onChange({ ...VALUE, cost })}
 			value={VALUE.cost ?? 'any'}
 		/>
 
 		<InputMatchStr
 			id={`${props.id}--description`}
+			label='Description'
 			onChange={description => props.onChange({ ...VALUE, description })}
 			value={VALUE.description ?? 'any'}
 		/>
@@ -37,6 +40,7 @@ export function InputMatchExpense(props: InputMatchObjectProps<MatchExpense>): R
 
 		<InputMatchId
 			id={`${props.id}--timesheet-id`}
+			label='Timesheet ID'
 			onChange={timesheet_id => props.onChange({ ...VALUE, timesheet_id })}
 			value={VALUE.timesheet_id ?? 'any'}
 		/>

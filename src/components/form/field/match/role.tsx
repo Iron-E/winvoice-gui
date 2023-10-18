@@ -19,12 +19,14 @@ export function InputMatchRole(props: InputMatchObjectProps<MatchRole>): React.R
 
 		<InputMatchStr
 			id={`${props.id}--name`}
+			label='Name'
 			onChange={name => props.onChange({ ...VALUE, name })}
 			value={VALUE.name ?? 'any'}
 		/>
 
 		<InputMatchDuration
 			id={`${props.id}--password-ttl`}
+			label='Password TTL'
 			onChange={password_ttl => props.onChange({ ...VALUE, password_ttl })}
 			value={VALUE.password_ttl ?? 'any'}
 		/>

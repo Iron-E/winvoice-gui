@@ -27,7 +27,7 @@ export function InvoiceDateTable(props:
 		>
 			{props.orderedData.data.map((d, i) => {
 				return (
-					<Tr key={i} onClick={props.onRowSelect && (() => props.onRowSelect!(d))}>
+					<Tr key={i} onSelect={props.onRowSelect && (() => props.onRowSelect!(d))}>
 						<Td>{d.issued.toLocaleString()}</Td>
 						<Td>{d.paid?.toLocaleString()}</Td>
 					</Tr>
@@ -50,7 +50,7 @@ export function InvoiceTable(props:
 		>
 			{props.orderedData.data.map((i, index) => {
 				return (
-					<Tr key={index} onClick={props.onRowSelect && (() => props.onRowSelect!(i))}>
+					<Tr key={index} onSelect={props.onRowSelect && (() => props.onRowSelect!(i))}>
 						<Td>
 							{i.date && (
 								<InvoiceDateTable

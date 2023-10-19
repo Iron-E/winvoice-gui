@@ -23,7 +23,8 @@ export type IdEventsHandlerForm<T> = (props: On<'submit', [value: T]> & IdProp) 
 export function useIdEventHandlers<T>(
 	id: Parameters<IdEventsHandler<T>>[0],
 	onChange: Parameters<IdEventsHandler<T>>[1],
-	NewForm: IdEventsHandlerForm<T>,
+	NewForm: (props: On<'submit', [value: T]> & IdProp) => React.ReactElement,
+	SearchForm: (props: IdProp & On<'rowSelect', [value: T]>) => React.ReactElement,
 ): ReturnType<IdEventsHandler<T>> {
 	const [MODAL_VISIBLE, setModalVisible] = useModalVisibility();
 	return [
@@ -31,14 +32,20 @@ export function useIdEventHandlers<T>(
 			? <Modal onClose={setModalVisible}>
 				<NewForm
 					id={id}
-					onSubmit={l => {
-						onChange(l);
+					onSubmit={value => {
+						onChange(value);
 						setModalVisible(null);
 					}}
 				/>
 			</Modal>
 			: <Modal onClose={setModalVisible}>
-				Unimplemented: allow searching for a location and choosing one
+				<SearchForm
+					id={id}
+					onRowSelect={value => {
+						onChange(value);
+						setModalVisible(null);
+					}}
+				/>
 			</Modal>
 		),
 		setModalVisible,

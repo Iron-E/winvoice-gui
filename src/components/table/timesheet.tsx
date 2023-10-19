@@ -59,10 +59,9 @@ export function TimesheetTable(props:
 			{props.orderedData.data.map(t => (
 				<Tr
 					key={t.id}
-					onClick={props.onRowSelect && (() => props.onRowSelect!(t))}
 					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: t }) : undefined}
 					onEdit={() => setRowEvent({ action: 'edit', data: t })}
-					selected={t.id === props.selectedRow}
+					onSelect={props.onRowSelect && (() => props.onRowSelect!(t))}
 				>
 					<Td>{t.id}</Td>
 					<Td>{t.time_begin.toLocaleString()}</Td>

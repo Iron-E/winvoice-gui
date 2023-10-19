@@ -62,10 +62,9 @@ export function UserTable(props:
 			{props.orderedData.data.map(u => (
 				<Tr
 					key={u.id}
-					onClick={props.onRowSelect && (() => props.onRowSelect!(u))}
 					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: u }) : undefined}
 					onEdit={() => setRowEvent({ action: 'edit', data: u })}
-					selected={u.id === props.selectedRow}
+					onSelect={props.onRowSelect && (() => props.onRowSelect!(u))}
 				>
 					<Td>{u.id}</Td>
 					<Td>{u.password_set?.toLocaleString()}</Td>

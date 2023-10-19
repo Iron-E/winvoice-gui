@@ -48,10 +48,9 @@ export function ContactTable(props:
 			{props.orderedData.data.map(c => (
 				<Tr
 					key={c.label}
-					onClick={props.onRowSelect && (() => props.onRowSelect!(c))}
 					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: c }) : undefined}
 					onEdit={() => setRowEvent({ action: 'edit', data: c })}
-					selected={c.label === props.selectedRow}
+					onSelect={props.onRowSelect && (() => props.onRowSelect!(c))}
 				>
 					<Td>{c.label}</Td>
 					<Td>{'email' in c && c.email}</Td>

@@ -1,8 +1,15 @@
 import type { Department } from "@/schema"
 import { DepartmentForm } from '../department';
-import { type IdEventsHandler, type IdEventsHandlerNewForm, useIdEventHandlers } from "../field"
+import { MatchDepartmentForm } from "../match/department";
+import {
+	type IdEventsHandler,
+	type IdEventsHandlerNewForm,
+	type IdEventsHandlerSearchForm,
+	useIdEventHandlers,
+} from "../field"
 
-export const Form: IdEventsHandlerNewForm<Department> = props => <DepartmentForm {...props} id={`${props.id}--department--form`} />;
+export const NewForm: IdEventsHandlerNewForm<Department> = props => <DepartmentForm {...props} id={`${props.id}--departrment--new`} />;
+export const SearchForm: IdEventsHandlerSearchForm<Department> = props => <MatchDepartmentForm {...props} id={`${props.id}--departrment--search`} />;
 
 /** Event handlers for a {@link Department} ID. */
-export const useDepartmentIdEventHandlers: IdEventsHandler<Department> = (id, setDepartment) => useIdEventHandlers(id, setDepartment, Form);
+export const useDepartmentIdEventHandlers: IdEventsHandler<Department> = (id, setDepartment) => useIdEventHandlers(id, setDepartment, NewForm, SearchForm);

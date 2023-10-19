@@ -1,8 +1,15 @@
 import type { Organization } from "@/schema"
 import { OrganizationForm } from '../organization';
-import { type IdEventsHandler, type IdEventsHandlerNewForm, useIdEventHandlers } from "../field"
+import { MatchOrganizationForm } from "../match/organization";
+import {
+	type IdEventsHandler,
+	type IdEventsHandlerNewForm,
+	type IdEventsHandlerSearchForm,
+	useIdEventHandlers,
+} from "../field"
 
-export const Form: IdEventsHandlerNewForm<Organization> = props => <OrganizationForm {...props} id={`${props.id}--organization--form`} />;
+export const NewForm: IdEventsHandlerNewForm<Organization> = props => <OrganizationForm {...props} id={`${props.id}--organization--new`} />;
+export const SearchForm: IdEventsHandlerSearchForm<Organization> = props => <MatchOrganizationForm {...props} id={`${props.id}--organization--search`} />;
 
 /** Event handlers for a {@link Organization} ID. */
-export const useOrganizationIdEventHandlers: IdEventsHandler<Organization> = (id, setOrganization) => useIdEventHandlers(id, setOrganization, Form);
+export const useOrganizationIdEventHandlers: IdEventsHandler<Organization> = (id, setOrganization) => useIdEventHandlers(id, setOrganization, NewForm, SearchForm);

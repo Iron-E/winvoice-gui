@@ -30,7 +30,7 @@ odd:bg-table-row-bg-odd even:bg-table-row-bg-even border-table-row-border`}
 					)}
 
 					{props.onSelect && (
-						<TableButton onClick={props.onDelete}>
+						<TableButton onClick={props.onSelect}>
 							<><CursorArrowRaysIcon className={ICON} /> Select</>
 						</TableButton>
 					)}

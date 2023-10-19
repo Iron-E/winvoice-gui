@@ -3,7 +3,7 @@ import type { CompositeProps, InputProps } from './props';
 import type { Match, MatchOption, MatchSet, MatchStr } from "@/match";
 import type { Props, Fn, Maybe, ValueOf } from "@/utils";
 import { AddIcon, RemoveIcon } from '@/components';
-import { ArrowUpIcon, ArrowsRightLeftIcon } from '@heroicons/react/20/solid';
+import { ArrowUpIcon, ArrowsRightLeftIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 import { BorderLabeledField, GRID } from './border-labeled';
 import { FormButton, LABEL_BUTTON_STYLE } from "../button";
 import { ICON } from '@/components/css';
@@ -35,7 +35,7 @@ export * from './match/user';
 export type InputMatchField<T> = (p: Omit<InputProps<T>, 'value'> & { value: T }) => React.ReactElement;
 
 /** The 'operands' {@link BorderLabeledField} minimum width style. */
-const OPERANDS_BORDER_STYLE = 'min-w-[16.6rem]';
+const OPERANDS_BORDER_STYLE = 'min-w-[25rem]';
 
 function and_or(and: boolean): ['and' | 'or', 'or' | 'and'] {
 	return and ? ['and', 'or'] : ['or', 'and'];
@@ -60,15 +60,25 @@ function operandsButtons<M>(
 	operands: 'any' extends M ? M[] : never,
 	index: number,
 ): Props<typeof BorderLabeledField>['button'] {
-	const PULL_UP = {
-		onClick: () => handleClick(operands[index] as M),
-		text: <><ArrowUpIcon className={ICON} /> Pull Up</>,
-	};
+	const BUTTONS = [
+		{
+			onClick: () => handleClick({ [operator]: operands.toSpliced(index, 0, operands[index] as M) } as M),
+			text: <><DocumentDuplicateIcon className={ICON} /> Duplicate</>
+		},
+		{
+			onClick: () => handleClick(operands[index] as M),
+			text: <><ArrowUpIcon className={ICON} /> Pull Out</>,
+		}
+	];
 
-	return operands.length < 2 ? PULL_UP : [PULL_UP, {
-		onClick: () => handleClick({ [operator]: operands.toSpliced(index, 1) } as M),
-		text: <RemoveIcon />,
-	}];
+	if (operands.length > 1) {
+		BUTTONS.push({
+			onClick: () => handleClick({ [operator]: operands.toSpliced(index, 1) } as M),
+			text: <RemoveIcon />,
+		})
+	}
+
+	return BUTTONS;
 }
 
 function swapButton<M>(

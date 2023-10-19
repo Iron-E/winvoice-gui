@@ -35,10 +35,9 @@ export function ExpenseTable(props: Omit<BaseProps<Expense, 'id'>, 'deletable'>)
 			{props.orderedData.data.map(x => (
 				<Tr
 					key={x.id}
-					onClick={props.onRowSelect && (() => props.onRowSelect!(x))}
 					onDelete={() => setRowEvent({ action: 'delete', data: x })}
 					onEdit={() => setRowEvent({ action: 'edit', data: x })}
-					selected={x.id === props.selectedRow}
+					onSelect={props.onRowSelect && (() => props.onRowSelect!(x))}
 				>
 					<Td>{x.timesheet_id}</Td>
 					<Td>{x.id}</Td>

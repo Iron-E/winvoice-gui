@@ -40,10 +40,9 @@ export function OrganizationTable(props:
 			{props.orderedData.data.map(o => (
 				<Tr
 					key={o.id}
-					onClick={props.onRowSelect && (() => props.onRowSelect!(o))}
 					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: o }) : undefined}
 					onEdit={() => setRowEvent({ action: 'edit', data: o })}
-					selected={o.id === props.selectedRow}
+					onSelect={props.onRowSelect && (() => props.onRowSelect!(o))}
 				>
 					<Td>{o.id}</Td>
 					<Td>{o.name}</Td>

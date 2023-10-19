@@ -56,10 +56,9 @@ export function JobTable(props:
 			{props.orderedData.data.map(j => (
 				<Tr
 					key={j.id}
-					onClick={props.onRowSelect && (() => props.onRowSelect!(j))}
 					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: j }) : undefined}
 					onEdit={() => setRowEvent({ action: 'edit', data: j })}
-					selected={j.id === props.selectedRow}
+					onSelect={props.onRowSelect && (() => props.onRowSelect!(j))}
 				>
 					<Td>{j.id}</Td>
 					<Td>{j.date_open.toLocaleString()}</Td>

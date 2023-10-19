@@ -17,14 +17,17 @@ export type IdEventsHandler<T> = (id: ValueOf<IdProp, 'id'>, onChange: Fn<[value
 ];
 
 /** A form which is used to {@link IdEventsHandler | handle ID events} */
-export type IdEventsHandlerForm<T> = (props: On<'submit', [value: T]> & IdProp) => React.ReactElement;
+export type IdEventsHandlerNewForm<T> = (props: On<'submit', [value: T]> & IdProp) => React.ReactElement;
+
+/** A form which is used to {@link IdEventsHandler | handle ID events} */
+export type IdEventsHandlerSearchForm<T> = (props: IdProp & On<'rowSelect', [value: T]>) => React.ReactElement;
 
 /** @returns a tuple which first contains the handler for the given {@link InputID} action, and second, a setter for the current ID action. */
 export function useIdEventHandlers<T>(
 	id: Parameters<IdEventsHandler<T>>[0],
 	onChange: Parameters<IdEventsHandler<T>>[1],
-	NewForm: (props: On<'submit', [value: T]> & IdProp) => React.ReactElement,
-	SearchForm: (props: IdProp & On<'rowSelect', [value: T]>) => React.ReactElement,
+	NewForm: IdEventsHandlerNewForm<T>,
+	SearchForm: IdEventsHandlerSearchForm<T>,
 ): ReturnType<IdEventsHandler<T>> {
 	const [MODAL_VISIBLE, setModalVisible] = useModalVisibility();
 	return [

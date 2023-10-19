@@ -33,10 +33,9 @@ export function DepartmentTable(props: BaseProps<Department, 'id'>): React.React
 			{props.orderedData.data.map(d => (
 				<Tr
 					key={d.id}
-					onClick={props.onRowSelect && (() => props.onRowSelect!(d))}
 					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: d }) : undefined}
 					onEdit={() => setRowEvent({ action: 'edit', data: d })}
-					selected={d.id === props.selectedRow}
+					onSelect={props.onRowSelect && (() => props.onRowSelect!(d))}
 				>
 					<Td>{d.id}</Td>
 					<Td>{d.name}</Td>

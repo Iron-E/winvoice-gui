@@ -40,10 +40,9 @@ export function EmployeeTable(props:
 			{props.orderedData.data.map(e => (
 				<Tr
 					key={e.id}
-					onClick={props.onRowSelect && (() => props.onRowSelect!(e))}
 					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: e }) : undefined}
 					onEdit={() => setRowEvent({ action: 'edit', data: e })}
-					selected={e.id === props.selectedRow}
+					onSelect={props.onRowSelect && (() => props.onRowSelect!(e))}
 				>
 					<Td>{e.id}</Td>
 					<Td>{e.active ? 'Yes' : 'No'}</Td>

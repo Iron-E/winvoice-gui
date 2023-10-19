@@ -14,7 +14,7 @@ const BASE_MSG_STYLE = `${FLEX_BETWEEN} gap-1 basis-auto hover:flex-shrink-0 \
 ${SPACE} min-w-[7vmax] max-w-fit \
 ease-in-out duration-200 \
 [&:not(:first-child):not(:hover)]:opacity-60 \
-z-50` as const;
+` as const;
 
 /** Arbitrary data ssociated with the {@link Level} of a message. */
 const LEVELS = {

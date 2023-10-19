@@ -70,7 +70,7 @@ export function InnerRootLayout(props: w.Children): React.ReactElement {
 		</SHOW_MESSAGE_CONTEXT.Provider>
 
 		<Messages
-			className={`fixed ${css.FLEX} justify-left bottom-0 w-screen h-12 overflow-x-scroll`}
+			className={`fixed ${css.FLEX} justify-left bottom-0 w-screen h-12 overflow-x-scroll z-50`}
 			messages={MESSAGES}
 			onHideMessage={key => setMessages(MESSAGES.filter(m => m.key !== key))}
 		/>

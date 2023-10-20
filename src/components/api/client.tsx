@@ -179,13 +179,18 @@ export class Client {
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @returns whether the request succeeded.
 	 */
-	public async login(this: Readonly<Client>, showMessage: ShowMessage, password: string): RequestSuccess {
-		return await (this as Client).caughtRequest(
+	public async login(this: Client, showMessage: ShowMessage, password: string): RequestSuccess {
+		const RESULT = await this.caughtRequest(
 			showMessage,
 			Route.Login,
 			{ method: 'POST', headers: { authorization: `Basic ${btoa(`${this.user?.username}:${password}`)}` } },
-			response.isDelete,
-		) !== null;
+			response.isLogin,
+			USER_REVIVER,
+		);
+		if (RESULT?.user === undefined) { return false; }
+
+		this.setUser(RESULT.user);
+		return true;
 	}
 
 	/**
@@ -221,6 +226,11 @@ export class Client {
 		return null;
 	}
 
+	/** Set the {@link Client.user} field in a privacy-respecting way. */
+	private setUser(this: Client, user: Readonly<User>): void {
+		this.user = { ...user, password: '' /* server should automatically censor password, but just to be safe… */ };
+	}
+
 	/**
 	 * Update `this` {@link Client} based on information from a {@link Route.WhoAmI} request.
 	 * @param showMessage a function that will be used to notify a user of errors.
@@ -231,7 +241,7 @@ export class Client {
 		if (RESULT === null) { return false; }
 
 		if (!(RESULT instanceof UnauthenticatedError)) { // the user isn't logged in, which is fine.
-			this.user = { ...RESULT.user, password: '' /* server should automatically censor password, but just to be safe… */ };
+			this.setUser(RESULT.user);
 		}
 
 		return true;

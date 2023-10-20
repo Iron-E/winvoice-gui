@@ -6,6 +6,7 @@ import { Client } from '../client';
 import { Form, FormButton, Input, InputPassword, InputString, Modal, SHOW_MESSAGE_CONTEXT } from "@/components";
 import { ICON, SPACE } from '@/components/css';
 import { useModalVisibility } from '@/hooks';
+import { User } from '@/schema';
 
 type ModalProps = Props<typeof Modal>;
 
@@ -68,16 +69,7 @@ function LoginModal(props: SelectorModalProps): React.ReactElement {
 
 	return (
 		<ModalForm button_text='Login' onClose={props.onClose} onSubmit={async () => {
-			const CLIENT = new Client(props.client!.address, {
-				username: USERNAME,
-				id: '',
-				password: '',
-				password_set: new Date(),
-				role: {
-					id: '',
-					name: '',
-				},
-			});
+			const CLIENT = new Client(props.client!.address, { username: USERNAME } as User);
 			if (!await CLIENT.login(showMessage, PASSWORD)) { return; }
 			props.onSetClient(CLIENT);
 			props.onClose(null);

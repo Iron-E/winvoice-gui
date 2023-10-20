@@ -4,8 +4,8 @@ import React from 'react';
 import type { MatchEmployee } from '@/match'
 import type { SearchProps } from './props';
 import { InputMatchEmployee } from '../field';
+import { isEmployee, type Employee } from '@/schema';
 import { Route } from '@/api';
-import { type Employee, isEmployee } from '@/schema';
 import { useEmployeeTable } from '@/components/table';
 import { useMatchForm } from './hooks';
 

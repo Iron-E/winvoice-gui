@@ -4,8 +4,8 @@ import React from 'react';
 import type { MatchLocation } from '@/match'
 import type { SearchProps } from './props';
 import { InputMatchLocation } from '../field';
+import { isLocation, type Location } from '@/schema';
 import { Route } from '@/api';
-import { type Location, isLocation } from '@/schema';
 import { useLocationTable } from '@/components/table';
 import { useMatchForm } from './hooks';
 

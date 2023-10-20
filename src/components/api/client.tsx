@@ -214,8 +214,9 @@ export class Client {
 		route: UserInputRoute,
 		body: request.Post<RequestBodyInner>,
 		checkSchema: (json: unknown) => json is ResponseBody,
+		reviver?: Reviver,
 	): OptBody<response.Post<ResponseBody>['entities']> {
-		const RESULT = await (this as Client).caughtRequest(showMessage, route, { method: 'POST', body }, response.isPost);
+		const RESULT = await (this as Client).caughtRequest(showMessage, route, { method: 'POST', body }, response.isPost, reviver);
 		if (RESULT !== null) {
 			const IS_EMPTY = RESULT.entities.length < 1;
 			if (IS_EMPTY || (!IS_EMPTY && checkSchema(RESULT.entities[0]))) {

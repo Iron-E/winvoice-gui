@@ -4,10 +4,10 @@ import React from 'react';
 import type { MatchExpense } from '@/match'
 import type { SearchProps } from './props';
 import { InputMatchExpense } from '../field';
+import { isExpense, type Expense } from '@/schema';
 import { Route } from '@/api';
-import { type Expense, isExpense } from '@/schema';
-import { useMatchForm } from './hooks';
 import { useExpenseTable } from '@/components/table';
+import { useMatchForm } from './hooks';
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link MatchExpense} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).

@@ -4,8 +4,8 @@ import React from 'react';
 import type { MatchDepartment } from '@/match'
 import type { SearchProps } from './props';
 import { InputMatchDepartment } from '../field';
+import { isDepartment, type Department } from '@/schema';
 import { Route } from '@/api';
-import { type Department, isDepartment } from '@/schema';
 import { useDepartmentTable } from '@/components/table';
 import { useMatchForm } from './hooks';
 

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { InputMatchObjectProps } from '../field/match/props';
-import type { ReadonlyNonNullUnitArray, ValueOf } from '@/utils';
+import type { ReadonlyNonNullUnitArray, Reviver, ValueOf } from '@/utils';
 import type { UserInputRoute } from '@/api';
 import type { UseTable } from '@/components/table';
 import { Form, FormButton } from '../../form';
@@ -24,13 +24,14 @@ export function useMatchForm<T extends {}, M extends {}>(
 	[orderedData, table]: ReturnType<UseTable<T>>,
 	route: UserInputRoute,
 	checkSchema: (json: unknown) => json is T,
+	reviver?: Reviver,
 ): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
 	const [MATCH, setMatch] = React.useState({} as M);
 	return <>
 		<Form
 			onSubmit={async () => {
-				const RESULT = await CLIENT.retrieve(showMessage, route, { condition: MATCH }, checkSchema);
+				const RESULT = await CLIENT.retrieve(showMessage, route, { condition: MATCH }, checkSchema, reviver);
 				if (RESULT === null) { return; } else if (RESULT.length < 1) {
 					showMessage('info', 'Search returned no results');
 				}

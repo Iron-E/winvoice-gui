@@ -4,8 +4,8 @@ import React from 'react';
 import type { MatchOrganization } from '@/match'
 import type { SearchProps } from './props';
 import { InputMatchOrganization } from '../field';
+import { isOrganization, type Organization } from '@/schema';
 import { Route } from '@/api';
-import { type Organization, isOrganization } from '@/schema';
 import { useMatchForm } from './hooks';
 import { useOrganizationTable } from '@/components/table';
 

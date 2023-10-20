@@ -4,8 +4,8 @@ import React from 'react';
 import type { MatchRole } from '@/match'
 import type { SearchProps } from './props';
 import { InputMatchRole } from '../field';
+import { isRole, type Role } from '@/schema';
 import { Route } from '@/api';
-import { type Role, isRole } from '@/schema';
 import { useMatchForm } from './hooks';
 import { useRoleTable } from '@/components/table';
 

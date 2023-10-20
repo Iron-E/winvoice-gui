@@ -4,8 +4,8 @@ import React from 'react';
 import type { MatchTimesheet } from '@/match'
 import type { SearchProps } from './props';
 import { InputMatchTimesheet } from '../field';
+import { isTimesheet, TIMESHEET_REVIVER, type Timesheet } from '@/schema';
 import { Route } from '@/api';
-import { type Timesheet, isTimesheet } from '@/schema';
 import { useMatchForm } from './hooks';
 import { useTimesheetTable } from '@/components/table';
 
@@ -19,5 +19,6 @@ export function MatchTimesheetForm(props: SearchProps<Timesheet>): React.ReactEl
 		useTimesheetTable(props.onRowSelect),
 		Route.Timesheet,
 		isTimesheet,
+		TIMESHEET_REVIVER,
 	);
 }

@@ -10,12 +10,12 @@ import { OrderedData } from './order';
 import { Route } from '@/api';
 import { Table } from '../table';
 import { Td } from './column';
-import { Tr, useRowEventHandlers } from './row';
+import { Tr, type RowEventHandlerEditForm, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
 export * from './contact/valuators';
 
-/** the headers of the {@link ContactTable}. */
+const FORM: RowEventHandlerEditForm<Contact> = props => <ContactForm  {...props} id='edit-location-form' />;
 const HEADERS = ['Label', 'Email', 'Other', 'Phone', 'Address'] as const;
 
 /**
@@ -36,7 +36,7 @@ export function ContactTable(props:
 		props.orderedData, CLIENT, showMessage, Route.Contact,
 		c => `contact "${c.label}"`,
 		label,
-		(props) => <ContactForm  {...props} id='edit-location-form' />,
+		FORM,
 	);
 
 	return <>

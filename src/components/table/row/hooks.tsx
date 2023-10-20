@@ -12,6 +12,11 @@ type RowEvent<T> = {
 	data: NonNullUnit<T>,
 };
 
+/** The form used for the 'edit' action in a {@link RowEvent}.  */
+export type RowEventHandlerEditForm<T> = (props: AsyncOn<'submit', [value: NonNullUnit<T>]> & {
+	initialValues: NonNullUnit<T>,
+}) => React.ReactElement;
+
 /** @returns a tuple which first contains the handler for the given {@link Tr | row} action, and second, a setter for the current row action. */
 export function useRowEventHandlers<T extends {}, Id extends FieldName>(
 	orderedData: OrderedData<T>,
@@ -20,9 +25,7 @@ export function useRowEventHandlers<T extends {}, Id extends FieldName>(
 	route: UserInputRoute,
 	confirmDeleteMessage: (value: NonNullUnit<T>) => string,
 	getId: (value: NonNullUnit<T>) => Id,
-	EditForm: (props: AsyncOn<'submit', [value: NonNullUnit<T>]> & {
-		initialValues: NonNullUnit<T>,
-	}) => React.ReactElement,
+	EditForm: RowEventHandlerEditForm<T>,
 ): [Opt<React.ReactElement>, ReturnType<typeof useModalVisibility<RowEvent<T>>>[1]] {
 	const [MODAL_VISIBLE, setModalVisible] = useModalVisibility<RowEvent<T>>();
 	return [

@@ -8,10 +8,10 @@ import { getId } from '@/utils';
 import { Route } from '@/api';
 import { Table } from '../table';
 import { Td } from './column';
-import { Tr, useRowEventHandlers } from './row';
+import { Tr, type RowEventHandlerEditForm, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
-/** the headers of the {@link DepartmentTable}. */
+const FORM: RowEventHandlerEditForm<Department> = props => <DepartmentForm  {...props} id='edit-department-form' />;
 const HEADERS = ['ID', 'Name'] as const;
 
 /** @returns a {@link Table} that displays a {@link Department} and its outer department. */
@@ -21,7 +21,7 @@ export function DepartmentTable(props: BaseProps<Department, 'id'>): React.React
 		props.orderedData, CLIENT, showMessage, Route.Department,
 		d => `department ${d.id} "${d.name}"`,
 		getId,
-		props => <DepartmentForm  {...props} id='edit-department-form' />,
+		FORM,
 	);
 
 	return <>

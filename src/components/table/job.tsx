@@ -12,12 +12,12 @@ import { OrganizationTable } from './organization';
 import { Route } from '@/api';
 import { Table } from '../table';
 import { Td } from './column';
-import { Tr, useRowEventHandlers } from './row';
+import { RowEventHandlerEditForm, Tr, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
 export * from './job/valuators';
 
-/** the headers of the {@link JobTable}. */
+const FORM: RowEventHandlerEditForm<Job> = props => <JobForm  {...props} id='edit-job-form' />;
 const HEADERS = [
 	'Id',
 	'Date Open',
@@ -44,7 +44,7 @@ export function JobTable(props:
 		props.orderedData, CLIENT, showMessage, Route.Job,
 		e => `job ${e.id}`,
 		getId,
-		props => <JobForm  {...props} id='edit-job-form' />,
+		FORM,
 	);
 
 	return <>

@@ -10,13 +10,13 @@ import { RoleTable } from './role';
 import { Route } from '@/api';
 import { Table } from '../table';
 import { Td } from './column';
-import { Tr, useRowEventHandlers } from './row';
+import { Tr, type RowEventHandlerEditForm, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 import { UserForm } from '../form';
 
 export * from './user/valuators';
 
-/** the headers of the {@link UserTable}. */
+const FORM: RowEventHandlerEditForm<User> = props => <UserForm  {...props} id='edit-user-form' />;
 const HEADERS = ['ID', 'Password Set', 'Username', 'Employee', 'Role'] as const;
 
 /** @returns a table which displays {@link User}s in a customizable manner. */
@@ -50,7 +50,7 @@ export function UserTable(props:
 		Route.User,
 		e => `user ${e.id} "${e.username}"`,
 		getId,
-		props => <UserForm  {...props} id='edit-user-form' />,
+		FORM,
 	);
 
 	return <>

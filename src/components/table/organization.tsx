@@ -10,12 +10,12 @@ import { OrganizationForm } from '../form';
 import { Route } from '@/api';
 import { Table } from '../table';
 import { Td } from './column';
-import { Tr, useRowEventHandlers } from './row';
+import { Tr, type RowEventHandlerEditForm, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
 export * from './organization/valuators';
 
-/** the headers of the {@link OrganizationTable}. */
+const FORM: RowEventHandlerEditForm<Organization> = props => <OrganizationForm  {...props} id='edit-organization-form' />;
 const HEADERS = ['ID', 'Name', 'Location'] as const;
 
 /** @returns a table which displays {@link Organization}s in a customizable manner. */
@@ -28,7 +28,7 @@ export function OrganizationTable(props:
 		props.orderedData, CLIENT, showMessage, Route.Organization,
 		e => `organization ${e.id} "${e.name}"`,
 		getId,
-		props => <OrganizationForm  {...props} id='edit-organization-form' />,
+		FORM,
 	);
 
 	return <>

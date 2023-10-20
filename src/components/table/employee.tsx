@@ -10,12 +10,12 @@ import { OrderedData } from './order';
 import { Route } from '@/api';
 import { Table } from '../table';
 import { Td } from './column';
-import { Tr, useRowEventHandlers } from './row';
+import { Tr, type RowEventHandlerEditForm, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
 export * from './employee/valuators';
 
-/** the headers of the {@link EmployeeTable}. */
+const FORM: RowEventHandlerEditForm<Employee> = props => <EmployeeForm  {...props} id='edit-employee-form' />;
 const HEADERS = ['ID', 'Active', 'Name', 'Title', 'Department'] as const;
 
 /** @returns a table which displays {@link Employee}s in a customizable manner. */
@@ -28,7 +28,7 @@ export function EmployeeTable(props:
 		props.orderedData, CLIENT, showMessage, Route.Employee,
 		e => `employee ${e.id} "${e.name}"`,
 		getId,
-		props => <EmployeeForm  {...props} id='edit-employee-form' />,
+		FORM,
 	);
 
 	return <>

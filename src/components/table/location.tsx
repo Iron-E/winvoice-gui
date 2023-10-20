@@ -14,13 +14,13 @@ import { Route } from '@/api';
 import { Table } from '../table';
 import { TableButton } from './button';
 import { Td } from './column';
-import { Tr, useRowEventHandlers } from './row';
+import { Tr, type RowEventHandlerEditForm, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 import { useLocationOrder } from './location/hooks/order';
 
 export * from './location/valuators';
 
-/** the headers of the {@link LocationTable}. */
+const FORM: RowEventHandlerEditForm<Location> = props => <LocationForm  {...props} id='edit-location-form' />;
 const HEADERS = ['ID', 'Currency', 'Name', 'Outer'] as const;
 
 /** @returns a table which displays {@link Location}s in a customizable manner. */
@@ -32,7 +32,7 @@ function BaseLocationTable(props: BaseProps<Location, 'id'> & {
 		props.orderedData, CLIENT, showMessage, Route.Location,
 		l => `location ${l.id} "${l.name}"`,
 		getId,
-		props => <LocationForm  {...props} id='edit-location-form' />,
+		FORM,
 	);
 
 	return <>

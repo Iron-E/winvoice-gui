@@ -8,12 +8,12 @@ import { moneyToString, type Expense } from '@/schema'
 import { Route } from '@/api';
 import { Table } from '../table';
 import { Td } from './column';
-import { Tr, useRowEventHandlers } from './row';
+import { Tr, type RowEventHandlerEditForm, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
 export * from './expense/valuators';
 
-/** the headers of the {@link ExpenseTable}. */
+const FORM: RowEventHandlerEditForm<Expense> = props => <ExpenseForm  {...props} id='edit-expense-form' />;
 const HEADERS = ['Timesheet ID', 'ID', 'Category', 'Cost', 'Description'] as const;
 
 /** @returns a table which displays {@link Expense}s in a customizable manner. */
@@ -23,7 +23,7 @@ export function ExpenseTable(props: Omit<BaseProps<Expense, 'id'>, 'deletable'>)
 		props.orderedData, CLIENT, showMessage, Route.Expense,
 		e => `expense ${e.id}`,
 		getId,
-		props => <ExpenseForm  {...props} id='edit-expense-form' />,
+		FORM,
 	);
 
 	return <>

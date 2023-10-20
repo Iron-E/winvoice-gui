@@ -22,12 +22,12 @@ import { Route } from '@/api';
 import { Table } from '../table';
 import { Td } from './column';
 import { TimesheetForm } from '../form';
-import { Tr, useRowEventHandlers } from './row';
+import { Tr, type RowEventHandlerEditForm, useRowEventHandlers } from './row';
 import { useApiContext } from '../api';
 
 export * from './timesheet/valuators';
 
-/** the headers of the {@link TimesheetTable}. */
+const FORM: RowEventHandlerEditForm<Timesheet> = props => <TimesheetForm  {...props} id='edit-timesheet-form' />;
 const HEADERS = ['Id', 'Time Begin', 'Time End', 'Work Notes', 'Employee', 'Expenses', 'Job'] as const;
 
 /** @returns a table which displays {@link Timesheet}s in a customizable manner. */
@@ -47,7 +47,7 @@ export function TimesheetTable(props:
 		props.orderedData, CLIENT, showMessage, Route.Timesheet,
 		e => `timesheet ${e.id}`,
 		getId,
-		props => <TimesheetForm  {...props} id='edit-timesheet-form' />,
+		FORM,
 	);
 
 	return <>

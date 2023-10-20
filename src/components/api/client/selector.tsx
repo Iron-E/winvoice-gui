@@ -36,12 +36,16 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 	const [URL, setUrl] = React.useState<string>(props.client?.address || '');
 
 	return (
-		<ModalForm button_text='Connect' onClose={props.onClose} onSubmit={async () => {
-			const CLIENT: Client = new Client(URL);
-			if (!await CLIENT.setWhoIAm(showMessage)) { return; }
-			props.onSetClient(CLIENT);
-			props.onClose(null);
-		}}>
+		<ModalForm
+			button_text='Connect'
+			onClose={props.onClose}
+			onSubmit={async () => {
+				const CLIENT: Client = new Client(URL);
+				if (!await CLIENT.setWhoIAm(showMessage)) { return; }
+				props.onSetClient(CLIENT);
+				props.onClose(null);
+			}}
+		>
 			<Input
 				id='client-connect-addr'
 				label='Address'
@@ -59,12 +63,21 @@ function ConnectModal(props: SelectorModalProps): React.ReactElement {
 /** @returns the {@link Modal} to use when logging in to the {@link State | API}. */
 function LoginModal(props: SelectorModalProps): React.ReactElement {
 	const showMessage = React.useContext(SHOW_MESSAGE_CONTEXT);
-	const [USERNAME, setUsername] = React.useState<string>(props.client?.username || '');
-	const [PASSWORD, setPassword] = React.useState<string>(props.client?.username || '');
+	const [USERNAME, setUsername] = React.useState<string>(props.client?.user?.username ?? '');
+	const [PASSWORD, setPassword] = React.useState<string>('');
 
 	return (
 		<ModalForm button_text='Login' onClose={props.onClose} onSubmit={async () => {
-			const CLIENT = new Client(props.client!.address, USERNAME);
+			const CLIENT = new Client(props.client!.address, {
+				username: USERNAME,
+				id: '',
+				password: '',
+				password_set: new Date(),
+				role: {
+					id: '',
+					name: '',
+				},
+			});
 			if (!await CLIENT.login(showMessage, PASSWORD)) { return; }
 			props.onSetClient(CLIENT);
 			props.onClose(null);
@@ -101,7 +114,7 @@ export function ClientSelector(props: Class<'button'> & SelectorProps): React.Re
 
 	if (CLIENT != undefined) {
 		props.client
-		let [Icon, content, onClick] = CLIENT.username == undefined
+		let [Icon, content, onClick] = CLIENT.user == undefined
 			? [ArrowRightOnRectangleIcon, 'Login', () => setModalVisible('login')]
 			: [ArrowLeftOnRectangleIcon, 'Logout', async () => {
 				if (!await CLIENT.logout(showMessage)) { return; }

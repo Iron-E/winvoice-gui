@@ -2,8 +2,8 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { chainRevivers, dateReviver, optional, type Maybe } from '@/utils';
-import { Department, isJob, type Job } from '@/schema';
+import type { Maybe } from '@/utils';
+import { Department, isJob, JOB_REVIVER, type Job } from '@/schema';
 import { Form, FormButton } from '../form';
 import { InputDate, InputDuration, InputId, InputInvoice, Textarea, useIdInputs } from './field';
 import { Route } from '@/api';
@@ -13,12 +13,6 @@ import { useDepartmentIdEventHandlers } from './department';
 import { useOrganizationIdEventHandlers } from './organization';
 
 export * from './job/hooks';
-
-/** A reviver for {@link JSON.parse} on a {@link Job}. */
-export const JOB_REVIVER = chainRevivers([
-	dateReviver<Job>('date_open'),
-	optional(dateReviver<Job>('date_close')),
-]);
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Job} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).

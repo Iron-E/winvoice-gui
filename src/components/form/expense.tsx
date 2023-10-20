@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { chainRevivers, type Maybe } from '@/utils';
+import type { Maybe, Reviver } from '@/utils';
 import { Form } from '../form';
 import { FormButton } from './button';
 import { InputExpense } from './field/expense';
@@ -11,14 +11,15 @@ import { isExpense, type Expense, type ExpenseValue } from '@/schema';
 import { Route, response } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
-import { TIMESHEET_REVIVER, useTimesheetIdEventHandlers } from './timesheet';
+import { useTimesheetIdEventHandlers } from './timesheet';
 
 export * from './expense/hooks';
 
-const REVIVER = chainRevivers([
-	(k, v: response.Put<Expense[]>) => k === '' && v.entity instanceof Array ? { ...v, entity: v.entity[0] } : v,
-	TIMESHEET_REVIVER,
-]);
+const REVIVER: Reviver = (k, v: response.Put<Expense[]>) => (
+	k === '' && v.entity instanceof Array
+	? { ...v, entity: v.entity[0] }
+	: v
+);
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Expense} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).

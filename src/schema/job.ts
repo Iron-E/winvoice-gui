@@ -1,5 +1,5 @@
-import { fieldMaybeIs } from '@/utils';
 import type { Department } from './department';
+import { chainRevivers, dateReviver, fieldMaybeIs, optional } from '@/utils';
 import { isId, type Id } from './id';
 import { isInvoice, type Invoice } from './invoice';
 import { isOrganization, type Organization } from './organization';
@@ -17,6 +17,12 @@ export type Job = {
 	notes: string,
 	objectives: string,
 };
+
+/** A reviver for {@link JSON.parse} on a {@link Job}. */
+export const JOB_REVIVER = chainRevivers([
+	dateReviver<Job>('date_open'),
+	optional(dateReviver<Job>('date_close')),
+]);
 
 /**
  * @param json the value to check.

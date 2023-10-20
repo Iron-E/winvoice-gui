@@ -3,6 +3,7 @@
 import React from 'react';
 import type { Opt, Reviver, ValueOf } from '@/utils';
 import type { ShowMessage } from '../messages';
+import { USER_REVIVER, type User } from '@/schema';
 import { Code, newRequest, request, response, Route, type Request, type Status, type UserInputRoute } from '@/api';
 import { UnauthenticatedError } from './unauthenticated_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
@@ -21,7 +22,7 @@ export class Client {
 		/** the address of the API */
 		public readonly address: string,
 		/** the username of the currently logged in user */
-		public username?: string,
+		public user?: User,
 	) { }
 
 	/** The context for the currently selected API address. */
@@ -182,7 +183,7 @@ export class Client {
 		return await (this as Client).caughtRequest(
 			showMessage,
 			Route.Login,
-			{ method: 'POST', headers: { authorization: `Basic ${btoa(`${this.username}:${password}`)}` } },
+			{ method: 'POST', headers: { authorization: `Basic ${btoa(`${this.user?.username}:${password}`)}` } },
 			response.isDelete,
 		) !== null;
 	}
@@ -226,11 +227,11 @@ export class Client {
 	 * @returns whether the request succeeded.
 	 */
 	public async setWhoIAm(this: Client, showMessage: ShowMessage,): RequestSuccess {
-		const RESULT = await this.request(showMessage, Route.WhoAmI, { method: 'POST' }, response.isWhoAmI);
+		const RESULT = await this.request(showMessage, Route.WhoAmI, { method: 'POST' }, response.isWhoAmI, USER_REVIVER);
 		if (RESULT === null) { return false; }
 
 		if (!(RESULT instanceof UnauthenticatedError)) { // the user isn't logged in, which is fine.
-			this.username = RESULT.username;
+			this.user = { ...RESULT.user, password: '' /* server should automatically censor password, but just to be safe… */ };
 		}
 
 		return true;

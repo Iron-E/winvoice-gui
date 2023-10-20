@@ -31,7 +31,7 @@ export function newRequest<BodyInner>(r: Request<BodyInner>): RequestInit {
 
 	r.headers = {
 		...r.headers,
-		'api-version': '^0.3',
+		'api-version': '^0.4',
 		'content-type': 'application/json',
 	};
 

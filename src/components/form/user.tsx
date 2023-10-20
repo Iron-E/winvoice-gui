@@ -2,20 +2,16 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
-import { dateReviver } from '@/utils';
 import { Form } from '../form';
 import { FormButton } from './button';
 import { InputId, InputString } from './field';
 import { InputPassword } from './field/password';
-import { isUser, type User } from '@/schema';
+import { isUser, USER_REVIVER, type User } from '@/schema';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
 import { useEmployeeIdEventHandlers } from './employee';
 import { useRoleIdEventHandlers } from './role';
-
-/** The {@link Reviver} for {@link User}s. */
-const REVIVER = dateReviver<User>('password_set');
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link User} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
@@ -36,7 +32,7 @@ export function UserForm(props: BaseProps<User>): React.ReactElement {
 	return <>
 		<Form onSubmit={async () => {
 			if (props.initialValues == undefined) {
-				const RESULT = await CLIENT.create(showMessage, Route.User, { args: [EMPLOYEE, PASSWORD, ROLE, USERNAME] }, isUser, REVIVER);
+				const RESULT = await CLIENT.create(showMessage, Route.User, { args: [EMPLOYEE, PASSWORD, ROLE, USERNAME] }, isUser, USER_REVIVER);
 				if (RESULT === null) { return; }
 				var result = RESULT;
 			} else {

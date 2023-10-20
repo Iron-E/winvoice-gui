@@ -1,4 +1,4 @@
-import { fieldMaybeIs } from '@/utils';
+import { dateReviver, fieldMaybeIs } from '@/utils';
 import { isEmployee, type Employee } from './employee';
 import { isId, type Id } from './id';
 import { isRole, type Role } from './role';
@@ -12,6 +12,9 @@ export type User = {
 	role: Role,
 	username: string,
 };
+
+/** The {@link Reviver} for {@link User}s. */
+export const USER_REVIVER = dateReviver<User>('password_set');
 
 /**
  * @param json the value to check.

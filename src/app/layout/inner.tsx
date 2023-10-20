@@ -34,6 +34,7 @@ export function InnerRootLayout(props: w.Children): React.ReactElement {
 
 	React.useEffect(() => {
 		const ITEM = localStorage.getItem('client');
+		console.log(ITEM);
 		if (ITEM != undefined) {
 			try {
 				const FIELDS = JSON.parse(ITEM) as JsonFields<Client>;
@@ -59,7 +60,7 @@ export function InnerRootLayout(props: w.Children): React.ReactElement {
 			</Header>
 
 			<div className={css.PAD}>
-				{CLIENT == undefined ? <Guidance>connect</Guidance> : CLIENT.username == undefined
+				{CLIENT == undefined ? <Guidance>connect</Guidance> : CLIENT.user == undefined
 					? <Guidance>sign in</Guidance> : (
 						<Client.CONTEXT.Provider value={CLIENT}>
 							{props.children}

@@ -1,8 +1,8 @@
-import { fieldMaybeIs } from '@/utils';
-import { isEmployee, type Employee } from './employee';
 import type { Expense } from './expense';
+import { chainRevivers, dateReviver, fieldMaybeIs, optional } from '@/utils';
+import { isEmployee, type Employee } from './employee';
 import { isId, type Id } from './id';
-import { isJob, type Job } from './job';
+import { isJob, JOB_REVIVER, type Job } from './job';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-schema | `Timesheet`} type. */
 export type Timesheet = {
@@ -14,6 +14,13 @@ export type Timesheet = {
 	time_end?: Date,
 	work_notes: string,
 };
+
+/** A reviver for {@link JSON.parse} on a {@link Timesheet}. */
+export const TIMESHEET_REVIVER = chainRevivers([
+	dateReviver<Timesheet>('time_begin'),
+	optional(dateReviver<Timesheet>('time_end')),
+	JOB_REVIVER,
+]);
 
 /**
  * @param json the value to check.

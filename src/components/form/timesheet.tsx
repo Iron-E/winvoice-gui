@@ -2,28 +2,21 @@
 
 import React from 'react';
 import type { BaseProps } from './props';
+import type { Maybe } from '@/utils';
 import { AddIcon, RemoveIcon } from '../icons';
 import { BorderLabeledField } from './field/border-labeled';
-import { chainRevivers, dateReviver, optional, type Maybe } from '@/utils';
-import { expenseToValue, isTimesheet, type Expense, type Money, type Timesheet } from '@/schema';
+import { expenseToValue, isTimesheet, TIMESHEET_REVIVER, type Expense, type Money, type Timesheet } from '@/schema';
 import { Form } from '../form';
 import { FormButton } from './button';
 import { InputDate, InputId, Textarea } from './field';
 import { InputExpense } from './field/expense';
-import { JOB_REVIVER, useJobIdEventHandlers } from './job';
 import { Route } from '@/api';
 import { SPACE } from '../css';
 import { useApiContext } from '../api';
 import { useEmployeeIdEventHandlers } from './employee';
+import { useJobIdEventHandlers } from './job';
 
 export * from './timesheet/hooks';
-
-/** A reviver for {@link JSON.parse} on a {@link Timesheet}. */
-export const TIMESHEET_REVIVER = chainRevivers([
-	dateReviver<Timesheet>('time_begin'),
-	optional(dateReviver<Timesheet>('time_end')),
-	JOB_REVIVER,
-]);
 
 /**
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Timesheet} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).

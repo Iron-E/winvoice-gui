@@ -8,8 +8,8 @@ import {
 	useIdEventHandlers,
 } from "../field"
 
-export const NewForm: IdEventsHandlerNewForm<Department> = props => <DepartmentForm {...props} id={`${props.id}--departrment--new`} />;
-export const SearchForm: IdEventsHandlerSearchForm<Department> = props => <MatchDepartmentForm {...props} id={`${props.id}--departrment--search`} />;
+const NewForm: IdEventsHandlerNewForm<Department> = props => <DepartmentForm {...props} id={`${props.id}--departrment--new`} />;
+const SearchForm: IdEventsHandlerSearchForm<Department> = props => <MatchDepartmentForm {...props} id={`${props.id}--departrment--search`} />;
 
 /** Event handlers for a {@link Department} ID. */
 export const useDepartmentIdEventHandlers: IdEventsHandler<Department> = (id, setDepartment) => useIdEventHandlers(id, setDepartment, NewForm, SearchForm);

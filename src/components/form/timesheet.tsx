@@ -29,14 +29,15 @@ export const TIMESHEET_REVIVER = chainRevivers([
  * @returns a {@link React.JSX.IntrinsicElements.form | form} which will either create a new {@link Timesheet} on submit (if `intialValues` is `undefined`), or simply call `onSubmit` with the result of the changes to the `initialValues` otherwise (to allow editing data).
  */
 export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boolean }): React.ReactElement {
-	const [EMPLOYEE, setEmployee] = React.useState(props.initialValues?.employee /* TODO: `?? CLIENT.employee` */);
+	const [CLIENT, showMessage] = useApiContext();
+
+	const [EMPLOYEE, setEmployee] = React.useState(props.initialValues?.employee ?? CLIENT.user?.employee);
 	const [EXPENSES, setExpenses] = React.useState<Maybe<Expense>[]>(props.initialValues?.expenses ?? []);
 	const [JOB, setJob] = React.useState(props.initialValues?.job);
 	const [TIME_BEGIN, setTimeBegin] = React.useState(props.initialValues?.time_begin ?? new Date());
 	const [TIME_END, setTimeEnd] = React.useState(props.initialValues?.time_end);
 	const [WORK_NOTES, setWorkNotes] = React.useState(props.initialValues?.work_notes ?? '');
 
-	const [CLIENT, showMessage] = useApiContext();
 	const [EMPLOYEE_HANDLER, setEmployeeIdHandler] = useEmployeeIdEventHandlers(props.id, setEmployee);
 	const [JOB_HANDLER, setJobIdHandler] = useJobIdEventHandlers(props.id, setJob);
 

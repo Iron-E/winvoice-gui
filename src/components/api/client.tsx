@@ -164,13 +164,25 @@ export class Client {
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @returns whether the request succeeded.
 	 */
-	public async export(
-		this: Readonly<Client>,
-		showMessage: ShowMessage,
-		body: request.Export,
-	): OptBody<ValueOf<response.Export, 'exported'>> {
-		const RESULT = await (this as Client).caughtRequest(showMessage, Route.Export, { method: 'POST', body }, response.isExport);
-		return RESULT && RESULT.exported;
+	public async export(this: Readonly<Client>, showMessage: ShowMessage, body: request.Export): RequestSuccess {
+		const RESULT = await (this as Client).caughtRequest(
+			showMessage,
+			Route.Export,
+			{ method: 'POST', body },
+			response.isExport,
+		);
+		if (RESULT === null) { return false; }
+
+		const ELEMENT = document.createElement('a');
+		const OPTIONS = { type: 'text/markdown' };
+		Object.entries(RESULT.exported).forEach(([fileName, fileContent]) => {
+			const FILE = new File([fileContent], fileName, OPTIONS);
+			ELEMENT.href = URL.createObjectURL(FILE);
+			ELEMENT.click();
+		});
+
+		ELEMENT.remove();
+		return true;
 	}
 
 	/**

@@ -10,6 +10,5 @@ export type WhoAmI = {
  * @returns whether the `json` is an instance of `WhoAmI`.
  */
 export function isWhoAmI(json: unknown): json is WhoAmI {
-	console.log(json);
 	return json instanceof Object && 'user' in json && isUser(json.user);
 }

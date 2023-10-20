@@ -1,7 +1,7 @@
 import type { Department } from './department';
 import { chainRevivers, dateReviver, fieldMaybeIs, optional } from '@/utils';
 import { isId, type Id } from './id';
-import { isInvoice, type Invoice } from './invoice';
+import { isInvoice, type Invoice, INVOICE_REVIVER } from './invoice';
 import { isOrganization, type Organization } from './organization';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-schema | `Job`} type. */
@@ -18,10 +18,11 @@ export type Job = {
 	objectives: string,
 };
 
-/** A reviver for {@link JSON.parse} on a {@link Job}. */
+/** A reviver for {@link JSON.parse} on a {@link Job}s. */
 export const JOB_REVIVER = chainRevivers([
 	dateReviver<Job>('date_open'),
 	optional(dateReviver<Job>('date_close')),
+	INVOICE_REVIVER,
 ]);
 
 /**

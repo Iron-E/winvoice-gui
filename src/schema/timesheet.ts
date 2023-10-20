@@ -15,7 +15,7 @@ export type Timesheet = {
 	work_notes: string,
 };
 
-/** A reviver for {@link JSON.parse} on a {@link Timesheet}. */
+/** A reviver for {@link JSON.parse} on a {@link Timesheet}s. */
 export const TIMESHEET_REVIVER = chainRevivers([
 	dateReviver<Timesheet>('time_begin'),
 	optional(dateReviver<Timesheet>('time_end')),

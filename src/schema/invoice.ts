@@ -1,5 +1,5 @@
 import { fieldMaybeIs } from '@/utils';
-import { isInvoiceDate, type InvoiceDate, invoiceDateToString } from './invoice/invoice-date';
+import { isInvoiceDate, type InvoiceDate, invoiceDateToString, INVOICE_DATE_REVIVER } from './invoice/invoice-date';
 import { isMoney, moneyToString, type Money } from './money';
 
 export { isInvoiceDate, type InvoiceDate };
@@ -9,6 +9,9 @@ export type Invoice = {
 	date?: InvoiceDate,
 	hourly_rate: Money,
 };
+
+/** A reviver for {@link JSON.parse} on a {@link Invoice}s. */
+export const INVOICE_REVIVER = INVOICE_DATE_REVIVER;
 
 /**
  * @param invoice the {@link Invoice} to convert to a string.

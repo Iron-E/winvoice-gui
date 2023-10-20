@@ -1,10 +1,16 @@
-import { fieldMaybeIs } from "@/utils";
+import { chainRevivers, dateReviver, fieldMaybeIs, optional } from "@/utils";
 
 /** Same as {@link https://github.com/Iron-E/winvoice-schema | `InvoiceDate`} type. */
 export type InvoiceDate = {
 	issued: Date,
 	paid?: Date,
 };
+
+/** A reviver for {@link JSON.parse} on a {@link InvoiceDate}s. */
+export const INVOICE_DATE_REVIVER = chainRevivers([
+	dateReviver<InvoiceDate>('issued'),
+	optional(dateReviver<InvoiceDate>('paid')),
+]);
 
 /**
  * @param date the {@link InvoiceDate} to convert into a `string`.

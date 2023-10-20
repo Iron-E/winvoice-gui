@@ -34,7 +34,6 @@ export function InnerRootLayout(props: w.Children): React.ReactElement {
 
 	React.useEffect(() => {
 		const ITEM = localStorage.getItem('client');
-		console.log(ITEM);
 		if (ITEM != undefined) {
 			try {
 				const FIELDS = JSON.parse(ITEM) as JsonFields<Client>;

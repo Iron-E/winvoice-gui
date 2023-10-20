@@ -58,6 +58,16 @@ export function JobTable(props:
 					key={j.id}
 					onDelete={props.deletable !== false ? () => setRowEvent({ action: 'delete', data: j }) : undefined}
 					onEdit={() => setRowEvent({ action: 'edit', data: j })}
+					onExport={async currency => await CLIENT.export(showMessage, {
+						currency,
+						format: 'markdown',
+						jobs: [j],
+						organization: {
+							id: '441d4ed0-4787-49d1-a7e1-d466f3914ba0',
+							location: { id: '7cf1e7c4-f473-4b4c-870b-d979c54c1c25', name: 'El Salvador' },
+							name: 'Trantow, Dietrich and Murray',
+						},
+					})}
 					onSelect={props.onRowSelect && (() => props.onRowSelect!(j))}
 				>
 					<Td>{j.id}</Td>

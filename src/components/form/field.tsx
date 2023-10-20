@@ -135,7 +135,7 @@ export function Select(props: FieldProps<HTMLSelectElement, 'select'> & Children
 
 		<ValidateIcon iconRight={props.validateIconRight ?? 'right-3'} iconTop={props.validateIconTop}>
 			<select
-				className={`${`${SPACE} bg-form-field-bg h-full` as const} ${props.selectClassName} peer w-full`}
+				className={`${`${SPACE} bg-form-field-bg h-full`} ${props.selectClassName} peer w-full`}
 				id={props.id}
 				name={props.id}
 				onChange={e => props.onChange(e.target.value)}

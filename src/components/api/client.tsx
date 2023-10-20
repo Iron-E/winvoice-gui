@@ -1,12 +1,12 @@
 'use client';
 
 import React from 'react';
-import type { Opt, Reviver, ValueOf } from '@/utils';
+import type { Opt, Reviver } from '@/utils';
 import type { ShowMessage } from '../messages';
-import { USER_REVIVER, type User } from '@/schema';
 import { Code, newRequest, request, response, Route, type Request, type Status, type UserInputRoute } from '@/api';
 import { UnauthenticatedError } from './unauthenticated_error';
 import { UnexpectedResponseError } from './unexpected_response_error';
+import { USER_REVIVER, type User } from '@/schema';
 
 /** A response body (`<T>`) or {@link null} if an error was handled. */
 type OptBody<T = unknown> = Promise<Opt<T>>;

@@ -61,8 +61,6 @@ export function TimesheetForm(props: BaseProps<Timesheet> & { showExpenses?: boo
 
 			await Promise.resolve(props.onSubmit?.(result));
 			setExpenses([]);
-			setTimeBegin(new Date());
-			setTimeEnd(undefined);
 			setWorkNotes('');
 		}}>
 			<InputId

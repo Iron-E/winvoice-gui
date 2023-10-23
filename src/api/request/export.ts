@@ -1,9 +1,7 @@
-import { Currency, type Job, type Organization } from '@/schema';
+import { Currency, type Job } from '@/schema';
 
 /** Same as {@link https://github.com/Iron-E/winvoice-server | `api::request::Export`}. */
 export type Export = Readonly<{
 	currency?: Currency,
-	format: 'markdown',
 	jobs: Job[],
-	organization: Organization,
 }>;

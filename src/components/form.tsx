@@ -17,7 +17,7 @@ export * from './form/user';
 /** A `form` which prevents the page from refreshing on submit. */
 export function Form(props: Children & Required<AsyncOn<'submit'>>): React.ReactElement {
 	return (
-		<form className='flex flex-col' onSubmit={async e => { e.preventDefault(); await props.onSubmit(); }}>
+		<form className='flex flex-col pb-11' onSubmit={async e => { e.preventDefault(); await props.onSubmit(); }}>
 			{props.children}
 		</form>
 	);

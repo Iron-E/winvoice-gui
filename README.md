@@ -73,7 +73,7 @@ npm run start
 
 Then, go into your browser and enter the URL it displays to you:
 
-IMAGE HERE
+![example-npm-start](https://github.com/Iron-E/winvoice-gui/assets/36409591/a9caf953-b09f-44da-8968-82d9db06d680)
 
 In this case, [localhost](https://localhost:3001) (click this link to go there).
 

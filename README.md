@@ -12,6 +12,7 @@
 ## Features
 
 * Manage jobs, timesheets, and expenses. Amount owed is automatically calculated when a job is exported.
+    * Robust searching capable of performing simple and advanced queries.
 * Text may contain any [markdown](https://commonmark.org/help/) syntax.
 * Designed from the ground up to support working in an international environments.
 	* Timezones are automatically converted and accounted for when creating and searching for records.

@@ -79,23 +79,11 @@ In this case, [localhost](https://localhost:3001) (click this link to go there).
 
 #### For Organizational/Remote Use
 
-TODO: setup instructions
+Setup instructions for organizational use are quite similar to those for personal use (covered just above), except that the address that [`winvoice-gui`] is bound to must be publicly accessible (or at least, privately accessible). Instructions for how to do that are found [here](https://nextjs.org/docs/app/building-your-application/deploying).
 
-## Usage
-
-### Requirements
+## Usage Requirements
 
 * A browser ([`LibreWolf`](https://librewolf.net) / FireFox recommended)
-
-### Instructions
-
-#### Local/Personal Access (`localhost`)
-
-TODO: usage instructions
-
-#### Organizational/Remote Access
-
-TODO: usage instructions
 
 [npm]: https://www.npmjs.com/
 [server]: https://github.com/Iron-E/winvoice-ser

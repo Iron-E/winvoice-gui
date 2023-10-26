@@ -46,7 +46,7 @@ export class Client {
 		requestParams: Request<RequestBodyInner>,
 		checkSchema: (json: unknown) => json is ResponseBody,
 		reviver?: Reviver,
-	): OptBody<ResponseBody> {
+	): Promise<OptBody<ResponseBody>> {
 		const RESULT = await (this as Client).request(showMessage, route, requestParams, checkSchema, reviver);
 		if (RESULT instanceof UnauthenticatedError) {
 			showMessage('warn', RESULT.message);
@@ -136,7 +136,7 @@ export class Client {
 		body: request.Put<RequestBodyInner>,
 		checkSchema: (json: unknown) => json is ResponseBody,
 		reviver?: Reviver,
-	): OptBody<Required<response.Put<ResponseBody>>['entity']> {
+	): Promise<OptBody<Required<response.Put<ResponseBody>>['entity']>> {
 		const RESULT = await (this as Client).caughtRequest(showMessage, route, { method: 'PUT', body }, response.isPut, reviver);
 		return (RESULT !== null && checkSchema(RESULT.entity))
 			? RESULT.entity
@@ -154,7 +154,7 @@ export class Client {
 		showMessage: ShowMessage,
 		route: UserInputRoute,
 		body: request.Delete<RequestBodyInner>,
-	): RequestSuccess {
+	): Promise<RequestSuccess> {
 		return await (this as Client).caughtRequest(showMessage, route, { method: 'DELETE', body }, response.isDelete) !== null;
 	}
 
@@ -164,7 +164,7 @@ export class Client {
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @returns whether the request succeeded.
 	 */
-	public async export(this: Readonly<Client>, showMessage: ShowMessage, body: request.Export): RequestSuccess {
+	public async export(this: Readonly<Client>, showMessage: ShowMessage, body: request.Export): Promise<RequestSuccess> {
 		const RESULT = await (this as Client).caughtRequest(
 			showMessage,
 			Route.Export,
@@ -191,7 +191,7 @@ export class Client {
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @returns whether the request succeeded.
 	 */
-	public async login(this: Client, showMessage: ShowMessage, password: string): RequestSuccess {
+	public async login(this: Client, showMessage: ShowMessage, password: string): Promise<RequestSuccess> {
 		const RESULT = await this.caughtRequest(
 			showMessage,
 			Route.Login,
@@ -210,7 +210,7 @@ export class Client {
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @returns the response or an error.
 	 */
-	public async logout(this: Readonly<Client>, showMessage: ShowMessage): RequestSuccess {
+	public async logout(this: Readonly<Client>, showMessage: ShowMessage): Promise<RequestSuccess> {
 		return await (this as Client).caughtRequest(showMessage, Route.Logout, { method: 'POST' }, response.isDelete) !== null;
 	}
 
@@ -227,7 +227,7 @@ export class Client {
 		body: request.Post<RequestBodyInner>,
 		checkSchema: (json: unknown) => json is ResponseBody,
 		reviver?: Reviver,
-	): OptBody<response.Post<ResponseBody>['entities']> {
+	): Promise<OptBody<response.Post<ResponseBody>['entities']>> {
 		const RESULT = await (this as Client).caughtRequest(showMessage, route, { method: 'POST', body }, response.isPost, reviver);
 		if (RESULT !== null) {
 			const IS_EMPTY = RESULT.entities.length < 1;
@@ -249,7 +249,7 @@ export class Client {
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @returns whether the request succeeded.
 	 */
-	public async setWhoIAm(this: Client, showMessage: ShowMessage,): RequestSuccess {
+	public async setWhoIAm(this: Client, showMessage: ShowMessage,): Promise<RequestSuccess> {
 		const RESULT = await this.request(showMessage, Route.WhoAmI, { method: 'POST' }, response.isWhoAmI, USER_REVIVER);
 		if (RESULT === null) { return false; }
 
@@ -271,7 +271,7 @@ export class Client {
 		showMessage: ShowMessage,
 		route: UserInputRoute,
 		body: request.Patch<RequestBodyInner>,
-	): RequestSuccess {
+	): Promise<RequestSuccess> {
 		return await (this as Client).caughtRequest(showMessage, route, { method: 'PATCH', body }, response.isPatch) !== null;
 	}
 }

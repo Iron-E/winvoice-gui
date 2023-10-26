@@ -76,7 +76,7 @@ const MATCH_STR_OPERATOR_CHANGE_HANDLERS: OperatorChangeHandlers<MatchStrOperato
 
 /** A common implementation of the `equal_to` operator to its operand. */
 function equal_to<T, U>(condition: T): U {
-	return condition! as U;
+	return condition as unknown as U;
 }
 
 /** A lookup table for handlers used in {@link handleOperatorChange}. */

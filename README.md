@@ -67,8 +67,8 @@ This will bind [`winvoice-server`][server] to [localhost](https://localhost:3000
 To do this, simply enter a shell environment where [`npm`][npm] is available and run:
 
 ```sh
-npm run build
-npm run start
+npm run build # if this produces an error, please search the issues for a duplicate, or report it if there is none
+npm run start -- -p <PORT> # you probably want '3001', since winvoice-server is on 3000
 ```
 
 Then, go into your browser and enter the URL it displays to you:

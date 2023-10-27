@@ -31,7 +31,7 @@
 
 #### For Local/Personal Use (`localhost`)
 
-> *Note*
+> **Note**
 >
 > Requires [`mkcert`][mkcert]), unless you are familiar with the process of setting up a local trust authority yourself.
 

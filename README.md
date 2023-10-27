@@ -14,7 +14,7 @@
 * Manage jobs, timesheets, and expenses. Amount owed is automatically calculated when a job is exported.
     * Powerful searching capable of performing simple and advanced queries.
 * Text may contain any [markdown](https://commonmark.org/help/) syntax.
-* Designed from the ground up to support working in an international environments.
+* Designed from the ground up to support international environments.
 	* Timezones are automatically converted and accounted for when creating and searching for records.
 	* Currencies are automatically managed by the location of the client— but you can request jobs be exported in any currency tracked by the [ECB](ecb.europa.eu/).
 * Robust permissions allocation, provided from [`winvoice-server`][server]. Don't worry about an intern editing critical historical information.

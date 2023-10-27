@@ -48,7 +48,7 @@ mkcert -key-file key.pem -cert-file cert.pem localhost "127.0.0.1" "::1"
 
 This will allow you to run [`winvoice-server`][server], as it requires the `-c` and `-k` arguments which specify the locations of the "cert.pem" and "key.pem" files (respectively) that have just been created.
 
-##### 2. Run [`winvoice-server`][winvoice]
+##### 2. Run [`winvoice-server`][server]
 
 The `winvoice-server help` command should help guide you through this process. An **example** of what the final command may look like is:
 

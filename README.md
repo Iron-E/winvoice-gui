@@ -1,6 +1,6 @@
 # winvoice-gui
 
-`winvoice-gui` is a WIP front-end for [`winvoice-server`](https://github.com/Iron-E/winvoice-server), written in TypeScript with React. It allows graphical management of invoices for any number of clients.
+`winvoice-gui` is a front-end for [`winvoice-server`](https://github.com/Iron-E/winvoice-server), written in TypeScript with React. It allows graphical management of invoices for any number of clients.
 
 <details>
 	<summary>Screenshots</summary>

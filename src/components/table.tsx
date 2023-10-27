@@ -73,7 +73,7 @@ overflow-y-scroll bg-table-header-bg`}>
 [&>tbody>tr:not(:nth-child(1_of_:has(td>div>table)))>td>div>table>thead]:hidden \
 [&:not(:has(>tbody>tr>td:first-child_button))>thead>tr>th:first-child]:hidden
 [&>tbody>tr>td:first-child:not(:has(button))]:hidden
-whitespace-nowrap`}>
+whitespace-pre`}>
 				<thead className='border-b-2 border-table-row-border'>
 					<tr>
 						<th className={HEADING_STYLE}>

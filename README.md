@@ -18,7 +18,7 @@
 	* Timezones are automatically converted and accounted for when creating and searching for records.
 	* Currencies are automatically managed by the location of the client— but you can request jobs be exported in any currency tracked by the [ECB](ecb.europa.eu/).
 * Robust permissions allocation, provided from [`winvoice-server`][server]. Don't worry about an intern editing critical historical information.
-* May be used on a locally by freelancers, or deployed on a server for organization-wide access.
+* May be used locally by freelancers, or deployed on a server for organization-wide access.
 
 ## Setup
 

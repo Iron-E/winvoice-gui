@@ -35,7 +35,7 @@
 >
 > Requires [`mkcert`][mkcert], unless you are familiar with the process of setting up a local trust authority yourself.
 
-##### Setting up a local Trust Authority
+##### 1. Setting up a local Trust Authority
 
 First, it is necessary to create a local trust authority so that [`winvoice-server`][server] can operate using HTTPS. If you are familiar with how to do this, or have already done so in the past, you can skip this step. Otherwise, [`mkcert`][mkcert] can be used.
 

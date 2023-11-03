@@ -33,7 +33,7 @@
 
 > **Note**
 >
-> Requires [`mkcert`][mkcert]), unless you are familiar with the process of setting up a local trust authority yourself.
+> Requires [`mkcert`][mkcert], unless you are familiar with the process of setting up a local trust authority yourself.
 
 ##### Setting up a local Trust Authority
 

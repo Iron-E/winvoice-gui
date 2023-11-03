@@ -87,5 +87,5 @@ Setup instructions for organizational use are quite similar to those for persona
 * A browser ([`LibreWolf`](https://librewolf.net) / FireFox recommended)
 
 [npm]: https://www.npmjs.com/
-[server]: https://github.com/Iron-E/winvoice-ser
+[server]: https://github.com/Iron-E/winvoice-server
 [mkcert]: https://github.com/FiloSottile/mkcert

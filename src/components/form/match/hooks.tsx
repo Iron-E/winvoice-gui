@@ -28,6 +28,8 @@ export function useMatchForm<T extends {}, M extends {}>(
 ): React.ReactElement {
 	const [CLIENT, showMessage] = useApiContext();
 	const [MATCH, setMatch] = React.useState({} as M);
+	const TABLE_REF = React.useRef<HTMLDivElement>(null);
+
 	return <>
 		<Form
 			onSubmit={async () => {
@@ -37,11 +39,15 @@ export function useMatchForm<T extends {}, M extends {}>(
 				}
 
 				orderedData.setData?.(RESULT as unknown as ReadonlyNonNullUnitArray<T>);
+				window.requestAnimationFrame(() => TABLE_REF.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
 			}}
 		>
 			<Input id={`${id}--${route}`} onChange={setMatch} value={MATCH} />
 			<FormButton className={SPACE} />
 		</Form>
-		{table}
+
+		<div className='max-w-full' ref={TABLE_REF}>
+			{table}
+		</div>
 	</>;
 }

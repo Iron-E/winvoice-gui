@@ -29,6 +29,16 @@ RUN --mount=type=bind,from=deps,source=/app/node_modules,target=./node_modules \
 FROM base AS runner
 WORKDIR /app
 
+LABEL org.opencontainers.image.authors="Iron-E <code.iron.e@gmail.com>"
+LABEL org.opencontainers.image.description="winvoice-gui docker image"
+LABEL org.opencontainers.image.documentation="https://github.com/Iron-E/winvoice-gui"
+LABEL org.opencontainers.image.license="GPL-3.0-only"
+LABEL org.opencontainers.image.source="https://github.com/Iron-E/winvoice-gui"
+LABEL org.opencontainers.image.title="winvoice-gui"
+LABEL org.opencontainers.image.url="https://github.com/Iron-E/winvoice-gui"
+LABEL org.opencontainers.image.vendor="Iron-E <code.iron.e@gmail.com>"
+LABEL org.opencontainers.image.version="0.1.0"
+
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
@@ -36,9 +46,10 @@ ARG GID=1001
 ARG UID=$GID
 
 RUN addgroup --system --gid "${GID}" nodejs && \
-    adduser --system --uid "${UID}" nextjs && \
-    # Set the correct permission for prerender cache
-    mkdir .next && \
+    adduser --system --uid "${UID}" nextjs
+
+# Set the correct permission for prerender cache
+RUN mkdir .next && \
     chown nextjs:nodejs .next
 
 # Automatically leverage output traces to reduce image size
@@ -48,9 +59,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-ENV HOSTNAME="0.0.0.0"
+# Expose the port that the application listens on.
+ENV HOSTNAME="127.0.0.1"
 ENV PORT=3000
-
 EXPOSE $PORT
 
 CMD ["node", "server.js"]

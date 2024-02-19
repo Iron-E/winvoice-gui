@@ -1,23 +1,33 @@
-### Building and running your application
+# winvoice-gui
 
-When you're ready, start your application by running:
-`docker compose up --build`.
+## Build
 
-Your application will be available at http://localhost:3000.
+Run the following command:
 
-### Deploying your application to the cloud
+```sh
+docker build [--build-arg <arg>=<value> ...] [--tag <tag>] .
+```
 
-First, build your image, e.g.: `docker build -t myapp .`.
-If your cloud uses a different CPU architecture than your development
-machine (e.g., you are on a Mac M1 and your cloud provider is amd64),
-you'll want to build the image for that platform, e.g.:
-`docker build --platform=linux/amd64 -t myapp .`.
+For example:
 
-Then, push it to your registry, e.g. `docker push myregistry.com/myapp`.
+```sh
+docker build --build-arg PORT=3001 --tag winvoice-gui:latest .
+```
 
-Consult Docker's [getting started](https://docs.docker.com/go/get-started-sharing/)
-docs for more detail on building and pushing.
+#### Arguments
 
-### References
+| Name   | Default | Description                        |
+| :--    | :--     | :--                                |
+| `GID`  | `1001`  | The ID of the created group.       |
+| `PORT` | `3001`  | The port the server will listen to |
+| `UID`  | `$GID`  | The ID of the created user.        |
 
-* [Docker's Node.js guide](https://docs.docker.com/language/nodejs/)
+#### Environment Variables
+
+## Usage
+
+After building, run:
+
+```sh
+docker run <image-name>
+```

@@ -1,4 +1,5 @@
 FROM node:18-alpine AS base
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -20,8 +21,6 @@ FROM base AS builder
 WORKDIR /app
 COPY . .
 
-ENV NEXT_TELEMETRY_DISABLED=1
-
 RUN --mount=type=bind,from=deps,source=/app/node_modules,target=./node_modules \
     npm run build
 
@@ -39,7 +38,6 @@ LABEL org.opencontainers.image.url="https://github.com/Iron-E/winvoice-gui"
 LABEL org.opencontainers.image.vendor="Iron-E <code.iron.e@gmail.com>"
 LABEL org.opencontainers.image.version="0.1.0"
 
-ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
 ARG GID=1001
@@ -60,8 +58,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 USER nextjs
 
 # Expose the port that the application listens on.
-ENV HOSTNAME="127.0.0.1"
-ENV PORT=3000
+ARG PORT=3001
 EXPOSE $PORT
 
 CMD ["node", "server.js"]

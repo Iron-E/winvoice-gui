@@ -1,0 +1,23 @@
+# This is an EXAMPLE of using winvoice-gui
+
+include:
+  - 'https://github.com/Iron-E/winvoice-server.git#v0.6.2'
+
+networks:
+  frontend: null
+
+networks:
+  frontend: null
+
+services:
+  gui:
+    image: 'winvoice/gui:v0.1.0'
+    build: .
+
+    depends_on: ['server']
+
+    networks: ['frontend']
+    ports: ['3001:3000']
+
+    environment:
+      NODE_ENV: production

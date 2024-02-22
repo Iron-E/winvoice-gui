@@ -1,6 +1,6 @@
 # winvoice-gui
 
-See also the [`winvoice-server` docs](https://github.com/Iron-E/winvoice-server/blob/master/README.Docker.md).
+See also the [`winvoice-server` docs].
 
 ## `docker`
 
@@ -49,6 +49,10 @@ docker run -p 3000 \
 
 A [compose file](./compose.yaml) is provided to run the application. A postgres image is included in the configuration.
 
+> [!NOTE]
+>
+> This example compose file requires `COMPOSE_EXPERIMENTAL_GIT_REMOTE=1` in the environment. It is possible to remove this requirement by manually merging `winvoice-server`'s compose file. See the [`winvoice-server` docs] for more information.
+
 ### Build
 
 Run the following command:
@@ -56,3 +60,5 @@ Run the following command:
 ```sh
 docker compose up
 ```
+
+[`winvoice-server` docs]: (https://github.com/Iron-E/winvoice-server/blob/master/README.Docker.md)

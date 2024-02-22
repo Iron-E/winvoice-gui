@@ -4,8 +4,7 @@ include:
   - path: 'https://github.com/Iron-E/winvoice-server.git#v0.6.2'
     project_directory: '.'
 
-networks:
-  frontend: null
+name: 'winvoice'
 
 networks:
   frontend: null

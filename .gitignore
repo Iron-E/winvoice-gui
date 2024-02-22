@@ -57,3 +57,4 @@ next-env.d.ts
 # compose configs
 db
 server
+.env

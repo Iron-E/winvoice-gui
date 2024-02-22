@@ -11,8 +11,8 @@ networks:
 
 services:
   gui:
-    image: 'winvoice/gui:v0.1.0'
-    build: .
+    image: 'winvoice/gui:${WINVOICE_GUI_TAG:-v0.1.0}'
+    build: '.'
 
     depends_on:
       server: {condition: 'service_healthy'}

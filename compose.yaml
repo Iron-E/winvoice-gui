@@ -21,4 +21,4 @@ services:
     ports: ['3001:3000']
 
     environment:
-      NODE_ENV: production
+      NODE_ENV: 'production'

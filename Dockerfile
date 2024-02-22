@@ -57,8 +57,4 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-# Expose the port that the application listens on.
-ARG PORT=3001
-EXPOSE $PORT
-
 CMD ["node", "server.js"]

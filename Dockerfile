@@ -38,6 +38,9 @@ LABEL org.opencontainers.image.url="https://github.com/Iron-E/winvoice-gui"
 LABEL org.opencontainers.image.vendor="Iron-E <code.iron.e@gmail.com>"
 LABEL org.opencontainers.image.version="0.1.0"
 
+# for healthchecks
+RUN apk add --no-cache curl
+
 ENV NODE_ENV=production
 
 ARG GID=1001

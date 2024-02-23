@@ -8,6 +8,7 @@ name: 'winvoice'
 
 secrets:
   proxy-ssl: {file: 'config/proxy/ssl/'}
+  proxy-ssl-cadir: {file: 'config/proxy/ssl-cadir/'}
 
 networks:
   frontend: null
@@ -35,12 +36,21 @@ services:
 
   proxy:
     image: 'nginxproxy/nginx-proxy:1.4-alpine'
+
     depends_on:
       gui: {condition: 'service_healthy'}
+    healthcheck:
+      test: ['CMD', 'curl', '-fs', 'https://localhost:443']
+      interval: '10s'
+      timeout: '5s'
+      retries: 5
+    restart: 'always'
 
     secrets:
       - source: 'proxy-ssl'
         target: '/etc/nginx/certs'
+      - source: 'proxy-ssl-cadir'
+        target: '/etc/ssl/certs'
     volumes:
       - '/var/run/docker.sock:/tmp/docker.sock:ro'
 

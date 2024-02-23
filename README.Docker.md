@@ -72,6 +72,7 @@ docker compose up
 
 #### Secrets
 
-| Name        | Path         | Description                                                                       |
-| :-          | :-           | :-                                                                                |
-| `proxy-ssl` | `proxy/ssl/` | See [here](https://github.com/nginx-proxy/nginx-proxy/tree/main/docs#ssl-support) |
+| Name              | Path                      | Description                                                                                   |
+| :-                | :-                        | :-                                                                                            |
+| `proxy-ssl`       | `config/proxy/ssl/`       | See [here](https://github.com/nginx-proxy/nginx-proxy/tree/main/docs#ssl-support)             |
+| `proxy-ssl-cadir` | `config/proxy/ssl-cadir/` | Trust authorities to use within the container. Structured like `/etc/ssl/certs/` in `alpine`. |

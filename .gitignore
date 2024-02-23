@@ -55,6 +55,5 @@ yarn-error.log*
 next-env.d.ts
 
 # compose configs
-db
-server
+config
 .env

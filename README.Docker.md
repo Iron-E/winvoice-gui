@@ -57,7 +57,7 @@ A [compose file](./compose.yaml) is provided to run the application. A `postgres
 
 > [!IMPORTANT]
 >
-> The compose file requires `COMPOSE_EXPERIMENTAL_GIT_REMOTE=1` in the environment. It is possible to remove this requirement by manually merging `winvoice-server`'s compose file.
+> The compose file requires `COMPOSE_EXPERIMENTAL_GIT_REMOTE=1` in the environment. It is possible to remove this requirement by manually merging [`winvoice-server`]'s compose file.
 
 ### Build
 
@@ -67,5 +67,11 @@ Run the following command:
 docker compose up
 ```
 
-[`winvoice-server`]: https://github.com/The-E/winvoice-server/blob/master/README.Docker.md
+[`winvoice-server`]: https://github.com/Iron-E/winvoice-server/blob/master/README.Docker.md
 [`nginx-proxy`]: https://github.com/nginx-proxy/nginx-proxy/blob/main/docs/README.md
+
+#### Secrets
+
+| Name        | Path         | Description                                                                       |
+| :-          | :-           | :-                                                                                |
+| `proxy-ssl` | `proxy/ssl/` | See [here](https://github.com/nginx-proxy/nginx-proxy/tree/main/docs#ssl-support) |

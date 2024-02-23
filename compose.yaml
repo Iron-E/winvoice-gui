@@ -6,6 +6,9 @@ include:
 
 name: 'winvoice'
 
+secrets:
+  proxy-ssl: {file: 'config/proxy/ssl/'}
+
 networks:
   frontend: null
 
@@ -23,7 +26,23 @@ services:
       retries: 5
     restart: 'always'
 
-    networks: ['frontend']
-
     environment:
       NODE_ENV: 'production'
+      VIRTUAL_HOST: '${VIRTUAL_HOST:-localhost}'
+      VIRTUAL_PORT: '${VIRTUAL_PORT:-3000}'
+
+    networks: ['frontend']
+
+  proxy:
+    image: 'nginxproxy/nginx-proxy:1.4-alpine'
+    depends_on:
+      gui: {condition: 'service_healthy'}
+
+    secrets:
+      - source: 'proxy-ssl'
+        target: '/etc/nginx/certs'
+    volumes:
+      - '/var/run/docker.sock:/tmp/docker.sock:ro'
+
+    networks: ['frontend']
+    ports: ['80:80', '443:443']

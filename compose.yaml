@@ -24,7 +24,6 @@ services:
     restart: 'always'
 
     networks: ['frontend']
-    expose: [3000]
 
     environment:
       NODE_ENV: 'production'

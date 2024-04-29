@@ -1,0 +1,38 @@
+apiVersion: 'networking.k8s.io/v1'
+kind: 'Ingress'
+metadata: &metadata
+  annotations:
+    # https://kubernetes.github.io/ingress-nginx/examples/rewrite/
+    nginx.ingress.kubernetes.io/rewrite-target: '/$2'
+  labels: &labels
+    app.kubernetes.io/name: &appName 'nginx'
+    app.kubernetes.io/version: '1.10.1'
+    app.kubernetes.io/component: 'ingress'
+    app.kubernetes.io/part-of: 'winvoice'
+  namespace: &namespace 'example'
+  name: 'winvoice-ingress'
+spec:
+  ingressClassName: 'nginx'
+  tls:
+    - hosts:
+        - &hostName 'localhost'
+      secretName: 'winvoice.tls'
+  rules:
+    - host: *hostName
+      http:
+        paths:
+          - path: '/api(/|$)(.*)'
+            pathType: 'ImplementationSpecific'
+            backend:
+              service:
+                name: 'winvoice-backend'
+                port:
+                  name: 'winvoice-server'
+          - path: '/()(.*)'
+            pathType: 'ImplementationSpecific'
+            backend:
+              service:
+                name: 'winvoice-frontend'
+                port:
+                  name: 'winvoice-gui'
+---

@@ -21,6 +21,9 @@ FROM base AS builder
 WORKDIR /app
 COPY . .
 
+ARG DEFAULT_SERVER_ADDR=""
+ENV NEXT_PUBLIC_DEFAULT_SERVER_ADDR=$DEFAULT_SERVER_ADDR
+
 RUN --mount=type=bind,from=deps,source=/app/node_modules,target=./node_modules \
     npm run build
 

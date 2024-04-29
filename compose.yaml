@@ -1,7 +1,7 @@
 # This is an EXAMPLE of using winvoice-gui
 
 include:
-  - path: 'https://github.com/Iron-E/winvoice-server.git#v0.6.2'
+  - path: 'https://github.com/Iron-E/winvoice-server.git#v0.6.4'
     project_directory: '.'
 
 name: 'winvoice'
@@ -15,7 +15,7 @@ networks:
 
 services:
   gui:
-    image: 'winvoice/gui:${WINVOICE_GUI_TAG:-v0.1.0}'
+    image: 'winvoice-gui:${WINVOICE_GUI_TAG:-0.1.0}'
     build: '.'
 
     depends_on:

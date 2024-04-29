@@ -1,0 +1,20 @@
+# https://kubernetes.io/docs/concepts/services-networking/service/
+apiVersion: 'v1'
+kind: 'Service'
+metadata: &metadata
+  labels: &labels
+    app.kubernetes.io/name: &appName 'winvoice-gui'
+    app.kubernetes.io/version: '0.1.0'
+    app.kubernetes.io/component: 'frontend'
+    app.kubernetes.io/part-of: 'winvoice'
+  namespace: &namespace 'example'
+  name: 'winvoice-frontend'
+spec:
+  selector: *labels
+  type: 'ClusterIP'
+  ports:
+    - name: *appName
+      protocol: 'TCP'
+      port: 8080
+      targetPort: *appName
+---

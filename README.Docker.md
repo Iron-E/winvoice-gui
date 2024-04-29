@@ -20,10 +20,11 @@ docker build --build-arg GID=100 --tag winvoice-gui:latest .
 
 #### Arguments
 
-| Name  | Default | Description                  |
-| :--   | :--     | :--                          |
-| `GID` | `10001` | The ID of the created group. |
-| `UID` | `$GID`  | The ID of the created user.  |
+| Name                  | Default  | Description                                           |
+| :--                   | :--      | :--                                                   |
+| `DEFAULT_SERVER_ADDR` | `""`     | The default [`winvoice-server`] address to connect to |
+| `GID`                 | `10001`  | The ID of the created group.                          |
+| `UID`                 | `${GID}` | The ID of the created user.                           |
 
 ### Usage
 
@@ -67,12 +68,12 @@ Run the following command:
 docker compose up
 ```
 
-[`winvoice-server`]: https://github.com/Iron-E/winvoice-server/blob/master/README.Docker.md
-[`nginx-proxy`]: https://github.com/nginx-proxy/nginx-proxy/blob/main/docs/README.md
-
 #### Secrets
 
 | Name              | Path                      | Description                                                                                   |
 | :-                | :-                        | :-                                                                                            |
 | `proxy-ssl`       | `config/proxy/ssl/`       | See [here](https://github.com/nginx-proxy/nginx-proxy/tree/main/docs#ssl-support)             |
 | `proxy-ssl-cadir` | `config/proxy/ssl-cadir/` | Trust authorities to use within the container. Structured like `/etc/ssl/certs/` in `alpine`. |
+
+[`winvoice-server`]: https://github.com/Iron-E/winvoice-server/blob/master/README.Docker.md
+[`nginx-proxy`]: https://github.com/nginx-proxy/nginx-proxy/blob/main/docs/README.md

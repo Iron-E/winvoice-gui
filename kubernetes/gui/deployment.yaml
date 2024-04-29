@@ -1,0 +1,51 @@
+# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+apiVersion: 'apps/v1'
+kind: 'Deployment'
+metadata:
+  labels: &labels
+    app.kubernetes.io/name: &appName 'winvoice-gui'
+    app.kubernetes.io/version: '0.1.0'
+    app.kubernetes.io/component: 'frontend'
+    app.kubernetes.io/part-of: 'winvoice'
+  namespace: &namespace 'example'
+  name: 'winvoice-frontend'
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: *component
+      app.kubernetes.io/name: *appName
+      app.kubernetes.io/part-of: *partOf
+  strategy:
+    rollingUpdate: { maxSurge: '25%', maxUnavailable: '25%' }
+    type: 'RollingUpdate'
+  template:
+    metadata:
+      annotations: { kubectl.kubernetes.io/default-container: *appName }
+      labels: *labels
+      namespace: *namespace
+    spec:
+      restartPolicy: 'Always'
+      containers:
+        - name: *appName
+          image: 'winvoice-gui:0.1.0'
+          imagePullPolicy: 'IfNotPresent'
+          resources:
+            requests: { cpu: '100m', memory: '100Mi' }
+            limits: { cpu: '100m', memory: '100Mi' }
+
+          ports:
+            - { name: *appName, containerPort: 3000, protocol: 'TCP' }
+
+          livenessProbe:
+            tcpSocket: { port: *appName }
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+            periodSeconds: 10
+
+          env:
+            - name: 'NODE_ENV'
+              value: 'production'
+---

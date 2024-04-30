@@ -12,7 +12,7 @@ import { USER_REVIVER, type User } from '@/schema';
 type OptBody<T = unknown> = Promise<Opt<T>>;
 
 /** Whether a request succeeded. */
-type RequestSuccess = Promise<boolean>;
+type RequestSuccess = boolean;
 
 /**
  * The information which is kept in order to make api requests / provide relevant UI elements (e.g. whether the user is currently signed in).

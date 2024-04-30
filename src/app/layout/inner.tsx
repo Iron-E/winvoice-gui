@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { JsonFields } from '@/utils';
+import type { JsonFields, Maybe, Opt } from '@/utils';
 import {
 	Client,
 	css,
@@ -14,6 +14,27 @@ import {
 	type ShowMessage,
 } from '@/components';
 import { ClientSelector } from '@/components/api/client/selector';
+
+/**
+ * @param defaultAddress the winvoice-server to connect to if the user has no previous session
+ * @param sessionClient the user's connection from the previous session
+ *
+ * @returns a {@link Client} from either of the following are valid, otherwise `undefined`:
+ * 1. the user's {@link sessionClient | previous session}, or
+ * 2. the {@link defaultAddress}
+ *
+ * @throws {@link SyntaxError} if {@link sessionClient} fails to parse
+ */
+function getClient(sessionClient: Opt<string>, defaultAddress?: string): Maybe<Client> {
+	if (sessionClient != undefined) { // no session url
+		const FIELDS: JsonFields<Client> = JSON.parse(sessionClient);
+		return new Client(FIELDS.address);
+	} else if (!(defaultAddress == undefined || defaultAddress.length < 1)) { // default url
+		return new Client(defaultAddress);
+	}
+
+	return;
+}
 
 /** @returns a guidance message to help users get started using winvoice. */
 function Guidance(props: w.Children): React.ReactElement {
@@ -33,15 +54,16 @@ export function InnerRootLayout(props: w.Children): React.ReactElement {
 	);
 
 	React.useEffect(() => {
-		const ITEM = localStorage.getItem('client');
-		if (ITEM != undefined) {
-			try {
-				const FIELDS = JSON.parse(ITEM) as JsonFields<Client>;
-				const CLIENT = new Client(FIELDS.address);
-				CLIENT.setWhoIAm(showMessage).then(b => b && setClient(CLIENT));
-			} catch (e: unknown) {
-				console.error(e);
-			}
+		try {
+			// @ts-ignore
+			const DEFAULT_SERVER_ADDR = process.env.NEXT_PUBLIC_DEFAULT_SERVER_ADDR;
+			const SESSION_CLIENT = localStorage.getItem('client');
+			console.log(DEFAULT_SERVER_ADDR);
+
+			const CLIENT = getClient(SESSION_CLIENT, DEFAULT_SERVER_ADDR);
+			CLIENT?.setWhoIAm(showMessage).then(b => b && setClient(CLIENT));
+		} catch (e: unknown) {
+			console.error(e);
 		}
 	}, []);
 

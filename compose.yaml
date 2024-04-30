@@ -15,7 +15,7 @@ networks:
 
 services:
   gui:
-    image: 'winvoice-gui:${WINVOICE_GUI_TAG:-0.1.0}'
+    image: 'winvoice-gui:${WINVOICE_GUI_TAG:-0.2.0}'
     build: '.'
 
     depends_on:

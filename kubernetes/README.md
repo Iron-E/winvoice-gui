@@ -17,17 +17,17 @@ Follow [this guide](https://github.com/Iron-E/winvoice-server/blob/v0.6.4/kubern
 >
 > You don't have to clone the `winvoice-server` repo to follow the above instructions: `kubectl apply -f` will accept links to remote files.
 
-Then, if you don't already have the `winvoice-gui:0.1.0` docker image, follow [this guide](../README.Docker.md) as well.
+Then, if you don't already have the `winvoice-gui:0.2.0` docker image, follow [this guide](../README.Docker.md) as well.
 
 > [!IMPORTANT]
 >
 > If you are using `kind` (included in the [flake]), there are a few extra steps:
 >
 > ```sh
-> kind load docker-image --name winvoice winvoice-gui:0.1.0
+> kind load docker-image --name winvoice winvoice-gui:0.2.0
 > ```
 >
-> This will bring `winvoice-gui:0.1.0` into the scope for your `kind` cluster.
+> This will bring `winvoice-gui:0.2.0` into the scope for your `kind` cluster.
 
 ## Build
 

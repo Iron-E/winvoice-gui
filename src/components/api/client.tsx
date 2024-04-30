@@ -249,7 +249,7 @@ export class Client {
 	 * @param showMessage a function that will be used to notify a user of errors.
 	 * @returns whether the request succeeded.
 	 */
-	public async setWhoIAm(this: Client, showMessage: ShowMessage,): Promise<RequestSuccess> {
+	public async setWhoIAm(this: Client, showMessage: ShowMessage): Promise<RequestSuccess> {
 		const RESULT = await this.request(showMessage, Route.WhoAmI, { method: 'POST' }, response.isWhoAmI, USER_REVIVER);
 		if (RESULT === null) { return false; }
 

@@ -4,9 +4,9 @@ kind: 'Deployment'
 metadata:
   labels: &labels
     app.kubernetes.io/name: &appName 'winvoice-gui'
-    app.kubernetes.io/version: '0.1.0'
-    app.kubernetes.io/component: 'frontend'
-    app.kubernetes.io/part-of: 'winvoice'
+    app.kubernetes.io/version: '0.2.0'
+    app.kubernetes.io/component: &component 'frontend'
+    app.kubernetes.io/part-of: &partOf 'winvoice'
   namespace: &namespace 'example'
   name: 'winvoice-frontend'
 spec:
@@ -28,7 +28,7 @@ spec:
       restartPolicy: 'Always'
       containers:
         - name: *appName
-          image: 'winvoice-gui:0.1.0'
+          image: 'winvoice-gui:0.2.0'
           imagePullPolicy: 'IfNotPresent'
           resources:
             requests: { cpu: '100m', memory: '100Mi' }

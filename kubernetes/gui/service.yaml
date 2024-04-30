@@ -4,7 +4,7 @@ kind: 'Service'
 metadata: &metadata
   labels: &labels
     app.kubernetes.io/name: &appName 'winvoice-gui'
-    app.kubernetes.io/version: '0.1.0'
+    app.kubernetes.io/version: '0.2.0'
     app.kubernetes.io/component: 'frontend'
     app.kubernetes.io/part-of: 'winvoice'
   namespace: &namespace 'example'

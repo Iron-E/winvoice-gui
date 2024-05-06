@@ -121,8 +121,30 @@
 
 				text = /* sh */ ''node "${lib.getLib winvoice-gui-unwrapped}/lib/node_modules/${name}/server.js"'';
 			};
+
+			oci-image = let
+				inherit (pkgs) dockerTools;
+				group = "nodejs";
+				user = "nextjs";
+			in dockerTools.streamLayeredImage { # https://nixos.org/manual/nixpkgs/unstable#ssec-pkgs-dockerTools-streamLayeredImage
+				inherit name;
+				tag = version;
+				created = "2024-05-06 15:38"; # date --iso-8601='seconds' --utc
+
+				enableFakechroot = true;
+				fakeRootCommands = /* sh */ ''
+					${dockerTools.shadowSetup}
+					groupadd --system --gid 1001 ${group}
+					useradd --system --uid 1001 ${user}
+				'';
+
+				config = {
+					Entrypoint = [ "${lib.getExe winvoice-gui}" ];
+					User = "${user}:${group}";
+				};
+			};
 		in {
-			inherit winvoice-gui winvoice-gui-unwrapped;
+			inherit oci-image winvoice-gui winvoice-gui-unwrapped;
 			default = winvoice-gui;
 		});
 
